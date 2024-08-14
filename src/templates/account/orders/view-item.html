@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="../../../static/img/display/jpg/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../../static/css/csss.css">
+    <title>View item</title>
+</head>
+
+<body>
+    <div class="dim-overlay" id="dimOverlay"></div>
+
+    <!-- The navigation  -->
+    <nav aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-info nav-body">
+                <div class="nav-container__shipping">
+                    <a href="#" aria-label="Free shipping information" class="nav-link">Free shipping</a>
+                </div>
+            </div>
+
+            <div class="nav-info nav-footer">
+                <div class="nav-container__account">
+                    <a href="#" aria-label="View account" class="nav-link">My account</a>
+                    
+                    <div class="nav-container__account__dropdown-menu my-account">
+                        <div class="my-account__container">
+                            <div class="buy-it-again">
+                                <h4>Buy it Again</h4>
+                                <a href="#" class="dropdown-menu-link">View All && Manage</a>
+
+                                <div class="buy-it-again__container">
+                                    <div class="item">
+                                        <div class="item-img">
+                                            <a href="#"><img src="../../../static/img/display/jpg/avacodo.jpg"
+                                                    alt="An image of item bought" class="bought-item-img"></a>
+                                        </div>
+
+                                        <div class="item-info">
+                                            <ul>
+                                                <li><a href="#" class="dropdown-menu-link">Avacado</a></li>
+                                                <li>£5.99</li>
+                                                <li><button class="button-sm buy-it-again-btn">Add to cart</button></li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- item 2 -->
+                                    <div class="item">
+                                        <div class="item-img">
+                                            <a href="#"><img src="../../../static/img/display/jpg/box-of-oranges.jpeg"
+                                                    alt="An image of item bought" class="bought-item-img"></a>
+
+                                        </div>
+
+                                        <div class="item-info">
+                                            <ul>
+
+                                                <li><a href="#" class="dropdown-menu-link">Bulk Pack Organic Sicilian
+                                                        Orange</a></li>
+
+                                                <li>£15.99</li>
+                                                <li><button class="button-sm buy-it-again-btn">Add to cart</button></li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- item 3 -->
+                                    <div class="item">
+                                        <div class="item-img">
+                                            <a href="#"><img src="../../../static/img/display/jpg/cashew.jpg"
+                                                    alt="An image of item bought" class="bought-item-img"></a>
+
+                                        </div>
+
+                                        <div class="item-info">
+                                            <ul>
+
+                                                <li><a href="#" class="dropdown-menu-link">Cashew, Almonds And Mint
+                                                        Seeds</a></li>
+
+                                                <li>£10.49</li>
+                                                <li><button class="button-sm buy-it-again-btn">Add to cart</button></li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- item 4 -->
+                                    <div class="item">
+                                        <div class="item-img">
+                                            <a href="#"><img src="../../../static/img/display/jpg/turkish-mullberries.jpg"
+                                                    alt="An image of item bought" class="bought-item-img"></a>
+
+                                        </div>
+
+                                        <div class="item-info">
+                                            <ul>
+                                                <li><a href="#" class="dropdown-menu-link">Natural Kashmiri Turkish
+                                                        Walnuts</a></li>
+                                                <li>£20.99</li>
+                                                <li><button class="button-sm buy-it-again-btn">Add to cart</button></li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+
+                            <div class="my-account__main">
+                                <div class="header center">
+                                    <a href="#" class="dropdown-menu-link">Manage profiles &gt;</a>
+                                </div>
+                                <div class="my-account__main__container">
+                                    <div class="your-lists">
+                                        <h4>My Lists</h4>
+                                        <ul class="my-account__links">
+                                            <li><a href="#" class="dropdown-menu-link">Wishlist</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">Create a wishlist</a></li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="my-account">
+                                        <h4>Account</h4>
+                                        <ul class="my-account__links">
+                                            <li><a href="../account/account.html" class="dropdown-menu-link">my account</a></li>
+                                            <li><a href="../orders/orders.html" class="dropdown-menu-link">my orders</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">my list</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">My addresses</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">Payment methods</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">Account settings</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">Change password</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">Sign out</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="administration__container">
+
+                        </div>
+                    </div>
+                    <a href="#" aria-label="logged in" class="nav-link logged-in">Hi, Egbie (logged in)</a>
+
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    
+    <main>
+        <section id="view-all-items" class="main-section">
+            <div class="container">
+
+                <!-- The sidebar  -->
+                <div class="sidebar">
+                    <div class="logo-text">
+                        <span aria-label="Logo">EUorganics</span>
+                    </div>
+                    <div class="categories">
+                        <div class="header">
+                            <a href="#" aria-label="View all departments" class="bold text-upper">All departments</a>
+                        </div>
+
+                        <div class="body">
+                            <a href="#" aria-label="View Fresh menu">Fresh menu</a>
+                            <a href="#" aria-label="View Vegetables">Vegetables</a>
+                            <a href="#" aria-label="View Fruit and Nut Gifts">Fruit & Nut Gifts</a>
+                            <a href="#" aria-label="View Fresh Berries">Fresh Berries</a>
+                            <a href="#" aria-label="View Ocean Foods">Ocean Foods</a>
+                            <a href="#" aria-label="View Butter and Eggs">Butter & Eggs</a>
+                            <a href="#" aria-label="View Drink">Drinks</a>
+                            <a href="#" aria-label="View Fresh Onion">Fresh Onion</a>
+                            <a href="#" aria-label="View Papayaya and Crisps">Papayaya & Crisps</a>
+                            <a href="#" aria-label="View Oatmeal">Oatmeal</a>
+                            <a href="#" aria-label="View Fresh Bananas">Fresh Bananas</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- The main body -->
+                <div class="main">
+                    <div class="head space-between">
+                        <div class="links">
+                            <a href="../../../index.html" aria-label="Featured products">Home</a>
+                            <a href="#" aria-label="New products">New products</a>
+                            <a href="#" aria-label="discounted items">Discounted items</a>
+                            <a href="#" aria-label="read our blog">Blog</a>
+                            <a href="#" aria-label="Contact us">Contact</a>
+                        </div>
+
+                        <div class="footer">
+                            <a href="#" aria-label="View your wishlist" class="nav-icon-link">
+                                <img src="../../../static/img/icons/red-heart.svg" alt="wishlist" class="nav-icon">
+                                <span class="item-count" aria-hidden="true"></span>
+                            </a>
+                            <a href="#" aria-label="View your cart" class="nav-icon-link">
+                                <img src="../../../static/img/icons/cart.svg" alt="cart" class="nav-icon item-cart-img">
+                                <span class="item-count item-cart" aria-hidden="true"></span>
+                            </a>
+                            <a href="#" aria-label="Total items cost £150" class="cart-item-total">Items: £0.00</a>
+                        </div>
+                    </div>
+
+                    <!-- breadcrumbs -->
+                    <ul class="breadcrumb order-breadcrumb">
+                        <li><a href="../../../index.html">Home</a></li>
+                        <li><a href="../account/account.html">My Account</a></li>
+                        <li><a href="../orders/orders.html">Orders</a></li>
+                        <li class="item-name"></li>
+                    </ul>
+
+                    <div id="view-item">
+
+                        <div class="view-item__container">
+
+                            <!-- The main section -->
+                            <div class="view-item__container__main">
+
+                                <!-- The main product -->
+                                <div class="item box-display two-column-grid">
+                                    <div class="view-item__img">
+                                        <img src="" alt="" class="view-item__img">
+                                    </div>
+
+                                    <div class="view-item__title">
+                                        <div class="view-item_title__wrapper">
+                                            <h3></h3>
+                                            <a href="#">View product detail</a>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+
+                                <!-- the day it was delivered -->
+                                <div class="view-item__delivered box-display">
+                                    <div class="view-item__head">
+                                        <span class="view-item__delivered-date"></span>
+                                        <p class="padding-top-md view-item__deliver-msg"></p>
+                                    </div>
+
+                                    <div class="view-item__body">
+                                        <button class="view-item-btn">Track button</button>
+                                    </div>
+                                </div>
+
+                                <!-- help section -->
+                                <div class="view-item__help box-display">
+                                
+                                    <div class="view-item__title">
+                                        <h3 class="padding-bottom-md">Need help with your item?</h3>
+                                        <p>Return item</p>
+                                        <p class="view-item__return-msg highlight"></p>
+                                    </div>
+                                </div>
+
+                                 <!-- review item section -->
+                                 <div class="view-item__review-section box-display">
+                                
+                                    <div class="view-item__title flex-col">
+                                        <h3 class="padding-bottom-md">How's your item?</h3>
+                                       
+                                        <a href="#">Write a product review</a>
+                                        <a href="#">Leave feedback</a>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="view-item__side">
+
+                                <!-- Buttons -->
+                                <div class="view-item__side__buttons box-display">
+                                    <button class="view-item-btn">Buy it again</button>
+                                    <button class="view-item-btn">Add to cart</button>
+                                </div>
+
+                                <!-- order info -->
+                                 <div class="view-item__side-order-info flex-col box-display">
+                                    <h3>Order info</h3>
+                                    <hr>
+                                    
+                                    <p class="view-item__ordered_by">Ordered by: Egbie</p>
+                                    <p class="view-item__order-id"></p>
+                                    <p class="view-item__order-total"></p>
+                                    <p class="view-item__date-ordered"></p>
+
+                                 </div>
+
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+            </div>
+            </div>
+
+
+
+            </div>
+
+            </div>
+            </div>
+
+
+            </div>
+        </section>
+    </main>
+
+
+    <footer>
+        <div class="container">
+            <div class="footer-section" aria-labelledby="quick-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Shop</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section" aria-labelledby="customer-service">
+                <h4>Customer Service</h4>
+                <ul>
+                    <li><a href="#">Help Center / FAQs</a></li>
+                    <li><a href="#">Shipping & Delivery</a></li>
+                    <li><a href="#">Returns & Refunds</a></li>
+                    <li><a href="#">Track Your Order</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section" aria-labelledby="my-account">
+                <h4>My Account</h4>
+                <ul>
+                    <li><a href="#">My Account</a></li>
+                    <li><a href="#">Sign In / Register</a></li>
+                    <li><a href="#">Wishlist</a></li>
+                    <li><a href="#">Subscription Preferences</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section" aria-labelledby="company-information">
+                <h4>Company Information</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press & Media</a></li>
+                    <li><a href="#">Affiliate Program</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section" aria-labelledby="Policies">
+                <h4>Policies</h4>
+                <ul>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                    <li><a href="#">Sustainability Practices</a></li>
+                    <li><a href="#">Supplier Standards</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section" aria-labelledby="Engage with us">
+                <h4>Engage with Us</h4>
+                <ul>
+                    <li><a href="#">Newsletter Signup</a></li>
+                    <li><a href="#" target="_blank">Follow Us on Facebook</a></li>
+                    <li><a href="#" target="_blank">Follow Us on Instagram</a></li>
+                    <li><a href="#" target="_blank">Follow Us on Twitter</a></li>
+                    <li><a href="#" target="_blank">Follow Us on Pinterest</a></li>
+                    <li><a href="#">Customer Reviews</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Recipe Ideas</a></li>
+                    <li><a href="#">Seasonal Produce Guide</a></li>
+                    <li><a href="#">Nutritional Information</a></li>
+                    <li><a href="#">Cooking Tips</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section contact-us">
+                <h4>Contact Us</h4>
+                <ul>
+                    <li>Email: <a href="mailto:egbieuku@hotmail.com" class="email-footer-link">egbieuku@hotmail.com</a>
+                    </li>
+                    <li>Phone: <a href="#">+44(079) 572 04547</a></li>
+                    <li>Address: <a href="https://www.google.com/maps?q=123+Market+Street,+City,+Country"
+                            target="_blank">
+                            123 Madeup Street, London, United Kingdom</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Secure Shopping</h4>
+                <ul>
+                    <li><a href="#">Payment Methods</a></li>
+                    <li><a href="#">Secure Shopping Information</a></li>
+              
+                </ul>
+            </div>
+        </div>
+    </footer>
+  
+    <script src="../../../static/js/pages/view-item.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.all.min.js"></script>
+
+
+
+</body>
+
+</html>

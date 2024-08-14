@@ -1,0 +1,568 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="{% static 'img/display/jpg/logo.png' %}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/css.css' %}">
+    <title>Detailed description and specification</title>
+</head>
+
+<body>
+    <div class="dim-overlay" id="dimOverlay"></div>
+
+    <!-- The navigation  -->
+    <nav aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-info nav-body">
+                <div class="nav-container__shipping">
+                    <a href="#" aria-label="Free shipping information" class="nav-link">Free shipping</a>
+                </div>
+            </div>
+
+            <div class="nav-info nav-footer">
+                <div class="nav-container__account">
+                    <a href="#" aria-label="View account" class="nav-link">My account</a>
+
+                    <div class="nav-container__account__dropdown-menu my-account">
+                        <div class="my-account__container">
+                            <div class="buy-it-again">
+                                <h4>Buy it Again</h4>
+                                <a href="#" class="dropdown-menu-link">View All && Manage</a>
+
+                                <div class="buy-it-again__container">
+                                    <div class="item">
+                                        <div class="item-img">
+                                            <a href="#"><img src="../../../../static/img/display/jpg/avacodo.jpg"
+                                                    alt="An image of item bought" class="bought-item-img"></a>
+                                        </div>
+
+                                        <div class="item-info">
+                                            <ul>
+                                                <li><a href="#" class="dropdown-menu-link">Avacado</a></li>
+                                                <li>£5.99</li>
+                                                <li><button class="button-sm buy-it-again-btn">Add to cart</button></li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- item 2 -->
+                                    <div class="item">
+                                        <div class="item-img">
+                                            <a href="#"><img
+                                                    src="../../../../static/img/display/jpg/box-of-oranges.jpeg"
+                                                    alt="An image of item bought" class="bought-item-img"></a>
+
+                                        </div>
+
+                                        <div class="item-info">
+                                            <ul>
+
+                                                <li><a href="#" class="dropdown-menu-link">Bulk Pack Organic Sicilian
+                                                        Orange</a></li>
+
+                                                <li>£15.99</li>
+                                                <li><button class="button-sm buy-it-again-btn">Add to cart</button></li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- item 3 -->
+                                    <div class="item">
+                                        <div class="item-img">
+                                            <a href="#"><img src="../../../../static/img/display/jpg/cashew.jpg"
+                                                    alt="An image of item bought" class="bought-item-img"></a>
+
+                                        </div>
+
+                                        <div class="item-info">
+                                            <ul>
+
+                                                <li><a href="#" class="dropdown-menu-link">Cashew, Almonds And Mint
+                                                        Seeds</a></li>
+
+                                                <li>£10.49</li>
+                                                <li><button class="button-sm buy-it-again-btn">Add to cart</button></li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- item 4 -->
+                                    <div class="item">
+                                        <div class="item-img">
+                                            <a href="#"><img
+                                                    src="../../../../static/img/display/jpg/turkish-mullberries.jpg"
+                                                    alt="An image of item bought" class="bought-item-img"></a>
+
+                                        </div>
+
+                                        <div class="item-info">
+                                            <ul>
+                                                <li><a href="#" class="dropdown-menu-link">Natural Kashmiri Turkish
+                                                        Walnuts</a></li>
+                                                <li>£20.99</li>
+                                                <li><button class="button-sm buy-it-again-btn">Add to cart</button></li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+
+                            <div class="my-account__main">
+                                <div class="header center">
+                                    <a href="#" class="dropdown-menu-link">Manage profiles &gt;</a>
+                                </div>
+                                <div class="my-account__main__container">
+                                    <div class="your-lists">
+                                        <h4>My Lists</h4>
+                                        <ul class="my-account__links">
+                                            <li><a href="#" class="dropdown-menu-link">Wishlist</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">Create a wishlist</a></li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="my-account">
+                                        <h4>Account</h4>
+                                        <ul class="my-account__links">
+                                            <li><a href="../../account/account.html" class="dropdown-menu-link">my
+                                                    account</a></li>
+                                            <li><a href="../../orders/orders.html" class="dropdown-menu-link">my
+                                                    orders</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">my list</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">My addresses</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">Payment methods</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">Account settings</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">Change password</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">Sign out</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="administration__container">
+
+                        </div>
+                    </div>
+                    <a href="#" aria-label="logged in" class="nav-link logged-in">Hi, Egbie (logged in)</a>
+
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <main>
+        <section id="product-management" aria-labelledby="product-management-heading">
+            <div class="content-container">
+                <div class="logo center">
+                    <a href="../../../../index.html">
+                        <img src="../../../../static/img/display/jpg/logo.png" alt="The logo" class="account-logo-img">
+                    </a>
+                </div>
+
+                <ul class="breadcrumb">
+
+                    <li><a href="../../../../index.html">Home</a></li>
+                    <li><a href="../../account/account.html">My account</a></li>
+                    <li><a href="../../project-management/add-new-product/project-management-overview.html">Product
+                        management overview</a></li>
+                    <li>Add new product</li>
+                </ul>
+                <h1 id="add-product-heading" class="padding-top-md lighten text-capitalize">Add new product</h1>
+                <p class="account-info">Detailed Description and Specifications</p>
+
+                <hr class="dividor">
+
+                <section id="detailed-specification" aria-labelledby="detailed-description" class="add-prodct-section">
+                    <div class="add-product-container">
+                        <form action="" method="post" class="add-product-form" id="detailed-description-form">
+                       
+
+                            <legend class="text-capitalize">Colors options</legend>
+                            <hr class="dividor">
+                            <fieldset class="colors">
+                                <div class="color">
+                                    <input type="checkbox" id="colorRed" name="color" value="Red" data-color="Red">
+                                    <label for="colorRed" class="red">Red</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorGreen" name="color" value="Green" data-color="Green">
+                                    <label for="colorGreen" class="green">Green</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorBlue" name="color" value="Blue" data-color="Blue">
+                                    <label for="colorBlue" class="blue">Blue</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorYellow" name="color" value="Yellow" data-color="Yellow">
+                                    <label for="colorYellow" class="yellow">Yellow</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorBlack" name="color" value="Black" data-color="Black">
+                                    <label for="colorBlack" class="black">Black</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorWhite" name="color" value="White" data-color="White">
+                                    <label for="colorWhite">White</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorGray" name="color" value="Gray" data-color="Gray">
+                                    <label for="colorGray" class="gray">Gray</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorBrown" name="color" value="Brown" data-color="Brown">
+                                    <label for="colorBrown" class="brown">Brown</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorOrange" name="color" value="Orange" data-color="Orange">
+                                    <label for="colorOrange" class="orange">Orange</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorPink" name="color" value="Pink" data-color="Pink">
+                                    <label for="colorPink">Pink</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorPurple" name="color" value="Purple" data-color="Purple">
+                                    <label for="colorPurple" class="purple">Purple</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorCyan" name="color" value="Cyan" data-color="Cyan">
+                                    <label for="colorCyan" class="cyan">Cyan</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorMagenta" name="color" value="Magenta" data-color="Magenta">
+                                    <label for="colorMagenta" class="magenta">Magenta</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorBeige" name="color" value="Beige" data-color="Beige">
+                                    <label for="colorBeige">Beige</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorMaroon" name="color" value="Maroon" data-color="Maroon">
+                                    <label for="colorMaroon" class="maroon">Maroon</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorNavy" name="color" value="Navy" data-color="Navy">
+                                    <label for="colorNavy" class="navy">Navy</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorOlive" name="color" value="Olive" data-color="Olive">
+                                    <label for="colorOlive" class="olive">Olive</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorTeal" name="color" value="Teal" data-color="Teal">
+                                    <label for="colorTeal" class="teal">Teal</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorLime" name="color" value="Lime" data-color="Lime">
+                                    <label for="colorLime" class="lime">Lime</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorIndigo" name="color" value="Indigo" data-color="Indigo">
+                                    <label for="colorIndigo" class="indigo">Indigo</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorViolet" name="color" value="Violet" data-color="Violet">
+                                    <label for="colorViolet" class="violet">Violet</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorGold" name="color" value="Gold" data-color="Gold">
+                                    <label for="colorGold" class="gold">Gold</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorSilver" name="color" value="Silver" data-color="Silver">
+                                    <label for="colorSilver" class="silver">Silver</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorBronze" name="color" value="Bronze" data-color="Bronze">
+                                    <label for="colorBronze" class="bronze">Bronze</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorCoral" name="color" value="Coral" data-color="Coral">
+                                    <label for="colorCoral" class="coral">Coral</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorTurquoise" name="color" value="Turquoise" data-color="Turquoise">
+                                    <label for="colorTurquoise" class="turquoise">Turquoise</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorLavender" name="color" value="Lavender" data-color="Lavender">
+                                    <label for="colorLavender">Lavender</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorPeach" name="color" value="Peach" data-color="Peach">
+                                    <label for="colorPeach" class="peach">Peach</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorMint" name="color" value="Mint" data-color="Mint">
+                                    <label for="colorMint" class="mint">Mint</label><br>
+                                </div>
+                            
+                                <div class="color">
+                                    <input type="checkbox" id="colorAqua" name="color" value="Aqua" data-color="Aqua">
+                                    <label for="colorAqua" class="aqua">Aqua</label><br>
+                                </div>
+                            </fieldset>
+                            
+                            <p class="error-msg" id="color-error-msg">You must select at least one color</p>
+
+                            <!-- The dimensions -->
+                            <fieldset class="dimensions">
+                                <legend>Food Dimensions</legend>
+                                <hr class="dividor">
+
+                                <label for="length">Length (in centimeters)</label>
+                                <input type="number" name="length" id="length" min="0.1" max="10000" step="0.1" aria-required="true" aria-label="Length input" placeholder="Enter length in cm" required>
+                            
+                                <label for="width">Width (in centimeters)</label>
+                                <input type="number" name="width" id="width" min="0.1" max="10000" step="0.1" aria-required="true" aria-label="Width input" placeholder="Enter width in cm" required>
+                            
+                                <label for="height">Height (in centimeters)</label>
+                                <input type="number" name="height" id="height" min="0.1" max="10000" step="0.1" aria-required="true" aria-label="Height input" placeholder="Enter height in cm" required>
+                            </fieldset>
+                            
+                            <p class="error-msg" id="size-error-msg">You must select at least one size</p>
+                           
+                            <legend class="text-capitalize">Size options</legend>
+                            <hr class="dividor">
+                            <fieldset class="sizes">
+                                
+
+                                <div class="small size">
+                                    <input type="checkbox" id="small" name="size" value="small" data-size="small">
+                                    <label for="small" class="item-small">Small</label><br>
+                                </div>
+                            
+                                <div class="medium size">
+                                    <input type="checkbox" id="medium" name="size" value="medium" data-size="medium">
+                                    <label for="medium" class="item-medium">Medium</label><br>
+                                </div>
+                            
+                                <div class="large size">
+                                    <input type="checkbox" id="large" name="size" value="large" data-size="large">
+                                    <label for="large" class="item-large">Large</label><br>
+                                </div>
+                            </fieldset>
+                            
+                            <p class="error-msg" id="size-error-msg">You must select at least one size</p>
+
+                            <legend class="text-capitalize">Weight</legend>
+                            <hr class="dividor">
+                            <label for="weight">Weight (gram)</label>
+                            <input type="number" name="weight" id="weight" min="1" max="10000" step="0.1" required>
+
+
+                            <legend class="text-capitalize">Description</legend>
+                            <hr class="dividor">
+                            <label for="detailed-description">Detailed Description</label>
+                            <textarea name="description" id="detailed-description" rows="10" cols="10" required></textarea>
+                            <p class="flex-end minimum-characters">Minimum characters to use: 50</p>
+                            <p class="maximum-characters flex-end">Number of characters remaining: 1000</p>
+
+                            <div class="button space-between">
+                                <button class="prev-button" type="button" onclick="prevPage(event, 1)"> &lt; prev</button>
+                                <button type="submit" class="next-button"> next &gt;</button>
+                            </div>
+                        </form>
+
+                        <div class="progress-list">
+                            <p id="basic-product-information" class="progress-link">
+                                <span><img src="../../../../static/img/icons/checkmark-running.svg"
+                                        alt="a check mark icon" class="icon"></span>
+                                Basic Product information
+                            </p>
+                            <p id="detailed-description-specs" class="opacity-md">
+                                <span><img src="../../../../static/img/icons/checkmark-running.svg"
+                                        alt="a check mark icon" class="icon"></span>
+                                Description and Specifications (current page)
+                            </p>
+                            <p id="pricing-inventory" class="opacity-md">
+                                <span><img src="../../../../static/img/icons/checkmark-running.svg"
+                                        alt="a check mark icon" class="icon"></span>
+                                Pricing and Inventory
+                            </p>
+                            <p id="images-media" class="opacity-md">
+                                <span><img src="../../../../static/img/icons/checkmark-running.svg"
+                                        alt="a check mark icon" class="icon"></span>
+                                Images and media
+                            </p>
+                            <p id="shipping-delivery" class="opacity-md">
+                                <span><img src="../../../../static/img/icons/checkmark-running.svg"
+                                        alt="a check mark icon" class="icon"></span>
+                                Shipping and delivery
+                            </p>
+                            <p id="seo-meta-info" class="opacity-md">
+                                <span><img src="../../../../static/img/icons/checkmark-running.svg"
+                                        alt="a check mark icon" class="icon"></span>
+                                SEO and Meta Information
+                            </p>
+                            <p id="additional-info" class="opacity-md">
+                                <span><img src="../../../../static/img/icons/checkmark-running.svg"
+                                        alt="a check mark icon" class="icon"></span>
+                                Additional information
+                            </p>
+                            <p id="review-submit" class="opacity-md">
+                                <span><img src="../../../../static/img/icons/checkmark-running.svg"
+                                        alt="a check mark icon" class="icon"></span>
+                                Review and Submit
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+
+
+            </div>
+        </section>
+
+
+    </main>
+
+
+
+    <footer>
+        <div class="container">
+            <div class="footer-section" aria-labelledby="quick-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Shop</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section" aria-labelledby="customer-service">
+                <h4>Customer Service</h4>
+                <ul>
+                    <li><a href="#">Help Center / FAQs</a></li>
+                    <li><a href="#">Shipping & Delivery</a></li>
+                    <li><a href="#">Returns & Refunds</a></li>
+                    <li><a href="#">Track Your Order</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section" aria-labelledby="my-account">
+                <h4>My Account</h4>
+                <ul>
+                    <li><a href="#">My Account</a></li>
+                    <li><a href="#">Sign In / Register</a></li>
+                    <li><a href="#">Wishlist</a></li>
+                    <li><a href="#">Subscription Preferences</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section" aria-labelledby="company-information">
+                <h4>Company Information</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press & Media</a></li>
+                    <li><a href="#">Affiliate Program</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section" aria-labelledby="Policies">
+                <h4>Policies</h4>
+                <ul>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                    <li><a href="#">Sustainability Practices</a></li>
+                    <li><a href="#">Supplier Standards</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section" aria-labelledby="Engage with us">
+                <h4>Engage with Us</h4>
+                <ul>
+                    <li><a href="#">Newsletter Signup</a></li>
+                    <li><a href="#" target="_blank">Follow Us on Facebook</a></li>
+                    <li><a href="#" target="_blank">Follow Us on Instagram</a></li>
+                    <li><a href="#" target="_blank">Follow Us on Twitter</a></li>
+                    <li><a href="#" target="_blank">Follow Us on Pinterest</a></li>
+                    <li><a href="#">Customer Reviews</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Recipe Ideas</a></li>
+                    <li><a href="#">Seasonal Produce Guide</a></li>
+                    <li><a href="#">Nutritional Information</a></li>
+                    <li><a href="#">Cooking Tips</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section contact-us">
+                <h4>Contact Us</h4>
+                <ul>
+                    <li>Email: <a href="mailto:egbieuku@hotmail.com" class="email-footer-link">egbieuku@hotmail.com</a>
+                    </li>
+                    <li>Phone: <a href="#">+44(079) 572 04547</a></li>
+                    <li>Address: <a href="https://www.google.com/maps?q=123+Market+Street,+City,+Country"
+                            target="_blank">
+                            123 Madeup Street, London, United Kingdom</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Secure Shopping</h4>
+                <ul>
+                    <li><a href="#">Payment Methods</a></li>
+                    <li><a href="#">Secure Shopping Information</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../../../static/js/components/add-product.js" type="module"></script>
+
+</body>
+
+</html>

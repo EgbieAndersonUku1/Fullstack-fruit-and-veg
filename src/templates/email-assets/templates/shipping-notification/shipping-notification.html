@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipping notification</title>
+</head>
+<body style="min-height: 90vh; max-height: 100vh; overflow: auto; margin: 0; padding: 0;">
+
+    <main>
+
+        <section id="registration" style="background: ghostwhite;">
+
+            <div class="container" style="background: white; width: 70%; margin: auto; padding: 16px;">
+
+                <div class="logo" style="position: relative; height: 200px; width: 200px; margin: auto;">
+                    <img src="../../icons/logo.png" alt="" class="img-logo" style="height: 100%; width: 100%;">
+                </div>
+
+                <h1 class="center" style="text-align: center; font-family: fantasy; font-size: 2rem; color: rgb(6, 64, 6);">EU organics online store</h1>
+
+                <div class="images" style="text-align: center;">
+                    <div class="cards" style="display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: auto; column-gap: 10px;">
+
+                        <div class="card" style="margin-bottom: 16px;">
+                            <div class="body">
+                                <img src="../../icons/drink-banner.jpeg" alt="" class="card-img" style="height: 200px; width: 100%; border-radius: 4%;">
+                            </div>
+                            <div class="footer"></div>
+                        </div>
+
+                        <div class="card" style="margin-bottom: 16px;">
+                            <div class="body">
+                                <img src="../../icons/organic-baked-goods-banner.jpeg" alt="" class="card-img" style="height: 200px; width: 100%; border-radius: 4%;">
+                            </div>
+                            <div class="footer"></div>
+                        </div>
+
+                        <div class="card" style="margin-bottom: 16px;">
+                            <div class="body">
+                                <img src="../../icons/organic-snacks-banner.jpeg" alt="" class="card-img" style="height: 200px; width: 100%; border-radius: 4%;">
+                            </div>
+                            <div class="footer"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="content">
+                    <p style="font-family: Arial, sans-serif; font-size: 1.5rem; width: 90%; text-align: left; margin-top: 8px;">Welcome to EUOrganics!</p>
+
+                    <p style="font-family: Arial, sans-serif; font-size: 1.1rem; width: 90%; text-align: left; margin-top: 32px; margin-bottom: 32px; font-weight: bold;">Dear {{ username }}</p>
+
+                    <p style="font-family: Arial, sans-serif; font-size: 1.1rem; width: 90%; text-align: left; margin-top: 8px; margin-bottom: 32px;">
+                        We are excited to inform you that your order {{OrderID}} has been shipped and is on its way to you!                    
+                    </p>
+
+                    <p style="font-family: Arial, sans-serif; font-size: 1.1rem; width: 90%; text-align: left; margin-top: 8px; margin-bottom: 4px; font-weight: bold;">
+                        Shipping Details:
+                    </p>
+
+
+                    <ul style="font-family: Arial, sans-serif; font-size: 1.1rem; width: 90%; text-align: left; margin-top: 8px; margin-bottom: 32px;">
+                        <li style="font-weight: bold;">
+                            Order Number: 
+                            <span style="font-weight: 300;">{{ OrderID }}</span>
+                        </li>
+                        <li style="font-weight: bold;">
+                            Shipping date: 
+                            <span style="font-weight: 300;">{{ shippingDate }}</span>
+                        </li>
+                        <li style="font-weight: bold;">
+                            Estimated Delivery Date: 
+                            <span style="font-weight: 300;">{{ EstimatedDeliveryDate }}</span>
+                        </li>
+                        <li style="font-weight: bold;">
+                            Shipping Address: 
+                            <span style="font-weight: 300;">{{ shippingAddress }}</span>
+                        </li>
+                    </ul>
+                    
+
+
+                    <p style="font-family: Arial, sans-serif; font-size: 1.1rem; width: 90%; text-align: left; margin-top: 8px; margin-bottom: 4px; font-weight: bold;">
+                        Order Summary:
+                    </p>
+
+                    <!-- A for loop to loop and display the products, quantity and their total price -->
+                    <ul style="font-family: Arial, sans-serif; font-size: 1.1rem; width: 90%; text-align: left; margin-top: 8px; margin-bottom: 32px;">
+                        <li>{{ ProductName1 }} x {{ Quantity1 }} = {{ price }}</li>
+                        <li>{{ ProductName2 }} x {{ Quantity2 }} = {{ price }}</li>
+                        <li>{{ ProductName3 }} x {{ Quantity3 }} = {{ price }}</li>
+                        <li>{{ ProductName4 }} x {{ Quantity4 }} = {{ price }}</li>
+                        
+                    </ul>
+
+
+                    <p style="font-family: Arial, sans-serif; font-size: 1.1rem; width: 90%; text-align: left; margin-top: 32px; margin-bottom: 2px; font-weight: bold;">
+                        Tracking Information:
+                    </p>
+
+                    <ul style="font-family: Arial, sans-serif; font-size: 1.1rem; width: 90%; text-align: left; margin-top: 8px; margin-bottom: 64px;">
+                      
+                        <li>
+                            You can track your order using the following link: 
+                            <a href="#" style="font-family: Arial, sans-serif; font-size: 1.1rem; color: blue; text-decoration: none;">{{ trackingLink }}</a>
+                        </li>
+
+                        <li>Your tracking number is {{ TrackingNumber }}</li>
+                    </ul>
+
+                   
+
+                    <p style="font-family: Arial, sans-serif; font-size: 1.1rem; width: 90%; text-align: left; margin-top: 2px;">
+                        Thank you for choosing EUOrganics for your organic food needs. We hope you enjoy your purchase and look forward to serving you again soon!
+                    </p>
+
+
+                    <hr style="color: lavender; margin-top: 108px; margin-bottom: 12px;">
+                    <div class="footer" style="margin-top: 30px;text-align: center; font-size: 0.9em; color: #666666;">
+                        <p style="font-family: Arial, sans-serif; font-size: 1.1rem; width: 90%; text-align: left; margin-top: 8px; ">Best regards,<br>The EUOrganics Team</a></p>
+    
+                        <p style="font-family: Arial, sans-serif; font-size: 1.1rem; width: 90%; text-align: left; margin-top: 8px; ">If you have any questions or need further assistance, feel free to reach out to our support team at <a href="mailto:support@yourdomain.com">{{support@yourdomain.com}}</a></p>
+                        <p style="font-family: Arial, sans-serif; font-size: 1.1rem; width: 90%; text-align: left; ">{{ website }}</p>
+                        <p style="font-family: Arial, sans-serif; font-size: 1.1rem; width: 90%; text-align: left; ">{{ supportPhoneNumber }}</p>
+                        <p style="font-family: Arial, sans-serif; font-size: 1.1rem; width: 90%; text-align: left; ">The EUOrganics Team</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+</body>
+</html>

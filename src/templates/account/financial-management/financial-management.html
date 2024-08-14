@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="../../../static/img/display/jpg/logo.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="../../../static/css/csss.css">
+    <title>account</title>
+</head>
+
+<body>
+    <div class="dim-overlay" id="dimOverlay"></div>
+
+    <!-- The navigation  -->
+    <nav aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-info nav-body">
+                <div class="nav-container__shipping">
+                    <a href="#" aria-label="Free shipping information" class="nav-link">Free shipping</a>
+                </div>
+            </div>
+
+            <div class="nav-info nav-footer">
+                <div class="nav-container__account">
+                    <a href="#" aria-label="View account" class="nav-link">My account</a>
+                    
+                    <div class="nav-container__account__dropdown-menu my-account">
+                        <div class="my-account__container">
+                            <div class="buy-it-again">
+                                <h4>Buy it Again</h4>
+                                <a href="#" class="dropdown-menu-link">View All && Manage</a>
+
+                                <div class="buy-it-again__container">
+                                    <div class="item">
+                                        <div class="item-img">
+                                            <a href="#"><img src="../../../static/img/display/jpg/avacodo.jpg"
+                                                    alt="An image of item bought" class="bought-item-img"></a>
+                                        </div>
+
+                                        <div class="item-info">
+                                            <ul>
+                                                <li><a href="#" class="dropdown-menu-link">Avacado</a></li>
+                                                <li>£5.99</li>
+                                                <li><button class="button-sm buy-it-again-btn">Add to cart</button></li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- item 2 -->
+                                    <div class="item">
+                                        <div class="item-img">
+                                            <a href="#"><img src="../../../static/img/display/jpg/box-of-oranges.jpeg"
+                                                    alt="An image of item bought" class="bought-item-img"></a>
+
+                                        </div>
+
+                                        <div class="item-info">
+                                            <ul>
+
+                                                <li><a href="#" class="dropdown-menu-link">Bulk Pack Organic Sicilian
+                                                        Orange</a></li>
+
+                                                <li>£15.99</li>
+                                                <li><button class="button-sm buy-it-again-btn">Add to cart</button></li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- item 3 -->
+                                    <div class="item">
+                                        <div class="item-img">
+                                            <a href="#"><img src="../../../static/img/display/jpg/cashew.jpg"
+                                                    alt="An image of item bought" class="bought-item-img"></a>
+
+                                        </div>
+
+                                        <div class="item-info">
+                                            <ul>
+
+                                                <li><a href="#" class="dropdown-menu-link">Cashew, Almonds And Mint
+                                                        Seeds</a></li>
+
+                                                <li>£10.49</li>
+                                                <li><button class="button-sm buy-it-again-btn">Add to cart</button></li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- item 4 -->
+                                    <div class="item">
+                                        <div class="item-img">
+                                            <a href="#"><img src="../../../static/img/display/jpg/turkish-mullberries.jpg"
+                                                    alt="An image of item bought" class="bought-item-img"></a>
+
+                                        </div>
+
+                                        <div class="item-info">
+                                            <ul>
+                                                <li><a href="#" class="dropdown-menu-link">Natural Kashmiri Turkish
+                                                        Walnuts</a></li>
+                                                <li>£20.99</li>
+                                                <li><button class="button-sm buy-it-again-btn">Add to cart</button></li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+
+                            <div class="my-account__main">
+                                <div class="header center">
+                                    <a href="#" class="dropdown-menu-link">Manage profiles &gt;</a>
+                                </div>
+                                <div class="my-account__main__container">
+                                    <div class="your-lists">
+                                        <h4>My Lists</h4>
+                                        <ul class="my-account__links">
+                                            <li><a href="#" class="dropdown-menu-link">Wishlist</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">Create a wishlist</a></li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="my-account">
+                                        <h4>Account</h4>
+                                        <ul class="my-account__links">
+                                            <li><a href="../account/account.html" class="dropdown-menu-link">my account</a></li>
+                                            <li><a href="../orders/orders.html" class="dropdown-menu-link">my orders</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">my list</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">My addresses</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">Payment methods</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">Account settings</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">Change password</a></li>
+                                            <li><a href="#" class="dropdown-menu-link">Sign out</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="administration__container">
+
+                        </div>
+                    </div>
+                    <a href="#" aria-label="logged in" class="nav-link logged-in">Hi, Egbie (logged in)</a>
+
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <main>
+        <section id="financial-management" aria-labelledby="financial-management-heading">
+            <div class="content-container">
+                <div class="logo center">
+                    <img src="../../../static/img/display/jpg/logo.png" alt="The logo" class="account-logo-img">
+                </div>
+
+                <ul class="breadcrumb">
+                    <li><a href="../../../index.html">Home</a></li>
+                    <li><a href="../account/account.html">My account</a></li>
+                    <li>Financial management</li>
+                </ul>
+                <h1 id="financial-management-heading" class="padding-top-md lighten text-capitalize">Financial Management</h1>
+                <p class="account-info">Manage financials</p>
+               
+                <hr class="dividor">
+                <div class="account__options cards">
+                    <a href="#" aria-labelledby="financial-heading" class="card-link">
+                        <div class="card-grid">
+                            <div class="head">
+                                <img src="../../../static/img/icons/view-financial-account-reopen.svg" alt="financial account book icon" class="account-icon">
+                            </div>
+                            <div class="body">
+                                <p id="financial-heading" class="title">Financial Summary Dashboard</p>
+                                <p id="financial-description">Get a comprehensive overview of your financial activities at a glance.</p>
+                            </div>
+                            
+                        </div>
+                    </a>
+                    <a href="#" aria-labelledby="transactions-heading" class="card-link">
+                        <div class="card-grid">
+                            <div class="head">
+                                <img src="../../../static/img/icons/tran.svg" alt="transactions icon" class="account-icon">
+                            </div>
+                            <div class="body">
+                                <p id="transactions-heading">Transactions</p>
+                                <p id="transactions-description">Monitor all transactions.</p>
+                            </div>
+                            
+                        </div>
+                    </a>
+                    <a href="#" aria-labelledby="refund-management-heading" class="card-link">
+                        <div class="card-grid">
+                            <div class="head">
+                                <img src="../../../static/img/icons/money-refund-dollar.svg" alt="refund dollar icon" class="account-icon">
+                            </div>
+                            <div class="body">
+                                <p id="refund-management-heading">Refund Management</p>
+                                <p id="refund-management-description">Handle refunds, process requests, and manage customer reimbursements.</p>
+                            </div>
+                            
+                        </div>
+                    </a>
+                    <a href="#" aria-labelledby="invoices-heading" class="card-link">
+                        <div class="card-grid">
+                            <div class="head">
+                                <img src="../../../static/img/icons/bill.svg" alt="invoices-heading icon" class="account-icon">
+                            </div>
+                            <div class="body">
+                                <p id="invoices-heading">Invoices</p>
+                                <p id="invoices-description">Manage billing details, track payment statuses, and generate financial records.</p>
+                            </div>
+                            
+                        </div>
+                    </a>
+                    <a href="#" aria-labelledby="expenses-heading" class="card-link">
+                        <div class="card-grid">
+                            <div class="head">
+                                <img src="../../../static/img/icons/corp-interest-expenses.svg" alt="expenses icon" class="account-icon">
+                            </div>
+                            <div class="body">
+                                <p id="expenses-heading">Expenses</p>
+                                <p id="expenses-description">Track operational costs, manage expenses, and maintain financial transparency.</p>
+                            </div>
+                            
+                        </div>
+                    </a>
+                    <a href="#" aria-labelledby="tax-management-heading" class="card-link">
+                        <div class="card-grid">
+                            <div class="head">
+                                <img src="../../../static/img/icons/corp-sundry-taxes.svg" alt="tax management icon" class="account-icon">
+                            </div>
+                            <div class="body">
+                                <p id="tax-management-heading">Tax Management</p>
+                                <p id="tax-management-description">Configure tax rates, generate tax reports, and manage tax filings efficiently.</p>
+                            </div>
+                            
+                        </div>
+                    </a>
+                 
+                </div>
+
+              
+            </div>
+        </section>
+
+       
+    </main>
+    
+
+
+    <footer>
+        <div class="container">
+            <div class="footer-section" aria-labelledby="quick-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Shop</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section" aria-labelledby="customer-service">
+                <h4>Customer Service</h4>
+                <ul>
+                    <li><a href="#">Help Center / FAQs</a></li>
+                    <li><a href="#">Shipping & Delivery</a></li>
+                    <li><a href="#">Returns & Refunds</a></li>
+                    <li><a href="#">Track Your Order</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section" aria-labelledby="my-account">
+                <h4>My Account</h4>
+                <ul>
+                    <li><a href="#">My Account</a></li>
+                    <li><a href="#">Sign In / Register</a></li>
+                    <li><a href="#">Wishlist</a></li>
+                    <li><a href="#">Subscription Preferences</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section" aria-labelledby="company-information">
+                <h4>Company Information</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press & Media</a></li>
+                    <li><a href="#">Affiliate Program</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section" aria-labelledby="Policies">
+                <h4>Policies</h4>
+                <ul>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                    <li><a href="#">Sustainability Practices</a></li>
+                    <li><a href="#">Supplier Standards</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section" aria-labelledby="Engage with us">
+                <h4>Engage with Us</h4>
+                <ul>
+                    <li><a href="#">Newsletter Signup</a></li>
+                    <li><a href="#" target="_blank">Follow Us on Facebook</a></li>
+                    <li><a href="#" target="_blank">Follow Us on Instagram</a></li>
+                    <li><a href="#" target="_blank">Follow Us on Twitter</a></li>
+                    <li><a href="#" target="_blank">Follow Us on Pinterest</a></li>
+                    <li><a href="#">Customer Reviews</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Recipe Ideas</a></li>
+                    <li><a href="#">Seasonal Produce Guide</a></li>
+                    <li><a href="#">Nutritional Information</a></li>
+                    <li><a href="#">Cooking Tips</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section contact-us">
+                <h4>Contact Us</h4>
+                <ul>
+                    <li>Email: <a href="mailto:egbieuku@hotmail.com" class="email-footer-link">egbieuku@hotmail.com</a>
+                    </li>
+                    <li>Phone: <a href="#">+44(079) 572 04547</a></li>
+                    <li>Address: <a href="https://www.google.com/maps?q=123+Market+Street,+City,+Country"
+                            target="_blank">
+                            123 Madeup Street, London, United Kingdom</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Secure Shopping</h4>
+                <ul>
+                    <li><a href="#">Payment Methods</a></li>
+                    <li><a href="#">Secure Shopping Information</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+   
+    <script src="static/js/modules/auth.js" type="module"></script>
+
+</body>
+
+</html>
