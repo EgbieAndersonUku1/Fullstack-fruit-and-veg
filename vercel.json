@@ -1,10 +1,11 @@
 {
-    "version": 2,
-    "projects": [
-      {
-        "src": "src/",
-        "use": "@vercel/python"
-      }
-    ]
-  }
-  
+  "version": 2,
+  "builds": [
+    { "src": "src/manage.py", "use": "@vercel/python" }
+  ],
+  "routes": [
+    { "src": "/static/(.*)", "dest": "src/static/$1" },
+    { "src": "/media/(.*)", "dest": "src/media/$1" },
+    { "src": "/(.*)", "dest": "src/manage.py" }
+  ]
+}
