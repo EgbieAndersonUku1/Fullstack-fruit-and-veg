@@ -32,8 +32,13 @@ SECRET_KEY = getenv("SECRET_KEY")
 DEBUG = getenv("DEBUG")
 
 
+
 # Fetch the ALLOWED_HOSTS environment variable, defaulting to an empty string if not set
-ALLOWED_HOSTS = getenv('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+]
+
 
 
 # Application definition
