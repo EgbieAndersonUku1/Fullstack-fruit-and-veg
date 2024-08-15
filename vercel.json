@@ -1,11 +1,8 @@
 {
-  "version": 2,
-  "builds": [
-    { "src": "src/manage.py", "use": "@vercel/python" }
-  ],
-  "routes": [
-    { "src": "/static/(.*)", "dest": "src/static/$1" },
-    { "src": "/media/(.*)", "dest": "src/media/$1" },
-    { "src": "/(.*)", "dest": "src/manage.py" }
-  ]
+  "functions": {
+    "src/fruit_and_veg/wsgi.py": {
+      "runtime": "python3.8",
+      "handler": "wsgi.app"
+    }
+  }
 }
