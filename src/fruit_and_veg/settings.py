@@ -37,6 +37,7 @@ DEBUG = getenv("DEBUG")
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
+    "fullstack-fruit-and-iqtdaotbj-egbies-projects.vercel.app",
 ]
 
 
