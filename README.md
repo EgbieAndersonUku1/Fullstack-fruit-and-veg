@@ -95,11 +95,11 @@ venv\Scripts\activate
 pip install -r requirements.txt
 
 # Apply migrations
+cd into the "src" folder
 python manage.py migrate
 
 
 # Run the development server
-cd fruit-and-veg/src
 python manage.py runserver
 
 # Navigation to 
