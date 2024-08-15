@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "src/fruit_and_veg/wsgi.py",
+      "src": "vercel-handler.py",
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "50mb"
@@ -12,7 +12,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/wsgi.py"
+      "dest": "vercel-handler.py"
     }
   ]
 }
