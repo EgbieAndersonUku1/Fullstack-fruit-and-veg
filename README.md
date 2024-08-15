@@ -94,7 +94,9 @@ venv\Scripts\activate
 # Install dependencies
 pip install -r requirements.txt
 
+
 # Apply migrations
+cd into the "src" folder
 python manage.py migrate
 
 

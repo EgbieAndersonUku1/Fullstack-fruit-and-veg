@@ -1,0 +1,141 @@
+{% load static %}
+
+<nav aria-label="Main navigation">
+    <div class="nav-container">
+        <div class="nav-info nav-body">
+            <div class="nav-container__shipping">
+                <a href="#" aria-label="Free shipping information" class="nav-link">Free shipping</a>
+            </div>
+        </div>
+
+        <div class="nav-info nav-footer">
+            <div class="nav-container__account">
+                <a href="#" aria-label="View account" class="nav-link">My account</a>
+                <div class="nav-container__account__dropdown-menu my-account">
+                    <div class="my-account__container">
+                        <div class="buy-it-again">
+                            <h4>Buy it Again</h4>
+                            <a href="#" class="dropdown-menu-link">View All && Manage</a>
+
+                            <div class="buy-it-again__container">
+                                <div class="item">
+                                    <div class="item-img">
+                                        <a href="#"><img src="static/img/display/jpg/avacodo.jpg"
+                                                alt="An image of item bought" class="bought-item-img"></a>
+                                    </div>
+
+                                    <div class="item-info">
+                                        <ul>
+                                            <li><a href="#" class="dropdown-menu-link">Avacado</a></li>
+                                            <li>£5.99</li>
+                                            <li><button class="button-sm buy-it-again-btn">Add to cart</button></li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+
+                                <!-- item 2 -->
+                                <div class="item">
+                                    <div class="item-img">
+                                        <a href="#"><img src="{% static '/img/display/jpg/box-of-oranges.jpeg'  %}"
+                                                alt="An image of item bought" class="bought-item-img"></a>
+
+                                    </div>
+
+                                    <div class="item-info">
+                                        <ul>
+
+                                            <li><a href="#" class="dropdown-menu-link">Bulk Pack Organic Sicilian
+                                                    Orange</a></li>
+
+                                            <li>£15.99</li>
+                                            <li><button class="button-sm buy-it-again-btn">Add to cart</button></li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+
+                                <!-- item 3 -->
+                                <div class="item">
+                                    <div class="item-img">
+                                        <a href="#"><img src="{% static '/img/display/jpg/cashew.jpg' %}"
+                                                alt="An image of item bought" class="bought-item-img"></a>
+
+                                    </div>
+
+                                    <div class="item-info">
+                                        <ul>
+
+                                            <li><a href="#" class="dropdown-menu-link">Cashew, Almonds And Mint
+                                                    Seeds</a></li>
+
+                                            <li>£10.49</li>
+                                            <li><button class="button-sm buy-it-again-btn">Add to cart</button></li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+
+                                <!-- item 4 -->
+                                <div class="item">
+                                    <div class="item-img">
+                                        <a href="#"><img src="{% static '/img/display/jpg/turkish-mullberries.jpg' %}"
+                                                alt="An image of item bought" class="bought-item-img"></a>
+
+                                    </div>
+
+                                    <div class="item-info">
+                                        <ul>
+                                            <li><a href="#" class="dropdown-menu-link">Natural Kashmiri Turkish
+                                                    Walnuts</a></li>
+                                            <li>£20.99</li>
+                                            <li><button class="button-sm buy-it-again-btn">Add to cart</button></li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                        <div class="my-account__main">
+                            <div class="header center">
+                                <a href="#" class="dropdown-menu-link">Manage profiles &gt;</a>
+                            </div>
+                            <div class="my-account__main__container">
+                                <div class="your-lists">
+                                    <h4>My Lists</h4>
+                                    <ul class="my-account__links">
+                                        <li><a href="#" class="dropdown-menu-link">Wishlist</a></li>
+                                        <li><a href="#" class="dropdown-menu-link">Create a wishlist</a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="my-account">
+                                    <h4>Account</h4>
+                                    <ul class="my-account__links">
+                                        <li><a href="{% url 'account' %}" class="dropdown-menu-link">My account</a></li>
+
+                                        <li><a href="templates/account/orders/orders.html" class="dropdown-menu-link">my orders</a></li>
+                                        <li><a href="#" class="dropdown-menu-link">my list</a></li>
+                                        <li><a href="#" class="dropdown-menu-link">My addresses</a></li>
+                                        <li><a href="#" class="dropdown-menu-link">Payment methods</a></li>
+                                        <li><a href="#" class="dropdown-menu-link">Account settings</a></li>
+                                        <li><a href="#" class="dropdown-menu-link">Change password</a></li>
+                                        <li><a href="#" class="dropdown-menu-link">Sign out</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+               
+                <a href="#" aria-label="Login to your account" class="nav-link" id="login">Login</a>
+                <a href="#" aria-label="Register a new account" class="nav-link" id="register-link">Register</a>
+            </div>
+        </div>
+    </div>
+</nav>

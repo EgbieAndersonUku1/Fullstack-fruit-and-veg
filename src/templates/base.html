@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="{% static 'img/display/jpg/logo.png' %}" type="image/x-icon">
+
+    <!-- Dynamic Meta Tags -->
+    <meta name="description" content="{% block description %}Default description of the site{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}default, keywords, site{% endblock %}">
+    
+    <!-- Dynamic Title -->
+    <title>{% block title %}Default Title{% endblock %}</title>
+  
+    <link rel="stylesheet" href="{% static 'css/css.css' %}">
+</head>
+
+<body>
+    <div class="dim-overlay" id="dimOverlay"></div>
+
+    <!-- The navigation  -->
+    {% include "partials/base_nav.html" %}
+
+
+    <!-- the main body -->
+    <main>
+
+        {% block body %} {% endblock %}
+
+    </main>
+
+
+    <!-- the footer -->
+    {% include "partials/base_footer.html" %}
+
+   
+
+     <!-- Scripts Block -->
+     {% block scripts %}
+     {% endblock %}
+    
+</body>
+
+</html>
