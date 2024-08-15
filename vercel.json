@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "vercel-handler.py",
+      "src": "src/vercel-handler.py",
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "50mb"
@@ -12,7 +12,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "vercel-handler.py"
+      "dest": "src/vercel-handler.py"
     }
   ]
 }
