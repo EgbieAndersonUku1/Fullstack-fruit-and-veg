@@ -8,8 +8,6 @@ from django.core.wsgi import get_wsgi_application
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fruit_and_veg.settings')
-    application = get_wsgi_application()
-    app = application  # Add this alias for Vercel
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
