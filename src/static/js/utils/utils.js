@@ -33,6 +33,7 @@ function saveToLocalStorage(name, valueToSave, stringfy = false) {
 }
 
 
+
 function getItemFromLocalStorage(name, parse = false) {
     const item = localStorage.getItem(name);
     return parse ? JSON.parse(item) : item; 
