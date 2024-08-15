@@ -7,8 +7,9 @@ import { closeAddToCartMsg as handleAddToCartCloseMsg, closeWishlistMessage as h
 import CarouselSlider from "../components/carouselSlider.js";
 import dealCountDown from "../components/countdown.js";
 
-
-
+// import {BakedItems, DrinksMenu, DairyProducts, 
+//        FeaturedItems,  GrainProducts, IceCreams, 
+//        NewItems, Sauces, Snacks} from "../../../data.js";
 
 const boxes                        = document.querySelectorAll(".box");
 const addToItemCloseIcon           = document.getElementById("addToItem-close-icon");

@@ -12,10 +12,10 @@
     <!-- Dynamic Meta Tags -->
     <meta name="description" content="{% block description %}Default description of the site{% endblock %}">
     <meta name="keywords" content="{% block keywords %}default, keywords, site{% endblock %}">
-    
+
     <!-- Dynamic Title -->
-    <title>{% block title %}Default Title{% endblock %}</title>
-  
+    <title>{% block title %}Default Title here {% endblock %}</title>
+
     <link rel="stylesheet" href="{% static 'css/css.css' %}">
 </head>
 
@@ -37,12 +37,12 @@
     <!-- the footer -->
     {% include "partials/base_footer.html" %}
 
-   
 
-     <!-- Scripts Block -->
-     {% block scripts %}
-     {% endblock %}
-    
+
+    <!-- Scripts Block -->
+    {% block scripts %}
+    {% endblock %}
+
 </body>
 
 </html>
