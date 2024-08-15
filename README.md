@@ -6,7 +6,7 @@
 
 [![Build Status](https://travis-ci.org/yourusername/fruit-store-backend.svg?branch=main)](https://travis-ci.org/yourusername/fruit-store-backend)
 
-The backend for the Fruit Store website is designed to manage server-side operations for a seamless online shopping experience for fresh fruits and vegetables. Built with Django, it handles user authentication, product management, and more.
+The backend for the Fruit Store website is designed to manage server-side operations for a seamless online shopping experience for fresh fruits and vegetables. Built with Django, it handles user authentication, product management, and more making the application a fullstack application
 
 - Develop the backend to manage product listings
 - Secure user authentication and registration
@@ -60,19 +60,10 @@ The backend uses several technologies and libraries some have be used some have 
 - **Frontend Integration:** Ensure seamless integration with the frontend.
 - **Extensive Development:** Address a range of significant tasks across various components to ensure full functionality and integration, covering all remaining aspects of the backend development.
 - 
-## Branching and Repository Structure
-
-- The **backend** branch is maintained separately from the frontend branch and will not be merged into the main branch.
-- Once the backend development is complete, it will be deployed to a distinct repository, while the frontend (developed with HTML, CSS, and JavaScript) will also be hosted in a separate repository.
-- The original frontend repository will concentrate solely on frontend features and will remain separate from the backend integration.
 
 
 
-## Branching and Repository Structure
 
-- The **backend** branch is maintained separately from the frontend branch and won't be integrated in the main brach.
-- Upon completion the frontend, developed using HTML, CSS, and JavaScript, will integrate with the backend services and hosted on another repository.
-- The frontend where this branch is original from will be kept at is and the rest of the features built but only for the front
 
 ## Installation
 
@@ -80,7 +71,7 @@ To set up the backend environment, follow these instructions:
 
 ```bash
 # Clone the repository
-git clone https://github.com/EgbieAndersonUku1/fruit-and-veg-store.git 
+git https://github.com/EgbieAndersonUku1/Fullstack-fruit-and-veg.git . 
 
 # Set up a virtual environment
 python3 -m venv venv
