@@ -101,7 +101,6 @@ python manage.py migrate
 
 
 # Run the development server
-cd fruit-and-veg/src
 python manage.py runserver
 
 # Navigation to 
