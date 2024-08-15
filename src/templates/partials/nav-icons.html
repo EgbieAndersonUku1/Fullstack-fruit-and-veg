@@ -1,0 +1,12 @@
+{% load static %}
+
+
+<a href="#" aria-label="View your wishlist" class="nav-icon-link">
+    <img src="{% static '/img/icons/red-heart.svg'  %}" alt="wishlist" class="nav-icon">
+    <span class="item-count" aria-hidden="true"></span>
+</a>
+<a href="#" aria-label="View your cart" class="nav-icon-link">
+    <img src="{% static '/img/icons/cart.svg' %}" alt="cart" class="nav-icon item-cart-img">
+    <span class="item-count item-cart" aria-hidden="true"></span>
+</a>
+<a href="#" aria-label="Total items cost £{{ total_cost }}" class="cart-item-total">Items: £{{ total_cost }}</a>

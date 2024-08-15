@@ -1,147 +1,143 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% load static %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="static/img/display/jpg/logo.png" type="image/x-icon">
-    <link rel="stylesheet" href="../../../static/css/csss.css">
-    <title>Invoice</title>
-</head>
+{% block title %} Invoice {% endblock %}
 
-<body>
 
-    <section id="invoice" aria-labelledby="invoice-title">
-        <div class="logo center">
-            <a href="../../../index.html">
-                <img src="../../../static/img/display/jpg/logo.png" alt="Company Logo" class="account-logo-img">
-            </a>
+{% block body %}
+<section id="invoice" aria-labelledby="invoice-title">
+    {% include "partials/logo_link.html" %}
+    <div class="invoice__container">
+
+        <h3 id="invoice-title" class="center"></h3>
+        <a class="center invoice-link" href="#" aria-label="Print this page for your records" onclick="print()">Print
+            this page for your records</a>
+
+        <div class="order-details">
+            <div class="order-date">
+                <span>Order Placed: </span><time datetime="" class="datetime"></time>
+            </div>
+            <div class="order-number">
+                <p></p>
+            </div>
+            <div class="order-total">
+                <p></p>
+
+            </div>
         </div>
-        <div class="invoice__container">
 
-            <h3 id="invoice-title" class="center"></h3>
-            <a class="center invoice-link" href="#" aria-label="Print this page for your records" onclick="print()">Print this page for your records</a>
+        <hr class="dividor">
+        <h3 class="center order-dispatched">Dispatched on <time datetime=""> 30 June 2024</time></h3>
 
-            <div class="order-details">
-                <div class="order-date"> 
-                    <span>Order Placed: </span><time datetime="" class="datetime"></time>
+        <div class="order-details__main">
+
+            <div class="order-item">
+
+                <div class="row item-name">
+                    <h3>Item ordered</h3>
+                    <p class="order-item-title"></p>
                 </div>
-                <div class="order-number">
+
+                <div class="row shipping-address">
+                    <h3>Shipping Address</h3>
+                    <address class="address-details">
+                        <p class="address"></p>
+                        <p class="city"></p>
+                        <p class="postcode"></p>
+                    </address>
+                </div>
+
+                <div class="shipping-speed padding-bottom-sm">
+                    <h3>Shipping Speed</h3>
+                    <p class="delivery"></p>
+                </div>
+
+            </div>
+
+            <div class="row order-price">
+                <p class="order-price"></p>
+            </div>
+
+
+        </div>
+
+        <hr class="dividor">
+        <h3 class="center order-payment padding-bottom-sm">Payment</h3>
+
+        <div class="order-details__payment">
+
+            <div class="row">
+                <div class="payment-info">
+                    <h3>Payment Method</h3>
                     <p></p>
                 </div>
-                <div class="order-total">
-                    <p></p>
-                  
+
+                <div class="cost-breakdown text-right-align">
+                    <p class="subtotal-title">Item(s) Subtotal:</p>
+                    <p class="postage-packaging">Postage & Packaging:</p>
+                </div>
+
+                <div class="cost text-right-align">
+                    <p class="subtotal-cost"></p>
+                    <p class="package-cost"></p>
                 </div>
             </div>
 
-            <hr class="dividor">
-            <h3 class="center order-dispatched">Dispatched on <time datetime=""> 30 June 2024</time></h3>
+            <div class="row">
+                <div class="payment-info">
+                    <h3>Invoice Address:</h3>
+                    <address class="address-details">
+                        <p class="address"></p>
+                        <p class="city"></p>
+                        <p class="postcode"></p>
 
-            <div class="order-details__main">
-
-                <div class="order-item">
-
-                    <div class="row item-name">
-                        <h3>Item ordered</h3>
-                        <p class="order-item-title"></p>
-                    </div>
-
-                    <div class="row shipping-address">
-                        <h3>Shipping Address</h3>
-                        <address class="address-details">
-                            <p class="address"></p>
-                            <p class="city"></p>
-                            <p class="postcode"></p>
-                        </address>
-                    </div>
-
-                    <div class="shipping-speed padding-bottom-sm">
-                        <h3>Shipping Speed</h3>
-                        <p class="delivery"></p>
-                    </div>
-
+                    </address>
                 </div>
 
-                <div class="row order-price">
-                    <p class="order-price"></p>
+                <div class="cost-breakdown text-right-align">
+                    <p class="total-before-vat">Total Before VAT:</p>
+                    <p class="vat">VAT:</p>
                 </div>
 
-               
+                <div class="cost text-right-align">
+                    <p class="before-vat-cost"></p>
+                    <p class="vat-cost"></p>
+                </div>
             </div>
 
-            <hr class="dividor">
-            <h3 class="center order-payment padding-bottom-sm">Payment</h3>
-
-            <div class="order-details__payment">
-
-                <div class="row">
-                    <div class="payment-info">
-                        <h3>Payment Method</h3>
-                        <p></p>
-                    </div>
-
-                    <div class="cost-breakdown text-right-align">
-                        <p class="subtotal-title">Item(s) Subtotal:</p>
-                        <p class="postage-packaging">Postage & Packaging:</p>
-                    </div>
-
-                    <div class="cost text-right-align">
-                        <p class="subtotal-cost"></p>
-                        <p class="package-cost"></p>
-                    </div>
+            <div class="row">
+                <div class="payment-info">
+                    <h3>Credit Card Transactions</h3>
                 </div>
 
-                <div class="row">
-                    <div class="payment-info">
-                        <h3>Invoice Address:</h3>
-                        <address class="address-details">
-                            <p class="address"></p>
-                            <p class="city"></p>
-                            <p class="postcode"></p>
-                           
-                        </address>
-                    </div>
-
-                    <div class="cost-breakdown text-right-align">
-                        <p class="total-before-vat">Total Before VAT:</p>
-                        <p class="vat">VAT:</p>
-                    </div>
-
-                    <div class="cost text-right-align">
-                        <p class="before-vat-cost"></p>
-                        <p class="vat-cost"></p>
-                    </div>
+                <div class="cost-breakdown text-right-align">
+                    <h4 class="grand-total text-capitalize">Grand Total:</h4>
+                    <p class="card-ending-display"></p>
                 </div>
 
-                <div class="row">
-                    <div class="payment-info">
-                        <h3>Credit Card Transactions</h3>
-                    </div>
-
-                    <div class="cost-breakdown text-right-align">
-                        <h4 class="grand-total text-capitalize">Grand Total:</h4>
-                        <p class="card-ending-display"></p>
-                    </div>
-
-                    <div class="cost">
-                        <p class="bold text-right-align item-grand-total"></p>
-                        <p class="total text-right-align"></p>
-                    </div>
+                <div class="cost">
+                    <p class="bold text-right-align item-grand-total"></p>
+                    <p class="total text-right-align"></p>
                 </div>
-
-            </div>
-
-            
-            <div class="go-back">
-                <a href="../orders/orders.html" class="invoice-link" alt="A link back to the orders page">&lt; Go back</a>
             </div>
 
         </div>
 
-    </section>
 
-    <script src="../../../static/js/pages/invoice.js" type="module"></script>
-</body>
+        <div class="go-back">
+            <a href="{% url 'orders' %}" class="invoice-link" alt="A link back to the orders page">&lt; Go back</a>
+        </div>
 
-</html>
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+
+{% block script %}
+
+<script src="{% static '/js/pages/invoice.js' %}" type="module"></script>
+
+{% endblock %}
