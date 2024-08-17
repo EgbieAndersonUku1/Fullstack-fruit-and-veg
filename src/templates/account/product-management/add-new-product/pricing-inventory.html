@@ -47,9 +47,12 @@
         <input type="number" name="maximum-order-quantity" id="maximum-order-quantity" min="1" max="10000" step="1" required>
 
 
-        <div class="button space-between add-product-btn-container">
-            <button class="prev-button" type="button" onclick="prevPage(event, 2)">&lt; prev</button>
-            <button class="next-button" type="submit">next &gt;</button>
+        <div class="button space-between">
+            <a href="{% url 'detailed_description_form' %}" class="prev-button center">
+               &lt; prev
+            </a>
+           
+            <button type="submit" class="next-button"> next &gt;</button>
         </div>
     </form>
 

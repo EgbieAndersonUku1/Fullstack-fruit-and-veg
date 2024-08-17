@@ -7,54 +7,51 @@
 
 {% block body %}
 
-    <form action="" method="post" class="add-product-form"
+    <form action="{% url 'basic_description_form' %}" method="post" class="add-product-form"
         id="basic-product-information-form">
 
         {% csrf_token %}
 
-            <!-- Product Name Section -->
-             {{ form.name.label_tag }}
-             {{ form.name }}
-          
-            <!-- Product Category Section -->
-            {{ form.category.label_tag }}
-            {{ form.category }}
+        {% include "partials/form_errors.html" with form=form %}
 
+        <!-- Product Name Section -->
+        {{ form.name.label_tag }}
+        {{ form.name }}
+       
+        <!-- Product Category Section -->
+        {{ form.category.label_tag }}
+        {{ form.category }}  
+      
+        <!-- Add New Category Section is hidden and will be displayed when the user calls `new category`--> 
+        <label for="add-category" id="add-category-label">Add new category</label>
+        {{ form.new_category }}
           
-            <p class="highlight error-msg" id="select-category-error-msg">The field cannot be empty</p>
+        <!-- Brand Section -->
+        {{ form.brand.label_tag }}
+        {{ form.brand }}
         
-            <!-- Add New Category Section is hidden and will be displayed when the user calls `new category`--> 
-            <label for="add-category" id="add-category-label">Add new category</label>
-            {{ form.new_category }}
+        <!-- SKU (Stock Keeping Unit) Section -->
+        {{ form.sku.label_tag }}
+        {{ form.sku }}
           
-        
-            <!-- Brand Section -->
-            {{ form.brand.label_tag }}
-            {{ form.brand }}
-        
-            <!-- SKU (Stock Keeping Unit) Section -->
-            {{ form.sku.label_tag }}
-            {{ form.sku }}
-          
-            <!-- UPC (Universal Product Code) Section -->
-            {{ form.upc.label_tag }}
-            {{ form.upc }}
+        <!-- UPC (Universal Product Code) Section -->
+        {{ form.upc.label_tag }}
+        {{ form.upc }}
            
         
-            <!-- Short Description Section -->
-            {{ form.short_description.label_tag }}
-            {{ form.short_description }}
-            
-            <!-- Error and Helper Messages for Description -->
-            <p class="highlight error-msg" id="short-description-error-msg">The field cannot be empty</p>
-            <p class="flex-end minimum-characters">Minimum characters to use: 50</p>
-            <p class="maximum-characters flex-end">Number of characters remaining: 255</p>
-        
-            <!-- Submit Button Section -->
-            <div class="button flex-end add-product-btn-container">
-                <button type="submit" class="next-button"> next &gt;</button>
-            </div>
-        </form>
+         <!-- Short Description Section -->
+        {{ form.short_description.label_tag }}
+        {{ form.short_description }}
+
+        <!-- Error and Helper Messages for Description -->
+        <p class="flex-end minimum-characters">Minimum characters to use: 50</p>
+        <p class="maximum-characters flex-end">Number of characters remaining: 255</p>
+     
+        <!-- Submit Button Section -->
+        <div class="button flex-end add-product-btn-container">
+             <button type="submit" class="next-button"> next &gt;</button>
+         </div>
+     </form>
         
 
 

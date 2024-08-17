@@ -1,20 +1,16 @@
-import addNewProductPages from "../pages/pages.js";
 
 import { minimumCharactersToUse } from "./characterCounter.js";
 import {getItemFromLocalStorage, saveToLocalStorage, getAllCheckBoxElementsValue,
     redirectToNewPage, getCurrentPage, disableEmptySelectOptions as handleEmptySelectOptions
 } from "../utils/utils.js";
+
+import AlertUtils from "../utils/alerts.js";
 import { getFormEntries, toggleInputVisibilityBasedOnSelection } from "../utils/formUtils.js";
 import { populateSelectField } from "../builders/formBuilder.js";
 
 
 const selectFormCategory = document.getElementById("select-category");
 document.addEventListener("DOMContentLoaded", (e) => handleEmptySelectOptions(selectFormCategory))
-
-
-
-
-window.prevPage = prevPage;
 
 
 
@@ -141,34 +137,6 @@ selectDiscountCategoryElement?.addEventListener("change", () => toggleInputVisib
 
 
 
-
-/**
- * Navigates to the previous page in the add new product workflow.
- * 
- * This function determines the page to navigate to based on the given page number, and redirects the user to that page.
- * If the page number is invalid, it throws an error.
- *
- * @param {Event} event - The event object that triggered the function.
- * @param {number|string} pageNumber - The page number to navigate to. This value is parsed as an integer.
- * @throws {Error} If the page number is invalid and the corresponding page is not found.
- * @returns {void}
- */
-function prevPage(event, pageNumber) {
-    event.preventDefault();
-
-    const page = addNewProductPages[parseInt(pageNumber)];
-
-    if (!page) {
-        throw new Error("Something went wrong and the page number couldn't be found!!!");
-    }
-
-    redirectToNewPage(page);
-}
-
-
-
-
-
 /**
  * Updates form input fields with saved values when a form page loads.
  * 
@@ -227,10 +195,7 @@ function updateFormValue() {
 // Handles the form submission for basic-product-information.html
 function handleBasicInformationForm(e) {
     e.preventDefault();
-    const pageNumber = 2;
-
-  
-    handleFormSubmission(basicForm, pageNumber);
+    handleFormSubmission(basicForm);
     
 }
 
@@ -245,22 +210,30 @@ function handleDetailedInformationForm(e) {
     const sizeCheckBoxes = document.querySelectorAll(".sizes .size input[type='checkbox']:checked");
 
     let formComplete = true;
-    const pageNumber = 3;
-
+  
     if (colorsCheckboxes.length === 0) {
         selectColorErrorMsg.style.display = "block";
         formComplete = false;
 
-        // replace this later with a more beautiful custom message
-        alert("Select at least one color");
+        AlertUtils.showAlert({
+            "title": "Missing value",
+            "icon": "warning",
+            "text": "Select at least one color",
+            "confirmButtonText": "Ok"
+        })
+      
     };
 
     if (sizeCheckBoxes.length === 0) {
         selectSizesErrorMsg.style.display = "block";
         formComplete = false;
 
-        // replace this later with a more beautiful custom message
-        alert("Select at least one size");
+        AlertUtils.showAlert({
+            "title": "Missing value",
+            "icon": "warning",
+            "text": "Select at least one size",
+            "confirmButtonText": "Ok"
+        })
     };
 
 
@@ -277,7 +250,7 @@ function handleDetailedInformationForm(e) {
         delete formEntries["size"]
 
 
-        handleFormComplete(detailedForm, formEntries, pageNumber);
+        handleFormComplete(detailedForm, formEntries);
 
     }
 }
@@ -286,9 +259,7 @@ function handleDetailedInformationForm(e) {
 // handles pricing-inventory.html
 function handlePriceInventoryForm(e) {
     e.preventDefault();
-    const pageNumber = 4;
-    
-    handleFormSubmission(pricingInventoryForm, pageNumber);
+    handleFormSubmission(pricingInventoryForm);
 
 };
 
@@ -313,7 +284,7 @@ function handleImageAndMediaForm(e) {
     formObject.optionalVideo     = formEntries["primary-video"]["name"];
 
     if (imageAndMediaForm.reportValidity()) {
-        handleFormComplete(imageAndMediaForm, formObject, pageNumber);
+        handleFormComplete(imageAndMediaForm, formObject);
     }
   
 
@@ -325,7 +296,6 @@ function handleImageAndMediaForm(e) {
 function handleShippingAndDeliveryForm(e) {
     e.preventDefault();
 
-    const pageNumber = 6;
     let formComplete = true;
 
     const deliveryCheckboxes = document.querySelectorAll(".shipping-options label input[name='shipping']:checked");
@@ -334,14 +304,19 @@ function handleShippingAndDeliveryForm(e) {
         selectDeliveryErrorMsg.style.display = "block";
         formComplete = false;
 
-        // replace this later with a more beautiful custom message
-        alert("Select at least one delivery option");
+        AlertUtils.showAlert({
+            "title": "Missing value",
+            "icon": "warning",
+            "text": "Select at least one delivery option",
+            "confirmButtonText": "Ok"
+        })
+      
     };
 
     if (shippingAndDeliveryForm.reportValidity() && formComplete) {
         const formEntries = getFormEntries(shippingAndDeliveryForm);
         formEntries.deliveryOptions = getAllCheckBoxElementsValue(deliveryCheckboxes, 'data-delivery-time');
-        handleFormComplete(shippingAndDeliveryForm, formEntries, pageNumber);
+        handleFormComplete(shippingAndDeliveryForm, formEntries);
     }
 
 }
@@ -350,31 +325,30 @@ function handleShippingAndDeliveryForm(e) {
 // handles seo-and-meta-information.html
 function handleSeoAndMetaForm(e) {
     e.preventDefault();
-    const pageNumber = 7;
-    handleFormSubmission(seoAndMetaForm, pageNumber);
+    handleFormSubmission(seoAndMetaForm);
 };
 
 
 // handles additional-information.html
 function handleAdditionalFormInfo(e) {
     e.preventDefault();
-    const pageNumber = 8;
-    handleFormSubmission(additionInformationForm, pageNumber);
+    handleFormSubmission(additionInformationForm);
 }
 
 
 
 
-function handleFormSubmission(form, pageNumber) {
+function handleFormSubmission(form) {
     if (form.reportValidity()) {
-        handleFormComplete(form, getFormEntries(form), pageNumber);
+        handleFormComplete(form, getFormEntries(form));
     }
 }
 
 
-function handleFormComplete(form, formEntries, pageNumber) {
+function handleFormComplete(form, formEntries) {
     saveToLocalStorage(form.id, formEntries, true);
-    redirectToNewPage(addNewProductPages[pageNumber]);
+    form.submit()
+
 }
 
 
@@ -382,7 +356,7 @@ function handleFormComplete(form, formEntries, pageNumber) {
 
 
 
-window.onload = updateFormValue;
+
 
 
 
