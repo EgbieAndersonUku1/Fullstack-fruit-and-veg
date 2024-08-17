@@ -1,5 +1,7 @@
 from django.shortcuts import render
 
+from .forms import BasicFormDescription
+
 # Create your views here.
 
 
@@ -12,9 +14,17 @@ def product_management(request):
 
 
 def add_basic_description(request):
-    context = {
-        "section_id" : "basic-description",
-    }
+    
+    form    = BasicFormDescription()
+    context = {"section_id" : "basic-description"}
+    
+    if (request.method == "POST"):
+        form = BasicFormDescription(request.POST)
+        if form.is_valid():
+            # Do nothing for now logic will be added later
+            pass
+    
+    context["form"] = form
     return render(request, "account/product-management/add-new-product/basic-product-information.html", context=context)
 
 
@@ -84,6 +94,9 @@ def financial_management(request):
     return render(request, "account/financial-management/financial-management.html")
 
 
-
 def invoice(request, item_id):
     return render(request, "account/orders/invoice.html" )
+
+
+def refund_overview(request):
+    return render(request, "account/refund/refund-management.html")

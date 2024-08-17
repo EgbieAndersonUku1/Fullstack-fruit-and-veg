@@ -1,10 +1,17 @@
 import addNewProductPages from "../pages/pages.js";
+
 import { minimumCharactersToUse } from "./characterCounter.js";
 import {getItemFromLocalStorage, saveToLocalStorage, getAllCheckBoxElementsValue,
-    redirectToNewPage, getCurrentPage
+    redirectToNewPage, getCurrentPage, disableEmptySelectOptions as handleEmptySelectOptions
 } from "../utils/utils.js";
 import { getFormEntries, toggleInputVisibilityBasedOnSelection } from "../utils/formUtils.js";
 import { populateSelectField } from "../builders/formBuilder.js";
+
+
+const selectFormCategory = document.getElementById("select-category");
+document.addEventListener("DOMContentLoaded", (e) => handleEmptySelectOptions(selectFormCategory))
+
+
 
 
 window.prevPage = prevPage;
