@@ -7,7 +7,11 @@
 
 {% block body %}
 
-    <form action="" method="post" class="add-product-form" id="detailed-description-form">
+    <form action="{% url 'detailed_description_form' %}" method="post" class="add-product-form" id="detailed-description-form">
+
+        {% csrf_token %} 
+
+        {% include "partials/form_errors.html" with form=form %}
 
         <!-- Colors Options Section -->
         <legend class="text-capitalize">Colors options</legend>
@@ -173,14 +177,15 @@
             <legend>Food Dimensions</legend>
             <hr class="dividor">
 
-            <label for="length">Length (in centimeters)</label>
-            <input type="number" name="length" id="length" min="0.1" max="10000" step="0.1" aria-required="true" aria-label="Length input" placeholder="Enter length in cm" required>
+            {{ form.length.label_tag }}
+            {{ form.length }}
 
-            <label for="width">Width (in centimeters)</label>
-            <input type="number" name="width" id="width" min="0.1" max="10000" step="0.1" aria-required="true" aria-label="Width input" placeholder="Enter width in cm" required>
+            {{ form.width.label_tag }}
+            {{ form.width }}
 
-            <label for="height">Height (in centimeters)</label>
-            <input type="number" name="height" id="height" min="0.1" max="10000" step="0.1" aria-required="true" aria-label="Height input" placeholder="Enter height in cm" required>
+            {{ form.height.label_tag }}
+            {{ form.height }}
+
         </fieldset>
 
         <!-- Error Message for Dimensions -->
@@ -213,21 +218,27 @@
         <!-- Weight Section -->
         <legend class="text-capitalize">Weight</legend>
         <hr class="dividor">
-        <label for="weight">Weight (gram)</label>
-        <input type="number" name="weight" id="weight" min="1" max="10000" step="0.1" required>
+
+        {{ form.weight.label_tag }}
+        {{ form.weight }}
+       
 
         <!-- Description Section -->
         <legend class="text-capitalize">Description</legend>
         <hr class="dividor">
-        <label for="detailed-description">Detailed Description</label>
-        <textarea name="description" id="detailed-description" rows="10" cols="10" required></textarea>
-     
+
+        {{ form.description.label_tag }}
+        {{ form.description }}
+
         <p class="flex-end minimum-characters">Minimum characters to use: 50</p>
         <p class="maximum-characters flex-end">Number of characters remaining: 1000</p>
 
         <!-- Navigation Buttons -->
         <div class="button space-between">
-            <button class="prev-button" type="button" onclick="prevPage(event, 1)"> &lt; prev</button>
+            <a href="{% url 'basic_description_form' %}" class="prev-button center">
+               &lt; prev
+            </a>
+           
             <button type="submit" class="next-button"> next &gt;</button>
         </div>
     </form>

@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from .forms import BasicFormDescription, DetailedFormDescription
 
-from .forms import BasicFormDescription
+from .utils.converter import convert_decimal_to_float
 
 # Create your views here.
 
@@ -15,30 +17,48 @@ def product_management(request):
 
 def add_basic_description(request):
     
-    form    = BasicFormDescription()
+    initial_data = request.session.get('basic_form_description', {})
+    
+    # Prepopulate the form with the session data
+    form    = BasicFormDescription(initial=initial_data)
     context = {"section_id" : "basic-description"}
     
     if (request.method == "POST"):
         form = BasicFormDescription(request.POST)
         if form.is_valid():
-            # Do nothing for now logic will be added later
-            pass
+            if form.has_changed():
+                 request.session["basic_form_description"] = form.cleaned_data
+            return redirect(reverse("detailed_description_form"))
     
     context["form"] = form
     return render(request, "account/product-management/add-new-product/basic-product-information.html", context=context)
 
 
 def add_detailed_description(request):
-    context = {
-        "section_id" : "detailed_descritpion",
-    }
+    
+    initial_data = request.session.get('detailed_form_description', {})
+    context      = {"section_id" : "detailed_description"}
+    form         = DetailedFormDescription(initial=initial_data)
+
+    
+    if (request.method == "POST"):
+        
+        form = DetailedFormDescription(request.POST)
+        if form.is_valid():
+          
+            if form.has_changed():
+                request.session["detailed_form_description"] = convert_decimal_to_float(form.cleaned_data)
+            
+            return redirect(reverse("pricing_and_inventory_form"))
+    
+    context["form"] = form
     return render(request, "account/product-management/add-new-product/detailed-description-specs.html", context=context)
 
 
 def add_pricing_and_inventory(request):
-    context = {
-        "section_id" : "pricing-and-inventory",
-    }
+    initial_data = request.session.get("")
+    context      = { "section_id" : "pricing-and-inventory"}
+   
     return render(request, "account/product-management/add-new-product/pricing-inventory.html", context=context)
 
 

@@ -20,11 +20,12 @@ class BasicFormDescription(forms.Form):
                                     "required": True,
                                 }))
     
-    new_category = forms.CharField(max_length="100", min_length=6, 
+    new_category = forms.CharField(max_length="100", 
                     widget=forms.TextInput(attrs={
                         "id": "add-category",
                         "placeholder": "Enter a category",
-                        "name": "add-category",        
+                        "name": "add-category",
+                                
                     }))
     
     brand = forms.CharField(label="Brand", max_length=20, 
@@ -41,4 +42,52 @@ class BasicFormDescription(forms.Form):
                                                                      "cols": "10", "required": True,
                                                                      "placeholder": "Enter a short description..."}))
     
+
+
+class DetailedFormDescription(forms.Form):
+  
+    length = forms.DecimalField(label="Length (in centimeters)", max_digits=10, decimal_places=2, 
+                                widget=forms.NumberInput(attrs={
+                                    "id": "length",
+                                    "min": "0.1",
+                                    "step": "0.01",
+                                    "aria-required": True,
+                                    "placeholder": "Enter length in cm"
+                                    
+                                }))
+    
+    width = forms.DecimalField(label="Width (in centimeters)", max_digits=10, decimal_places=2, 
+                                widget=forms.NumberInput(attrs={
+                                    "id": "width",
+                                    "min": "0.1",
+                                    "step": "0.01",
+                                    "aria-required": True,
+                                    "placeholder": "Enter length in cm"
+                                    
+                                }))
+    
+    height = forms.DecimalField(label="Height (in centimeters)", max_digits=10, decimal_places=2, 
+                                widget=forms.NumberInput(attrs={
+                                    "id": "height",
+                                    "min": "0.1",
+                                    "step": "0.01",
+                                    "aria-required": True,
+                                    "placeholder": "Enter length in cm"
+                                    
+                                }))
+    
+    weight = forms.DecimalField(label="Weight (in grams)", max_digits=10, decimal_places=2, 
+                                widget=forms.NumberInput(attrs={
+                                    "id": "weight",
+                                    "min": "0.01",
+                                    "step": "0.01",
+                                    "aria-required": True,
+                                    "placeholder": "Enter weight in gram"
+                                    
+                                }))
+    
+    description = forms.CharField(label="Enter a description description", 
+                                widget=forms.Textarea(attrs={"id": "short-description", "rows": "10", 
+                                                             "cols": "10", "required": True,
+                                                            "placeholder": "Enter a description..."}))
     
