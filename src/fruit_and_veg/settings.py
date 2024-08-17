@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from os.path import join
+from dotenv import load_dotenv
+from os import getenv
+
+# Enables the `.env` file to be loaded
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +26,20 @@ TEMPLATES = join(BASE_DIR, "templates")
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-wkq^7_1gmeh!d2)mr+*w=og9d=(!btr*uqw7y)&c&$1(o1o&z7'
+SECRET_KEY = getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = getenv("DEBUG")
 
-ALLOWED_HOSTS = []
+
+
+# Fetch the ALLOWED_HOSTS environment variable, defaulting to an empty string if not set
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    "fullstack-fruit-and-iqtdaotbj-egbies-projects.vercel.app",
+]
+
 
 
 # Application definition
@@ -129,10 +142,13 @@ STATIC_URL = '/static/'
 # This is required if you are running collectstatic
 STATIC_ROOT = join(BASE_DIR, 'staticfiles')
 
-
 STATICFILES_DIRS = [
     join(BASE_DIR,  'static'),
 ]
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = join(BASE_DIR, 'media')
 
 
 # Default primary key field type
