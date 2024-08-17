@@ -13,13 +13,11 @@ urlpatterns = [
    path("product-management/add-new-product/seo/", view=views.add_seo_management, name="seo_and_meta_form"),
    path("product-management/add-new-product/additional-information/", view=views.add_additonal_information, name="add_information_form"),
    path("product-management/add-new-product/review-and-submit/", view=views.view_review, name="view_review"),
-   
    path("product-management/add-new-product/view-products/", view=views.view_products, name="view_products"),
-
-   
    path("orders/order/", view=views.orders, name="orders"),
    path("orders/view-item/<int:id>", views.view_item, name="view-item"),
    path("financial-management/overview/", view=views.financial_management, name="financial_management"),
    path("orders/order/invoice/<int:item_id>/", view=views.invoice, name="invoice"),
+   path("refund-management/overview", view=views.refund_overview, name="refund-overview"),
    
 ]

@@ -12,100 +12,39 @@
 
         {% csrf_token %}
 
-        <form>
             <!-- Product Name Section -->
-            <label for="product-name">Product name</label>
-            <input type="text" name="product-name" id="product-name" required maxlength="100" placeholder="Enter a product name">
-            
+             {{ form.name.label_tag }}
+             {{ form.name }}
+          
             <!-- Product Category Section -->
-            <label for="select-category">Select a product category</label>
-            <select name="select-a-category" id="select-category" class="select-category" required>
-           
-                <option value="" selected disabled>Select a category</option>
-                <option value="new" id="new-category-entry">New Category</option>
-        
-                <!-- Fruits & Vegetables Category Group -->
-                <optgroup label="Fruits & Vegetables">
-                    <option value="fresh_fruits">Fresh Fruits</option>
-                    <option value="fresh_vegetables">Fresh Vegetables</option>
-                    <option value="organic_greens">Organic Greens</option>
-                </optgroup>
-        
-                <!-- Dairy Products Category Group -->
-                <optgroup label="Dairy Products">
-                    <option value="milk">Milk</option>
-                    <option value="cheese">Cheese</option>
-                    <option value="yogurt">Yogurt</option>
-                </optgroup>
-        
-                <!-- Meat & Seafood Category Group -->
-                <optgroup label="Meat & Seafood">
-                    <option value="meat">Meat</option>
-                    <option value="poultry">Poultry</option>
-                    <option value="seafood">Seafood</option>
-                </optgroup>
-        
-                <!-- Pantry Staples Category Group -->
-                <optgroup label="Pantry Staples">
-                    <option value="grains_rice">Grains & Rice</option>
-                    <option value="pasta_noodles">Pasta & Noodles</option>
-                    <option value="baking_essentials">Baking Essentials</option>
-                    <option value="canned_goods">Canned Goods</option>
-                </optgroup>
-        
-                <!-- Beverages Category Group -->
-                <optgroup label="Beverages">
-                    <option value="juices">Juices</option>
-                    <option value="teas">Teas</option>
-                    <option value="coffee">Coffee</option>
-                    <option value="smoothies">Smoothies</option>
-                </optgroup>
-        
-                <!-- Snacks & Sweets Category Group -->
-                <optgroup label="Snacks & Sweets">
-                    <option value="chips_crackers">Chips & Crackers</option>
-                    <option value="cookies_bars">Cookies & Bars</option>
-                    <option value="dried_fruits_nuts">Dried Fruits & Nuts</option>
-                    <option value="chocolates_candies">Chocolates & Candies</option>
-                </optgroup>
-        
-                <!-- Frozen Foods Category Group -->
-                <optgroup label="Frozen Foods">
-                    <option value="frozen_meals">Frozen Meals</option>
-                    <option value="frozen_vegetables_fruits">Frozen Vegetables & Fruits</option>
-                    <option value="frozen_desserts">Frozen Desserts</option>
-                </optgroup>
-        
-                <!-- Baby & Kids Category Group -->
-                <optgroup label="Baby & Kids">
-                    <option value="baby_food">Baby Food</option>
-                    <option value="snacks_for_kids">Snacks for Kids</option>
-                    <option value="baby_formula">Baby Formula</option>
-                </optgroup>
-            </select>
-            <!-- Error Message for Category Selection -->
+            {{ form.category.label_tag }}
+            {{ form.category }}
+
+          
             <p class="highlight error-msg" id="select-category-error-msg">The field cannot be empty</p>
         
-            <!-- Add New Category Section -->
+            <!-- Add New Category Section is hidden and will be displayed when the user calls `new category`--> 
             <label for="add-category" id="add-category-label">Add new category</label>
-            <input type="text" name="add-category" id="add-category" maxlength="100" placeholder="Enter a category">
+            {{ form.new_category }}
+          
         
             <!-- Brand Section -->
-            <label for="brand">Brand</label>
-            <input type="text" name="brand" id="brand" required maxlength="80" placeholder="Enter brand">
+            {{ form.brand.label_tag }}
+            {{ form.brand }}
         
             <!-- SKU (Stock Keeping Unit) Section -->
-            <label for="sku">SKU (Stock Keeping unit)</label>
-            <input type="text" name="sku" id="sku" maxlength="20" placeholder="Enter SKU" required>
-        
+            {{ form.sku.label_tag }}
+            {{ form.sku }}
+          
             <!-- UPC (Universal Product Code) Section -->
-            <label for="upc">UPC (Universal Product code)</label>
-            <input type="text" name="upc" id="upc" maxlength="13" placeholder="Enter UPC" required>
+            {{ form.upc.label_tag }}
+            {{ form.upc }}
+           
         
             <!-- Short Description Section -->
-            <label for="short-description">Short Description</label>
-            <textarea name="short-description" id="short-description" rows="5" cols="10" required></textarea>
-
+            {{ form.short_description.label_tag }}
+            {{ form.short_description }}
+            
             <!-- Error and Helper Messages for Description -->
             <p class="highlight error-msg" id="short-description-error-msg">The field cannot be empty</p>
             <p class="flex-end minimum-characters">Minimum characters to use: 50</p>

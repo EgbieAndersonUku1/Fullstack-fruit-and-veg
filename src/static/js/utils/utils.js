@@ -138,6 +138,30 @@ function capitalize(str) {
 }
   
 
+/**
+ * Disables any option in a select element that has an empty value.
+ *
+ * This function searches for options within the provided select element that have an empty value 
+ * (i.e., `value=""`). It disables these options to prevent them from being selectable by the user.
+ *
+ * Args:
+ *     selectElement (HTMLElement): The select element to be modified.
+ */
+function disableEmptySelectOptions(selectElement) {
+    if (!selectElement) {
+        console.warn("The select element wasn't found");
+        return;
+    }
+    
+    // Find and disable the placeholder option
+    const placeholderOption = selectElement.querySelector('option[value=""]');
+    if (placeholderOption) {
+        placeholderOption.disabled = true;
+    }
+}
+
+
+
 
 export {
     generateSessionKey,
@@ -150,5 +174,6 @@ export {
     getCurrentUrl,
     getCurrentPage,
     capitalize,
+    disableEmptySelectOptions,
     
 };
