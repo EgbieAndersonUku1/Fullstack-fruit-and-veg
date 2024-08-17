@@ -24,6 +24,7 @@
  */
 async function populateSelectField(cssSelectorID, filePath) {
     const selectElement = document.querySelector(cssSelectorID);
+    console.log(selectElement)
 
     if (!selectElement) {
         console.warn(`The element with selector '${cssSelectorID}' wasn't found!!`);
