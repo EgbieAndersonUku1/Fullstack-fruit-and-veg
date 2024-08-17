@@ -93,7 +93,9 @@ SECRET_KEY='your_generated_secret_key_here'
 
 
 ### Note 
-For now, you don't need to set up a `.env` file because the application is using the default `SECRET_KEY`. However, once the authentication feature is implemented, you will need to configure a `.env` file to manage essential environment variables securely which will be found in the .env.example file. 
+For now, you don't need to set up a `.env` file because the application is using the default `SECRET_KEY`. 
+However, once the authentication feature is implemented, you will need to configure a `.env` file to manage 
+essential environment variables securely which will be found in the .env.example file. 
 This will ensure the proper handling of sensitive information, such as the `SECRET_KEY`.
 
 
