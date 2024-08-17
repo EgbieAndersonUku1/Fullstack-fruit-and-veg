@@ -12,7 +12,7 @@ window.prevPage = prevPage;
 
 
 // populate the select function
-populateSelectField("#countries", "../../../../countries.txt")
+// populateSelectField("#countries", window.countriesFileUrl)
 
 
 // checkboxes error msg selector

@@ -1,301 +1,309 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title  %}Account{% endblock title  %}Account
+{% block title %}Account{% endblock title %}Account
 
 
-{% block  body%}
+{% block body%}
 
-    <section id="account" aria-labelledby="account-heading">
-        <div class="content-container">
-            <div class="logo center">
-                <a href="{%  url 'home' %}">
-                    <img src="{% static 'img/display/jpg/logo.png' %}" alt="The logo" class="account-logo-img">
-                </a>
-            
-            </div>
-            <ul class="breadcrumb">
-                <li><a href="{%  url 'home' %}">Home</a></li>
-                
-                <li>My account</li>
-            
-            </ul>
-            <h1 id="account-heading" class="padding-top-md lighten">My Account</h1>
-            <p class="account-info">Manage user account</p>
-            <hr class="dividor">
-            <div class="account__options cards">
-                <a href="#" aria-labelledby="login-security-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static '/img/icons/closed-lock-with-key.svg' %}" alt="Locked key icon" class="account-icon">
+<section id="account" aria-labelledby="account-heading">
+    <div class="content-container">
+        {% include "partials/logo_link.html" %}
+        <ul class="breadcrumb">
+            <li><a href="{%  url 'home' %}">Home</a></li>
 
-                        </div>
-                        <div class="body">
-                            <p id="login-security-heading" class="title">Login & Security</p>
-                            <p>Manage password, emails, and passwords</p>
-                        </div>
+            <li>My account</li>
+
+        </ul>
+        <h1 id="account-heading" class="padding-top-md lighten">My Account</h1>
+        <p class="account-info">Manage user account</p>
+        <hr class="dividor">
+        <div class="account__options cards">
+            <a href="#" aria-labelledby="login-security-heading" class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static '/img/icons/closed-lock-with-key.svg' %}" alt="Locked key icon"
+                            class="account-icon">
+
                     </div>
-                </a>
-                <a href="../orders/orders.html" aria-labelledby="orders-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static '/img/icons/shopping-bags.svg' %}" alt="Shopping bags icon" class="account-icon">
+                    <div class="body">
+                        <p id="login-security-heading" class="title">Login & Security</p>
+                        <p>Manage password, emails, and passwords</p>
+                    </div>
+                </div>
+            </a>
+            <a href="{%  url 'orders' %}" aria-labelledby="orders-heading" class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static '/img/icons/shopping-bags.svg' %}" alt="Shopping bags icon"
+                            class="account-icon">
 
-                        </div>
-                        <div class="body">
-                            <p id="orders-heading">Your Orders</p>
-                            <p>Track, cancel an order, download an invoice or buy again</p>
-                        </div>
                     </div>
-                </a>
-                <a href="#" aria-labelledby="addresses-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static '/img/icons/address-book.svg' %}" alt="Address book icon" class="account-icon">
+                    <div class="body">
+                        <p id="orders-heading">Your Orders</p>
+                        <p>Track, cancel an order, download an invoice or buy again</p>
+                    </div>
+                </div>
+            </a>
+            <a href="#" aria-labelledby="addresses-heading" class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static '/img/icons/address-book.svg' %}" alt="Address book icon"
+                            class="account-icon">
 
-                        </div>
-                        <div class="body">
-                            <p id="addresses-heading">Manage Addresses</p>
-                            <p>Edit, remove, or set default address</p>
-                        </div>
                     </div>
-                </a>
-                <a href="#" aria-labelledby="wishlist-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static '/img/icons/red-heart.svg' %}" alt="Red heart icon" class="account-icon">
+                    <div class="body">
+                        <p id="addresses-heading">Manage Addresses</p>
+                        <p>Edit, remove, or set default address</p>
+                    </div>
+                </div>
+            </a>
+            <a href="#" aria-labelledby="wishlist-heading" class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static '/img/icons/red-heart.svg' %}" alt="Red heart icon" class="account-icon">
 
-                        </div>
-                        <div class="body">
-                            <p id="wishlist-heading">Wishlist</p>
-                            <p>Track, edit, or create a new wishlist</p>
-                        </div>
                     </div>
-                </a>
-                <a href="../../account/reviews/reviews-and-feedback.html" aria-labelledby="reviews-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static '/img/icons/comments.svg' %}" alt="Comments icon" class="account-icon">
+                    <div class="body">
+                        <p id="wishlist-heading">Wishlist</p>
+                        <p>Track, edit, or create a new wishlist</p>
+                    </div>
+                </div>
+            </a>
+            <a href="../../account/reviews/reviews-and-feedback.html" aria-labelledby="reviews-heading"
+                class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static '/img/icons/comments.svg' %}" alt="Comments icon" class="account-icon">
 
-                        </div>
-                        <div class="body">
-                            <p id="reviews-heading">Manage Your Reviews</p>
-                            <p>View or create a new review</p>
-                        </div>
                     </div>
-                </a>
-                <a href="#" aria-labelledby="payments-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static '/img/icons/paypal.svg' %}" alt="Paypal icon" class="account-icon">
+                    <div class="body">
+                        <p id="reviews-heading">Manage Your Reviews</p>
+                        <p>View or create a new review</p>
+                    </div>
+                </div>
+            </a>
+            <a href="#" aria-labelledby="payments-heading" class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static '/img/icons/paypal.svg' %}" alt="Paypal icon" class="account-icon">
 
-                        </div>
-                        <div class="body">
-                            <p id="payments-heading">Your Payments</p>
-                            <p>Manage or add payment methods and view all past transactions</p>
-                        </div>
                     </div>
-                </a>
-                <a href="#" aria-labelledby="profile-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static '/img/icons/person-add.svg' %}" alt="Person add icon" class="account-icon">
+                    <div class="body">
+                        <p id="payments-heading">Your Payments</p>
+                        <p>Manage or add payment methods and view all past transactions</p>
+                    </div>
+                </div>
+            </a>
+            <a href="#" aria-labelledby="profile-heading" class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static '/img/icons/person-add.svg' %}" alt="Person add icon" class="account-icon">
 
-                        </div>
-                        <div class="body">
-                            <p id="profile-heading">Profile Information</p>
-                            <p>View and edit your personal information</p>
-                        </div>
                     </div>
-                </a>
-                <a href="#" aria-labelledby="subscriptions-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static '/img/icons/rss.svg' %}" alt="RSS feed icon" class="account-icon">
-                        </div>
-                        <div class="body">
-                            <p id="subscriptions-heading">Subscriptions</p>
-                            <p>Manage your subscriptions and memberships</p>
-                        </div>
+                    <div class="body">
+                        <p id="profile-heading">Profile Information</p>
+                        <p>View and edit your personal information</p>
                     </div>
-                </a>
-                <a href="#" aria-labelledby="saved-items-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static '/img/icons/save.svg' %}" alt="Save icon" class="account-icon">
+                </div>
+            </a>
+            <a href="#" aria-labelledby="subscriptions-heading" class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static '/img/icons/rss.svg' %}" alt="RSS feed icon" class="account-icon">
+                    </div>
+                    <div class="body">
+                        <p id="subscriptions-heading">Subscriptions</p>
+                        <p>Manage your subscriptions and memberships</p>
+                    </div>
+                </div>
+            </a>
+            <a href="#" aria-labelledby="saved-items-heading" class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static '/img/icons/save.svg' %}" alt="Save icon" class="account-icon">
 
-                        </div>
-                        <div class="body">
-                            <p id="saved-items-heading">Saved Items</p>
-                            <p>View and manage your saved items</p>
-                        </div>
                     </div>
-                </a>
-                <a href="#" aria-labelledby="support-tickets-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static '/img/icons/admission-tickets.svg' %}" alt="Support tickets icon" class="account-icon">
+                    <div class="body">
+                        <p id="saved-items-heading">Saved Items</p>
+                        <p>View and manage your saved items</p>
+                    </div>
+                </div>
+            </a>
+            <a href="#" aria-labelledby="support-tickets-heading" class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static '/img/icons/admission-tickets.svg' %}" alt="Support tickets icon"
+                            class="account-icon">
 
-                        </div>
-                        <div class="body">
-                            <p id="support-tickets-heading">Support Tickets</p>
-                            <p>View and manage your support tickets</p>
-                        </div>
                     </div>
-                </a>
+                    <div class="body">
+                        <p id="support-tickets-heading">Support Tickets</p>
+                        <p>View and manage your support tickets</p>
+                    </div>
+                </div>
+            </a>
 
-                <a href="../refund/refund-management.html" aria-labelledby="promotions-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static '/img/icons/money-refund-dollar.svg' %}" alt="promotions icon" class="account-icon">
-                        </div>
-                        <div class="body">
-                            <p id="marketing-heading">Refund</p>
-                            <p>Request refund or track any refunds made</p>
-                            
-                        </div>
+            <a href="../refund/refund-management.html" aria-labelledby="promotions-heading" class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static '/img/icons/money-refund-dollar.svg' %}" alt="promotions icon"
+                            class="account-icon">
                     </div>
-                </a>
-            </div>
+                    <div class="body">
+                        <p id="marketing-heading">Refund</p>
+                        <p>Request refund or track any refunds made</p>
 
-            <h1 class="account-heading lighten" id="delete-account-heading">Delete account</h1>
-            <p class="highlight">Warning this action cannot be reversed</p>
-            <hr class="dividor">
-            <div class="account__options cards">
-                <a href="#" aria-labelledby="delete-account-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static '/img/icons/delete.svg' %}" alt="Locked key icon" class="account-icon">
-                        </div>
-                        <div class="body">
-                            <p id="delete-account-heading" class="highlight">Delete account</p>
-                            <p>Delete your account and everything related to it</p>
-                        </div>
                     </div>
-                </a>
-            </div>
+                </div>
+            </a>
         </div>
-    </section>
 
-    <!-- Administration -->
-    <!-- This section will be visible only to the admin and not to customers when the backend is built.
+        <h1 class="account-heading lighten" id="delete-account-heading">Delete account</h1>
+        <p class="highlight">Warning this action cannot be reversed</p>
+        <hr class="dividor">
+        <div class="account__options cards">
+            <a href="#" aria-labelledby="delete-account-heading" class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static '/img/icons/delete.svg' %}" alt="Locked key icon" class="account-icon">
+                    </div>
+                    <div class="body">
+                        <p id="delete-account-heading" class="highlight">Delete account</p>
+                        <p>Delete your account and everything related to it</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Administration -->
+<!-- This section will be visible only to the admin and not to customers when the backend is built.
         For now, it will be displayed along with the normal user section.
     -->
 
-    <section id="administration" aria-labelledby="administration-heading">
-        <div class="content-container">
-            <h1 id="admin-heading" class="account-heading lighten">Admin</h1>
-            <p class="account-info">Visible to the admin only</p>
-            <hr class="dividor">
-            <div class="account__options cards">
+<section id="administration" aria-labelledby="administration-heading">
+    <div class="content-container">
+        <h1 id="admin-heading" class="account-heading lighten">Admin</h1>
+        <p class="account-info">Visible to the admin only</p>
+        <hr class="dividor">
+        <div class="account__options cards">
 
-                <a href="../financial-management/financial-management.html" aria-labelledby="financial-management-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static '/img/icons/view-financial-account-credit-card.svg' %}" alt="credit icon" class="account-icon">
+            <a href="{% url 'financial_management' %}" aria-labelledby="financial-management-heading" class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static '/img/icons/view-financial-account-credit-card.svg' %}" alt="credit icon"
+                            class="account-icon">
 
-                        </div>
-                        <div class="body">
-                            <p id="financial-management-heading" class="financial-management-header">Financial Management:</p>
-                            <p id="financial-management-details" class="financial-management-instructions">Manage and track all financial transactions related enquires, such as refund-related financial activities, including issued refunds, pending transactions, and processed payments.</p>
-                        </div>
-                        
                     </div>
-                </a>
-                <a href="{% url 'product-management' %}" aria-labelledby="product-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static '/img/icons/product.svg' %}" alt="product icon" class="account-icon">
-
-                        </div>
-                        <div class="body">
-                            <p id="product-management-heading" class="title">Product Management</p>
-                            <p>Manage products including discounted items, new items, etc. Add, edit, or delete products.</p>
-
-                        </div>
+                    <div class="body">
+                        <p id="financial-management-heading" class="financial-management-header">Financial Management:
+                        </p>
+                        <p id="financial-management-details" class="financial-management-instructions">Manage and track
+                            all financial transactions related enquires, such as refund-related financial activities,
+                            including issued refunds, pending transactions, and processed payments.</p>
                     </div>
-                </a>
-                <a href="#" aria-labelledby="orders-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static '/img/icons/draft-orders-major.svg' %}" alt="Orders icon" class="account-icon">
 
-                        </div>
-                        <div class="body">
-                            <p id="order-management-heading">Order Management</p>
-                            <p>Analyse reports, manage inventory, and monitor customer activities.</p>
+                </div>
+            </a>
+            <a href="{% url 'product-management' %}" aria-labelledby="product-heading" class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static '/img/icons/product.svg' %}" alt="product icon" class="account-icon">
 
-                        </div>
                     </div>
-                </a>
-                <a href="#" aria-labelledby="customer-support-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static '/img/icons/customer-support.svg' %}" alt="Customer support icon" class="account-icon">
-                        </div>
-                        <div class="body">
-                            <p id="customer-management-heading">Customer management</p>
-                            <p>Manage, view, or edit customer information. Handle support tickets and cusomter reviews or feedbacks.</p>
+                    <div class="body">
+                        <p id="product-management-heading" class="title">Product Management</p>
+                        <p>Manage products including discounted items, new items, etc. Add, edit, or delete products.
+                        </p>
 
-                        </div>
                     </div>
-                </a>
+                </div>
+            </a>
+            <a href="#" aria-labelledby="orders-heading" class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static '/img/icons/draft-orders-major.svg' %}" alt="Orders icon"
+                            class="account-icon">
 
-                <a href="#" aria-labelledby="content-book-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static '/img/icons/content-book-open.svg' %}" alt="content book icon" class="account-icon">
-                        </div>
-                        <div class="body">
-                            <p id="subscriptions-heading">Content Management</p>
-                            <p>Manage content including creating blogs, new posts including FAQ or help sections</p>
-                            
-                        </div>
                     </div>
-                </a>
-                <a href="#" aria-labelledby="analytics-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static '/img/icons/analytics.svg' %}" alt="Analytics icon" class="account-icon">
-                        </div>
-                        <div class="body">
-                            <p id="analytics-heading">Analytics and Reports</p>
-                            <p>Handle analytics reports including sales, inventory and customer activity reports</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="#" aria-labelledby="promotions-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static '/img/icons/marketing-major.svg' %}" alt="promotions icon" class="account-icon">
+                    <div class="body">
+                        <p id="order-management-heading">Order Management</p>
+                        <p>Analyse reports, manage inventory, and monitor customer activities.</p>
 
-                        </div>
-                        <div class="body">
-                            <p id="marketing-heading">Promotions</p>
-                            <p>Manage promotions by creating or editing products.</p>
-                            
-                        </div>
                     </div>
-                </a>
+                </div>
+            </a>
+            <a href="#" aria-labelledby="customer-support-heading" class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static '/img/icons/customer-support.svg' %}" alt="Customer support icon"
+                            class="account-icon">
+                    </div>
+                    <div class="body">
+                        <p id="customer-management-heading">Customer management</p>
+                        <p>Manage, view, or edit customer information. Handle support tickets and cusomter reviews or
+                            feedbacks.</p>
 
-              
-                <a href="#" aria-labelledby="settings-and-configuration-heading" class="card-link">
-                    <div class="card-grid">
-                        <div class="head">
-                            <img src="{% static 'img/icons/settings.svg' %}" alt="Settings and configuration icon" class="account-icon">
-                        </div>
-                        <div class="body">
-                            <p id="settings-heading">Settings and Configuration</p>
-                            <p>Manage settings, including tax configuration, store settings, and payment gateways.</p>
-                            
-                        </div>
                     </div>
-                </a>
-            </div>
+                </div>
+            </a>
+
+            <a href="#" aria-labelledby="content-book-heading" class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static '/img/icons/content-book-open.svg' %}" alt="content book icon"
+                            class="account-icon">
+                    </div>
+                    <div class="body">
+                        <p id="subscriptions-heading">Content Management</p>
+                        <p>Manage content including creating blogs, new posts including FAQ or help sections</p>
+
+                    </div>
+                </div>
+            </a>
+            <a href="#" aria-labelledby="analytics-heading" class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static '/img/icons/analytics.svg' %}" alt="Analytics icon" class="account-icon">
+                    </div>
+                    <div class="body">
+                        <p id="analytics-heading">Analytics and Reports</p>
+                        <p>Handle analytics reports including sales, inventory and customer activity reports</p>
+                    </div>
+                </div>
+            </a>
+            <a href="#" aria-labelledby="promotions-heading" class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static '/img/icons/marketing-major.svg' %}" alt="promotions icon"
+                            class="account-icon">
+
+                    </div>
+                    <div class="body">
+                        <p id="marketing-heading">Promotions</p>
+                        <p>Manage promotions by creating or editing products.</p>
+
+                    </div>
+                </div>
+            </a>
+
+
+            <a href="#" aria-labelledby="settings-and-configuration-heading" class="card-link">
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static 'img/icons/settings.svg' %}" alt="Settings and configuration icon"
+                            class="account-icon">
+                    </div>
+                    <div class="body">
+                        <p id="settings-heading">Settings and Configuration</p>
+                        <p>Manage settings, including tax configuration, store settings, and payment gateways.</p>
+
+                    </div>
+                </div>
+            </a>
         </div>
-    </section>
-{% endblock  %}
-
-
-
-
+    </div>
+</section>
+{% endblock %}

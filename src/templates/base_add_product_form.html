@@ -1,0 +1,75 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="{% static 'img/display/jpg/logo.png' %}" type="image/x-icon">
+
+    <!-- Dynamic Meta Tags -->
+    <meta name="description" content="{% block description %}Default description of the site{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}default, keywords, site{% endblock %}">
+
+    <!-- Dynamic Title -->
+    <title>{% block title %}Default Title here {% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/css.css' %}">
+</head>
+
+<body>
+    <div class="dim-overlay" id="dimOverlay"></div>
+
+    <!-- The navigation  -->
+    {% include "partials/base_nav.html" %}
+
+
+    <!-- the main body -->
+    <main>
+
+        <section id="{{ section_id }}" aria-labelledby="{{ section_id }}-heading" class="add-product-section">
+
+            {% include "partials/logo_link.html" %}
+
+            <div class="content-container">
+        
+                <!-- Breadcrumb Navigation -->
+                <ul class="breadcrumb">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'account' %}">My account</a></li>
+                    <li><a href="{% url 'product-management' %}">Product management overview</a></li>
+                    <li>Add new product</li>
+                </ul>
+        
+                <!-- Section Heading -->
+                <h1 id="add-product-heading" class="padding-top-md lighten text-capitalize">Add new product</h1>
+                <p class="account-info">{% block section_title %}{% endblock %}</p>
+                <hr class="dividor">
+        
+                <!-- Dynamic Container -->
+                <div class="add-product-container {% if is_review_section %} review-product-container {% endif %}" 
+                aria-labelledby="{{ aria_labelledby }}">
+                     
+                    {% block body %}{% endblock %}
+                    
+                </div>
+                
+            </div>
+        </section>
+    </main>
+
+    <!-- the footer -->
+    {% include "partials/base_footer.html" %}
+
+
+    <!-- Scripts Block -->
+    {% block script %}{% endblock %}
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.all.min.js"></script>
+
+
+</body>
+
+</html>

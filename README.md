@@ -63,6 +63,38 @@ The backend uses several technologies and libraries some have be used some have 
 
 
 
+### Secret Key Setup
+
+To ensure the security of your Django project, you must set a `SECRET_KEY` in your environment variables. This key is critical for various cryptographic operations in Django, including session management, password hashing, and more.
+
+#### Creating the `.env` File1.**Create a `.env` File:**   - Start by creating a `.env` file in the root of your project directory. The .env file
+    must reside outside the 'src' directory where the `requirements.html' and `.env.example` live
+
+   - You can use the `.env.example` file as a guide. Simply copy its contents into your new `.env` file and replace any placeholder values as needed.
+
+2.**How to Set the Secret Key:**   - You have two options to generate the `SECRET_KEY`:
+
+   -**Option 1: Generate a Secret Key Online:**     - You can use an online generator like [Django Secret Key Generator](https://djecrety.ir/) to generate a secure key.
+
+   -**Option 2: Generate a Secret Key Using the Project's Utility Function:**     - Use the `generateSessionKey()` function found in the `utils` module of this project to generate a secure key.
+
+#### Setting the Secret Key in `.env`:
+
+Once you have your secret key, add it to the `.env` file as follows:
+
+```bash
+# Option 1: Generate Secret Key Online and add it to the .env file
+# Go to https://djecrety.ir/ and generate a key, then replace 'your_generated_secret_key_here' below
+
+SECRET_KEY='your_generated_secret_key_here'
+
+# Option 2: Generate Secret Key using the project's utility function
+# This command will generate the SECRET_KEY, which you can then copy and paste into the .env file
+
+
+### Note 
+For now, you don't need to set up a `.env` file because the application is using the default `SECRET_KEY`. However, once the authentication feature is implemented, you will need to configure a `.env` file to manage essential environment variables securely which will be found in the .env.example file. 
+This will ensure the proper handling of sensitive information, such as the `SECRET_KEY`.
 
 
 ## Installation

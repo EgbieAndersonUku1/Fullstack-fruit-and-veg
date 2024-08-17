@@ -1,0 +1,9 @@
+# Ensure LF line endings for specific file types
+*.sh text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.py text eol=lf
+
+# Ensure CRLF line endings for Windows batch files
+*.bat text eol=crlf

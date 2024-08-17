@@ -1,0 +1,17 @@
+{% load static %}
+{% if is_current_page and not remove_opacity %}
+    <p id="{{ id }}" class="opacity-md progress-link">
+        <span><img src="{% static '/img/icons/checkmark-running.svg' %}" alt="a check mark icon" class="icon"></span>
+        {{ current_page }} (current page)
+    </p>
+{% elif remove_opacity and not is_current_page %}
+    <p id="{{ id }}" class="progress-link">
+        <span><img src="{% static '/img/icons/checkmark-running.svg' %}" alt="a check mark icon" class="icon"></span>
+        {{ current_page }}
+    </p>
+{% else %}
+    <p id="{{ id }}" class="progress-link opacity-md">
+        <span><img src="{% static '/img/icons/checkmark-running.svg' %}" alt="a check mark icon" class="icon"></span>
+        {{ current_page }}
+    </p>
+{% endif %}

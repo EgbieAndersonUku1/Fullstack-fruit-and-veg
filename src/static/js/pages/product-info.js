@@ -387,7 +387,7 @@ function validateLink(link) {
  * const notLiveProducts = getProductsByStatus(false);
  */
 function getProductsByStatus(live = true) {
-    if (productEntries.length === 0) {
+    if (!productEntries || productEntries.length === 0) {
         return [];
     }
 
