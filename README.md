@@ -125,6 +125,8 @@ SECRET_KEY='your_generated_secret_key_here'
      DB_HOST=localhost
      DB_PORT=5432
      ```
+4. **Run python manage.py migrate:**
+   - Run the migrate command above to migrate the changes
 
 Your application should now be set up with PostgreSQL.
 
