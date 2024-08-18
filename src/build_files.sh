@@ -1,13 +1,12 @@
 #!/bin/bash
 
-# Debugging: Print Python and Pip versions
-which python
-python --version
-which pip
-pip --version
+# Install Python
+apt-get update
+apt-get install -y python3 python3-pip
 
-# Install dependencies
-pip install -r requirements.txt
+# Set up the Python environment
+pip3 install -r requirements.txt
 
-# Collect static files
-python manage.py collectstatic --noinput
+# Run your build commands
+python3 manage.py collectstatic --noinput
+
