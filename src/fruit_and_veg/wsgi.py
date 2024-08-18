@@ -16,6 +16,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fruit_and_veg.settings')
 
 application = get_wsgi_application()
 application = WhiteNoise(application)
+app = application
 
 
 if __name__ == '__main__':

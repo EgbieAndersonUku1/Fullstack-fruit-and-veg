@@ -4,10 +4,27 @@
     {
       "src": "fruit_and_veg/wsgi.py",
       "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb" }
+      "config": {
+        "maxLambdaSize": "15mb",
+        "runtime": "python3.12"  
+      }
+    },
+    {
+      "src": "build_files.sh",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "staticfiles_build"
+      }
     }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "fruit_and_veg/wsgi.py" }
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "fruit_and_veg/wsgi.py"
+    }
   ]
 }
