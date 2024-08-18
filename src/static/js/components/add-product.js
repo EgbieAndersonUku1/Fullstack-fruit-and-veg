@@ -1,7 +1,7 @@
 
 import { minimumCharactersToUse } from "./characterCounter.js";
 import {getItemFromLocalStorage, saveToLocalStorage, getAllCheckBoxElementsValue,
-    redirectToNewPage, getCurrentPage, disableEmptySelectOptions as handleEmptySelectOptions
+        getCurrentPage, disableEmptySelectOptions as handleEmptySelectOptions
 } from "../utils/utils.js";
 
 import AlertUtils from "../utils/alerts.js";
@@ -10,8 +10,16 @@ import { populateSelectField } from "../builders/formBuilder.js";
 
 
 const selectFormCategory = document.getElementById("select-category");
+const selectPriceFormCategory = document.getElementById("select-discount");
+
+const PRODUCT_SELECT_OPTION_VALUE  = "new";
+const DISCOUNT_SELECT_OPTION_VALUE = "yes"
+
+// handle the empty field in the select option for basic form
 document.addEventListener("DOMContentLoaded", (e) => handleEmptySelectOptions(selectFormCategory))
 
+// handle the empty field for the pricing and inventory form
+document.addEventListener("DOMContentLoaded", (e) => handleEmptySelectOptions(selectPriceFormCategory))
 
 
 // populate the select function
@@ -123,7 +131,8 @@ minimumCharactersToUse(warrantyDescriptionTextAreaElement, {
 selectProductCategoryElement?.addEventListener("change", () => toggleInputVisibilityBasedOnSelection(selectProductCategoryElement,
     addCategoryLabelElement,
     addCategoryInputFieldElement,
-    "new"));
+    PRODUCT_SELECT_OPTION_VALUE
+));
 
 
 
@@ -131,7 +140,7 @@ selectProductCategoryElement?.addEventListener("change", () => toggleInputVisibi
 selectDiscountCategoryElement?.addEventListener("change", () => toggleInputVisibilityBasedOnSelection(selectDiscountCategoryElement,
     addDiscountLabelElement,
     addDiscountInputFieldElement,
-    "yes"
+    DISCOUNT_SELECT_OPTION_VALUE,
 ));
 
 
@@ -269,7 +278,6 @@ function handlePriceInventoryForm(e) {
 function handleImageAndMediaForm(e) {
 
     e.preventDefault();
-    const pageNumber = 5;
     const formObject = {};
    
     const formEntries = getFormEntries(imageAndMediaForm);

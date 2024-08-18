@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from .forms import BasicFormDescription, DetailedFormDescription
+from .forms import BasicFormDescription, DetailedFormDescription, PricingAndInventoryForm
 
 from .utils.converter import convert_decimal_to_float
 
@@ -19,8 +19,8 @@ def add_basic_description(request):
     
     initial_data = request.session.get('basic_form_description', {})
     
-    # Prepopulate the form with the session data
-    form    = BasicFormDescription(initial=initial_data)
+  
+    form    = BasicFormDescription(initial=initial_data) # Prepopulate the form with the session data
     context = {"section_id" : "basic-description"}
     
     if (request.method == "POST"):
@@ -38,7 +38,7 @@ def add_detailed_description(request):
     
     initial_data = request.session.get('detailed_form_description', {})
     context      = {"section_id" : "detailed_description"}
-    form         = DetailedFormDescription(initial=initial_data)
+    form         = DetailedFormDescription(initial=initial_data) # Prepopulate the form with the session data
 
     
     if (request.method == "POST"):
@@ -56,8 +56,22 @@ def add_detailed_description(request):
 
 
 def add_pricing_and_inventory(request):
-    initial_data = request.session.get("")
+    
+    initial_data = request.session.get("pricing_and_inventory_form", {})
     context      = { "section_id" : "pricing-and-inventory"}
+    form         = PricingAndInventoryForm(initial=initial_data) # Prepopulate the form with the session data
+    
+    if (request.method == "POST"):
+        
+        form = PricingAndInventoryForm(request.POST)
+      
+        if form.is_valid():
+            if form.has_changed():
+                  request.session["pricing_and_inventory_form"] = convert_decimal_to_float(form.cleaned_data)
+            return redirect(reverse("images_and_media_form"))
+                
+
+    context["form"] = form
    
     return render(request, "account/product-management/add-new-product/pricing-inventory.html", context=context)
 
