@@ -3,7 +3,6 @@
 ## _The Server-Side Solution for Fresh Produce_
 
 [![Django](https://www.djangoproject.com/m/img/logos/django-logo-negative.png)](https://www.djangoproject.com/)
-
 [![Build Status](https://travis-ci.org/yourusername/fruit-store-backend.svg?branch=main)](https://travis-ci.org/yourusername/fruit-store-backend)
 
 The backend for the Fruit Store website is designed to manage server-side operations for a seamless online shopping experience for fresh fruits and vegetables. Built with Django, it handles user authentication, product management, and more, making the application a fullstack solution.
@@ -12,6 +11,14 @@ The backend for the Fruit Store website is designed to manage server-side operat
 - **Secure user authentication and registration**
 - **API endpoints for frontend integration**
 - ✨ **Robust & Scalable** ✨
+
+## Table of Contents
+- [Features](#features)
+- [Tech](#tech)
+- [Current Status](#current-status)
+- [Secret Key Setup](#secret-key-setup)
+- [Django Application Setup with PostgreSQL](#django-application-setup-with-postgresql)
+- [Overview](#overview)
 
 ## Features
 
@@ -24,10 +31,6 @@ The backend for the Fruit Store website is designed to manage server-side operat
 - **Wishlist:** Option for users to save and manage their favorite products.
 - **Review and Ratings:** Feature to allow users to leave reviews and ratings for products.
 - **Checkout System:** Secure checkout process including payment integration.
-
-This backend is built with Django to provide a powerful, scalable server-side solution for the Fruit Store. As [Django Documentation](https://www.djangoproject.com/) writes:
-
-> Django is a high-level Python Web framework that encourages rapid development and clean, pragmatic design. It’s designed to help developers take applications from concept to completion as swiftly as possible.
 
 ## Tech
 
@@ -56,6 +59,7 @@ The backend uses several technologies and libraries:
 - **Additional API Endpoints:** Create and implement additional API endpoints as needed.
 - **Frontend Integration:** Ensure seamless integration with the frontend.
 - **Extensive Development:** Address a range of significant tasks across various components to ensure full functionality and integration, covering all remaining aspects of backend development.
+- Add responsiveness to the site so that it can handle all screen sizes as not all elements respond to different windows sizes e.g small, etc
 
 ## Secret Key Setup
 
@@ -77,9 +81,18 @@ To ensure the security of your Django project, you must set a `SECRET_KEY` in yo
 
 Once you have your secret key, add it to the `.env` file as follows:
 
+```plaintext
+SECRET_KEY='your_generated_secret_key_here'
 
+To create a clickable menu in the README that links to various sections, you can use Markdown's anchor links. Here's how you can update your README with a table of contents:
 
+```markdown
 # Fruit Store Website - Backend
+
+## _The Server-Side Solution for Fresh Produce_
+
+[![Django](https://www.djangoproject.com/m/img/logos/django-logo-negative.png)](https://www.djangoproject.com/)
+[![Build Status](https://travis-ci.org/yourusername/fruit-store-backend.svg?branch=main)](https://travis-ci.org/yourusername/fruit-store-backend)
 
 The backend for the Fruit Store website is designed to manage server-side operations for a seamless online shopping experience for fresh fruits and vegetables. Built with Django, it handles user authentication, product management, and more, making the application a fullstack solution.
 
@@ -87,6 +100,14 @@ The backend for the Fruit Store website is designed to manage server-side operat
 - **Secure user authentication and registration**
 - **API endpoints for frontend integration**
 - ✨ **Robust & Scalable** ✨
+
+## Table of Contents
+- [Features](#features)
+- [Tech](#tech)
+- [Current Status](#current-status)
+- [Secret Key Setup](#secret-key-setup)
+- [Django Application Setup with PostgreSQL](#django-application-setup-with-postgresql)
+- [Overview](#overview)
 
 ## Features
 
@@ -99,7 +120,6 @@ The backend for the Fruit Store website is designed to manage server-side operat
 - **Wishlist:** Option for users to save and manage their favorite products.
 - **Review and Ratings:** Feature to allow users to leave reviews and ratings for products.
 - **Checkout System:** Secure checkout process including payment integration.
-
 
 ## Tech
 
@@ -179,8 +199,6 @@ Your application should now be set up with PostgreSQL.
 
 ## Overview
 
-
-Overview
 To set up the backend environment, follow these instructions:
 
 ```bash
@@ -212,3 +230,5 @@ python manage.py runserver
 # Navigate to the application
 http://127.0.0.1:8000/
 ```
+```
+
