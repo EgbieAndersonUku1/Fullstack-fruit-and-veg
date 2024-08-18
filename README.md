@@ -18,7 +18,7 @@ The backend for the Fruit Store website is designed to manage server-side operat
 - [Current Status](#current-status)
 - [Secret Key Setup](#secret-key-setup)
 - [Django Application Setup with PostgreSQL](#django-application-setup-with-postgresql)
-- [Create a superuser](#create a super user)
+- [Create a superuser](#Creating-a-Superuser)
 - [Overview](#overview)
 
 
