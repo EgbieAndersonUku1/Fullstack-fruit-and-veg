@@ -18,7 +18,9 @@ The backend for the Fruit Store website is designed to manage server-side operat
 - [Current Status](#current-status)
 - [Secret Key Setup](#secret-key-setup)
 - [Django Application Setup with PostgreSQL](#django-application-setup-with-postgresql)
+- [Create a superuser](#create a super user)
 - [Overview](#overview)
+
 
 ## Features
 
@@ -196,6 +198,59 @@ SECRET_KEY='your_generated_secret_key_here'
      ```
 
 Your application should now be set up with PostgreSQL.
+
+
+## Creating a Superuser
+
+To manage your Django application through the admin interface, you need to create a superuser. Follow these steps:
+
+### Step 1: Create a Superuser
+
+1. **Activate your virtual environment** (if not already activated):
+   - For Unix or macOS:
+     ```bash
+     source venv/bin/activate
+     ```
+   - For Windows:
+     ```bash
+     venv\Scripts\activate
+     ```
+
+2. **Navigate to your project directory** (where `manage.py` is located):
+   ```bash
+   cd path_to_your_project_directory
+   ```
+
+3. **Run the `createsuperuser` command**:
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+4. **Enter the required details**:
+   - **Username**: Choose a username for your superuser.
+   - **Email address**: Provide an email address.
+   - **Password**: Set a strong password and confirm it.
+
+   After completing these prompts, Django will create your superuser account.
+
+### Step 2: Access the Django Admin Interface
+
+1. **Run the development server** (if it's not already running):
+   ```bash
+   python manage.py runserver
+   ```
+
+2. **Open the Django admin interface** in your web browser:
+   ```plaintext
+   http://127.0.0.1:8000/admin/
+   ```
+
+3. **Log in** with the superuser credentials you created.
+
+Once logged in, you'll have full access to manage your Django project's data and settings through the admin interface.
+```
+
+
 
 ## Overview
 
