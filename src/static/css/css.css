@@ -2778,6 +2778,8 @@ label:not(label:first-child){
 }
 
 
+
+
 /* add basic product */
 
 .add-product-container{
@@ -2811,6 +2813,7 @@ label:not(label:first-child){
     display: flex;
     flex-direction: column;
     gap: 2px;
+    margin-bottom: var(--padding-xl);
 }
 
 .add-product-form input,
@@ -2836,7 +2839,6 @@ label:not(label:first-child){
 
 .prev-button,
 .next-button {
-   
    
     box-shadow: var(--box-shadow3);
     color: white;
@@ -3129,4 +3131,13 @@ legend {
 
 .add-product-section {
     margin-bottom: var(--padding-xl);
+}
+
+#detailed-description-form h4 {
+    margin-top: var(--padding-md);
+}
+
+/* The form buttons located within add product page */
+.button {
+    margin-top: var(--padding-md);
 }

@@ -7,45 +7,20 @@
 
 {% block body %}
 
-    <form action="" method="post" class="add-product-form" id="pricing-inventory-form">
+    <form action="{% url 'pricing_and_inventory_form' %}" method="post" class="add-product-form" id="pricing-inventory-form">
+        
         {% csrf_token %}
-
-        <!-- price input field -->
-        <label for="price">Price</label>
-        <input type="number" name="price" id="price" min="1" max="10000" step="0.01" required>
-
-        <!-- Availability options -->
-        <label for="availability">Availability</label>
-        <select name="availability" id="availability" class="select-category" required>
-            <option value="in-stock">In stock</option>
-            <option value="out-of-stock">Out of stock</option>
-            <option value="pre-order">Pre-order</option>
-        </select>
-
-        <!-- Add discount options -->
-        <label for="add-discount">Add discount</label>
-        <select name="select-discount" id="select-discount" class="select-category" required>
-            <option value="default" selected disabled>Select a category</option>
-
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-        </select>
-
-        <label for="add-discount" id="add-discount-label">Add a discount</label>
-        <input type="number" name="add-discount" id="add-discount" min="1" max="10000" step="0.01" required>
-
-        <!-- Quantity stock field -->
-        <label for="quantity-stock">Quantity in stock</label>
-        <input type="number" name="quantity-stock" id="quantity-stock" min="1" max="10000" step="1" required>
-
-        <!-- minimum order field -->
-        <label for="minimum-order-quantity">Minimum order quantity</label>
-        <input type="number" name="minimum-order-quantity" id="minimum-order-quantity" min="1" max="10000" step="1" required>
-
-        <!-- maximum order field -->
-        <label for="maximum-order-quantity">Maximum order quantity</label>
-        <input type="number" name="maximum-order-quantity" id="maximum-order-quantity" min="1" max="10000" step="1" required>
-
+        
+        {% include "partials/form_errors.html" with form=form %}
+   
+        {% for field in form %}
+            {% if field.name == "add_discount" %}
+                <label for="add-discount" id="add-discount-label">Add a discount</label>
+                {{ form.add_discount }}
+            {% else %}
+                {{ field.as_field_group }}
+            {% endif %}
+        {% endfor %}
 
         <div class="button space-between">
             <a href="{% url 'detailed_description_form' %}" class="prev-button center">

@@ -25,13 +25,16 @@
         <input type="file" name="primary-video" id="primary-video" accept="video/*">
 
         <!-- Navigation Buttons -->
-        <div class="button space-between padding-top-md">
-            <button class="prev-button" type="button" onclick="prevPage(event, 3)"> &lt; prev</button>
-            <button class="next-button" type="submit">next &gt;</button>
+        <div class="button space-between">
+            <a href="{% url 'pricing_and_inventory_form' %}" class="prev-button center">
+               &lt; prev
+            </a>
+           
+            <button type="submit" class="next-button"> next &gt;</button>
         </div>
     </form>
 
-    
+   
     <!-- The progess status i.e the number of forms left to complete -->
     <div class="progress-list">
 

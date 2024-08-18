@@ -14,9 +14,9 @@
         {% include "partials/form_errors.html" with form=form %}
 
         <!-- Colors Options Section -->
-        <legend class="text-capitalize">Colors options</legend>
+        <h4 class="text-capitalize">Colors options</h4>
         <hr class="dividor">
-        <fieldset class="colors">
+        <div class="colors">
           
             <div class="color">
                 <input type="checkbox" id="colorRed" name="color" value="Red" data-color="Red">
@@ -167,32 +167,16 @@
                 <input type="checkbox" id="colorAqua" name="color" value="Aqua" data-color="Aqua">
                 <label for="colorAqua" class="aqua">Aqua</label><br>
             </div>
-        </fieldset>
+        </div>
 
         <!-- Error Message for Color Selection -->
         <p class="error-msg" id="color-error-msg">You must select at least one color</p>
 
-        <!-- Dimensions Section -->
-        <fieldset class="dimensions">
-            <legend>Food Dimensions</legend>
-            <hr class="dividor">
-
-            {{ form.length.label_tag }}
-            {{ form.length }}
-
-            {{ form.width.label_tag }}
-            {{ form.width }}
-
-            {{ form.height.label_tag }}
-            {{ form.height }}
-
-        </fieldset>
-
-        <!-- Error Message for Dimensions -->
-        <p class="error-msg" id="size-error-msg">You must select at least one size</p>
-
+       
+        <!-- Sizes -->
+        
         <!-- Size Options Section -->
-        <legend class="text-capitalize">Size options</legend>
+        <h4 class="text-capitalize">Size options</h4>
         <hr class="dividor">
 
         <fieldset class="sizes">
@@ -215,8 +199,30 @@
         <!-- Error Message for Size Selection -->
         <p class="error-msg" id="size-error-msg">You must select at least one size</p>
 
+        <!-- Dimensions Section -->
+        <fieldset class="dimensions">
+            <h4>Food Dimensions</h4>
+            <hr class="dividor">
+
+            {{ form.length.label_tag }}
+            {{ form.length }}
+
+            {{ form.width.label_tag }}
+            {{ form.width }}
+
+            {{ form.height.label_tag }}
+            {{ form.height }}
+
+        </fieldset>
+
+        <!-- Error Message for Dimensions -->
+        <p class="error-msg" id="size-error-msg"></p>
+
+
+      
+
         <!-- Weight Section -->
-        <legend class="text-capitalize">Weight</legend>
+        <h4 class="text-capitalize">Weight</h4>
         <hr class="dividor">
 
         {{ form.weight.label_tag }}
@@ -224,7 +230,7 @@
        
 
         <!-- Description Section -->
-        <legend class="text-capitalize">Description</legend>
+        <h4 class="text-capitalize">Description</h4>
         <hr class="dividor">
 
         {{ form.description.label_tag }}
