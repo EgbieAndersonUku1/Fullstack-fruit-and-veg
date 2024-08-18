@@ -1,2 +1,13 @@
+#!/bin/bash
+
+# Debugging: Print Python and Pip versions
+which python
+python --version
+which pip
+pip --version
+
+# Install dependencies
 pip install -r requirements.txt
-python manage.py collectstatic
+
+# Collect static files
+python manage.py collectstatic --noinput
