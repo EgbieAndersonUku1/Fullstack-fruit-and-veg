@@ -37,7 +37,7 @@ DEBUG = getenv("DEBUG")
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
-    "fullstack-fruit-and-iqtdaotbj-egbies-projects.vercel.app",
+    ".vercel.app",
 ]
 
 
@@ -155,3 +155,6 @@ MEDIA_ROOT = join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
