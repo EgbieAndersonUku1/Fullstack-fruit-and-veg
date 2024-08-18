@@ -43,7 +43,7 @@ The backend uses several technologies and libraries:
 - [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) - Client-side functionality
 - [PostgreSQL/MySQL](https://www.postgresql.org/) - Database for data storage (configure in `settings.py`)
 
-## Current Status
+## Current Status (In progress)
 
 **Features Implemented:**
 
