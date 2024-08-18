@@ -89,67 +89,6 @@ SECRET_KEY='your_generated_secret_key_here'
 To create a clickable menu in the README that links to various sections, you can use Markdown's anchor links. Here's how you can update your README with a table of contents:
 
 ```markdown
-# Fruit Store Website - Backend
-
-## _The Server-Side Solution for Fresh Produce_
-
-[![Django](https://www.djangoproject.com/m/img/logos/django-logo-negative.png)](https://www.djangoproject.com/)
-[![Build Status](https://travis-ci.org/yourusername/fruit-store-backend.svg?branch=main)](https://travis-ci.org/yourusername/fruit-store-backend)
-
-The backend for the Fruit Store website is designed to manage server-side operations for a seamless online shopping experience for fresh fruits and vegetables. Built with Django, it handles user authentication, product management, and more, making the application a fullstack solution.
-
-- **Develop the backend to manage product listings**
-- **Secure user authentication and registration**
-- **API endpoints for frontend integration**
-- ✨ **Robust & Scalable** ✨
-
-## Table of Contents
-- [Features](#features)
-- [Tech](#tech)
-- [Current Status](#current-status)
-- [Secret Key Setup](#secret-key-setup)
-- [Django Application Setup with PostgreSQL](#django-application-setup-with-postgresql)
-- [Overview](#overview)
-
-## Features
-
-- **User Registration and Login:** Secure user registration, login, and account management.
-- **Product Management:** CRUD (Create, Read, Update, Delete) operations for managing fruit and vegetable listings.
-- **Shopping Cart:** Comprehensive shopping cart management for adding, updating, and removing items.
-- **Order Processing:** Functionality to handle order creation, processing, and tracking.
-- **API Endpoints:** RESTful API endpoints for frontend integration and external communication.
-- **Product Search and Filters:** Search functionality and filters for users to find products easily.
-- **Wishlist:** Option for users to save and manage their favorite products.
-- **Review and Ratings:** Feature to allow users to leave reviews and ratings for products.
-- **Checkout System:** Secure checkout process including payment integration.
-
-## Tech
-
-The backend uses several technologies and libraries:
-
-- [Django](https://www.djangoproject.com/) - High-level Python Web framework
-- [Python](https://www.python.org/) - Programming language for backend development
-- [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) - The skeleton of the website
-- [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS) - Styles for the site
-- [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) - Client-side functionality
-- [PostgreSQL/MySQL](https://www.postgresql.org/) - Database for data storage (configure in `settings.py`)
-
-## Current Status
-
-**Features Implemented:**
-
-- **Index Page:** Basic routing and homepage setup.
-- **Accounts Page:** User registration and login functionality.
-- **Product Management Page:** Initial wiring completed; some product cards still in progress.
-
-**Future Work:**
-
-- **Product Management Integration:** Finalize integration of product management features.
-- **Rewiring and Integration:** Complete the rewiring of HTML pages, navigation to use Django templates, and ensure JavaScript functions properly with Django.
-- **Shopping Cart Functionality:** Develop and integrate comprehensive shopping cart management.
-- **Additional API Endpoints:** Create and implement additional API endpoints as needed.
-- **Frontend Integration:** Ensure seamless integration with the frontend.
-- **Extensive Development:** Address a range of significant tasks across various components to ensure full functionality and integration, covering all remaining aspects of backend development.
 
 ## Secret Key Setup
 
@@ -218,7 +157,7 @@ To manage your Django application through the admin interface, you need to creat
 
 2. **Navigate to your project directory** (where `manage.py` is located):
    ```bash
-   cd path_to_your_project_directory
+   cd src
    ```
 
 3. **Run the `createsuperuser` command**:
@@ -248,9 +187,12 @@ To manage your Django application through the admin interface, you need to creat
 3. **Log in** with the superuser credentials you created.
 
 Once logged in, you'll have full access to manage your Django project's data and settings through the admin interface.
+
+
+
+## Quick Overview
+
 ```
-
-
 
 ## Overview
 
