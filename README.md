@@ -79,16 +79,6 @@ To ensure the security of your Django project, you must set a `SECRET_KEY` in yo
    - **Option 2: Generate a Secret Key Using the Project's Utility Function:**
      - Use the `generateSessionKey()` function found in the `utils` module of this project to generate a secure key.
 
-### Setting the Secret Key in `.env`
-
-Once you have your secret key, add it to the `.env` file as follows:
-
-```plaintext
-SECRET_KEY='your_generated_secret_key_here'
-
-To create a clickable menu in the README that links to various sections, you can use Markdown's anchor links. Here's how you can update your README with a table of contents:
-
-```markdown
 
 ## Secret Key Setup
 
@@ -110,9 +100,9 @@ To ensure the security of your Django project, you must set a `SECRET_KEY` in yo
 
 Once you have your secret key, add it to the `.env` file as follows:
 
-```plaintext
+
 SECRET_KEY='your_generated_secret_key_here'
-```
+
 
 ## Django Application Setup with PostgreSQL
 
@@ -227,5 +217,5 @@ python manage.py runserver
 # Navigate to the application
 http://127.0.0.1:8000/
 ```
-```
+
 
