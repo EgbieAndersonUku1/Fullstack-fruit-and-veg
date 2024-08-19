@@ -1,5 +1,5 @@
 from django import forms
-from .utils.product_category_utils import get_product_category_choices
+from .utils.product_category_utils import get_product_category_choices, get_product_color_choices, get_product_size_chocies
 
 
 class BasicFormDescription(forms.Form):
@@ -44,14 +44,23 @@ class BasicFormDescription(forms.Form):
     
 
 
+
 class DetailedFormDescription(forms.Form):
+    
+    def __init__(self, *args, **kwargs):
+        
+        super().__init__(*args, **kwargs)
+        self.color_choices = get_product_color_choices()
+        self.size_choices  = get_product_size_chocies()
+        
+       
   
     length = forms.DecimalField(label="Length (in centimeters)", max_digits=10, decimal_places=2, 
                                 widget=forms.NumberInput(attrs={
                                     "id": "length",
                                     "min": "0.1",
                                     "step": "0.01",
-                                    "aria-required": True,
+                                    "aria-required": "true",
                                     "placeholder": "Enter length in cm"
                                     
                                 }))
@@ -61,7 +70,7 @@ class DetailedFormDescription(forms.Form):
                                     "id": "width",
                                     "min": "0.1",
                                     "step": "0.01",
-                                    "aria-required": True,
+                                    "aria-required": "true",
                                     "placeholder": "Enter length in cm"
                                     
                                 }))
@@ -71,7 +80,7 @@ class DetailedFormDescription(forms.Form):
                                     "id": "height",
                                     "min": "0.1",
                                     "step": "0.01",
-                                    "aria-required": True,
+                                    "aria-required": "true",
                                     "placeholder": "Enter length in cm"
                                     
                                 }))
@@ -81,7 +90,7 @@ class DetailedFormDescription(forms.Form):
                                     "id": "weight",
                                     "min": "0.01",
                                     "step": "0.01",
-                                    "aria-required": True,
+                                    "aria-required": "true",
                                     "placeholder": "Enter weight in gram"
                                     
                                 }))

@@ -80,3 +80,38 @@ def get_product_category_choices():
             ('baby_formula', 'Baby Formula'),
         ]),
     ]
+
+
+
+def get_product_color_choices():
+    
+    colors =  [
+        {"id": "colorRed",    "name": "color",  "data_color": "red",    "value": "red"},
+        {"id": "colorGreen",  "name": "color",  "data_color": "green",  "value": "green"},
+        {"id": "colorBlue",   "name": "color",  "data_color": "blue",   "value": "blue"},
+        {"id": "colorYellow", "name": "color",  "data_color": "yellow", "value": "yellow"},
+        {"id": "colorBlack",  "name": "color",  "data_color": "black",  "value": "black"},
+        {"id": "colorWhite",  "name": "color",  "data_color": "white",  "value": "white"},
+        {"id": "colorPurple", "name": "color",  "data_color": "purple", "value": "purple"},
+        {"id": "colorOrange", "name": "color",  "data_color": "orange", "value": "orange"},
+        {"id": "colorPink",   "name": "color",  "data_color": "pink",   "value": "pink"},
+        {"id": "colorBrown",  "name": "color",  "data_color": "brown",   "value": "brown"},
+        {"id": "colorGray",   "name": "color",  "data_color": "gray",    "value": "gray"},
+        {"id": "colorCyan",   "name": "color",  "data_color": "cyan",    "value": "cyan"},
+        {"id": "colorMagenta", "name": "color", "data_color": "magenta", "value": "magenta"},
+        {"id": "colorLime",   "name": "color",  "data_color": "lime",    "value": "lime"},
+        {"id": "colorTeal",   "name": "color",  "data_color": "teal",     "value": "teal"},
+        {"id": "colorIndigo", "name": "color",  "data_color": "indigo",   "value": "indigo"},
+    ]
+    
+    return colors
+
+
+
+def get_product_size_chocies():
+    sizes = [
+        {"id" :"small",  "name": "size", "value" : "small",  "data_size": "small",  "class": "item-small"},
+        {"id" :"medium", "name": "size", "value" : "medium", "data_size": "medium", "class": "item-medium"},
+        {"id" :"large",  "name": "size", "value" : "large",  "data_size": "large",  "class": "item-large"}
+    ]
+    return sizes

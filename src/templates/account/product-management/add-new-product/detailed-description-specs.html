@@ -17,184 +17,36 @@
         <h4 class="text-capitalize">Colors options</h4>
         <hr class="dividor">
         <div class="colors">
-          
-            <div class="color">
-                <input type="checkbox" id="colorRed" name="color" value="Red" data-color="Red">
-                <label for="colorRed" class="red">Red</label><br>
-            </div>
+            
+            {% for color_dict in form.color_choices  %}
+                <div class="color">
+                    <input type="checkbox" id="{{ color_dict.id }}"   name="color" value="{{ color_dict.value }}" data-color="{{ color_dict.data_color }}">
+                    <label for="{{ color_dict.value}}" class="{{ color_dict.value}}">{{ color_dict.value }}</label>
+                    <br>
+                </div>
+            {% endfor %}
 
-            <div class="color">
-                <input type="checkbox" id="colorGreen" name="color" value="Green" data-color="Green">
-                <label for="colorGreen" class="green">Green</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorBlue" name="color" value="Blue" data-color="Blue">
-                <label for="colorBlue" class="blue">Blue</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorYellow" name="color" value="Yellow" data-color="Yellow">
-                <label for="colorYellow" class="yellow">Yellow</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorBlack" name="color" value="Black" data-color="Black">
-                <label for="colorBlack" class="black">Black</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorWhite" name="color" value="White" data-color="White">
-                <label for="colorWhite">White</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorGray" name="color" value="Gray" data-color="Gray">
-                <label for="colorGray" class="gray">Gray</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorBrown" name="color" value="Brown" data-color="Brown">
-                <label for="colorBrown" class="brown">Brown</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorOrange" name="color" value="Orange" data-color="Orange">
-                <label for="colorOrange" class="orange">Orange</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorPink" name="color" value="Pink" data-color="Pink">
-                <label for="colorPink">Pink</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorPurple" name="color" value="Purple" data-color="Purple">
-                <label for="colorPurple" class="purple">Purple</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorCyan" name="color" value="Cyan" data-color="Cyan">
-                <label for="colorCyan" class="cyan">Cyan</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorMagenta" name="color" value="Magenta" data-color="Magenta">
-                <label for="colorMagenta" class="magenta">Magenta</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorBeige" name="color" value="Beige" data-color="Beige">
-                <label for="colorBeige">Beige</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorMaroon" name="color" value="Maroon" data-color="Maroon">
-                <label for="colorMaroon" class="maroon">Maroon</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorNavy" name="color" value="Navy" data-color="Navy">
-                <label for="colorNavy" class="navy">Navy</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorOlive" name="color" value="Olive" data-color="Olive">
-                <label for="colorOlive" class="olive">Olive</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorTeal" name="color" value="Teal" data-color="Teal">
-                <label for="colorTeal" class="teal">Teal</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorLime" name="color" value="Lime" data-color="Lime">
-                <label for="colorLime" class="lime">Lime</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorIndigo" name="color" value="Indigo" data-color="Indigo">
-                <label for="colorIndigo" class="indigo">Indigo</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorViolet" name="color" value="Violet" data-color="Violet">
-                <label for="colorViolet" class="violet">Violet</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorGold" name="color" value="Gold" data-color="Gold">
-                <label for="colorGold" class="gold">Gold</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorSilver" name="color" value="Silver" data-color="Silver">
-                <label for="colorSilver" class="silver">Silver</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorBronze" name="color" value="Bronze" data-color="Bronze">
-                <label for="colorBronze" class="bronze">Bronze</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorCoral" name="color" value="Coral" data-color="Coral">
-                <label for="colorCoral" class="coral">Coral</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorTurquoise" name="color" value="Turquoise" data-color="Turquoise">
-                <label for="colorTurquoise" class="turquoise">Turquoise</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorLavender" name="color" value="Lavender" data-color="Lavender">
-                <label for="colorLavender">Lavender</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorPeach" name="color" value="Peach" data-color="Peach">
-                <label for="colorPeach" class="peach">Peach</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorMint" name="color" value="Mint" data-color="Mint">
-                <label for="colorMint" class="mint">Mint</label><br>
-            </div>
-
-            <div class="color">
-                <input type="checkbox" id="colorAqua" name="color" value="Aqua" data-color="Aqua">
-                <label for="colorAqua" class="aqua">Aqua</label><br>
-            </div>
         </div>
 
         <!-- Error Message for Color Selection -->
         <p class="error-msg" id="color-error-msg">You must select at least one color</p>
 
-       
         <!-- Sizes -->
         
         <!-- Size Options Section -->
         <h4 class="text-capitalize">Size options</h4>
         <hr class="dividor">
 
-        <fieldset class="sizes">
-            <div class="small size">
-                <input type="checkbox" id="small" name="size" value="small" data-size="small">
-                <label for="small" class="item-small">Small</label><br>
-            </div>
+        <div class="sizes">
 
-            <div class="medium size">
-                <input type="checkbox" id="medium" name="size" value="medium" data-size="medium">
-                <label for="medium" class="item-medium">Medium</label><br>
-            </div>
-
-            <div class="large size">
-                <input type="checkbox" id="large" name="size" value="large" data-size="large">
-                <label for="large" class="item-large">Large</label><br>
-            </div>
-        </fieldset>
+            {% for size_dict in form.size_choices %}
+                <div class="{{ size_dict.class }} size">
+                    <input type="checkbox" id="{{ size_dict.id }}" name="{{ size_dict.name }}" value="{{ size_dict.value }}" data-size="{{ size_dict.data_size }}">
+                    <label for="{{ size_dict.value }}" class="{{ size_dict.class }}">{{ size_dict.value }}</label><br>
+                </div>
+            {% endfor %}
+          
+        </div>
 
         <!-- Error Message for Size Selection -->
         <p class="error-msg" id="size-error-msg">You must select at least one size</p>
@@ -218,8 +70,6 @@
         <!-- Error Message for Dimensions -->
         <p class="error-msg" id="size-error-msg"></p>
 
-
-      
 
         <!-- Weight Section -->
         <h4 class="text-capitalize">Weight</h4>
