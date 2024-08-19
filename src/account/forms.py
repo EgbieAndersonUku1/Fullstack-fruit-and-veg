@@ -54,7 +54,7 @@ class DetailedFormDescription(forms.Form):
         self.size_choices  = get_product_size_chocies()
         
        
-  
+
     length = forms.DecimalField(label="Length (in centimeters)", max_digits=10, decimal_places=2, 
                                 widget=forms.NumberInput(attrs={
                                     "id": "length",

@@ -28,10 +28,7 @@ def add_basic_description(request):
         if form.is_valid():
            
             if form.has_changed():
-                 
                  request.session["basic_form_description"] = form.cleaned_data
-                
-                 
             return redirect(reverse("detailed_description_form"))
     
     context["form"] = form
