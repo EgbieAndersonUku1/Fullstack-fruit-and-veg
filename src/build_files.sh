@@ -4,7 +4,6 @@
 apt-get update
 apt-get install -y python3 python3-pip
 
-
 # get the latest pip
 # python3.12 -m pip install --upgrade pip
 
