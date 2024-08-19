@@ -30,8 +30,7 @@ def add_basic_description(request):
             if form.has_changed():
                  
                  request.session["basic_form_description"] = form.cleaned_data
-                 request.session["selected_colors"]        = request.POST.getlist('color')
-                 request.session["selected_sizes"]         = request.POST.getlist("size")
+                
                  
             return redirect(reverse("detailed_description_form"))
     
@@ -53,6 +52,8 @@ def add_detailed_description(request):
           
             if form.has_changed():
                 request.session["detailed_form_description"] = convert_decimal_to_float(form.cleaned_data)
+                request.session["selected_colors"]           = request.POST.getlist('color')
+                request.session["selected_sizes"]            = request.POST.getlist("size")
             
             return redirect(reverse("pricing_and_inventory_form"))
     
