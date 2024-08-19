@@ -12,5 +12,7 @@ apt-get install -y python3 python3-pip
 pip3 install -r requirements.txt
 
 # Run your build commands
+python3 manage.py makemigrations
+python3 manage.py migrate
 python3 manage.py collectstatic --noinput
 
