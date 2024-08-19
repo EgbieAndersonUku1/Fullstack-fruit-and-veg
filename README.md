@@ -79,23 +79,6 @@ To ensure the security of your Django project, you must set a `SECRET_KEY` in yo
    - **Option 2: Generate a Secret Key Using the Project's Utility Function:**
      - Use the `generateSessionKey()` function found in the `utils` module of this project to generate a secure key.
 
-
-## Secret Key Setup
-
-To ensure the security of your Django project, you must set a `SECRET_KEY` in your environment variables. This key is critical for various cryptographic operations in Django, including session management, password hashing, and more.
-
-### Creating the `.env` File
-
-1. **Create a `.env` File:**
-   - Create a `.env` file in the root of your project directory. The `.env` file should reside outside the 'src' directory where `requirements.txt` and `.env.example` are located.
-   - Use the `.env.example` file as a guide. Copy its contents into your new `.env` file and replace any placeholder values as needed.
-
-2. **How to Set the Secret Key:**
-   - **Option 1: Generate a Secret Key Online:**
-     - Use an online generator like [Django Secret Key Generator](https://djecrety.ir/) to generate a secure key.
-   - **Option 2: Generate a Secret Key Using the Project's Utility Function:**
-     - Use the `generateSessionKey()` function found in the `utils` module of this project to generate a secure key.
-
 ### Setting the Secret Key in `.env`
 
 Once you have your secret key, add it to the `.env` file as follows:

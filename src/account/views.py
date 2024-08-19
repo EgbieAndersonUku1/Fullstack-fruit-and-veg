@@ -26,8 +26,13 @@ def add_basic_description(request):
     if (request.method == "POST"):
         form = BasicFormDescription(request.POST)
         if form.is_valid():
+           
             if form.has_changed():
+                 
                  request.session["basic_form_description"] = form.cleaned_data
+                 request.session["selected_colors"]        = request.POST.getlist('color')
+                 request.session["selected_sizes"]         = request.POST.getlist("sizes")
+                 
             return redirect(reverse("detailed_description_form"))
     
     context["form"] = form
