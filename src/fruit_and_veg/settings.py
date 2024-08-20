@@ -46,7 +46,8 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-     'jazzmin',
+    'jazzmin',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
      
     # my apps
     "home.apps.HomeConfig",
