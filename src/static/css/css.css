@@ -2763,6 +2763,7 @@ footer .container h4 {
 label {
     font-weight: 500;
     text-transform: capitalize;
+   
 }
 
 
@@ -2869,6 +2870,7 @@ label:not(label:first-child){
 
 .shipping-options label {
     font-weight: 300;
+    padding-top: var(--padding-md);
 }
 
 .colors {
@@ -2925,6 +2927,14 @@ legend {
 
 .image-media-form label:not(label:first-child) {
     padding-top: var(--padding-md);
+}
+
+#image-media-form label {
+    color: var(--dark-red);
+}
+
+#image-media-form label:not(label:last-child) {
+    color: black;
 }
 
 .image-media-form input:last-child {
@@ -3140,4 +3150,17 @@ legend {
 /* The form buttons located within add product page */
 .button {
     margin-top: var(--padding-md);
+}
+
+
+/* For screen reader */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
 }

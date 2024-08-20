@@ -115,3 +115,159 @@ def get_product_size_chocies():
         {"id" :"large",  "name": "size", "value" : "large",  "data_size": "large",  "class": "item-large"}
     ]
     return sizes
+
+
+def get_shipping_options():
+    """
+    Returns a list of shipping options for a form, including details for each shipping method.
+    
+    Each option contains:
+    - A label for display
+    - Input details (name, value, data attributes, aria attributes)
+    - Screen reader accessible elements providing descriptions
+    
+    Returns:
+        list: A list of dictionaries where each dictionary represents a shipping option.
+    """
+    return [
+        {
+            "label": "Standard Shipping (3-5 business days) - £3.99",
+            "input": {
+                "name": "shipping",
+                "value": "standard",
+                "data": {
+                    "shipping_type": "standard",
+                    "cost": "3.99",
+                    "delivery_time": "3-5 business days"
+                },
+                "aria": {
+                    "describedby": "standard-desc"
+                },
+                "id": "standard"
+            },
+            "screen_reader_elems": {
+                "id": "standard-desc",
+                "text": "Standard shipping with delivery in 3 to 5 business days"
+            }
+        },
+        {
+            "label": "Express Shipping (1-2 business days) - £5.99",
+            "input": {
+                "name": "shipping",
+                "value": "express",
+                "data": {
+                    "shipping_type": "express",
+                    "cost": "5.99",
+                    "delivery_time": "1-2 business days"
+                },
+                "aria": {
+                    "describedby": "express-desc"
+                },
+                "id": "express"
+            },
+            "screen_reader_elems": {
+                "id": "express-desc",
+                "text": "Express shipping with delivery in 1 to 2 business days"
+            }
+        },
+        {
+            "label": "Next-Day Delivery - £9.99",
+            "input": {
+                "name": "shipping",
+                "value": "next-day",
+                "data": {
+                    "shipping_type": "next-day",
+                    "cost": "9.99",
+                    "delivery_time": "Next-Day Delivery"
+                },
+                "aria": {
+                    "describedby": "next-day-desc"
+                },
+                "id": "next-day"
+            },
+            "screen_reader_elems": {
+                "id": "next-day-desc",
+                "text": "Next-day delivery option"
+            }
+        },
+        {
+            "label": "Same-Day Delivery (order by 2 PM) - £14.99",
+            "input": {
+                "name": "shipping",
+                "value": "same-day",
+                "data": {
+                    "shipping_type": "same-day",
+                    "cost": "14.99",
+                    "delivery_time": "Same-Day Delivery (order by 2 PM)"
+                },
+                "aria": {
+                    "describedby": "same-day-desc"
+                },
+                "id": "same-day"
+            },
+            "screen_reader_elems": {
+                "id": "same-day-desc",
+                "text": "Same-day delivery option, order by 2 PM"
+            }
+        },
+        {
+            "label": "Click and Collect (1-2 days) - Free",
+            "input": {
+                "name": "shipping",
+                "value": "click-collect",
+                "data": {
+                    "shipping_type": "click-collect",
+                    "cost": "0.00",
+                    "delivery_time": "1-2 days"
+                },
+                "aria": {
+                    "describedby": "click-collect-desc"
+                },
+                "id": "click-collect"
+            },
+            "screen_reader_elems": {
+                "id": "click-collect-desc",
+                "text": "Click and Collect option with delivery in 1 to 2 days"
+            }
+        },
+        {
+            "label": "Weekend Delivery - £7.99",
+            "input": {
+                "name": "shipping",
+                "value": "weekend",
+                "data": {
+                    "shipping_type": "weekend",
+                    "cost": "7.99",
+                    "delivery_time": "Weekend Delivery"
+                },
+                "aria": {
+                    "describedby": "weekend-desc"
+                },
+                "id": "weekend"
+            },
+            "screen_reader_elems": {
+                "id": "weekend-desc",
+                "text": "Weekend delivery option"
+            }
+        },
+        {
+            "label": "Free Shipping (orders over £50) - Free",
+            "input": {
+                "name": "shipping",
+                "value": "free",
+                "data": {
+                    "shipping_type": "free",
+                    "cost": "0.00",
+                    "delivery_time": "Free Shipping (orders over £50)"
+                },
+                "aria": {
+                    "describedby": "free-desc"
+                },
+                "id": "free"
+            },
+            "screen_reader_elems": {
+                "id": "free-desc",
+                "text": "Free shipping for orders over £50"
+            }
+        }
+    ]
