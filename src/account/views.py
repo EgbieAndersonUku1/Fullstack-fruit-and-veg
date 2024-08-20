@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from .views_helpers import handle_form
 from .forms import BasicFormDescription, DetailedFormDescription, PricingAndInventoryForm
 
 from .utils.converter import convert_decimal_to_float
@@ -15,68 +16,37 @@ def product_management(request):
     return render(request, "account/product-management/add-new-product/product-management-overview.html")
 
 
+
 def add_basic_description(request):
-    
-    initial_data = request.session.get('basic_form_description', {})
-    
-  
-    form    = BasicFormDescription(initial=initial_data) # Prepopulate the form with the session data
-    context = {"section_id" : "basic-description"}
-    
-    if (request.method == "POST"):
-        form = BasicFormDescription(request.POST)
-        if form.is_valid():
-           
-            if form.has_changed():
-                 request.session["basic_form_description"] = form.cleaned_data
-            return redirect(reverse("detailed_description_form"))
-    
-    context["form"] = form
-    return render(request, "account/product-management/add-new-product/basic-product-information.html", context=context)
+    return handle_form(
+        request=request,
+        form_class=BasicFormDescription,
+        session_key='basic_form_description',
+        next_url_name='detailed_description_form',
+        template_name='account/product-management/add-new-product/basic-product-information.html'
+    )
 
 
 def add_detailed_description(request):
-    
-    initial_data = request.session.get('detailed_form_description', {})
-    context      = {"section_id" : "detailed_description"}
-    form         = DetailedFormDescription(initial=initial_data) # Prepopulate the form with the session data
-
-    
-    if (request.method == "POST"):
-        
-        form = DetailedFormDescription(request.POST)
-        if form.is_valid():
-          
-            if form.has_changed():
-                request.session["detailed_form_description"] = convert_decimal_to_float(form.cleaned_data)
-                request.session["selected_colors"]           = request.POST.getlist('color')
-                request.session["selected_sizes"]            = request.POST.getlist("size")
-            
-            return redirect(reverse("pricing_and_inventory_form"))
-    
-    context["form"] = form
-    return render(request, "account/product-management/add-new-product/detailed-description-specs.html", context=context)
+    return handle_form(
+        request=request,
+        form_class=DetailedFormDescription,
+        session_key='detailed_form_description',
+        next_url_name='pricing_and_inventory_form',
+        template_name='account/product-management/add-new-product/detailed-description-specs.html'
+    )
 
 
 def add_pricing_and_inventory(request):
-    
-    initial_data = request.session.get("pricing_and_inventory_form", {})
-    context      = { "section_id" : "pricing-and-inventory"}
-    form         = PricingAndInventoryForm(initial=initial_data) # Prepopulate the form with the session data
-    
-    if (request.method == "POST"):
-        
-        form = PricingAndInventoryForm(request.POST)
-      
-        if form.is_valid():
-            if form.has_changed():
-                  request.session["pricing_and_inventory_form"] = convert_decimal_to_float(form.cleaned_data)
-            return redirect(reverse("images_and_media_form"))
-                
-
-    context["form"] = form
+     return handle_form(
+        request=request,
+        form_class=PricingAndInventoryForm,
+        session_key='pricing_and_inventory_form',
+        next_url_name='images_and_media_form',
+        template_name='account/product-management/add-new-product/pricing-inventory.html'
+    )
    
-    return render(request, "account/product-management/add-new-product/pricing-inventory.html", context=context)
+                
 
 
 def add_images_and_media(request):
