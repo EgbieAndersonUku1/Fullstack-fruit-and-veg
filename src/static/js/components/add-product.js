@@ -278,21 +278,9 @@ function handlePriceInventoryForm(e) {
 function handleImageAndMediaForm(e) {
 
     e.preventDefault();
-    const formObject = {};
-   
-    const formEntries = getFormEntries(imageAndMediaForm);
-
-    if (!formEntries) {
-        throw new Error("Something went wrong - the form values shouldn't be empty");
-    };
-
-    formObject.primaryImageName  = formEntries["primary-image"]["name"];
-    formObject.sideImageName     = formEntries["side-image1"]["name"];
-    formObject.sideImageName2    = formEntries["side-image2"]["name"];
-    formObject.optionalVideo     = formEntries["primary-video"]["name"];
-
+  
     if (imageAndMediaForm.reportValidity()) {
-        handleFormComplete(imageAndMediaForm, formObject);
+       imageAndMediaForm.submit()
     }
   
 
