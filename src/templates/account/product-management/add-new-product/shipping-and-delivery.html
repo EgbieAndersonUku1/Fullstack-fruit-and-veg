@@ -10,81 +10,75 @@
     <form action="" method="post" class="add-product-form" id="shipping-and-delivery-form">
 
         <!-- The shipping dimensions -->
-        <legend>Shipping Dimensions</legend>
+        <h4 class="padding-top-md" id="shipping-dimensions-heading">Shipping Dimensions</h4>
         <hr class="dividor">
-        <fieldset class="dimensions">
-            <label for="length">Length</label>
-            <input type="number" name="length" id="length" min="1" max="10000" step="0.1" required>
+        <div class="dimensions" aria-labelledby="shipping-dimensions-heading">
+            
+            {{ form.length.label_tag }}
+            {{ form.length }}
 
-            <label for="width">Width</label>
-            <input type="number" name="width" id="width" min="1" max="10000" step="0.1" required>
+            <span id="length-desc" class="sr-only">Enter the length in centimeters</span>
 
-            <label for="height">Height</label>
-            <input type="number" name="height" id="height" min="1" max="10000" step="0.1" required>
-        </fieldset>
+
+            {{ form.width.label_tag }}
+            {{ form.width }}
+
+            <span id="width-desc" class="sr-only">Enter the width in centimeters</span>
+
+            {{ form.height.label_tag }}
+            {{ form.height }}
+
+            <span id="height-desc" class="sr-only">Enter the height in centimeters</span>
+        </div>
 
         <!-- The shipping weight -->
-        <legend class="text-capitalize">Shipping Weight</legend>
+        <h4 class="text-capitalize padding-top-md" id="shipping-weight-heading">Shipping Weight</h4>
         <hr class="dividor">
-        <label for="weight">Weight (kg)</label>
-        <input type="number" name="weight" id="weight" min="1" max="10000" step="0.1" required>
+        <div class="shipping-weight" aria-labelledby="shipping-weight-heading">
 
+            {{ form.weight.label_tag }}
+            {{ form.weight }}
+
+            <span id="weight-desc" class="sr-only">Enter the weight in kilograms</span>
+        </div>
 
         <!-- The shipping options -->
-        <legend>Shipping Options</legend>
+        <h4 class="padding-top-md" id="shipping-options-heading">Shipping Options</h4>
         <hr class="dividor">
-        <fieldset class="shipping-options">
-            <label>
-                <input type="checkbox" name="shipping" value="standard" data-shipping-type="standard" data-cost="3.99"
-                    data-delivery-time="3-5 business days">
-                Standard Shipping (3-5 business days) - £3.99
-            </label><br>
+        <div class="shipping-options" aria-labelledby="shipping-options-heading">
+            <fieldset>
+                <h4 class="sr-only">Select a shipping method</h4>
 
-            <label>
-                <input type="checkbox" name="shipping" value="express" data-shipping-type="express" data-cost="5.99"
-                    data-delivery-time="1-2 business days">
-                Express Shipping (1-2 business days) - £5.99
-            </label><br>
+                {% for delivery_option_dict in form.delivery_options %}
 
-            <label>
-                <input type="checkbox" name="shipping" value="next-day" data-shipping-type="next-day" data-cost="9.99"
-                    data-delivery-time="Next-Day Delivery">
-                Next-Day Delivery - £9.99
-            </label><br>
+                    <label>
+                       
+                        <input type="checkbox" name="{{ delivery_option_dict.input.name }}" value="{{ delivery_option_dict.input.value }}" 
+                           data-shipping-type="{{ delivery_option_dict.data.shipping_type }}" data-cost="{{ delivery_option_dict.data.cost }}"
+                            data-delivery-time="{{ delivery_option_dict.data.delivery_data }}" aria-describedby="{{ delivery_option.aria.describedby }}"
+                            id="{{ delivery_option_dict.id }}">
+                     
+                        {{ delivery_option_dict.label }}
+                    </label><br>
+                    <span id="{{ delivery_option_dict.screen_reader_elems.id }}" class="sr-only">{{ delivery_option_dict.screen_reader_elems.text }}</span>
 
-            <label>
-                <input type="checkbox" name="shipping" value="same-day" data-shipping-type="same-day" data-cost="14.99"
-                    data-delivery-time="Same-Day Delivery (order by 2 PM)">
-                Same-Day Delivery (order by 2 PM) - £14.99
-            </label><br>
+                {% endfor %}            
+             
+            </fieldset>
+        </div>
 
-            <label>
-                <input type="checkbox" name="shipping" value="click-collect" data-shipping-type="click-collect"
-                    data-cost="0.00" data-delivery-time="1-2 days">
-                Click and Collect (1-2 days) - Free
-            </label><br>
+        <p class="error-msg" id="delivery-error-msg" aria-live="assertive">You must select at least one delivery option</p>
 
-            <label>
-                <input type="checkbox" name="shipping" value="weekend" data-shipping-type="weekend" data-cost="7.99"
-                    data-delivery-time="Weekend Delivery">
-                Weekend Delivery - £7.99
-            </label><br>
-
-            <label>
-                <input type="checkbox" name="shipping" value="free" data-shipping-type="free" data-cost="0.00"
-                    data-delivery-time="Free Shipping (orders over £50)">
-                Free Shipping (orders over £50) - Free
-            </label><br>
-        </fieldset>
-
-
-        <p class="error-msg" id="delivery-error-msg">You must select at least one delivery option</p>
-
+        <!-- Navigation Buttons -->
         <div class="button space-between">
-            <button class="prev-button" type="button" onclick="prevPage(event, 4)"> &lt; prev</button>
-            <button class="next-button" type="submit">next &gt;</button>
+            <a href="{% url 'images_and_media_form' %}" class="prev-button center">
+            &lt; prev
+            </a>
+        
+            <button type="submit" class="next-button"> next &gt;</button>
         </div>
     </form>
+
 
     <!-- The progess status i.e the number of forms left to complete -->
     <div class="progress-list">

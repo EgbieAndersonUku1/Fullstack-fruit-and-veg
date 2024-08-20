@@ -7,32 +7,46 @@
 
 {% block body %}
 
-    <form action="" method="post" class="add-product-form image-media-form" id="image-media-form">
+    <form action="{% url 'images_and_media_form' %}" method="post" class="add-product-form image-media-form" id="image-media-form" 
+                    aria-labelledby="image-media-form-heading" enctype="multipart/form-data">
+
+
+        {% csrf_token %}
+
+        {% include "partials/form_errors.html" %}
+        
+        <!-- Form Heading -->
+        <h2 id="image-media-form-heading" class="visually-hidden">Image and Media Upload Form</h2>
+        
         <!-- Primary Image Upload Section -->
-        <label for="primary-image">Upload primary image <span class="highlight">(required)</span></label>
-        <input type="file" name="primary-image" id="primary-image" required accept="image/*">
+         {{ form.primary_image.label_tag }}
+         {{ form.primary_image }}
+        <div id="primary-image-description" class="visually-hidden">Please upload the primary image. This field is required.</div>
 
         <!-- Side Image 1 Upload Section -->
-        <label for="side-image1">Upload Side image 1 <span class="highlight">(required)</span></label>
-        <input type="file" name="side-image1" id="side-image1" required accept="image/*">
+         {{ form.side_image1.label_tag }}
+         {{ form.side_image1 }}
+        <div id="side-image1-description" class="visually-hidden">Please upload the first side image. This field is required.</div>
 
         <!-- Side Image 2 Upload Section -->
-        <label for="side-image2">Upload Side image 2 <span class="highlight">(required)</span></label>
-        <input type="file" name="side-image2" id="side-image2" required accept="image/*">
-    
+        {{ form.side_image2.label_tag }}
+        {{ form.side_image2 }}
+        <div id="side-image2-description" class="visually-hidden">Please upload the second side image. This field is required.</div>
+
         <!-- Primary Video Upload Section -->
         <label for="primary-video">Upload primary video <span>(Optional)</span></label>
-        <input type="file" name="primary-video" id="primary-video" accept="video/*">
+        <input type="file" name="primary-video" id="primary-video" accept="video/*" aria-describedby="primary-video-description">
+        <div id="primary-video-description" class="visually-hidden">You may upload a primary video. This field is optional.</div>
 
         <!-- Navigation Buttons -->
         <div class="button space-between">
-            <a href="{% url 'pricing_and_inventory_form' %}" class="prev-button center">
-               &lt; prev
+            <a href="{% url 'pricing_and_inventory_form' %}" class="prev-button center" aria-label="Go to the previous section: Pricing and Inventory Form">
+                &lt; prev
             </a>
-           
-            <button type="submit" class="next-button"> next &gt;</button>
+            <button type="submit" class="next-button" aria-label="Go to the next section"> next &gt;</button>
         </div>
     </form>
+
 
    
     <!-- The progess status i.e the number of forms left to complete -->

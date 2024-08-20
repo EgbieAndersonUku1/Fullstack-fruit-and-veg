@@ -1,9 +1,15 @@
 from django.shortcuts import render, redirect
-from django.urls import reverse
-from .views_helpers import handle_form
-from .forms import BasicFormDescription, DetailedFormDescription, PricingAndInventoryForm
+from django.urls      import reverse
 
-from .utils.converter import convert_decimal_to_float
+from .views_helpers   import handle_form
+from .forms.forms     import (BasicFormDescription, 
+                              DetailedFormDescription,
+                              PricingAndInventoryForm, 
+                              ImageAndMediaForm, 
+                              ShippingAndDeliveryForm
+                              )
+from .utils.utils     import create_unique_file_name, save_file_temporarily
+
 
 # Create your views here.
 
@@ -46,20 +52,43 @@ def add_pricing_and_inventory(request):
         template_name='account/product-management/add-new-product/pricing-inventory.html'
     )
    
-                
 
 def add_images_and_media(request):
-    context = {
-        "section_id" : "images-and-media",
-    }
+    
+    context      = {"section_id" : "images-and-media"}
+    initial_data = request.session.get("temp_file_paths", {})
+    form         = ImageAndMediaForm(initial=initial_data)
+    
+    if request.method == "POST":
+        
+        form = ImageAndMediaForm(request.POST, request.FILES)
+        if form.is_valid():
+    
+            if form.has_changed():
+                
+                file_fields     = ['primary_image', 'side_image1', 'side_image2', 'primary_video']
+                temp_file_paths = {}
+                
+                for field in file_fields:
+                    if field in request.FILES:
+                        temp_file_paths[field] = save_file_temporarily(request.FILES[field])
+                request.session["temp_file_paths"] = temp_file_paths
+                
+            return redirect(reverse("shipping_and_delivery_form"))
+    
+    context["form"] = form
     return render(request, "account/product-management/add-new-product/images-and-media.html", context=context)
 
 
 def add_shipping_and_delivery(request):
-    context = {
-        "section_id" : "shipping-and-delivery",
-    }
-    return render(request, "account/product-management/add-new-product/shipping-and-delivery.html", context=context)
+  
+    return handle_form(request=request,
+                       form_class=ShippingAndDeliveryForm,
+                       session_key="shipping_and_delivery_form",
+                       next_url_name="seo_and_meta_form",
+                       template_name="account/product-management/add-new-product/shipping-and-delivery.html"
+                       )
+
 
 
 def add_seo_management(request):

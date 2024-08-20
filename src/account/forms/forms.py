@@ -1,9 +1,19 @@
 from django import forms
-from .utils.product_category_utils import get_product_category_choices, get_product_color_choices, get_product_size_chocies
+
+
+from  .base_form_helper  import BaseFormMeasurements
+from ..utils.product_category_utils import (get_product_category_choices,
+                                            get_product_color_choices, 
+                                            get_product_size_chocies,
+                                            get_shipping_options
+                                            )
 
 
 class BasicFormDescription(forms.Form):
-    
+    CATEGORY_CHOICES = [
+        ("n", "No"),
+        ("y", "Yes")
+    ]
     name = forms.CharField(label="Product name", max_length=100, min_length=3,
                             widget=forms.TextInput(attrs={
                                     "id": "product-name",
@@ -20,6 +30,8 @@ class BasicFormDescription(forms.Form):
                                     "required": True,
                                 }))
     
+    
+    is_featured_item = forms.ChoiceField(label="Featured item", choices=CATEGORY_CHOICES, initial=CATEGORY_CHOICES[0])
     new_category = forms.CharField(max_length="100", 
                     widget=forms.TextInput(attrs={
                         "id": "add-category",
@@ -45,7 +57,7 @@ class BasicFormDescription(forms.Form):
 
 
 
-class DetailedFormDescription(forms.Form):
+class DetailedFormDescription(BaseFormMeasurements):
     
     def __init__(self, *args, **kwargs):
         
@@ -53,48 +65,7 @@ class DetailedFormDescription(forms.Form):
         self.color_choices = get_product_color_choices()
         self.size_choices  = get_product_size_chocies()
         
-       
-
-    length = forms.DecimalField(label="Length (in centimeters)", max_digits=10, decimal_places=2, 
-                                widget=forms.NumberInput(attrs={
-                                    "id": "length",
-                                    "min": "0.1",
-                                    "step": "0.01",
-                                    "aria-required": "true",
-                                    "placeholder": "Enter length in cm"
-                                    
-                                }))
-    
-    width = forms.DecimalField(label="Width (in centimeters)", max_digits=10, decimal_places=2, 
-                                widget=forms.NumberInput(attrs={
-                                    "id": "width",
-                                    "min": "0.1",
-                                    "step": "0.01",
-                                    "aria-required": "true",
-                                    "placeholder": "Enter length in cm"
-                                    
-                                }))
-    
-    height = forms.DecimalField(label="Height (in centimeters)", max_digits=10, decimal_places=2, 
-                                widget=forms.NumberInput(attrs={
-                                    "id": "height",
-                                    "min": "0.1",
-                                    "step": "0.01",
-                                    "aria-required": "true",
-                                    "placeholder": "Enter length in cm"
-                                    
-                                }))
-    
-    weight = forms.DecimalField(label="Weight (in grams)", max_digits=10, decimal_places=2, 
-                                widget=forms.NumberInput(attrs={
-                                    "id": "weight",
-                                    "min": "0.01",
-                                    "step": "0.01",
-                                    "aria-required": "true",
-                                    "placeholder": "Enter weight in gram"
-                                    
-                                }))
-    
+      
     description = forms.CharField(label="Enter a description description", 
                                 widget=forms.Textarea(attrs={"id": "short-description", "rows": "10", 
                                                              "cols": "10", "required": True,
@@ -139,7 +110,7 @@ class PricingAndInventoryForm(forms.Form):
                                      })
                                      )
     
-    add_discount = forms.DecimalField(max_digits=10, decimal_places=2, 
+    add_discount = forms.DecimalField(max_digits=10, decimal_places=2, required=False,
                                widget=forms.NumberInput(attrs={"min": "1", 
                                                                "max": "1000000",
                                                                 "step": "0.01",
@@ -178,4 +149,58 @@ class PricingAndInventoryForm(forms.Form):
                                                                 
                                                                }))
     
+
+
+class ImageAndMediaForm(forms.Form):
     
+    primary_image = forms.ImageField(
+        label="Upload primary image (required)",
+        widget=forms.ClearableFileInput(attrs={
+            "id": "primary-image",
+            "accept": "image/*",
+            "name": "primary-image",
+            "aria-describedby": "primary-image-description"
+        })
+    )
+
+    side_image1 = forms.ImageField(
+        label="Upload side image 1 (required)",
+        widget=forms.ClearableFileInput(attrs={
+            "id": "side-image1",
+            "accept": "image/*",
+            "name": "side-image1",
+            "aria-describedby": "side-image1-description",
+        })
+    )
+
+    side_image2 = forms.ImageField(
+        label="Upload side image 2 (required)",
+        widget=forms.ClearableFileInput(attrs={
+            "id": "side-image2",
+            "accept": "image/*",
+            "name": "side-image2",
+            "aria-describedby": "side-image2-description"
+        })
+    )
+
+    primary_video = forms.FileField(
+        label="Upload primary video (optional)",
+        required=False,
+        widget=forms.ClearableFileInput(attrs={
+            "id": "primary-video",
+            "accept": "video/*",
+            "name": "primary-video",
+            "aria-describedby": "primary-video-description"
+        })
+    )
+
+
+# shipping and delivery
+class ShippingAndDeliveryForm(BaseFormMeasurements):
+    def __init__(self, *args, **kwargs):
+        
+        super().__init__(*args, **kwargs)
+        self.delivery_options = get_shipping_options()
+        
+    
+   
