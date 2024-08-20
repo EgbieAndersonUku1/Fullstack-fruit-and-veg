@@ -6,7 +6,7 @@
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "15mb",
-        "runtime": "python3.12"  
+        "runtime": "python3.12"
       }
     },
     {
@@ -26,5 +26,6 @@
       "src": "/(.*)",
       "dest": "fruit_and_veg/wsgi.py"
     }
-  ]
+  ],
+  "ignoreCommand": "if [ \"$(git rev-parse --abbrev-ref HEAD)\" != \"main\" ]; then echo \"Not on main branch, skipping deploy.\" && exit 0; fi"
 }

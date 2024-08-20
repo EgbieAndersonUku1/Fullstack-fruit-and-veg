@@ -48,7 +48,6 @@ def add_pricing_and_inventory(request):
    
                 
 
-
 def add_images_and_media(request):
     context = {
         "section_id" : "images-and-media",
