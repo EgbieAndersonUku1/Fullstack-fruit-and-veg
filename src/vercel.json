@@ -28,4 +28,5 @@
     }
   ],
   "ignoreCommand": "if [ \"$(git rev-parse --abbrev-ref HEAD)\" != \"main\" ]; then echo \"Not on main branch, skipping deploy.\" && exit 0; fi"
+
 }
