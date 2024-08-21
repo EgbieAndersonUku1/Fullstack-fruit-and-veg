@@ -8,7 +8,7 @@
 {% block body %}
 
     <form action="" method="post" class="add-product-form" id="shipping-and-delivery-form">
-
+        {% csrf_token %}
         <!-- The shipping dimensions -->
         <h4 class="padding-top-md" id="shipping-dimensions-heading">Shipping Dimensions</h4>
         <hr class="dividor">
