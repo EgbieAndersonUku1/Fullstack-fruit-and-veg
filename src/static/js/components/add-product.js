@@ -6,7 +6,7 @@ import {getItemFromLocalStorage, saveToLocalStorage, getAllCheckBoxElementsValue
 
 import AlertUtils from "../utils/alerts.js";
 import { getFormEntries, toggleInputVisibilityBasedOnSelection } from "../utils/formUtils.js";
-import { populateSelectField } from "../builders/formBuilder.js";
+
 
 
 const selectFormCategory = document.getElementById("select-category");

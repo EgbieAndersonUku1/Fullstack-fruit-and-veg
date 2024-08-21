@@ -108,7 +108,7 @@ def get_product_color_choices():
 
 
 
-def get_product_size_chocies():
+def get_product_size_choices():
     sizes = [
         {"id" :"small",  "name": "size", "value" : "small",  "data_size": "small",  "class": "item-small"},
         {"id" :"medium", "name": "size", "value" : "medium", "data_size": "medium", "class": "item-medium"},
