@@ -66,7 +66,7 @@ class DetailedFormDescription(BaseFormMeasurements):
         
       
     description = forms.CharField(label="Enter a description description", 
-                                widget=forms.Textarea(attrs={"id": "short-description", "rows": "10", 
+                                widget=forms.Textarea(attrs={"id": "detailed-description", "rows": "10", 
                                                              "cols": "10", 
                                                             "placeholder": "Enter a description..."}))
     
