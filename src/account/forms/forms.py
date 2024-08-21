@@ -31,13 +31,13 @@ class BasicFormDescription(forms.Form):
     
     
     is_featured_item = forms.ChoiceField(label="Featured item", choices=CATEGORY_CHOICES, initial=CATEGORY_CHOICES[0])
-    new_category = forms.CharField(max_length="100", 
-                    widget=forms.TextInput(attrs={
-                        "id": "add-category",
-                        "placeholder": "Enter a category",
-                        "name": "add-category",
-                                
-                    }))
+    new_category = forms.CharField(max_length="100",  required=False
+                                    widget=forms.TextInput(attrs={
+                                        "id": "add-category",
+                                        "placeholder": "Enter a category",
+                                        "name": "add-category",
+                                        
+                                    }))
     
     brand = forms.CharField(label="Brand", max_length=20, 
                           widget=forms.TextInput(attrs={"id": "brand", "name": "brand", "placeholder": "Enter a brand..."}))
