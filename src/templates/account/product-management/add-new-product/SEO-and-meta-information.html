@@ -11,25 +11,22 @@
 
         {% csrf_token %}
 
-        <!-- meta title input field -->
-        <label for="meta-title" class="text-capitalize" id="meta-title">Meta title</label>
-        <input type="text" name="meta-title" id="meta-title" required>
+        {% for field in form %}
+            {{ field.as_field_group }}
+        {% endfor %}
+        <!-- Character count information -->
+        <p id="minimum-characters" class="flex-end minimum-characters">Minimum characters to use: 10</p>
+        <p id="maximum-characters" class="maximum-characters flex-end">Number of characters remaining: 500</p>
 
-        <!-- meta keywords input field -->
-        <label for="meta-keywords" class="text-capitalize" id="meta-keywords">Add Meta keywords separated by a comma (delicious, creamy, etc)</label>
-        <input type="text" name="meta-keywords" id="meta-keywords" required>
-
-        <!-- meta description input field -->
-        <label for="meta-description">Meta Description</label>
-        <textarea name="meta-description" id="meta-description" rows="10" cols="10" required></textarea>
-        <p class="flex-end minimum-characters">Minimum characters to use: 10</p>
-        <p class="maximum-characters flex-end">Number of characters remaining: 500</p>
-
+        <!-- Navigation buttons -->
         <div class="button space-between">
-            <button class="prev-button" type="button" onclick="prevPage(event, 5)"> &lt; prev</button>
-            <button class="next-button" type="submit">next &gt;</button>
+            <a href="{% url 'shipping_and_delivery_form' %}" class="prev-button center" aria-label="Go to the previous section: Shipping and Selivery Form">
+                &lt; prev
+            </a>
+            <button type="submit" class="next-button" aria-label="Go to the next section"> next &gt;</button>
         </div>
     </form>
+
 
     <div class="progress-list">
         {% include "partials/form_progress_checker.html" with is_current_page=False current_page='Basic Product information' id='basic-product-information' remove_opacity=True %}

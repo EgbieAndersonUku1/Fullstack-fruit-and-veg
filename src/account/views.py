@@ -6,7 +6,9 @@ from .forms.forms     import (BasicFormDescription,
                               DetailedFormDescription,
                               PricingAndInventoryForm, 
                               ImageAndMediaForm, 
-                              ShippingAndDeliveryForm
+                              ShippingAndDeliveryForm,
+                              SeoAndMetaForm,
+                              AdditionalInformationForm,
                               )
 from .utils.utils     import create_unique_file_name, save_file_temporarily
 
@@ -29,7 +31,8 @@ def add_basic_description(request):
         form_class=BasicFormDescription,
         session_key='basic_form_description',
         next_url_name='detailed_description_form',
-        template_name='account/product-management/add-new-product/basic-product-information.html'
+        template_name='account/product-management/add-new-product/basic-product-information.html',
+      
     )
 
 
@@ -39,7 +42,8 @@ def add_detailed_description(request):
         form_class=DetailedFormDescription,
         session_key='detailed_form_description',
         next_url_name='pricing_and_inventory_form',
-        template_name='account/product-management/add-new-product/detailed-description-specs.html'
+        template_name='account/product-management/add-new-product/detailed-description-specs.html',
+        checkbox_fields_to_store=("size", "color")
     )
 
 
@@ -81,28 +85,32 @@ def add_images_and_media(request):
 
 
 def add_shipping_and_delivery(request):
-  
     return handle_form(request=request,
                        form_class=ShippingAndDeliveryForm,
-                       session_key="shipping_and_delivery_form",
+                       session_key="shipping_and_delivery",
                        next_url_name="seo_and_meta_form",
-                       template_name="account/product-management/add-new-product/shipping-and-delivery.html"
+                       template_name="account/product-management/add-new-product/shipping-and-delivery.html",
+                       checkbox_fields_to_store=("shipping")
                        )
 
 
 
 def add_seo_management(request):
-    context = {
-        "section_id" : "seo-management",
-    }
-    return render(request, "account/product-management/add-new-product/SEO-and-meta-information.html", context=context)
+    return handle_form(request=request,
+                       form_class=SeoAndMetaForm,
+                       session_key="seo_management",
+                       next_url_name="add_information_form",
+                       template_name="account/product-management/add-new-product/SEO-and-meta-information.html",
+                       )
 
 
 def add_additonal_information(request):
-    context = {
-        "section_id" : "additonal-information",
-    }
-    return render(request, "account/product-management/add-new-product/additonal-information.html", context=context)
+    return handle_form(request=request,
+                       form_class=AdditionalInformationForm,
+                       session_key="additional_information",
+                       next_url_name="view_review",
+                       template_name="account/product-management/add-new-product/additonal-information.html",
+                       )
 
 
 def view_review(request):
