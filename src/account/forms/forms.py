@@ -1,5 +1,5 @@
 from django import forms
-
+from ..utils.country_parser import parse_country_file
 
 from  .base_form_helper  import BaseFormMeasurements
 from ..utils.product_category_utils import (get_product_category_choices,
@@ -27,7 +27,6 @@ class BasicFormDescription(forms.Form):
                                     "id": "select-category",
                                     "name": "select-a-category",
                                     "class": "select-category",
-                                    "required": True,
                                 }))
     
     
@@ -51,7 +50,7 @@ class BasicFormDescription(forms.Form):
     
     short_description = forms.CharField(label="Enter a short description", 
                                         widget=forms.Textarea(attrs={"id": "short-description", "rows": "5", 
-                                                                     "cols": "10", "required": True,
+                                                                     "cols": "10", 
                                                                      "placeholder": "Enter a short description..."}))
     
 
@@ -68,7 +67,7 @@ class DetailedFormDescription(BaseFormMeasurements):
       
     description = forms.CharField(label="Enter a description description", 
                                 widget=forms.Textarea(attrs={"id": "short-description", "rows": "10", 
-                                                             "cols": "10", "required": True,
+                                                             "cols": "10", 
                                                             "placeholder": "Enter a description..."}))
     
     
@@ -103,7 +102,6 @@ class PricingAndInventoryForm(forms.Form):
     
     select_discount = forms.ChoiceField(label="Add a discount?", choices=DISCOUNT_OPTIONS,
                                      widget=forms.Select(attrs={
-                                         "required": True,
                                          "name": "select-discount",
                                          "id": "select-discount",
                                          "class": "select-category",
@@ -195,12 +193,77 @@ class ImageAndMediaForm(forms.Form):
     )
 
 
-# shipping and delivery
+# Shipping and delivery form
 class ShippingAndDeliveryForm(BaseFormMeasurements):
     def __init__(self, *args, **kwargs):
         
         super().__init__(*args, **kwargs)
         self.delivery_options = get_shipping_options()
         
+
+# Seo and meta form
+class SeoAndMetaForm(forms.Form):
+    meta_title = forms.CharField(label="Meta title", min_length=3, max_length=40, 
+                                 widget=forms.TextInput(attrs={
+                                    "id": "meta-title-input",
+                                    "aria-labelledby": "meta-title-label",
+                                    "name": "meta-title",
+                                    "placeholder": "Enter a meta title...",
+                                 }))
     
-   
+    meta_keywords = forms.CharField(label="Add meta keywords (separate by commas)", min_length=3, max_length=40, 
+                                 widget=forms.TextInput(attrs={
+                                    "id": "meta-keyword-input",
+                                    "aria-labelledby": "meta-keyword-label",
+                                    "name": "meta-keywords",
+                                    "aria-labelledby": "meta-keywords-label",
+                                    "placeholder": "e.g delicious, creamy, banana...."
+                                 }))
+    
+    meta_description = forms.CharField(label="Meta description", widget=forms.Textarea(attrs={
+                                        "id": "meta-description-textarea",
+                                        "rows": "10",
+                                        "cols": "10",
+                                        "aria-labelledby": "meta-description-label",
+                                        }))
+    
+
+
+
+# Additonal information
+class AdditionalInformationForm(forms.Form):
+    RETURN_POLICY_OPTIONS = [ ("n", "No"), ("y", "Yes")]
+    COUNTRIES_CHOICES     = parse_country_file("data/countries.txt")
+    
+    title = forms.CharField(label="Manufacturer title", min_length=4, max_length=40, 
+                            widget=forms.TextInput(attrs={
+                                "id": "manafacturer-title",
+                                "aria-labelledby": "manufacturer-title",
+                                "name": "manafacturer-title",
+                                "placeholder": "Enter a manufacturer title...",
+                            }))
+    
+    countries = forms.ChoiceField(label="Country of origin", 
+                                  choices=COUNTRIES_CHOICES,
+                                  widget=forms.Select(attrs={
+                                      "aria-label": "Select Country of Origin",
+                                      "id": "countries",
+                                      
+                                  }))
+    
+    return_policy = forms.ChoiceField(label="Return policy", 
+                                      choices=RETURN_POLICY_OPTIONS,
+                                      initial=RETURN_POLICY_OPTIONS[0],
+                                      widget=forms.Select(attrs={
+                                            "aria-label": "Select Return Policy",
+                                            "id": "return-policy",
+                                            "name":"return-policy",
+                                            
+                                        }))
+    
+    description = forms.CharField(label="Warranty description", widget=forms.Textarea(attrs={
+                                        "id": "warranty-description",
+                                        "rows": "15",
+                                        "cols": "10",
+                                        "aria-labelledby": "warranty-description-label",
+                                        }))

@@ -23,7 +23,8 @@ document.addEventListener("DOMContentLoaded", (e) => handleEmptySelectOptions(se
 
 
 // populate the select function
-// populateSelectField("#countries", window.countriesFileUrl)
+// const COUNTRIES_FILE_PATH = "/static/data/countries.txt"
+// populateSelectField("#countries", COUNTRIES_FILE_PATH)
 
 
 // checkboxes error msg selector
@@ -53,13 +54,10 @@ additionInformationForm?.addEventListener("submit", handleAdditionalFormInfo);
 
 
 
-
-
-
 // field selectors for textArea fields
 const detailDescriptionTextAreaElement   = document.getElementById("detailed-description");
 const shortDescriptionTextAreaElement    = document.getElementById("short-description");
-const metaDescriptionTextAreaElement     = document.getElementById("meta-description");
+const metaDescriptionTextAreaElement     = document.getElementById("meta-description-textarea");
 const warrantyDescriptionTextAreaElement = document.getElementById("warranty-description");
 
 
@@ -75,20 +73,7 @@ const addDiscountInputFieldElement  = document.getElementById("add-discount");
 
 
 
-// Text area field inside inside the detail description specs page
-minimumCharactersToUse(detailDescriptionTextAreaElement, {
-    minCharClass: '.minimum-characters',
-    minCharMessage: 'Minimum characters to use: ',
-    maxCharClass: '.maximum-characters',
-    maxCharMessage: 'Number of characters remaining: ',
-    minCharsLimit: 50,
-    maxCharsLimit: 1000,
-    disablePaste: true,
-});
-
-
-
-// Text area field for the basic product information page
+// Text area field for the `basic-product-information.html` page
 minimumCharactersToUse(shortDescriptionTextAreaElement, {
     minCharClass: '.minimum-characters',
     minCharMessage: 'Minimum characters to use: ',
@@ -101,8 +86,19 @@ minimumCharactersToUse(shortDescriptionTextAreaElement, {
 })
 
 
+// Text area field inside the `detail-description-specs.html` page
+minimumCharactersToUse(detailDescriptionTextAreaElement, {
+    minCharClass: '.minimum-characters',
+    minCharMessage: 'Minimum characters to use: ',
+    maxCharClass: '.maximum-characters',
+    maxCharMessage: 'Number of characters remaining: ',
+    minCharsLimit: 50,
+    maxCharsLimit: 1000,
+    disablePaste: true,
+});
 
-// Text area field for the meta description page
+
+// Text area field  inside the `SEO-and-meta-information.html` 
 minimumCharactersToUse(metaDescriptionTextAreaElement, {
     minCharClass: '.minimum-characters',
     minCharMessage: 'Minimum characters to use: ',
@@ -114,7 +110,7 @@ minimumCharactersToUse(metaDescriptionTextAreaElement, {
 });
 
 
-// Text area field for the meta description page
+// Text area field for the warranty description page in additional_information.html
 minimumCharactersToUse(warrantyDescriptionTextAreaElement, {
     minCharClass: '.minimum-characters',
     minCharMessage: 'Minimum characters to use: ',

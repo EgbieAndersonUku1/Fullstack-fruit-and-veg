@@ -18,15 +18,17 @@
         <hr class="dividor">
         <div class="colors">
             
-            {% for color_dict in form.color_choices  %}
+            {% for color_dict in form.color_choices %}
                 <div class="color">
-                    <input type="checkbox" id="{{ color_dict.id }}"  name={{ color_dict.name }} value="{{ color_dict.value }}" 
-                     data-color="{{ color_dict.data_color }}">
-                     
-                    <label for="{{ color_dict.value}}" class="{{ color_dict.value}}">{{ color_dict.value }}</label>
+                
+                    <input type="checkbox" id="{{ color_dict.id }}" name="{{ color_dict.name }}" value="{{ color_dict.value }}"
+                        data-color="{{ color_dict.data_color }}">
+                
+                    <label for="{{ color_dict.value }}" class="{{ color_dict.value }}">{{ color_dict.value }}</label>
                     <br>
                 </div>
             {% endfor %}
+        
 
         </div>
 

@@ -10,37 +10,26 @@
 
 {% block body %}
 
-    <form action="" method="post" class="add-product-form" id="additional-information-form">
+    <form action="{% url 'add_information_form' %}" method="post" class="add-product-form" id="additional-information-form">
 
-        <!-- Manufacturer Title Section -->
-        <label for="manafacturer-title" class="text-capitalize" id="manafacturer-title">Manufacturer title</label>
-        <input type="text" name="manafacturer-title" id="manafacturer-title" required>
+        {% csrf_token%}
 
-        <!-- Country of Origin Section -->
-        <label for="countries" class="text-capitalize">Country of origin</label>
-        
-        <select name="country-of-origin" id="countries">
-            <!-- Options for selecting the country of origin would be dynamically added here -->
-        </select> 
+        {% include "partials/form_errors.html" %}
 
-        <!-- Return Policy Section -->
-        <label for="return-policy" class="text-capitalize">Return policy</label>
-        <select name="return-policy" id="return-policy" required>
-            <option value="no">No</option>
-            <option value="yes">Yes</option>
-        </select>
+        {% for field in form %}
+            {{ field.as_field_group }}
+        {% endfor %}
 
-        <!-- Warranty Description Section -->
-        <label for="warranty-description">Warranty description</label>
-        <textarea name="warranty-description" id="warranty-description" rows="15" cols="10" required></textarea>
-    
         <p class="flex-end minimum-characters">Minimum characters to use: 50</p>
         <p class="maximum-characters flex-end">Number of characters remaining: 2000</p>
 
         <!-- Navigation Buttons -->
         <div class="button space-between">
-            <button class="prev-button" type="button" onclick="prevPage(event, 6)"> &lt; prev</button>
-            <button class="next-button" type="submit">next &gt;</button>
+            <a href="{% url 'seo_and_meta_form' %}" class="prev-button center">
+            &lt; prev
+            </a>
+        
+            <button type="submit" class="next-button"> next &gt;</button>
         </div>
     </form>
 
