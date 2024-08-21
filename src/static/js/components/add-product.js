@@ -22,9 +22,7 @@ document.addEventListener("DOMContentLoaded", (e) => handleEmptySelectOptions(se
 document.addEventListener("DOMContentLoaded", (e) => handleEmptySelectOptions(selectPriceFormCategory))
 
 
-// populate the select function
-// const COUNTRIES_FILE_PATH = "/static/data/countries.txt"
-// populateSelectField("#countries", COUNTRIES_FILE_PATH)
+
 
 
 // checkboxes error msg selector
