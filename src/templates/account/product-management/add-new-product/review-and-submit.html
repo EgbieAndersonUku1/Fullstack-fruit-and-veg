@@ -19,9 +19,9 @@
                     <h4 id="product-name-header">Product Name</h4>
                     <p class="product-name">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Product Name" onclick="prevPage(event, 1)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'basic_description_form' %}">
+                    <button aria-label="Edit Product Name">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="product-category-header">
@@ -29,9 +29,9 @@
                     <h4 id="product-category-header">Product Category</h4>
                     <p class="product-category">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Product Category" onclick="prevPage(event, 1)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'basic_description_form' %}">
+                    <button aria-label="Edit Product Name">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="new-category-header">
@@ -39,9 +39,9 @@
                     <h4 id="new-category-header">New Category added</h4>
                     <p class="brand">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Brand" onclick="prevPage(event, 1)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'basic_description_form' %}">
+                    <button aria-label="Edit Product Name">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="brand-header">
@@ -49,9 +49,9 @@
                     <h4 id="brand-header">Brand</h4>
                     <p class="brand">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Brand" onclick="prevPage(event, 1)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'basic_description_form' %}">
+                    <button aria-label="Edit Product Name">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="sku-header">
@@ -59,9 +59,9 @@
                     <h4 id="sku-header">SKU (Stock Keeping Unit)</h4>
                     <p class="stock-keeping">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit SKU" onclick="prevPage(event, 1)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'basic_description_form' %}">
+                    <button aria-label="Edit Product Name">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="upc-header">
@@ -69,9 +69,9 @@
                     <h4 id="upc-header">UPC (Universal Product Code)</h4>
                     <p class="upc">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit UPC" onclick="prevPage(event, 1)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'basic_description_form' %}">
+                    <button aria-label="Edit Product Name">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="short-description-header">
@@ -79,9 +79,9 @@
                     <h4 id="short-description-header">Short Description</h4>
                     <p class="short-description">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Short Description" onclick="prevPage(event, 1)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'basic_description_form' %}">
+                    <button aria-label="Edit Product Name">Edit</button>
+                </a>
             </div>
         </div>
 
@@ -97,9 +97,9 @@
                     <h4 id="color-options-header">Color Options</h4>
                     <p id="list-of-colors">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Color Options" onclick="prevPage(event, 2)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'detailed_description_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="product-length-header">
@@ -107,18 +107,18 @@
                     <h4 id="product-dimensions-header">Product length</h4>
                     <p id="length">Not entered/p>
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Product length" onclick="prevPage(event, 2)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'detailed_description_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
             <div class="product-info space-between" role="group" aria-labelledby="product-width-header">
                 <div class="info">
                     <h4 id="product-width-header">Product Width</h4>
                     <p id="width">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Product width" onclick="prevPage(event, 2)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'detailed_description_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="product-height-header">
@@ -126,18 +126,18 @@
                     <h4 id="product-height-header">Product Height</h4>
                     <p id="height">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Product height" onclick="prevPage(event, 2)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'detailed_description_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
             <div class="product-info space-between" role="group" aria-labelledby="size-options-header">
                 <div class="info">
                     <h4 id="size-options-header">Size Options</h4>
                     <p id="list-of-sizes">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Size Options" onclick="prevPage(event, 2)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'detailed_description_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="weight-options-header">
@@ -145,9 +145,9 @@
                     <h4 id="weight-options-header">Weight (grams)</h4>
                     <p id="weight">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Weight Options" onclick="prevPage(event, 2)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'detailed_description_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="description-header">
@@ -155,9 +155,9 @@
                     <h4 id="description-header">Description</h4>
                     <p id="detailed-description">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Description" onclick="prevPage(event, 2)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'detailed_description_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
         </div>
 
@@ -172,9 +172,9 @@
                     <h4 id="price-heading">Price</h4>
                     <p id="price-info">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 3)" aria-label="Edit price">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'pricing_and_inventory_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="availability-heading">
@@ -182,9 +182,9 @@
                     <h4 id="availability-heading">Availability</h4>
                     <p id="availability-info">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 3)" aria-label="Edit availability">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'pricing_and_inventory_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="discount-heading">
@@ -192,9 +192,9 @@
                     <h4 id="discount-heading">Add Discount</h4>
                     <p id="discount-info">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 3)" aria-label="Edit discount">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'pricing_and_inventory_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="discount-price-heading">
@@ -202,9 +202,9 @@
                     <h4 id="discount-price-heading">Discount Price</h4>
                     <p id="discount-price-info">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 3)" aria-label="Edit discount price">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'pricing_and_inventory_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="quantity-in-stock-heading">
@@ -212,9 +212,9 @@
                     <h4 id="quantity-in-stock-heading">Quantity in Stock</h4>
                     <p id="quantity-in-stock-info">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 3)" aria-label="Edit quantity in stock">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'pricing_and_inventory_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="min-order-quantity-heading">
@@ -222,9 +222,9 @@
                     <h4 id="min-order-quantity-heading">Minimum Order Quantity</h4>
                     <p id="min-order-quantity-info">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 3)" aria-label="Edit minimum order quantity">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'pricing_and_inventory_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="max-order-quantity-heading">
@@ -232,9 +232,9 @@
                     <h4 id="max-order-quantity-heading">Maximum Order Quantity</h4>
                     <p id="max-order-quantity-info">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 3)" aria-label="Edit maximum order quantity">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'pricing_and_inventory_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
         </div>
 
@@ -247,23 +247,13 @@
 
             <div class="product-info space-between">
                 <h3 id="image-media-heading" class="product-section-header">Image and Media</h3>
-                <div class="edit">
-                    <button onclick="prevPage(event, 4)" aria-label="Edit image and media section">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'images_and_media_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info flex-col">
-                <p class="highlight padding-bottom-md padding-top-md">
-                    Warning: Due to security restrictions in web browsers, JavaScript cannot access
-                    or display local file paths directly. As a result, images cannot be shown in the review section because
-                    their local file paths are not accessible—only the file name is available, and so the file paths cannot
-                    be stored for later.
-                    Since the backend for image handling isn’t set up yet,
-                    selected images won’t be displayed until the backend is operational.
-                    However, you can still view the name of the image file you selected under the
-                    placeholder image.
-                </p>
-
+               
                 <div class="product-info img-preview" role="group" aria-labelledby="image-gallery-heading">
 
                     <div class="info primary-img review-product-img">
@@ -299,9 +289,9 @@
                     <h4 id="length-heading">Length</h4>
                     <p id="length-info">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 5)" aria-label="Edit length">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'shipping_and_delivery_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="width-heading">
@@ -309,9 +299,9 @@
                     <h4 id="width-heading">Width</h4>
                     <p id="width-info">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 5)" aria-label="Edit width">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'shipping_and_delivery_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="height-heading">
@@ -319,9 +309,9 @@
                     <h4 id="height-heading">Height</h4>
                     <p id="height-info">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 5)" aria-label="Edit height">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'shipping_and_delivery_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="shipping-weight-heading">
@@ -329,9 +319,9 @@
                     <h4 id="shipping-weight-heading">Shipping Weight (kg)</h4>
                     <p id="shipping-weight-info">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 5)" aria-label="Edit shipping weight">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'shipping_and_delivery_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="shipping-options-heading">
@@ -339,9 +329,9 @@
                     <h4 id="shipping-options-heading">Shipping Options</h4>
                     <p id="shipping-options-info">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 5)" aria-label="Edit shipping options">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'shipping_and_delivery_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
         </div>
         <hr class="dividor">
@@ -355,9 +345,9 @@
                     <h4 id="meta-title-heading">Meta Title</h4>
                     <p id="meta-title-info">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 6)" aria-label="Edit meta title">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'seo_and_meta_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="meta-keywords-heading">
@@ -365,9 +355,9 @@
                     <h4 id="meta-keywords-heading">Meta Keywords</h4>
                     <p id="meta-keywords-info">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 6)" aria-label="Edit meta keywords">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'seo_and_meta_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="meta-description-heading">
@@ -377,9 +367,9 @@
                         Not entered
                     </p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 6)" aria-label="Edit meta description">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'seo_and_meta_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
         </div>
 
@@ -394,9 +384,9 @@
                     <h4 id="manufacturer-title-heading">Manufacturer Title</h4>
                     <p id="manufacturer-title-info">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 7)" aria-label="Edit manufacturer title">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'add_information_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="country-of-origin-heading">
@@ -404,9 +394,9 @@
                     <h4 id="country-of-origin-heading">Country of Origin</h4>
                     <p id="country-of-origin-info">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 7)" aria-label="Edit country of origin">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'add_information_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="return-policy-heading">
@@ -414,9 +404,9 @@
                     <h4 id="return-policy-heading">Return Policy</h4>
                     <p id="return-policy-info">Not entered</p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 7)" aria-label="Edit return policy">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'add_information_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="warranty-heading">
@@ -426,9 +416,9 @@
                         Not entered
                     </p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 7)" aria-label="Edit warranty">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'add_information_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
         </div>
 

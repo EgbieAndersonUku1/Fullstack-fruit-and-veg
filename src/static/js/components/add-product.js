@@ -1,7 +1,6 @@
 
 import { minimumCharactersToUse } from "./characterCounter.js";
-import {getItemFromLocalStorage, saveToLocalStorage, getAllCheckBoxElementsValue,
-        getCurrentPage, disableEmptySelectOptions as handleEmptySelectOptions
+import {getAllCheckBoxElementsValue, disableEmptySelectOptions as handleEmptySelectOptions
 } from "../utils/utils.js";
 
 import AlertUtils from "../utils/alerts.js";
@@ -139,62 +138,6 @@ selectDiscountCategoryElement?.addEventListener("change", () => toggleInputVisib
 
 
 
-
-/**
- * Updates form input fields with saved values when a form page loads.
- * 
- * This function determines the current page and retrieves the corresponding form element.
- * It then loads the saved values for that form from local storage and updates the form's input fields.
- * If the user had selected "new" or "yes" as the category in the dropdown menu, it resets the dropdown to the default state.
- * 
- * @returns {void}
- */
-function updateFormValue() {
-    const currentPage = getCurrentPage();
-
-    const formElements = {
-        "basic-product-information.html": basicForm,
-        "detailed-description-specs.html": detailedForm,
-        "pricing-inventory.html": pricingInventoryForm,
-        "images-and-media.html": imageAndMediaForm,
-        "shipping-and-delivery.html": shippingAndDeliveryForm,
-        "SEO-and-meta-information.html": seoAndMetaForm,
-        "additonal-information.html": additionInformationForm,
-    };
-
-    if (!currentPage || formElements[currentPage] === undefined) {
-        console.warn(`No form element found for current page: ${currentPage}`);
-        return;
-    }
-
-    const formDetails = formElements[currentPage];
-    const productValues = getItemFromLocalStorage(formDetails.id, true);
-    const productSelectCategory = basicForm?.querySelector("#select-category");
-    const discountSelectCategory = pricingInventoryForm?.querySelector("#select-discount");
-
-    // Iterate over the form elements and update their values using their saved data
-    for (let element of formDetails.elements) {
-
-        if (element.name) {
-            element.value = productValues[element.name] || '';   // Fallback to empty string if no value
-        };
-
-    }
-
-    // If the user had selected "new" or "yes" as the category for the dropdown menu, reset the dropdown to the default state
-    // This indicates that the user did not choose a predefined category but entered a custom one instead
-    if ( productSelectCategory && productSelectCategory.value === "new") {
-         productSelectCategory.value = "";
-    };
-
-    if (discountSelectCategory && discountSelectCategory.value === "yes") {
-       discountSelectCategory.value = "";
-   }
-}
-
-
-
-
 // Handles the form submission for basic-product-information.html
 function handleBasicInformationForm(e) {
     e.preventDefault();
@@ -241,20 +184,7 @@ function handleDetailedInformationForm(e) {
 
 
     if (detailedForm.reportValidity() && formComplete) {
-
-        const colors = getAllCheckBoxElementsValue(colorsCheckboxes, 'data-color');
-        const sizes = getAllCheckBoxElementsValue(sizeCheckBoxes, 'data-size');
-        const formEntries = getFormEntries(detailedForm);
-
-        formEntries.colorsOptions = colors;
-        formEntries.sizesOptions = sizes;
-
-        delete formEntries["color"];
-        delete formEntries["size"]
-
-
-        handleFormComplete(detailedForm, formEntries);
-
+        handleFormSubmission(detailedForm)
     }
 }
 
@@ -272,12 +202,8 @@ function handlePriceInventoryForm(e) {
 function handleImageAndMediaForm(e) {
 
     e.preventDefault();
+    handleFormSubmission(imageAndMediaForm)
   
-    if (imageAndMediaForm.reportValidity()) {
-       imageAndMediaForm.submit()
-    }
-  
-
 };
 
 
@@ -304,9 +230,7 @@ function handleShippingAndDeliveryForm(e) {
     };
 
     if (shippingAndDeliveryForm.reportValidity() && formComplete) {
-        const formEntries = getFormEntries(shippingAndDeliveryForm);
-        formEntries.deliveryOptions = getAllCheckBoxElementsValue(deliveryCheckboxes, 'data-delivery-time');
-        handleFormComplete(shippingAndDeliveryForm, formEntries);
+        handleFormSubmission(shippingAndDeliveryForm)
     }
 
 }
@@ -330,16 +254,11 @@ function handleAdditionalFormInfo(e) {
 
 function handleFormSubmission(form) {
     if (form.reportValidity()) {
-        handleFormComplete(form, getFormEntries(form));
+        form.submit()
     }
 }
 
 
-function handleFormComplete(form, formEntries) {
-    saveToLocalStorage(form.id, formEntries, true);
-    form.submit()
-
-}
 
 
 

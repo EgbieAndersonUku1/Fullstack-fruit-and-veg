@@ -1,10 +1,13 @@
+import base64
+
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from pathlib import Path
 from time import time
 from django.utils import timezone
 
-from .utils.utils import create_timestamped_directory,  upload_to
+
+from .utils.utils import create_timestamped_directory, encode_image_bytes_to_base64, get_saved_temp_file,  upload_to
 
 from account.utils.converter import convert_decimal_to_float
 
@@ -85,16 +88,18 @@ def handle_form(request, form_class, session_key, next_url_name, template_name, 
     """
   
     initial_data = request.session.get(session_key, {})
+ 
+   
     form = form_class(initial=initial_data)
     context = {"section_id": session_key}
-
+   
     if request.method == "POST":
         
         form = form_class(request.POST)
         if form.is_valid():
             if form.has_changed():
                 request.session[session_key] = convert_decimal_to_float(form.cleaned_data)
-                
+               
                 store_checked_inputs_in_session(request, checkbox_fields_to_store)
                             
             return redirect(reverse(next_url_name))
@@ -155,3 +160,40 @@ def save_file_with_timestamped_directory(file, base_folder, create_unique_name_f
 
 
 
+def get_base64_images_from_session(session_dict):
+    """
+    Retrieve and encode images from a session dictionary in Base64 format.
+
+    Args:
+        session_dict (dict): A dictionary where keys are image names and values are file paths.
+
+    Returns:
+        list: A list of Base64 encoded image strings.
+
+    Raises:
+        ValueError: If the session_dict is empty.
+        TypeError: If session_dict is not a dictionary.
+        FileNotFoundError: If a file path is invalid.
+    """
+    images = []
+
+   
+    if not session_dict:
+        raise ValueError("The session dictionary cannot be empty.")
+    
+    if not isinstance(session_dict, dict):
+        raise TypeError("The session dictionary should be a dictionary.")
+    
+   
+    for _, file_path in session_dict.items():
+        try:
+            image_bytes = get_saved_temp_file(file_path)
+            if image_bytes:
+                encoded_image = encode_image_bytes_to_base64(image_bytes)
+                images.append(encoded_image)
+        except FileNotFoundError:
+            print(f"File not found: {file_path}")
+        except Exception as e:
+            print(f"Error processing file {file_path}: {e}")
+
+    return images

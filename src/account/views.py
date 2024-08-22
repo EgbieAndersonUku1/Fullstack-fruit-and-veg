@@ -10,7 +10,9 @@ from .forms.forms     import (BasicFormDescription,
                               SeoAndMetaForm,
                               AdditionalInformationForm,
                               )
-from .utils.utils     import create_unique_file_name, save_file_temporarily
+
+
+from .views_helpers import get_base64_images_from_session
 
 
 # Create your views here.
@@ -26,6 +28,7 @@ def product_management(request):
 
 
 def add_basic_description(request):
+    
     return handle_form(
         request=request,
         form_class=BasicFormDescription,
@@ -75,7 +78,7 @@ def add_images_and_media(request):
                 
                 for field in file_fields:
                     if field in request.FILES:
-                        temp_file_paths[field] = save_file_temporarily(request.FILES[field])
+                        temp_file_paths[field]  = save_file_temporarily(request.FILES[field])
                 request.session["temp_file_paths"] = temp_file_paths
                 
             return redirect(reverse("shipping_and_delivery_form"))
@@ -118,6 +121,24 @@ def view_review(request):
         "section_id" : "review-section",
         'is_review_section': True
     }
+    
+    basic_form_session           = request.session.get("basic_form_description", {})
+    detailed_form_session        = request.session.get("detailed_form_description", {})
+    price_and_inventory_session  = request.session.get("pricing_and_inventory_form", {})
+    image_and_media_session      = request.session.get("temp_file_paths", {})
+    
+    detailed_form_data_colors, detailed_form_data_sizes  = request.session.get("color"), request.session.get("size")
+    
+    if (not detailed_form_data_colors or not detailed_form_data_sizes):
+        raise Exception("There must be at least one color or one size")
+    
+    detailed_form_session["colors"] = detailed_form_data_colors
+    detailed_form_session["sizes"]  = detailed_form_data_sizes
+    
+    images = get_base64_images_from_session(image_and_media_session)
+  
+    print(images)
+   
     return render(request, "account/product-management/add-new-product/review-and-submit.html", context=context)
  
  
