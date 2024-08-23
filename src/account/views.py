@@ -132,9 +132,12 @@ def view_review(request):
     context["seo_management_data"]         = request.session.get("seo_management", {})
     context["additional_information_data"] = request.session.get("additional_information", {})
     
-    print(context["additional_information_data"] )
+   
     
     return render(request, "account/product-management/add-new-product/review-and-submit.html", context=context)
+ 
+ 
+ 
  
  
 def view_products(request):

@@ -234,3 +234,9 @@ def get_base64_images_from_session(session_dict):
             print(f"Error processing file {file_path}: {e}")
 
     return images
+
+
+
+def verify_form_data(form_context, expected_field_values):
+    # To be written
+    pass

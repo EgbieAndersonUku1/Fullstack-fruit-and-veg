@@ -32,6 +32,9 @@ SECRET_KEY = getenv("SECRET_KEY")
 DEBUG = getenv("DEBUG")
 
 
+# set the path for the custom user model
+AUTH_USER_MODEL = "authentication.User"
+
 
 # Fetch the ALLOWED_HOSTS environment variable, defaulting to an empty string if not set
 ALLOWED_HOSTS = [
@@ -47,10 +50,12 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     'jazzmin',     
+    
     # my apps
     "home.apps.HomeConfig",
     "account.apps.AccountConfig",
-     
+    "authentication.apps.AuthenticationConfig",
+    
     # third party django apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -90,6 +95,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'fruit_and_veg.wsgi.application'
 
+
+JAZZMIN_SETTINGS = { 
+        
+        "site_brand": "EUOrganics",
+        "welcome_sign": "Welcome to the EUOrganics",
+        "copyright": "EUOrganics Ltd",
+      
+                    
+
+
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
