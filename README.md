@@ -18,6 +18,7 @@ The backend for the Fruit Store website is designed to manage server-side operat
 - [Current Status](#current-status)
 - [Secret Key Setup](#secret-key-setup)
 - [Django Application Setup with PostgreSQL](#django-application-setup-with-postgresql)
+- [Django-HTML Syntax Highlighting in VS Code](#Django-HTML-Syntax-Highlighting-in-VS-Code)
 - [Create a superuser](#Creating-a-Superuser)
 - [Overview](#overview)
 
@@ -112,6 +113,76 @@ SECRET_KEY='your_generated_secret_key_here'
    - Run the migrate command above to migrate the changes
 
 Your application should now be set up with PostgreSQL.
+
+
+
+### Django-HTML Syntax Highlighting in VS Code
+
+
+Enhance your Django development experience by enabling **Django-HTML** syntax highlighting in Visual Studio Code (VS Code). This guide will walk you through the installation process to get the best out of your Django templates with proper syntax highlighting, auto-completion, and error checking.
+
+## 🎯 Why Use Django-HTML Syntax Highlighting?
+
+When working on Django projects, your HTML templates often contain Django-specific syntax, such as `{% %}` for template tags and `{{ }}` for expressions. By enabling Django-HTML syntax highlighting in VS Code, you get:
+
+- **Improved Readability**: Clearly distinguish between HTML and Django template syntax.
+- **Enhanced Development Experience**: Enjoy features like auto-completion, code snippets, and error checking tailored for Django.
+- **Increased Productivity**: Quickly identify syntax errors and improve coding efficiency.
+
+## 🚀 Getting Started
+
+Follow these steps to set up Django-HTML syntax highlighting in VS Code:
+
+### Step 1: Install Visual Studio Code
+
+If you haven't already installed VS Code, download it from the [official website](https://code.visualstudio.com/) and follow the installation instructions for your operating system.
+
+### Step 2: Install the Django Template Extension
+
+To enable Django-HTML syntax highlighting, you'll need to install a VS Code extension. Here's how:
+
+1. Open **Visual Studio Code**.
+2. Go to the **Extensions** view by clicking on the **Extensions icon** in the sidebar or pressing `Ctrl+Shift+X` (Windows/Linux) or `Cmd+Shift+X` (Mac).
+3. In the **Search bar**, type **Django**.
+4. Find the extension named **"Django"** by **Baptiste Darthenay** and click **Install**.
+
+
+### Step 3: Configure Syntax Highlighting
+
+1. After installing the extension, open any `.html` file in your Django project.
+2. VS Code should automatically detect the Django template syntax and apply the Django-HTML highlighting.
+3. If not, manually change the language mode:
+   - Click on the language mode indicator in the bottom right corner of the status bar (usually says `HTML`).
+   - Select **"Django HTML"** from the dropdown list.
+
+### Step 4: Optional - Install Additional Extensions
+
+To further enhance your Django development experience, consider installing these additional extensions:
+
+- **Django** by **Baptiste Darthenay** - Provides Django snippets and additional functionalities.
+- **Python** by **Microsoft** - Essential for Python development, with features like IntelliSense, linting, and debugging.
+
+## ⚙️ Troubleshooting
+
+If you face any issues with syntax highlighting:
+
+- Ensure that the **Django** extension is installed and enabled.
+- Restart VS Code after installation.
+- Verify that your template files have the correct `.html` extension.
+- In VS code you can switch between templates using the bottom right corner. If you are using html VScode should
+automatically detect that the templates is HTML and vice-versa with with Django-html. However, if that is not the case click on `HTML` a dropdown will now appear with `auto-detect` on top, now in the search bar enter `Django-HTML` and hit
+`Enter` now any Django snippets will be highlighted with the proper colour and syntax
+
+
+## 📚 Additional Resources
+
+- [Django Documentation](https://docs.djangoproject.com/en/stable/): Official Django documentation for templates and more.
+- [VS Code Django Extension Guide](https://marketplace.visualstudio.com/items?itemName=batisteo.vscode-django): Detailed guide and documentation for the Django extension.
+
+## 🎉 Congratulations!
+
+You now have Django-HTML syntax highlighting enabled in VS Code! 
+---
 
 
 ## Creating a Superuser
