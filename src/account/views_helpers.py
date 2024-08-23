@@ -151,7 +151,7 @@ def stored_checked_inputs_to_context(request, session_key, check_box_fields, con
         for field_name in check_box_fields:
             try:
                 context[field_name] = request.session[session_key][field_name]
-            except ValueError:
+            except KeyError:
                 pass
 
     
