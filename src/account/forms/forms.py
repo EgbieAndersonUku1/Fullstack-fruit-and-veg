@@ -21,6 +21,8 @@ class BasicFormDescription(forms.Form):
                            })
                            )
 
+    is_featured_item = forms.ChoiceField(label="Featured item", choices=CATEGORY_CHOICES, initial=CATEGORY_CHOICES[0])
+
     category = forms.ChoiceField(label="Select a product category", 
                                  choices=get_product_category_choices(),
                                  widget=forms.Select(attrs={
@@ -28,7 +30,6 @@ class BasicFormDescription(forms.Form):
                                      "class": "select-category",
                                  }))
 
-    is_featured_item = forms.ChoiceField(label="Featured item", choices=CATEGORY_CHOICES, initial=CATEGORY_CHOICES[0])
     new_category = forms.CharField(max_length=100, required=False,
                                    widget=forms.TextInput(attrs={
                                        "id": "add-category",
@@ -97,30 +98,32 @@ class PricingAndInventoryForm(forms.Form):
                                       widget=forms.NumberInput(attrs={"min": "1",
                                                                       "max": "1000000",
                                                                       "step": "0.01",
-                                                                      "id": "add-discount"
+                                                                      "id": "add-discount",
+                                                                       "type": "number",
                                                                       }))
 
     quantity_stock = forms.FloatField(label="Quantity in stock",
-                                      widget=forms.NumberInput(attrs={"min": "1",
+                                      widget=forms.NumberInput(attrs={"min": "0",
                                                                       "max": "1000000",
                                                                       "step": "1",
                                                                       "id": "quantity-stock",
-                                                                      "required": True
+                                                                      "type": "number",
                                                                       }))
 
     minimum_order = forms.FloatField(label="Minimum order quantity",
-                                     widget=forms.NumberInput(attrs={"min": "1",
+                                     widget=forms.NumberInput(attrs={"min": "0",
                                                                      "max": "1000000",
                                                                      "step": "1",
                                                                      "id": "minimum-order-quantity",
-                                                                     "required": True
+                                                                      "type": "number",
+                                                                    
                                                                      }))
     maximum_order = forms.FloatField(label="Maximum order quantity",
-                                     widget=forms.NumberInput(attrs={"min": "1",
+                                     widget=forms.NumberInput(attrs={"min": "0",
                                                                      "max": "1000000",
                                                                      "step": "1",
                                                                      "id": "maximum-order-quantity",
-                                                                     "required": True
+                                                                    
                                                                      }))
 
 

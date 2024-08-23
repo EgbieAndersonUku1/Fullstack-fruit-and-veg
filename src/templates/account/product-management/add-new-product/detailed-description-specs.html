@@ -22,8 +22,15 @@
                 <div class="color">
                 
                     <input type="checkbox" id="{{ color_dict.id }}" name="{{ color_dict.name }}" value="{{ color_dict.value }}"
-                        data-color="{{ color_dict.data_color }}">
-                
+                    data-color="{{ color_dict.data_color }}" 
+
+                      {% comment %} Loop through the list of colors choices and check any colors that the user has selected  {% endcomment %}
+                        {% for field in color%}
+                            {% if field == color_dict.value %}
+                                checked  
+                            {% endif %}
+                        {% endfor %}>  
+                  
                     <label for="{{ color_dict.value }}" class="{{ color_dict.value }}">{{ color_dict.value }}</label>
                     <br>
                 </div>
@@ -41,11 +48,25 @@
         <h4 class="text-capitalize">Size options</h4>
         <hr class="dividor">
 
+      
         <div class="sizes">
-
+          
             {% for size_dict in form.size_choices %}
+
                 <div class="{{ size_dict.class }} size">
-                    <input type="checkbox" id="{{ size_dict.id }}" name="{{ size_dict.name }}" value="{{ size_dict.value }}" data-size="{{ size_dict.data_size }}">
+                    
+                    
+                    <input type="checkbox" id="{{ size_dict.id }}" name="{{ size_dict.name }}" value="{{ size_dict.value }}"
+                      data-size="{{ size_dict.data_size }}" 
+                      
+                      {% comment %} Loop through the list of size choices and check any sizes that the user has selected {% endcomment %}
+                      {% for field in  size %}
+                            {% if field == size_dict.value %}
+                                checked  
+                            {% endif %}
+                      {% endfor %}
+                      >
+                       
                     <label for="{{ size_dict.value }}" class="{{ size_dict.class }}">{{ size_dict.value }}</label><br>
                 </div>
             {% endfor %}

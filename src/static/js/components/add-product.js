@@ -60,7 +60,7 @@ const warrantyDescriptionTextAreaElement = document.getElementById("warranty-des
 
 // basic category  form fields
 const selectProductCategoryElement = document.getElementById("select-category");
-const addCategoryLabelElement = document.getElementById("add-category-label");
+const addCategoryLabelElement      = document.getElementById("add-category-label");
 const addCategoryInputFieldElement = document.getElementById("add-category");
 
 // pricing form fields

@@ -86,23 +86,24 @@ def get_product_category_choices():
 def get_product_color_choices():
     
     colors = [
-           {"id": "colorRed",    "name": "color",  "data_color": "red",    "value": "red"},
-           {"id": "colorGreen",  "name": "color",  "data_color": "green",  "value": "green"},
-           {"id": "colorBlue",   "name": "color",  "data_color": "blue",   "value": "blue"},
-           {"id": "colorYellow", "name": "color",  "data_color": "yellow", "value": "yellow"},
-           {"id": "colorBlack",  "name": "color",  "data_color": "black",  "value": "black"},
-           {"id": "colorWhite",  "name": "color",  "data_color": "white",  "value": "white"},
-           {"id": "colorPurple", "name": "color",  "data_color": "purple", "value": "purple"},
-           {"id": "colorOrange", "name": "color",  "data_color": "orange", "value": "orange"},
-           {"id": "colorPink",   "name": "color",  "data_color": "pink",   "value": "pink"},
-           {"id": "colorBrown",  "name": "color",  "data_color": "brown",  "value": "brown"},
-           {"id": "colorGray",   "name": "color",  "data_color": "gray",   "value": "gray"},
-           {"id": "colorCyan",   "name": "color",  "data_color": "cyan",   "value": "cyan"},
-           {"id": "colorMagenta", "name": "color", "data_color": "magenta", "value": "magenta"},
-           {"id": "colorLime",   "name": "color",  "data_color": "lime",   "value": "lime"},
-           {"id": "colorTeal",   "name": "color",  "data_color": "teal",   "value": "teal"},
-           {"id": "colorIndigo", "name": "color",  "data_color": "indigo", "value": "indigo"}
-       ]
+        {"id": "colorRed",    "name": "color",  "value": "Red"},
+        {"id": "colorGreen",  "name": "color",  "value": "Green"},
+        {"id": "colorBlue",   "name": "color",  "value": "Blue"},
+        {"id": "colorYellow", "name": "color",  "value": "Yellow"},
+        {"id": "colorBlack",  "name": "color",  "value": "Black"},
+        {"id": "colorWhite",  "name": "color",  "value": "White"},
+        {"id": "colorPurple", "name": "color",  "value": "Purple"},
+        {"id": "colorOrange", "name": "color",  "value": "Orange"},
+        {"id": "colorPink",   "name": "color",  "value": "Pink"},
+        {"id": "colorBrown",  "name": "color",  "value": "Brown"},
+        {"id": "colorGray",   "name": "color",  "value": "Gray"},
+        {"id": "colorCyan",   "name": "color",  "value": "Cyan"},
+        {"id": "colorMagenta", "name": "color", "value": "Magenta"},
+        {"id": "colorLime",   "name": "color",  "value": "Lime"},
+        {"id": "colorTeal",   "name": "color",  "value": "Teal"},
+        {"id": "colorIndigo", "name": "color",  "value": "Indigo"}
+    ]
+
     
     return colors
 
@@ -110,9 +111,9 @@ def get_product_color_choices():
 
 def get_product_size_choices():
     sizes = [
-        {"id" :"small",  "name": "size", "value" : "small",  "data_size": "small",  "class": "item-small"},
-        {"id" :"medium", "name": "size", "value" : "medium", "data_size": "medium", "class": "item-medium"},
-        {"id" :"large",  "name": "size", "value" : "large",  "data_size": "large",  "class": "item-large"}
+        {"id" :"small",  "name": "size", "value" : "Small",  "data_size": "small",  "class": "item-small"},
+        {"id" :"medium", "name": "size", "value" : "Medium", "data_size": "medium", "class": "item-medium"},
+        {"id" :"large",  "name": "size", "value" : "Large",  "data_size": "large",  "class": "item-large"}
     ]
     return sizes
 
@@ -134,12 +135,7 @@ def get_shipping_options():
             "label": "Standard Shipping (3-5 business days) - £3.99",
             "input": {
                 "name": "shipping",
-                "value": "standard",
-                "data": {
-                    "shipping_type": "standard",
-                    "cost": "3.99",
-                    "delivery_time": "3-5 business days"
-                },
+                "value": "Standard",
                 "aria": {
                     "describedby": "standard-desc"
                 },
@@ -154,12 +150,7 @@ def get_shipping_options():
             "label": "Express Shipping (1-2 business days) - £5.99",
             "input": {
                 "name": "shipping",
-                "value": "express",
-                "data": {
-                    "shipping_type": "express",
-                    "cost": "5.99",
-                    "delivery_time": "1-2 business days"
-                },
+                "value": "Express",
                 "aria": {
                     "describedby": "express-desc"
                 },
@@ -174,12 +165,7 @@ def get_shipping_options():
             "label": "Next-Day Delivery - £9.99",
             "input": {
                 "name": "shipping",
-                "value": "next-day",
-                "data": {
-                    "shipping_type": "next-day",
-                    "cost": "9.99",
-                    "delivery_time": "Next-Day Delivery"
-                },
+                "value": "Next-Day-Delivery",
                 "aria": {
                     "describedby": "next-day-desc"
                 },
@@ -194,12 +180,7 @@ def get_shipping_options():
             "label": "Same-Day Delivery (order by 2 PM) - £14.99",
             "input": {
                 "name": "shipping",
-                "value": "same-day",
-                "data": {
-                    "shipping_type": "same-day",
-                    "cost": "14.99",
-                    "delivery_time": "Same-Day Delivery (order by 2 PM)"
-                },
+                "value": "Same-Day",
                 "aria": {
                     "describedby": "same-day-desc"
                 },
@@ -214,12 +195,7 @@ def get_shipping_options():
             "label": "Click and Collect (1-2 days) - Free",
             "input": {
                 "name": "shipping",
-                "value": "click-collect",
-                "data": {
-                    "shipping_type": "click-collect",
-                    "cost": "0.00",
-                    "delivery_time": "1-2 days"
-                },
+                "value": "Click-Collect",
                 "aria": {
                     "describedby": "click-collect-desc"
                 },
@@ -234,12 +210,7 @@ def get_shipping_options():
             "label": "Weekend Delivery - £7.99",
             "input": {
                 "name": "shipping",
-                "value": "weekend",
-                "data": {
-                    "shipping_type": "weekend",
-                    "cost": "7.99",
-                    "delivery_time": "Weekend Delivery"
-                },
+                "value": "Weekend",
                 "aria": {
                     "describedby": "weekend-desc"
                 },
@@ -254,12 +225,7 @@ def get_shipping_options():
             "label": "Free Shipping (orders over £50) - Free",
             "input": {
                 "name": "shipping",
-                "value": "free",
-                "data": {
-                    "shipping_type": "free",
-                    "cost": "0.00",
-                    "delivery_time": "Free Shipping (orders over £50)"
-                },
+                "value": "Free",
                 "aria": {
                     "describedby": "free-desc"
                 },

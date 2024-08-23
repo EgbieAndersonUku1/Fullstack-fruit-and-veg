@@ -95,7 +95,7 @@ def add_shipping_and_delivery(request):
                        session_key="shipping_and_delivery",
                        next_url_name="seo_and_meta_form",
                        template_name="account/product-management/add-new-product/shipping-and-delivery.html",
-                       checkbox_fields_to_store=("shipping")
+                       checkbox_fields_to_store=("shipping",)
                        )
 
 
@@ -119,28 +119,21 @@ def add_additonal_information(request):
 
 
 def view_review(request):
-    context = {
-        "section_id" : "review-section",
-        'is_review_section': True
-    }
+    context = { "section_id" : "review-section", 'is_review_section': True}
     
-    basic_form_session           = request.session.get("basic_form_description", {})
-    detailed_form_session        = request.session.get("detailed_form_description", {})
-    price_and_inventory_session  = request.session.get("pricing_and_inventory_form", {})
-    image_and_media_session      = request.session.get("temp_file_paths", {})
-    
-    detailed_form_data_colors, detailed_form_data_sizes  = request.session.get("color"), request.session.get("size")
-    
-    if (not detailed_form_data_colors or not detailed_form_data_sizes):
-        raise Exception("There must be at least one color or one size")
-    
-    detailed_form_session["colors"] = detailed_form_data_colors
-    detailed_form_session["sizes"]  = detailed_form_data_sizes
-    
-    images = get_base64_images_from_session(image_and_media_session)
+    image_and_media_session = request.session.get("temp_file_paths", {})
   
-    print(images)
-   
+    # add to the context
+    context["basic_form_data"]             = request.session.get("basic_form_description", {})
+    context["detailed_form_data"]          = request.session.get("detailed_form_description", {})
+    context["price_and_inventory_data"]    = request.session.get("pricing_and_inventory_form", {})
+    context["image_and_media_data"]        = get_base64_images_from_session(image_and_media_session)
+    context["shipping_and_delivery_data"]  = request.session.get("shipping_and_delivery", {})
+    context["seo_management_data"]         = request.session.get("seo_management", {})
+    context["additional_information_data"] = request.session.get("additional_information", {})
+    
+    print(context["additional_information_data"] )
+    
     return render(request, "account/product-management/add-new-product/review-and-submit.html", context=context)
  
  

@@ -31,7 +31,10 @@ def handle_form(request, form_class, session_key, next_url_name, template_name, 
         - template_name: The name of the template to render if the form is not valid or if the form is initially loaded.
         - checkbox_fields_to_store: (Optional) A set of input field names (strings) that correspond to groups of 
         checkboxes. The selected values for these checkboxes will be stored in the session under keys 
-        matching the input field names.
+        matching the input field names. If a single input field name is entered it must 
+        followed by a comma, e.g ("color", ). Note: This only applies to a single field name
+        
+        
 
     Returns:
         - HttpResponse: Redirects to the URL specified by `next_url_name` if the form is successfully 
@@ -92,7 +95,8 @@ def handle_form(request, form_class, session_key, next_url_name, template_name, 
    
     form = form_class(initial=initial_data)
     context = {"section_id": session_key}
-   
+    stored_checked_inputs_to_context(request, session_key, checkbox_fields_to_store, context)
+    
     if request.method == "POST":
         
         form = form_class(request.POST)
@@ -100,23 +104,56 @@ def handle_form(request, form_class, session_key, next_url_name, template_name, 
             if form.has_changed():
                 request.session[session_key] = convert_decimal_to_float(form.cleaned_data)
                
-                store_checked_inputs_in_session(request, checkbox_fields_to_store)
+                store_checked_inputs_in_session(request, checkbox_fields_to_store, session_key)
                             
             return redirect(reverse(next_url_name))
     
     context["form"] = form
+    
     return render(request, template_name, context=context)
 
 
 
-def store_checked_inputs_in_session(request, checkbox_elements):
+def store_checked_inputs_in_session(request, checkbox_elements, session_key):
     
     if (not checkbox_elements):
         return
     
-    for value in checkbox_elements:
-        request.session[value] = request.POST.getlist(value)
+    for element_name in checkbox_elements:
+        
+        values = request.POST.getlist(element_name)
+        if values:
+            
+            # change each value to a capital before storing it in the session
+            request.session[session_key][element_name] = [value.title() for value in values] 
     
+    
+
+
+def stored_checked_inputs_to_context(request, session_key, check_box_fields, context):
+    """
+    Populates the context dictionary with values of checked input fields 
+    that are stored in the session.
+
+    This function checks if there are stored values for specific checkbox fields 
+    in the session using a given session key. If these values exist, they are 
+    added to the context dictionary to maintain the state of the checkboxes 
+    across requests.
+
+    Args:
+        request (HttpRequest): The HTTP request object, which contains the session data.
+        session_key (str): The key used to retrieve the stored checkbox data from the session.
+        check_box_fields (set of str): A set of field names representing the checkbox inputs 
+                                        that need to be checked for stored values.
+        context (dict): The context dictionary to be populated with the stored checkbox values.
+    """
+    if request.session.get(session_key):
+        for field_name in check_box_fields:
+            try:
+                context[field_name] = request.session[session_key][field_name]
+            except ValueError:
+                pass
+
     
 def save_file_with_timestamped_directory(file, base_folder, create_unique_name_func):
     """

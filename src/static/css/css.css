@@ -3046,14 +3046,14 @@ legend {
 
 .review-img {
     height: 150px;
-    width: 220px;
+    width: 150px;
 }
 
 .img-preview  {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: auto;
-    column-gap: 2px;
+    column-gap: 6px;
     margin-bottom: var(--padding-lg);
 }
 

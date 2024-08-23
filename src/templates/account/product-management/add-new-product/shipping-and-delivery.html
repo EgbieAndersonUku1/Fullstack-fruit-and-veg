@@ -50,13 +50,21 @@
                 <h4 class="sr-only">Select a shipping method</h4>
 
                 {% for delivery_option_dict in form.delivery_options %}
-
+                    
                     <label>
                        
                         <input type="checkbox" name="{{ delivery_option_dict.input.name }}" value="{{ delivery_option_dict.input.value }}" 
-                           data-shipping-type="{{ delivery_option_dict.data.shipping_type }}" data-cost="{{ delivery_option_dict.data.cost }}"
-                            data-delivery-time="{{ delivery_option_dict.data.delivery_data }}" aria-describedby="{{ delivery_option.aria.describedby }}"
-                            id="{{ delivery_option_dict.id }}">
+                            aria-describedby="{{ delivery_option.aria.describedby }}"
+                            id="{{ delivery_option_dict.id }}" 
+                            
+                            {% comment %} Loop through the list of dictionary choices and check any dictionary that the user has selected  {% endcomment %}
+                            {% for field in shipping %}
+                               
+                                {% if field == delivery_option_dict.input.value %}
+                                    checked  
+                                {% endif %}
+                            {% endfor %}
+                            >
                      
                         {{ delivery_option_dict.label }}
                     </label><br>
