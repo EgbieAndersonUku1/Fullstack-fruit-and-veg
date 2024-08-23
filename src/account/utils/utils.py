@@ -1,3 +1,5 @@
+import base64
+
 from os.path import splitext, join
 import tempfile
 
@@ -28,6 +30,16 @@ def save_file_temporarily(uploaded_file):
     
     return temp_file_path
 
+
+def get_saved_temp_file(temp_file_path):
+    with open(temp_file_path, 'rb') as file:
+        file_bytes = file.read()
+        return file_bytes
+
+
+def encode_image_bytes_to_base64(image_bytes):
+    return base64.b64encode(image_bytes).decode('utf-8')
+    
 
 def create_unique_file_name(original_name):
     

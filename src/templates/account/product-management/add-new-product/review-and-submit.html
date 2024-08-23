@@ -17,71 +17,121 @@
             <div class="product-info space-between" role="group" aria-labelledby="product-name-header">
                 <div class="info">
                     <h4 id="product-name-header">Product Name</h4>
-                    <p class="product-name">Not entered</p>
+                    <p class="product-name">
+
+                        {% if basic_form_data.name %} 
+                            {{ basic_form_data.name | capfirst }}
+                        {% else %}
+                            You haven't entered a value 
+                        {% endif %}
+
+                    </p>
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Product Name" onclick="prevPage(event, 1)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'basic_description_form' %}">
+                    <button aria-label="Edit Product Name">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="product-category-header">
                 <div class="info">
                     <h4 id="product-category-header">Product Category</h4>
-                    <p class="product-category">Not entered</p>
+                    <p id="product-category">
+
+                        {% if basic_form_data.category == "New" %} 
+                            {{ basic_form_data.category | capfirst }}
+                         {% else %}
+                             Not applicable since a new category has been chosen
+                        {% endif %}
+                    </p>
+                  
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Product Category" onclick="prevPage(event, 1)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'basic_description_form' %}">
+                    <button aria-label="Edit Product Name">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="new-category-header">
                 <div class="info">
                     <h4 id="new-category-header">New Category added</h4>
-                    <p class="brand">Not entered</p>
+                    <p id="new-category">
+                        {% if basic_form_data.new_category != "N/A" %} 
+                            {{ basic_form_data.new_category | capfirst }}
+                        {% else %}
+                            Not applicable since the product category has already been selected
+                        {% endif %}
+                    </p>
+                   
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Brand" onclick="prevPage(event, 1)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'basic_description_form' %}">
+                    <button aria-label="Edit Product Name">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="brand-header">
                 <div class="info">
                     <h4 id="brand-header">Brand</h4>
-                    <p class="brand">Not entered</p>
+                    <p id="product-brand">
+                        {% if basic_form_data.brand %} 
+                            {{ basic_form_data.brand | capfirst }}
+                        {% else %}
+                             You haven't entered a value 
+                        {% endif %}
+                    </p>
+                   
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Brand" onclick="prevPage(event, 1)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'basic_description_form' %}">
+                    <button aria-label="Edit Product Name">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="sku-header">
                 <div class="info">
                     <h4 id="sku-header">SKU (Stock Keeping Unit)</h4>
-                    <p class="stock-keeping">Not entered</p>
+                    <p id="product-sku">
+                        {% if basic_form_data.sku %} 
+                            {{ basic_form_data.sku | capfirst }}
+                        {% else %}
+                            You haven't entered a value 
+                        {% endif %}
+                    </p>
+                   
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit SKU" onclick="prevPage(event, 1)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'basic_description_form' %}">
+                    <button aria-label="Edit Product Name">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="upc-header">
                 <div class="info">
                     <h4 id="upc-header">UPC (Universal Product Code)</h4>
-                    <p class="upc">Not entered</p>
+                    <p id="product-upc">
+                        {% if basic_form_data.upc  %} 
+                            {{ basic_form_data.upc | capfirst }}
+                        {% else %}
+                            You haven't entered a value 
+                        {% endif %}
+                    </p>
+                   
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit UPC" onclick="prevPage(event, 1)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'basic_description_form' %}">
+                    <button aria-label="Edit Product Name">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="short-description-header">
                 <div class="info">
                     <h4 id="short-description-header">Short Description</h4>
-                    <p class="short-description">Not entered</p>
+                    <p id="product-short-description">
+                        {% if basic_form_data.short_description  %} 
+                          <p>{{ basic_form_data.short_description | capfirst }}</p>
+                        {% else %}
+                            You haven't entered a value 
+                        {% endif %}
+                    </p>
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Short Description" onclick="prevPage(event, 1)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'basic_description_form' %}">
+                    <button aria-label="Edit Product Name">Edit</button>
+                </a>
             </div>
         </div>
 
@@ -95,69 +145,112 @@
             <div class="product-info space-between" role="group" aria-labelledby="color-options-header">
                 <div class="info">
                     <h4 id="color-options-header">Color Options</h4>
-                    <p id="list-of-colors">Not entered</p>
+                    <p id="product-colors">
+                        {% if detailed_form_data.color  %} 
+                            {{ detailed_form_data.color|join:", " }}
+                        {% else %}
+                             You haven't entered a value 
+                        {% endif %}
+                    </p>
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Color Options" onclick="prevPage(event, 2)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'detailed_description_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="product-length-header">
                 <div class="info">
                     <h4 id="product-dimensions-header">Product length</h4>
-                    <p id="length">Not entered/p>
+                    <p id="product-length">
+                        {% if detailed_form_data.length  %} 
+                            {{ detailed_form_data.length  }} cm
+                        {% else %}
+                            You haven't entered a value 
+                        {% endif %}
+                    </p>
+                   
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Product length" onclick="prevPage(event, 2)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'detailed_description_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
             <div class="product-info space-between" role="group" aria-labelledby="product-width-header">
                 <div class="info">
                     <h4 id="product-width-header">Product Width</h4>
-                    <p id="width">Not entered</p>
+                    {% if detailed_form_data.width  %} 
+                        {{ detailed_form_data.width  }} cm
+                    {% else %}
+                        You haven't entered a value 
+                    {% endif %}
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Product width" onclick="prevPage(event, 2)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'detailed_description_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="product-height-header">
                 <div class="info">
                     <h4 id="product-height-header">Product Height</h4>
-                    <p id="height">Not entered</p>
+                    <p id="product-height">
+                        {% if detailed_form_data.height  %} 
+                            {{ detailed_form_data.height  }} cm
+                        {% else %}
+                            You haven't entered a value 
+                        {% endif %}
+                    </p>
+                    
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Product height" onclick="prevPage(event, 2)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'detailed_description_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
             <div class="product-info space-between" role="group" aria-labelledby="size-options-header">
                 <div class="info">
                     <h4 id="size-options-header">Size Options</h4>
-                    <p id="list-of-sizes">Not entered</p>
+                    {% if detailed_form_data.size  %} 
+                        {{ detailed_form_data.size|join:", "  }}
+                    {% else %}
+                        You haven't entered a value 
+                    {% endif %}
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Size Options" onclick="prevPage(event, 2)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'detailed_description_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="weight-options-header">
                 <div class="info">
-                    <h4 id="weight-options-header">Weight (grams)</h4>
-                    <p id="weight">Not entered</p>
+                    <h4 id="weight-options-header">Weight</h4>
+                    <p id="product-weight">
+                        {% if detailed_form_data.weight  %} 
+                            {{ detailed_form_data.weight  }} Grams
+                        {% else %}
+                            You haven't entered a value 
+                        {% endif %}
+                    </p>
+                    
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Weight Options" onclick="prevPage(event, 2)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'detailed_description_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="description-header">
                 <div class="info">
                     <h4 id="description-header">Description</h4>
-                    <p id="detailed-description">Not entered</p>
+                    <p id="product-detailed-description">
+                        {% if detailed_form_data.description  %} 
+                            <p id="detailed-description">{{ detailed_form_data.description  }}</p>
+                        {% else %}
+                            You haven't entered a value 
+                        {% endif %}
+                    </p>
+                    
+                    
                 </div>
-                <div class="edit">
-                    <button aria-label="Edit Description" onclick="prevPage(event, 2)">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'detailed_description_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
         </div>
 
@@ -170,71 +263,140 @@
             <div class="product-info space-between" role="group" aria-labelledby="price-heading">
                 <div class="info">
                     <h4 id="price-heading">Price</h4>
-                    <p id="price-info">Not entered</p>
+                    <p id="product-price">
+
+                        {% if price_and_inventory_data.price %}
+                           £{{ price_and_inventory_data.price }}
+                        {% else %}
+                           You haven't entered a value
+                        {% endif %}
+
+                    </p>
+                   
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 3)" aria-label="Edit price">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'pricing_and_inventory_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="availability-heading">
                 <div class="info">
                     <h4 id="availability-heading">Availability</h4>
-                    <p id="availability-info">Not entered</p>
+                    <p id="product-availability">
+
+                        {% if price_and_inventory_data.category %}
+
+                            {% if price_and_inventory_data.category == 'is' %} 
+                                The item is in stock 
+                            {% elif  price_and_inventory_data.category == 'oos' %} 
+                                The item is out of stock 
+                            {% else %}
+                                The item has been pre-ordered
+                            {% endif %}
+                            
+                        {% else %}
+                            You haven't entered a value
+                        {% endif %}
+                    </p>
+                   
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 3)" aria-label="Edit availability">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'pricing_and_inventory_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="discount-heading">
                 <div class="info">
                     <h4 id="discount-heading">Add Discount</h4>
-                    <p id="discount-info">Not entered</p>
+                    <p id="product-choose-discount">
+                        {% if price_and_inventory_data.select_discount == "no" %}
+                            You have chosen not to add a discount to this item
+                        {% else %}
+                            You have chosen to add a discount to this item
+                        {% endif %}
+                    </p>
+                   
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 3)" aria-label="Edit discount">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'pricing_and_inventory_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="discount-price-heading">
                 <div class="info">
                     <h4 id="discount-price-heading">Discount Price</h4>
-                    <p id="discount-price-info">Not entered</p>
+                    <p id="product-add-a-discount">
+                        {% if price_and_inventory_data.add_discount == None %}
+                            Not applicable because you have chosen not to add a discount
+                        {% else %}
+                           £{{ price_and_inventory_data.add_discount }}
+                        {% endif %}
+                    </p>
+                  
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 3)" aria-label="Edit discount price">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'pricing_and_inventory_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="quantity-in-stock-heading">
                 <div class="info">
                     <h4 id="quantity-in-stock-heading">Quantity in Stock</h4>
-                    <p id="quantity-in-stock-info">Not entered</p>
+
+                    <p id="product-stock-quantity">
+                        {% if price_and_inventory_data.quantity_stock  %}
+                            {{ price_and_inventory_data.quantity_stock }}
+                        {% elif price_and_inventory_data.quantity_stock == 0 %}
+                            You currently have no stock
+                        {% else %}
+                            You haven't entered a value
+                        {% endif %}
+                    </p>
+                   
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 3)" aria-label="Edit quantity in stock">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'pricing_and_inventory_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="min-order-quantity-heading">
                 <div class="info">
                     <h4 id="min-order-quantity-heading">Minimum Order Quantity</h4>
-                    <p id="min-order-quantity-info">Not entered</p>
+                    <p id="product-minimum-order">
+
+                        {% if price_and_inventory_data.minimum_order  %}
+                             {{ price_and_inventory_data.minimum_order }}
+                        {% elif price_and_inventory_data.minimum_order == 0 %}
+                            There is no minimum stock order
+                        {% else %}
+                            You haven't entered a value
+                        {% endif %}
+                    </p>
+                  
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 3)" aria-label="Edit minimum order quantity">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'pricing_and_inventory_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="max-order-quantity-heading">
                 <div class="info">
                     <h4 id="max-order-quantity-heading">Maximum Order Quantity</h4>
-                    <p id="max-order-quantity-info">Not entered</p>
+                    <p id="product-maximum-order">
+
+                        {% if price_and_inventory_data.maximum_order  %}
+                            {{ price_and_inventory_data.maximum_order }}
+                        {% elif price_and_inventory_data.maximum_order == 0 %}
+                            There is no maximum stock order
+                        {% else %}
+                            You haven't entered a value
+                        {% endif %}
+                    </p>
+                   
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 3)" aria-label="Edit maximum order quantity">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'pricing_and_inventory_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
         </div>
 
@@ -247,42 +409,30 @@
 
             <div class="product-info space-between">
                 <h3 id="image-media-heading" class="product-section-header">Image and Media</h3>
-                <div class="edit">
-                    <button onclick="prevPage(event, 4)" aria-label="Edit image and media section">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'images_and_media_form' %}">
+                    <button aria-label="Edit Color Options">Edit</button>
+                </a>
             </div>
 
             <div class="product-info flex-col">
-                <p class="highlight padding-bottom-md padding-top-md">
-                    Warning: Due to security restrictions in web browsers, JavaScript cannot access
-                    or display local file paths directly. As a result, images cannot be shown in the review section because
-                    their local file paths are not accessible—only the file name is available, and so the file paths cannot
-                    be stored for later.
-                    Since the backend for image handling isn’t set up yet,
-                    selected images won’t be displayed until the backend is operational.
-                    However, you can still view the name of the image file you selected under the
-                    placeholder image.
-                </p>
-
+               
                 <div class="product-info img-preview" role="group" aria-labelledby="image-gallery-heading">
 
-                    <div class="info primary-img review-product-img">
-                        <img src="{%  static '/img/display/jpg/placeholder.jpg' %}"
-                            alt="Placeholder image of the primary product" class="review-img">
-                        <p>Not entered</p>
-                    </div>
+                    {% for encoded_image in image_and_media_data %}
 
-                    <div class="info secondary-img review-product-img">
-                        <img src="{%  static '/img/display/jpg/placeholder.jpg' %}" alt="Placeholder image of a side view"
-                            class="review-img">
-                        <p>Not entered</p>
-                    </div>
+                        {% if encoded_image %}
+                            <div class="info image-and-media-images review-product-img">
+                               
+                                <img src="data:image/jpeg;base64,{{ encoded_image }}" alt="Image" class="review-img" alt="Image should be here">
+                            </div>
 
-                    <div class="info third-img review-product-img">
-                        <img src="{%  static '/img/display/jpg/placeholder.jpg' %}"
-                            alt="Placeholder image of another side view" class="review-img">
-                        <p>Not entered</p>
-                    </div>
+                        {% else %}
+                            <div class="info primary-img review-product-img">
+                                <p>The image was not found </p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
                 </div>
             </div>
         </div>
@@ -297,51 +447,92 @@
             <div class="product-info space-between" role="group" aria-labelledby="length-heading">
                 <div class="info">
                     <h4 id="length-heading">Length</h4>
-                    <p id="length-info">Not entered</p>
+
+                    <p id="product-shipping-length">
+
+                        {% if shipping_and_delivery_data.length %}
+                            {{ shipping_and_delivery_data.length }}
+                        {% else %}
+                            You haven't entered a value
+                        {% endif %}
+                    </p>
+                   
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 5)" aria-label="Edit length">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'shipping_and_delivery_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="width-heading">
                 <div class="info">
                     <h4 id="width-heading">Width</h4>
-                    <p id="width-info">Not entered</p>
+
+                    <p id="product-shipping-width">
+                        {% if shipping_and_delivery_data.width %}
+                            {{ shipping_and_delivery_data.width }}
+                        {% else %}
+                             You haven't entered a value
+                        {% endif %}
+                    </p>
+                   
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 5)" aria-label="Edit width">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'shipping_and_delivery_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="height-heading">
                 <div class="info">
                     <h4 id="height-heading">Height</h4>
-                    <p id="height-info">Not entered</p>
+                    <p id="product-shipping-height">
+
+                        {% if shipping_and_delivery_data.height %}
+                            {{ shipping_and_delivery_data.height }}
+                        {% else %}
+                            You haven't entered a value
+                        {% endif %}
+                    </p>
+                   
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 5)" aria-label="Edit height">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'shipping_and_delivery_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="shipping-weight-heading">
                 <div class="info">
                     <h4 id="shipping-weight-heading">Shipping Weight (kg)</h4>
-                    <p id="shipping-weight-info">Not entered</p>
+                    <p id="product-shipping-weight">
+
+                        {% if shipping_and_delivery_data.weight %}
+                             {{ shipping_and_delivery_data.weight }}
+                        {% else %}
+                            You haven't entered a value
+                        {% endif %}
+                    </p>
+                    
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 5)" aria-label="Edit shipping weight">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'shipping_and_delivery_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="shipping-options-heading">
                 <div class="info">
                     <h4 id="shipping-options-heading">Shipping Options</h4>
-                    <p id="shipping-options-info">Not entered</p>
+                    
+                    <p id="product-shipping-delivery-options">
+                        {% if shipping_and_delivery_data.shipping %}
+                            {{ shipping_and_delivery_data.shipping | join:", " }}
+                        {% else %}
+                            You haven't entered a value
+                        {% endif %}
+                    </p>
+                   
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 5)" aria-label="Edit shipping options">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'shipping_and_delivery_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
         </div>
         <hr class="dividor">
@@ -353,33 +544,60 @@
             <div class="product-info space-between" role="group" aria-labelledby="meta-title-heading">
                 <div class="info">
                     <h4 id="meta-title-heading">Meta Title</h4>
-                    <p id="meta-title-info">Not entered</p>
+                    
+                    <p id="product-meta-titla">
+
+                        {% if seo_management_data.meta_title %}
+                            {{ seo_management_data.meta_title }}
+                        {% else %}
+                            You haven't entered a value
+                        {% endif %}
+                    </p>
+                    
+                  
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 6)" aria-label="Edit meta title">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'seo_and_meta_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="meta-keywords-heading">
                 <div class="info">
                     <h4 id="meta-keywords-heading">Meta Keywords</h4>
-                    <p id="meta-keywords-info">Not entered</p>
+
+                    <p id="product-meta-keywords">
+
+                        {% if seo_management_data.meta_keywords %}
+                            {{ seo_management_data.meta_keywords }}
+                        {% else %}
+                        
+                            You haven't entered a value
+                        {% endif %}
+                    </p>
+                   
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 6)" aria-label="Edit meta keywords">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'seo_and_meta_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="meta-description-heading">
                 <div class="info">
                     <h4 id="meta-description-heading">Meta Description</h4>
-                    <p id="meta-description-info">
-                        Not entered
+
+                    <p id="product-meta-description">
+
+                        {% if seo_management_data.meta_description %}
+                            {{ seo_management_data.meta_description  }}
+                        {% else %}
+                            You haven't entered a value
+                        {% endif %}
                     </p>
+                   
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 6)" aria-label="Edit meta description">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'seo_and_meta_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
         </div>
 
@@ -392,43 +610,80 @@
             <div class="product-info space-between" role="group" aria-labelledby="manufacturer-title-heading">
                 <div class="info">
                     <h4 id="manufacturer-title-heading">Manufacturer Title</h4>
-                    <p id="manufacturer-title-info">Not entered</p>
+
+                    <p id="product-manufacter-title">
+
+                        {% if additional_information_data.title %}
+                            {{ additional_information_data.title  }}
+                        {% else %}
+                            You haven't entered a value
+                        {% endif %}
+                    </p>
+                   
+                   
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 7)" aria-label="Edit manufacturer title">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'add_information_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="country-of-origin-heading">
                 <div class="info">
-                    <h4 id="country-of-origin-heading">Country of Origin</h4>
-                    <p id="country-of-origin-info">Not entered</p>
+                    <h4 id="country-of-origin-heading">Country of origin </h4>
+                    <p id="product-country-code">
+
+                        {% if additional_information_data.title %}
+                            Country code: {{ additional_information_data.countries  }}
+                        {% else %}
+                            You haven't entered a value
+                        {% endif %}
+                    </p>
+                    
+                   
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 7)" aria-label="Edit country of origin">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'add_information_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="return-policy-heading">
                 <div class="info">
                     <h4 id="return-policy-heading">Return Policy</h4>
-                    <p id="return-policy-info">Not entered</p>
+                        <p id="product-return-policy-message">
+                            {% if additional_information_data.return_policy %}
+
+                                {% if additional_information_data.return_policy == "n" %}
+                                    This item is not eligible for return.
+                                {% else %}
+                                    This item is eligible for return.
+                                {% endif %}
+                        
+                            {% else %}
+                                You haven't entered a value
+                            {% endif %}
+                        </p>
+                       
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 7)" aria-label="Edit return policy">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'add_information_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
 
             <div class="product-info space-between" role="group" aria-labelledby="warranty-heading">
                 <div class="info">
                     <h4 id="warranty-heading">Warranty</h4>
-                    <p id="warranty-info">
-                        Not entered
+                    <p id="produuct-warranty-info">
+                       
+                        {% if additional_information_data.description %}
+                            {{ additional_information_data.description }} 
+                        {% else %}
+                            You haven't entered a value</p>
+                        {% endif %}
                     </p>
                 </div>
-                <div class="edit">
-                    <button onclick="prevPage(event, 7)" aria-label="Edit warranty">Edit</button>
-                </div>
+                <a class="edit" href="{% url 'add_information_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
             </div>
         </div>
 

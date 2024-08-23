@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.urls      import reverse
 
+from account.utils.utils import save_file_temporarily
+
 from .views_helpers   import handle_form
 from .forms.forms     import (BasicFormDescription, 
                               DetailedFormDescription,
@@ -10,7 +12,9 @@ from .forms.forms     import (BasicFormDescription,
                               SeoAndMetaForm,
                               AdditionalInformationForm,
                               )
-from .utils.utils     import create_unique_file_name, save_file_temporarily
+
+
+from .views_helpers import get_base64_images_from_session
 
 
 # Create your views here.
@@ -26,6 +30,7 @@ def product_management(request):
 
 
 def add_basic_description(request):
+    
     return handle_form(
         request=request,
         form_class=BasicFormDescription,
@@ -75,7 +80,7 @@ def add_images_and_media(request):
                 
                 for field in file_fields:
                     if field in request.FILES:
-                        temp_file_paths[field] = save_file_temporarily(request.FILES[field])
+                        temp_file_paths[field]  = save_file_temporarily(request.FILES[field])
                 request.session["temp_file_paths"] = temp_file_paths
                 
             return redirect(reverse("shipping_and_delivery_form"))
@@ -90,7 +95,7 @@ def add_shipping_and_delivery(request):
                        session_key="shipping_and_delivery",
                        next_url_name="seo_and_meta_form",
                        template_name="account/product-management/add-new-product/shipping-and-delivery.html",
-                       checkbox_fields_to_store=("shipping")
+                       checkbox_fields_to_store=("shipping",)
                        )
 
 
@@ -114,10 +119,21 @@ def add_additonal_information(request):
 
 
 def view_review(request):
-    context = {
-        "section_id" : "review-section",
-        'is_review_section': True
-    }
+    context = { "section_id" : "review-section", 'is_review_section': True}
+    
+    image_and_media_session = request.session.get("temp_file_paths", {})
+  
+    # add to the context
+    context["basic_form_data"]             = request.session.get("basic_form_description", {})
+    context["detailed_form_data"]          = request.session.get("detailed_form_description", {})
+    context["price_and_inventory_data"]    = request.session.get("pricing_and_inventory_form", {})
+    context["image_and_media_data"]        = get_base64_images_from_session(image_and_media_session)
+    context["shipping_and_delivery_data"]  = request.session.get("shipping_and_delivery", {})
+    context["seo_management_data"]         = request.session.get("seo_management", {})
+    context["additional_information_data"] = request.session.get("additional_information", {})
+    
+    print(context["additional_information_data"] )
+    
     return render(request, "account/product-management/add-new-product/review-and-submit.html", context=context)
  
  
