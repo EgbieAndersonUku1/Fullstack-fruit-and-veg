@@ -18,4 +18,8 @@ class RegisterForm(forms.ModelForm):
     
 
     def save(self, commit=True):
-        pass
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
