@@ -1,0 +1,93 @@
+{% load static %}
+
+<div class="main">
+    <div class="head space-between">
+        <div class="links">
+            <a href="#featured-products" aria-label="Featured products">Featured products</a>
+            <a href="#new-products" aria-label="New products">New products</a>
+            <a href="#deals-of-the-week" aria-label="Read our blog">Deal of the week</a>
+            <a href="#juice-and-drinks" aria-label="discounted items">Discounted items</a>
+            <div class="dropdown-menu discounted-items">
+                <h3>Discounted items</h3>
+                <div class="dropdown-menu__container">
+
+                    {% include "partials/nav-menu.html" %}
+                    
+                    <div class="dropdown-menu__container__img">
+                        <img src="{% static '/img/display/jpg/drink-banner.jpeg' %}" alt="An ice-cream image banner">
+                    </div>
+                </div>
+            </div>
+            <a href="#juice-and-drinks" aria-label="organic-products">Organic products</a>
+            <div class="dropdown-menu organic-products">
+                <h3>Organic products</h3>
+                <div class="dropdown-menu__container">
+                    <div class="links">
+                        <a href="#">Organic Juices and Drinks</a>
+                        <a href="#">Organic Ice Creams</a>
+                        <a href="#">Organic Snacks</a>
+                        <a href="#">Organic Baked Goods</a>
+                        <a href="#">Organic Condiments and Sauces</a>
+                        <a href="#">Organic Dairy Products</a>
+                        <a href="#">Organic Grains and Legumes</a>
+                        <a href="#">Organic Vegetables</a>
+                        <a href="#">Organic Fruits</a>
+                        <a href="#">Organic Meats</a>
+                        <a href="#">Organic Poultry</a>
+                        <a href="#">Organic Seafood</a>
+                    </div>
+                    <div class="dropdown-menu__container__img">
+                        <img src="{% static '/img/display/jpg/organic-snacks-banner.jpeg' %}" alt="A snacks banner">
+                    </div>
+                </div>
+            </div>
+
+            <a href="#" aria-label="read our blog">Blog</a>
+            <a href="#" aria-label="Contact us">Contact</a>
+        </div>
+
+        <div class="footer">
+          {% comment %} The icons including wishlist, carts, etc {% endcomment %}
+           {% include "partials/nav-icons.html" with total_cost=0.00  %}
+        </div>
+    </div>
+
+    <div class="body">
+        <div class="search">
+            <form action="/" method="post" id="search">
+                <input type="search" name="search" id="search-form" placeholder="search...."
+                    aria-label="Search">
+                <button type="submit" class="search-btn medium-btn green-bg"
+                    aria-label="Submit search">Search</button>
+            </form>
+
+        </div>
+
+        <div class="main-phone">
+            <div class="icon">
+                <img src="{% static '/img/icons/alternate-phone.svg' %}" alt="A phone icon image" class="nav-icon">
+            </div>
+
+            <div class="phone-info">
+                <a href="tel:02076842569" aria-label="Call us at 0207 684 2569"><span>0207</span> 684
+                    2569</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="call-to-action">
+        <div class="info">
+            <p class="small-header bold">Fresh Fruit</p>
+            <p class="large-header">Vegetables</p>
+            <p class="medium-header">100% Organic</p>
+            <p>Free Pickup and delivery available</p>
+
+            <button class="button-md shop-btn" aria-label="Shop now">Shop now</button>
+        </div>
+
+        <div class="main-img">
+            <img src="{% static '/img/main/main-bg.png' %}" alt="The main background image" class="main-image">
+        </div>
+    </div>
+
+</div>

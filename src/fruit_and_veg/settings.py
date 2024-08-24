@@ -102,10 +102,17 @@ JAZZMIN_SETTINGS = {
         "welcome_sign": "Welcome to the EUOrganics",
         "copyright": "EUOrganics Ltd",
       
-                    
-
-
+                
 }
+
+# Gmail 
+EMAIL_BACKEND       = getenv('EMAIL_BACKEND')
+EMAIL_HOST          = getenv('EMAIL_HOST')
+EMAIL_PORT          = getenv('EMAIL_PORT')
+EMAIL_USE_TLS       = getenv('EMAIL_USE_TLS')
+EMAIL_HOST_USER     = getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = getenv('EMAIL_HOST_PASSWORD')
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -138,6 +145,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTION': {'min_length': 8},
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
