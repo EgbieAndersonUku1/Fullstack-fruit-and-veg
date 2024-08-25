@@ -2767,16 +2767,24 @@ label {
 }
 
 
-
 label:not(label:first-child){
     padding-top: var(--padding-sm);
 }
+
+div.checkbox label {
+    padding-top: 0!important;
+    font-size: var(--font-size-sm);
+    font-weight: 300;
+}
+
 
 .requirement.met {
     color: green;
     font-weight: bold;
     opacity: 1;
 }
+
+
 
 
 

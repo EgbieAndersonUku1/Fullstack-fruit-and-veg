@@ -26,7 +26,7 @@ class PasswordStrengthChecker {
      * @returns {boolean} True if the password contains at least one special character, otherwise false.
      */
     containsAtLeastOneSpecialChar() {
-        return /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(this.password);
+        return /[!@#$%^&*()£_+\-=\[\]{};':"\\|,.<>\/?]+/.test(this.password);
     }
 
     /**
@@ -40,7 +40,7 @@ class PasswordStrengthChecker {
         if(!this.password) {
             return false;
         }
-        return this.password.length >= length;
+        return this.password.length >= this.defaultPasswordLength;
     }
 
     /**

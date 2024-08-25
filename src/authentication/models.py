@@ -1,7 +1,10 @@
 from django.db import models
+from datetime import datetime, timedelta
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
+
+
 
 from typing import Optional
 
@@ -81,6 +84,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_banned         = models.BooleanField(_("is banned"), default=False) 
     last_login        = models.DateTimeField(_("last login"), auto_now=True) 
     date_created      = models.DateTimeField(_("date created"), auto_now_add=True)
+    verification_data = models.JSONField(default=dict, blank=True, null=False)
 
     objects = CustomBaseUser()
 
@@ -166,3 +170,56 @@ class User(AbstractBaseUser, PermissionsMixin):
                 return cls.objects.get(email=value)
         except cls.DoesNotExist:
             return None
+    
+    def set_verification_code(self, code:str, expiry_minutes:int) -> None:
+        """Set the verification data in the JSONField.
+        
+           Args:
+                code: The verification code to set to JSONField 
+                expiry_minutes: The minutes that code will expiry by
+             
+           Returns:
+                Returns none
+        """
+        
+        current_date = datetime.now()
+        self.verification_data = {
+            "verification_code": code,
+            "date_sent": current_date.isoformat(),
+            "expiry_date": (current_date + timedelta(minutes=expiry_minutes)).isoformat()
+        }
+        self.save()
+    
+    def clear_verification_data(self) -> None:
+        """Clear the verification data"""
+        self.verification_data = {}
+        self.save()
+    
+    
+    def is_verification_code_valid(self, verifcation_code:str) -> bool:
+        """
+        Checks if the verification code is valid
+        
+        Args:
+            verification_code (str): The verificatin code to check.
+           
+        Returns:
+            Returns True if valid or False not
+
+        """
+        if not self.verification_data:
+            return False
+        
+        stored_code = self.verification_data.get("verification_code")
+        expiry_date = self.verification_data.get('expiry_date')
+        
+        if stored_code != verifcation_code:
+            return False
+        
+        try:
+            expiration_datetime = datetime.fromisoformat(expiry_date)
+            return expiration_datetime < datetime.now()
+        except TypeError:
+            return False
+        
+        

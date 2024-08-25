@@ -12,6 +12,10 @@ class RegisterForm(forms.ModelForm):
         "id": "register-confirm-password",
         
     }))
+    
+    show_password = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={
+        "id": "show-password",
+    }))
     class Meta:
         model = get_user_model()
         fields = ["username", "email"]

@@ -30,7 +30,7 @@ const doPasswordsMatch = document.getElementById("is-password-a-match");
 const haveAnAccountLink = document.getElementById("have-an-account-link");
 const notRegisteredLink = document.getElementById("not-registered-link");
 const showPasswordElement = document.getElementById("show-password");
-const showPasswordLabelElement = document.getElementById("show-password-label");
+const showPasswordLabelElement = document.querySelector(".checkbox label");
 
 // DOM Element for Register Form
 const registerForm = document.getElementById("register-form");
@@ -40,6 +40,9 @@ const inputElementField  = document.getElementById('inputField');
 
 // csrf token
 const csrfToken  = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+
+const passwordStrengthChecker = new PasswordStrengthChecker()
 
 
 
@@ -54,7 +57,7 @@ async function handleRegisterFormSubmit(e) {
 
     const {password, confirmPassword } = {
         password: formData.get("password"),
-        confirmPassword: formData.get("confirm-password"),
+        confirmPassword: formData.get("confirm_password"),
       }
 
    
@@ -64,7 +67,8 @@ async function handleRegisterFormSubmit(e) {
 
     const url             = "authentication/validate/password/";
     const passwordReport  = await fetchPasswordStrengthReport(url, csrfToken, passwordElement.value);
-  
+    
+    console.log(passwordReport)
     if (passwordReport["IS_VALID"]) {
         console.log("registered")
         registerForm.submit();
@@ -98,7 +102,7 @@ async function fetchPasswordStrengthReport(url, csrfToken, password) {
 
 
 
-const passwordStrengthChecker = new PasswordStrengthChecker()
+
 
 loginLinkElement?.addEventListener("click", handleLoginClick);
 closeWindowIconElement?.addEventListener("click", handleCloseIcon);
@@ -122,6 +126,10 @@ function handlePasswordToggle(e) {
     if (!confirmPasswordElement || !passwordElement) {
         throw new Error("The confirm password or password element field couldn't be found!!!");
     };
+
+    if (!showPasswordLabelElement) {
+        throw new Error("The checkbox label for show password wasn't found!!")
+    }
 
     if (!showPasswordElement) {
         throw new Error("The checkbox element couldn't be found!!!");

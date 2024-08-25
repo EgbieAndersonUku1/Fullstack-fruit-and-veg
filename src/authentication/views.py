@@ -4,20 +4,24 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from .utils.password_validator import PasswordStrengthChecker
 
+from .forms.register_form import RegisterForm
+
 
 # Create your views here.
 
 
 def register(request):
     
-    # To do
-    # Add the logic here to register 
-    # Add the logic to send email to register account
-    messages.success(request, "You have successfully registered")
+    form    = RegisterForm()
+    
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            messages.success(request, "You have successfully registered")
+    
     return redirect("home")
-
-
-
+    
+    
 def validate_password(request):
     if request.method == 'POST':
         try:
@@ -26,7 +30,6 @@ def validate_password(request):
             data     = json.loads(request.body.decode('utf-8'))
             password = data.get('password')
 
-          
             if not password:
                 return JsonResponse({"IS_VALID": False, "message": "Password is required"}, status=400)
 

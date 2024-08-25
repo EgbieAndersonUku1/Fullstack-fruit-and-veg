@@ -20,21 +20,24 @@
 
                 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 
-                <label for="register-email">Email</label>
-                <input type="email" name="email" id="register" required>
+                {{ form.username.label_tag }}
+                {{ form.username }}
+                
+                {{ form.email.label_tag }}
+                {{ form.email}}
+                
+                {{ form.password.label_tag }}
+                {{ form.password }}
 
-                <label for="register-username">Username</label>
-                <input type="text" name="username" id="register-username" required>
+                {{ form.confirm_password.label_tag }}
+                {{ form.confirm_password }}
+                
 
-                <label for="register-password">Password</label>
-                <input type="password" name="password" id="register-password" required>
-
-                <label for="register-confirm-password">Confirm Password</label>
-                <input type="password" name="confirm-password" id="register-confirm-password" required>
-
-                <div class="flex-row">
-                    <input type="checkbox" name="show-password" id="show-password">
-                    <label for="show-password" id="show-password-label">Show Password</label>
+                <div class="flex-row checkbox">
+                   
+                    {{ form.show_password }}
+                    {{ form.show_password.label_tag }}
+                  
 
                 </div>
 
