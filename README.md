@@ -2,8 +2,7 @@
 
 ## _The Server-Side Solution for Fresh Produce_
 
-[![Django](https://www.djangoproject.com/m/img/logos/django-logo-negative.png)](https://www.djangoproject.com/)
-[![Build Status](https://travis-ci.org/yourusername/fruit-store-backend.svg?branch=main)](https://travis-ci.org/yourusername/fruit-store-backend)
+![Home page](src/static/assets/home_page.png)
 
 The backend for the Fruit Store website is designed to manage server-side operations for a seamless online shopping experience for fresh fruits and vegetables. Built with Django, it handles user authentication, product management, and more, making the application a fullstack solution.
 
@@ -17,6 +16,7 @@ The backend for the Fruit Store website is designed to manage server-side operat
 - [Tech](#tech)
 - [Current Status](#current-status)
 - [Secret Key Setup](#secret-key-setup)
+- [Email setup](#email-setup)
 - [Django Application Setup with PostgreSQL](#django-application-setup-with-postgresql)
 - [Django-HTML Syntax Highlighting in VS Code](#Django-HTML-Syntax-Highlighting-in-VS-Code)
 - [Create a superuser](#Creating-a-Superuser)
@@ -63,6 +63,52 @@ The backend uses several technologies and libraries:
 - **Frontend Integration:** Ensure seamless integration with the frontend.
 - **Extensive Development:** Address a range of significant tasks across various components to ensure full functionality and integration, covering all remaining aspects of backend development.
 - Add responsiveness to the site so that it can handle all screen sizes as not all elements respond to different windows sizes e.g small, etc
+
+## Email setup 
+
+To send emails using Django, you'll need to configure its email backend. There are various email service providers, such as Mailgun and SendGrid which offer solutions for sending emails. However, on free plans, these services often place you in a sandbox environment with restrictions, such as limited sending capabilities or the need to verify recipient addresses.
+
+A popular alternative is to use Gmail, which is free and allows you to send emails without these sandbox limitations. However, Gmail does have sending limits—typically 500 emails per day for regular accounts and 2,000 emails per day for Google Workspace accounts. To use Gmail with Django we first need to adjust our Gmail account settings to allow Django to send emails on its behalf. This includes enabling access for an `App Password` if you have two-factor authentication enabled.
+
+### How to Generate an App Password in Gmail
+
+To begin you need to generate an app password for Gmail, this is necessary when setting up your Google account on a device or in an application that doesn't support two-step verification. Without enabling 2-factor authentication `App passwords` will not be available.
+
+### Step 1: Enable Two-Step Verification
+
+1. Go to your [Google Account](https://myaccount.google.com/).
+2. Navigate to the **Security** tab.
+3. Under **Signing in to Google**, click on **2-Step Verification**.
+4. Follow the instructions to enable Two-Step Verification.
+
+### Step 2: Generate an App Password
+
+1. After enabling Two-Step Verification, return to the **Security** tab in your Google Account.
+2. In the search bar type in **App passwords** option and click on it when you see. If prompted, sign in again.
+3. Now type in the name of the app you want to create the `authentication code` for and hit `create`
+4. A popup will appear with a generate code e.g `yele liof uwkg qdvc`
+5. A 16-character password will be generated. Copy this password.
+
+### Important Notes
+
+- **One-time Use:** The app password is a one-time code, and so you don't need to remember it, and if you ever lose it, you can generate a new one.
+- **Security:** If you suspect that your account has been compromised, you can revoke the `app password` and any apps using it will have its access revoked. You can do this at any time in your Google Account under **App passwords**.
+
+## How to use the App password to send emails
+
+Open up the `.env.example` and copy the following block into the `.env` file
+
+```
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'your-email@gmail.com'   # your gmail account
+EMAIL_HOST_PASSWORD = 'your-app-password'  # Use the generated App Password here
+```
+Replace the `EMAIL_HOST_USER` and `EMAIL_HOST_PASSWORD` with your email and 16 digit app. Note, you only need to change
+the last two if you are using gmail, however if you are using a different email provider you need to the entire block with their email services providers
+
 
 ## Secret Key Setup
 

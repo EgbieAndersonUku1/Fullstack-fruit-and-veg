@@ -211,14 +211,14 @@ class User(AbstractBaseUser, PermissionsMixin):
             return False
         
         stored_code = self.verification_data.get("verification_code")
-        expiry_date = self.verification_data.get('expiry_date')
-        
+       
         if stored_code != verifcation_code:
             return False
         
         try:
+            expiry_date         = self.verification_data.get('expiry_date')
             expiration_datetime = datetime.fromisoformat(expiry_date)
-            return expiration_datetime < datetime.now()
+            return expiration_datetime <= datetime.now()
         except TypeError:
             return False
         
