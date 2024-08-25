@@ -14,19 +14,23 @@
     <div class="register-container">
         <div id="registration-form">
 
-            <form action="" method="post" id="register-form" role="form">
+            <form action="{% url 'register' %}" method="post" id="register-form" role="form">
+
+                {% csrf_token %}
+
+                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 
                 <label for="register-email">Email</label>
                 <input type="email" name="email" id="register" required>
 
                 <label for="register-username">Username</label>
-                <input type="email" name="email" id="register-username" required>
+                <input type="text" name="username" id="register-username" required>
 
                 <label for="register-password">Password</label>
                 <input type="password" name="password" id="register-password" required>
 
                 <label for="register-confirm-password">Confirm Password</label>
-                <input type="password" name="password" id="register-confirm-password" required>
+                <input type="password" name="confirm-password" id="register-confirm-password" required>
 
                 <div class="flex-row">
                     <input type="checkbox" name="show-password" id="show-password">

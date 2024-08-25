@@ -40,7 +40,7 @@ class PasswordStrengthChecker {
         if(!this.password) {
             return false;
         }
-        return password && password.length >= length;
+        return this.password.length >= length;
     }
 
     /**
@@ -91,31 +91,12 @@ class PasswordStrengthChecker {
             passwordObj.HAS_AT_LEAST_ONE_NUMBER &&
             passwordObj.HAS_AT_LEAST_ONE_LOWERCASE &&
             passwordObj.HAS_AT_LEAST_ONE_UPPERCASE;
-            passwordObj.IS_VALID = this.isValid(passwordObj)
-
         
-
         return passwordObj;
     }
 
 
-    /**
-     * Checks if the password meets the defined strength criteria.
-     * @returns {boolean} True if the password meets the strength criteria, otherwise false.
-     */
-    isValid() {
-      
-        const isValid =  passwordObj.HAS_AT_LEAST_ONE_SPECIAL_CHARS 
-                        && passwordObj.HAS_AT_LEAST_LENGTH_CHARS  
-                        && passwordObj.HAS_AT_LEAST_ONE_NUMBER 
-                        && passwordObj.HAS_AT_LEAST_ONE_LOWERCASE 
-                        && passwordObj.HAS_AT_LEAST_ONE_UPPERCASE ;
-
-    
-        return isValid;
-}
-
-
+  
 }
 
 export default PasswordStrengthChecker;
