@@ -44,8 +44,10 @@ const csrfToken  = document.querySelector('input[name="csrfmiddlewaretoken"]').v
 
 
 // Event listener for form submission
-registerForm?.addEventListener("submit", async (e) => {
-  
+registerForm?.addEventListener("submit", handleRegisterFormSubmit);
+
+
+async function handleRegisterFormSubmit(e) {
     e.preventDefault();
     
     const formData = new FormData(registerForm)
@@ -67,8 +69,7 @@ registerForm?.addEventListener("submit", async (e) => {
         console.log("registered")
         registerForm.submit();
     }
-    
-});
+}
 
 
 // Fetch password strength report
