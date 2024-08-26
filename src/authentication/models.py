@@ -182,7 +182,6 @@ class User(AbstractBaseUser, PermissionsMixin):
            Returns:
                 Returns none
         """
-        
         current_date = datetime.now()
         self.verification_data = {
             "verification_code": code,
@@ -225,6 +224,32 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def ban(self):
         """Ban the user from using the application"""
-        self.is_banned = True
+        if not self.is_banned:
+            self.is_banned = True
+            self.save()
+    
+    def un_ban(self):
+        """Unban the user from using the application"""
+        if self.is_banned:
+            self.is_banned = False
+            self.save()
+        
+    def mark_email_as_verified(self):
+        """
+        Mark the user's email as verified and save the updated instance.
+
+        This method sets the `is_emailed_verified` field to `True` and
+        persists the change to the database. It is typically called when
+        a user successfully verifies their email address.
+
+        Example:
+            user = User.objects.get(email='user@example.com')
+            user.mark_email_as_verified()
+
+        Note:
+            This method does not perform any additional checks or validations.
+            It directly updates the field and saves the instance.
+        """
+        self.is_email_verified = True
         self.save()
     

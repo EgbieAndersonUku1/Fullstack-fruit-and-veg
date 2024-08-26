@@ -55,7 +55,7 @@ class CustomUserModelTestCase(TestCase):
         # Check permissions
         self.assertTrue(super_user.is_active)
         self.assertTrue(super_user.is_superuser)
-        self.assertTrue(super_user.is_admin) 
+        self.assertTrue(super_user.is_admin) # Directly checking is_admin since it's part of the model
         self.assertTrue(super_user.is_staff)
         
         # Check values
@@ -164,8 +164,7 @@ class CustomUserModelTestCase(TestCase):
         user = self.User.get_by_username("user")
         
         resp = user.is_verification_code_valid(verification_code)
-        
-        # Assert
+
         self.assertTrue(resp)
 
     def test_user_is_not_created_with_verified_email(self):
@@ -206,3 +205,28 @@ class CustomUserModelTestCase(TestCase):
         """
         self.user.ban()  
         self.assertTrue(self.user.is_banned)
+
+    def test_un_ban_user(self):
+        """
+        Test that a user becomes unbanned after a ban action is applied.
+        """
+        # apply the ban and test if is banned
+        self.user.ban()
+        self.assertTrue(self.user.is_banned)
+        
+        # unban the user
+        self.user.un_ban()
+        self.assertFalse(self.user.is_banned)
+    
+    def test_mark_email_as_verified_method(self):
+        """Test if the method successfully marks the email as verified"""
+        
+        # Test if the email is unverifed first
+        self.assertFalse(self.user.is_email_verified)
+        
+        self.user.mark_email_as_verified()
+        
+        self.assertTrue(self.user.is_email_verified)
+        
+        
+        
