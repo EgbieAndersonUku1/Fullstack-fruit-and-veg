@@ -30,6 +30,7 @@ class CustomBaseUser(BaseUserManager):
         extra_fields.setdefault("is_active", True)
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_admin", True)
         return self.create_user(username, email, password, **extra_fields)
     
     def create_user(self, username:str, email:str, password:str=None, **extra_fields:any) -> "User":
@@ -209,17 +210,21 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         if not self.verification_data:
             return False
-        
+      
         stored_code = self.verification_data.get("verification_code")
-       
+     
         if stored_code != verifcation_code:
             return False
         
         try:
             expiry_date         = self.verification_data.get('expiry_date')
             expiration_datetime = datetime.fromisoformat(expiry_date)
-            return expiration_datetime <= datetime.now()
+            return expiration_datetime >= datetime.now()
         except TypeError:
             return False
-        
-        
+    
+    def ban(self):
+        """Ban the user from using the application"""
+        self.is_banned = True
+        self.save()
+    
