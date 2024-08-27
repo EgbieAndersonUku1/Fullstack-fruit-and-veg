@@ -22,13 +22,13 @@
 
                 <div class="images" style="text-align: center;">
                     <div class="cards" style="display: block; text-align: center;">
-                        <div class="card" style="margin-bottom: 16px; display: inline-block; width: 30%; margin-right: 8px;" >
+                        <div class="card" style="margin-bottom: 16px; display: inline-block; width: 30%; margin-right: 4px;" >
                             <div class="body">
                                 <img src="https://raw.githubusercontent.com/EgbieAndersonUku1/euorganics-email-assets/main/email_assets/images/registration/drink-banner.jpeg" alt="Drink Banner" class="card-img" style="height: 200px; width: 90%; border-radius: 4%;">
                             </div>
                         </div>
 
-                        <div class="card" style="margin-bottom: 16px; display: inline-block; width: 30%; margin-right: 8px;">
+                        <div class="card" style="margin-bottom: 16px; display: inline-block; width: 30%; margin-right: 4px;">
                             <div class="body">
                                 <img src="https://raw.githubusercontent.com/EgbieAndersonUku1/euorganics-email-assets/main/email_assets/images/registration/organic-baked-goods-banner.jpeg" alt="Baked Goods Banner" class="card-img" style="height: 200px; width: 90%; border-radius: 4%;">
                             </div>
@@ -65,13 +65,15 @@
                     </p>
 
                     <a href="{{ verification_url }}" style="font-family: Arial, sans-serif; font-size: 1.1rem; color: blue; text-decoration: underline; margin-bottom: 64px;">
-                       {{ verification_url }}
+                        click here
                     </a>
 
-                    <p>if the link doesn't show copy and paste this link below into a text area</p>
-                    {{ verification_url }}
+                    <p style="font-family: Arial, sans-serif; font-size: 1.1rem; width: 90%; text-align: left; margin-top: 32px; margin-bottom: 32px; margin-top: 8px;">
+                        If the link doesn't show copy and paste the link below in a web browser
+                    </p>
+                    <a href="{{ verification_url }}">{{ verification_url }}</a>
+                   
                     
-
                     <p style="font-family: Arial, sans-serif; font-size: 1.1rem; width: 90%; text-align: left; margin-top: 32px; margin-bottom: 32px; margin-top: 8px;">
                         Once verified, you'll have full access to explore our wide range of organic products, expert advice, and much more. We look forward to supporting you on your organic journey!
                     </p>
