@@ -195,7 +195,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.verification_data = {}
         self.save()
     
-    
     def is_verification_code_valid(self, verifcation_code:str) -> bool:
         """
         Checks if the verification code is valid
@@ -221,6 +220,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             return expiration_datetime >= datetime.now()
         except TypeError:
             return False
+        
     
     def ban(self):
         """Ban the user from using the application"""
@@ -250,6 +250,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             This method does not perform any additional checks or validations.
             It directly updates the field and saves the instance.
         """
-        self.is_email_verified = True
-        self.save()
+        if not self.is_email_verified:
+            self.is_email_verified = True
+            self.save()
     

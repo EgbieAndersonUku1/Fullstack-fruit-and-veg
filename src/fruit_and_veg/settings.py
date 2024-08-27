@@ -14,6 +14,7 @@ from pathlib import Path
 from os.path import join
 from dotenv import load_dotenv
 from os import getenv
+import logging
 
 # Enables the `.env` file to be loaded
 load_dotenv()
@@ -123,6 +124,7 @@ DB_PASSWORD = getenv("DB_PASSWORD")
 DB_HOST     = getenv("DB_HOST")
 DB_PORT     = getenv("DB_PORT")
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -193,3 +195,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+
+

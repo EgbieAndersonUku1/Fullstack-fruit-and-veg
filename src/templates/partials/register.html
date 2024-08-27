@@ -14,6 +14,8 @@
     <div class="register-container">
         <div id="registration-form">
 
+            {% include "partials/form_errors.html" %}
+
             <form action="{% url 'register' %}" method="post" id="register-form" role="form">
 
                 {% csrf_token %}
@@ -22,9 +24,11 @@
 
                 {{ form.username.label_tag }}
                 {{ form.username }}
+                 <p class="errors highlight username-error-field d-none"></p>
                 
                 {{ form.email.label_tag }}
                 {{ form.email}}
+                <p class="errors highlight email-error-field d-none"></p>
                 
                 {{ form.password.label_tag }}
                 {{ form.password }}

@@ -1,5 +1,6 @@
 import PasswordStrengthChecker from "../utils/password.js";
 import AlertUtils from "../utils/alerts.js";
+import fetchData from "../utils/fetch.js";
 
 // DOM Elements for Authentication
 const loginAuthenticationContainer = document.querySelector(".login");
@@ -36,10 +37,15 @@ const showPasswordLabelElement = document.querySelector(".checkbox label");
 const registerForm = document.getElementById("register-form");
 
 
-const inputElementField  = document.getElementById('inputField');
+const inputElementField = document.getElementById('inputField');
+
+// registration user field errors
+const usernameErrorField = document.querySelector(".username-error-field")
+const emailErrorField = document.querySelector(".email-error-field")
+
 
 // csrf token
-const csrfToken  = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
 
 
 const passwordStrengthChecker = new PasswordStrengthChecker()
@@ -52,56 +58,71 @@ registerForm?.addEventListener("submit", handleRegisterFormSubmit);
 
 async function handleRegisterFormSubmit(e) {
     e.preventDefault();
-    
-    const formData = new FormData(registerForm)
 
-    const {password, confirmPassword } = {
+    const formData  = new FormData(registerForm);
+    const formValid = false;
+
+    const { password, confirmPassword, email, username } = {
         password: formData.get("password"),
         confirmPassword: formData.get("confirm_password"),
-      }
+        email: formData.get("email"),
+        username: formData.get("username")
+    }
 
-   
+
     if (!doPasswordMatch(password, confirmPassword)) {
         return;
     };
 
-    const url             = "authentication/validate/password/";
-    const passwordReport  = await fetchPasswordStrengthReport(url, csrfToken, passwordElement.value);
     
-    console.log(passwordReport)
-    if (passwordReport["IS_VALID"]) {
+    const passwordReport = await fetchData({
+        url: "authentication/validate/password/",
+        csrfToken: csrfToken,
+        body: { password: password }
+    });
+
+
+    const UsernameReport = await fetchData({
+        url: "authentication/validate/username/",
+        csrfToken: csrfToken,
+        body: { username: username }
+    });
+
+
+    const emaildReport = await fetchData({
+        url: "authentication/validate/email/",
+        csrfToken: csrfToken,
+        body: { email: email }
+    });
+
+
+    const isEmailUnique = handleFieldReport(emailErrorField, emaildReport);
+    const isUsernameUnique = handleFieldReport(usernameErrorField, UsernameReport);
+
+
+    if (passwordReport && passwordReport["IS_VALID"] && isEmailUnique && isUsernameUnique) {
         console.log("registered")
         registerForm.submit();
-    }
+    };
+
+
+
 }
 
+function handleFieldReport(fieldElement, fieldReport) {
+    fieldElement.innerHTML = "";
 
-// Fetch password strength report
-async function fetchPasswordStrengthReport(url, csrfToken, password) {
-  
-    try {
-        const response = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": csrfToken
-            },
-            body: JSON.stringify({ password: password })
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        return response.json();
-    } catch (error) {
-        console.error('Fetch error:', error);
-        return null;
+    const isValid = fieldReport["IS_VALID"];
+    if (isValid) {
+        fieldElement.classList.add("d-none");
+    } else {
+        fieldElement.classList.remove("d-none");
+        fieldElement.textContent = fieldReport["message"]
+     
     }
+
+    return isValid
 }
-
-
-
 
 
 loginLinkElement?.addEventListener("click", handleLoginClick);
@@ -282,7 +303,7 @@ function passwordStrengthHelper(passwordInputField, msg) {
 }
 
 function doPasswordMatch(password, confirmPassword) {
-    
+
     doPasswordsMatch.classList.toggle("met", (password && password === confirmPassword));
     doPasswordsMatch.classList.toggle("opacity-md", (password && password !== confirmPasswordElement.value));
     return password === confirmPassword

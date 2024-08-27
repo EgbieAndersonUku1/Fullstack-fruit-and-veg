@@ -1,50 +1,80 @@
 import json
 from django.http import JsonResponse
 from django.contrib import messages
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 from .utils.password_validator import PasswordStrengthChecker
+from .views_helper import validate_helper
 
 from .forms.register_form import RegisterForm
+from .utils.generator import generate_token, generate_verification_url
+from .utils.send_emails import send_registration_email
+
 
 
 # Create your views here.
 
+User = get_user_model()
 
 def register(request):
+  
+    form = RegisterForm()
     
-    form    = RegisterForm()
-    
-    if request.method == "POST":
+    if request.method == 'POST':
+        
         form = RegisterForm(request.POST)
+        
         if form.is_valid():
+            
+            user = form.save(commit=False)
+            
+            token             = generate_token()
+            expiry_minutes    = 4320   # Expires in 3 days
+            
+            user.set_password(form.cleaned_data["password"])
+            user.set_verification_code(token, expiry_minutes)
+            user.save()
+            
+            # Generate the verification URL dynamically using request
+            verification_url = generate_verification_url(request, user)
+            
+            send_registration_email(subject="Please verify your email address",
+                                    from_email=settings.EMAIL_HOST_USER,
+                                    user=user,
+                                    verification_url=verification_url,
+                                    )
+            
             messages.success(request, "You have successfully registered")
+            messages.success(request, "Please verify your email address")
+            return redirect('home')
+        else:
+            messages.error(request, "Please correct the errors below.")
     
-    return redirect("home")
+    return redirect('home')
     
     
 def validate_password(request):
-    if request.method == 'POST':
-        try:
-            
-            # Parse JSON body
-            data     = json.loads(request.body.decode('utf-8'))
-            password = data.get('password')
+    def password_strength_checker(password):
+        checker = PasswordStrengthChecker(password)
+        return checker.is_strong_password()
 
-            if not password:
-                return JsonResponse({"IS_VALID": False, "message": "Password is required"}, status=400)
+    return validate_helper(request, 'password', 'Password is valid', password_strength_checker)
 
-            password_checker = PasswordStrengthChecker(password)
-            is_valid        = password_checker.is_strong_password()
 
-            # Return JSON response with status 200
-            return JsonResponse({
-                "IS_VALID": is_valid,
-                "message": "Password strength checked"
-            }, status=200)
+def validate_email(request):
+    def is_email_unique(email):
+        return not User.objects.filter(email=email).exists()
+    return validate_helper(request, 'email', 'Email is valid', is_email_unique)
 
-        except json.JSONDecodeError:
-            return JsonResponse({"IS_VALID": False, "message": "Invalid JSON"}, status=400)
 
+def validate_username(request):
    
-    return JsonResponse({"IS_VALID": False, "message": "Invalid request method"}, status=405)
-    
+    def is_username_unique(username):
+        return not User.objects.filter(username=username).exists()
+    return validate_helper(request, 'username', 'Username is valid',  is_username_unique)
+
+
+
+def verify_email(request, username, token):
+    pass
