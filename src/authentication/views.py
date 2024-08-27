@@ -28,22 +28,24 @@ def register(request):
         if form.is_valid():
             
             user = form.save(commit=False)
-        
             user.set_password(form.cleaned_data["password"])
             user.set_verification_code(code=generate_token(), expiry_minutes=4320) # expiries in 3 days
-            user.save()
-            
-            # Generate the verification URL dynamically using request
+         
             verification_url = generate_verification_url(request, user)
             
-            send_registration_email(subject="Please verify your email address",
+            resp = send_registration_email(subject="Please verify your email address",
                                     from_email=settings.EMAIL_HOST_USER,
                                     user=user,
                                     verification_url=verification_url,
                                     )
             
             messages.success(request, "You have successfully registered")
-            messages.success(request, "Please verify your email address")
+            
+            if resp:  
+                messages.success(request, "An email verification email has been sent. Please verify your email address.")
+            else:
+                messages.error(request, "Failed to send email verification email.")
+
             return redirect('home')
         else:
             messages.error(request, "Please correct the errors below.")

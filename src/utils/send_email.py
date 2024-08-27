@@ -35,8 +35,7 @@ def send_email(subject:str,
     try:
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
         msg.attach_alternative(html_content, "text/html")
-        msg.send()
-        return True
+        return msg.send()
     except Exception as e:
         print(f"Failed to send email: {e}")
         

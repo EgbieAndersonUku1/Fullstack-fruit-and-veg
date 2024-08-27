@@ -110,6 +110,10 @@ async function handleRegisterFormSubmit(e) {
 }
 
 function handleFieldReport(fieldElement, fieldReport) {
+    if (!fieldElement) {
+        return;
+    }
+    
     fieldElement.innerHTML = "";
 
     const isValid = fieldReport["IS_VALID"];
