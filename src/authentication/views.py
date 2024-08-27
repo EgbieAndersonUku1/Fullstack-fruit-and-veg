@@ -28,12 +28,9 @@ def register(request):
         if form.is_valid():
             
             user = form.save(commit=False)
-            
-            token             = generate_token()
-            expiry_minutes    = 4320   # Expires in 3 days
-            
+        
             user.set_password(form.cleaned_data["password"])
-            user.set_verification_code(token, expiry_minutes)
+            user.set_verification_code(code=generate_token(), expiry_minutes=4320) # expiries in 3 days
             user.save()
             
             # Generate the verification URL dynamically using request
