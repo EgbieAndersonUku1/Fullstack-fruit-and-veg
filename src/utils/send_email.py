@@ -31,21 +31,16 @@ def send_email(subject:str,
         text_content = render_to_string(text_template, context)
     else:
         text_content = ''
-    
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
-    msg.attach_alternative(html_content, "text/html")
-    msg.send()
-    return True
 
-    # try:
-    #     msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
-    #     msg.attach_alternative(html_content, "text/html")
-    #     msg.send()
-    #     return True
-    # # except Exception as e:
-    # #     print(f"Failed to send email: {e}")
+    try:
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+        return True
+    except Exception as e:
+        print(f"Failed to send email: {e}")
         
-    # except NoneType as e:
-    #     print(f"Error: {e}")
+    except NoneType as e:
+        print(f"Error: {e}")
         
     return False
