@@ -1,13 +1,9 @@
 import json
-import logging
 from django.conf import settings
 from django.http import JsonResponse
 from django.contrib import messages
 
 from authentication.utils.generator import generate_token, generate_verification_url
-
-# Get a logger instance for this module
-logger = logging.getLogger(__name__)
 
 
 def validate_helper(request, field_name, succ_message, validation_func):
@@ -84,8 +80,6 @@ def send_verification_email(request, user, subject, follow_up_message, send_func
         return resp
 
     except Exception as e:
-        # Log the exception details for debugging
-        logger.error(f"Error sending email: {str(e)}", exc_info=True)
         messages.error(request, "An unexpected error occurred while sending the email. Please try again later.")
         
         return False
