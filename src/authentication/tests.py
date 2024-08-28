@@ -163,7 +163,7 @@ class CustomUserModelTestCase(TestCase):
         # Retrieve the user from the db to ensure data consistency
         user = self.User.get_by_username("user")
         
-        resp = user.is_verification_code_valid(verification_code)
+        resp = user.is_verification_code_valid(verification_code)[0]
 
         self.assertTrue(resp)
 
@@ -229,4 +229,11 @@ class CustomUserModelTestCase(TestCase):
         self.assertTrue(self.user.is_email_verified)
         
         
+    def test_does_user_exists_method(self):
+        """Test if the user exists by calling the method within the class"""
         
+        # call a user that exists
+        self.assertTrue(self.User.does_user_exists(username="user"))
+        
+        # call a user that doesn't exists
+        self.assertFalse(self.User.does_user_exists(username="user_does_exists"))

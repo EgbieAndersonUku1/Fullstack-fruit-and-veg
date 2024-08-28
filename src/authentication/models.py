@@ -195,32 +195,39 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.verification_data = {}
         self.save()
     
-    def is_verification_code_valid(self, verifcation_code:str) -> bool:
+    def is_verification_code_valid(self, verification_code: str) -> tuple[bool, str]:
         """
-        Checks if the verification code is valid
-        
-        Args:
-            verification_code (str): The verificatin code to check.
-           
-        Returns:
-            Returns True if valid or False not
+        Checks if the verification code is valid and if it has expired.
 
+        Args:
+            verification_code (str): The verification code to check.
+
+        Returns:
+            tuple: A tuple where the first element is a boolean indicating
+                if the code is valid, and the second element is a string
+                indicating the status:
+                - 'EXPIRED' if the code has expired,
+                - None if the code is invalid or the verification data is missing.
         """
+        HAS_EXPIRED = "EXPIRED"
         if not self.verification_data:
-            return False
-      
+            return False, None
+
         stored_code = self.verification_data.get("verification_code")
-     
-        if stored_code != verifcation_code:
-            return False
         
+        if stored_code != verification_code:
+            return False, None
+
         try:
-            expiry_date         = self.verification_data.get('expiry_date')
+            expiry_date = self.verification_data.get('expiry_date')
             expiration_datetime = datetime.fromisoformat(expiry_date)
-            return expiration_datetime >= datetime.now()
-        except TypeError:
-            return False
+            
+            if expiration_datetime < datetime.now():
+                return False, HAS_EXPIRED
+            return True, None
         
+        except (TypeError, ValueError):
+            return False, None
     
     def ban(self):
         """Ban the user from using the application"""
@@ -254,3 +261,23 @@ class User(AbstractBaseUser, PermissionsMixin):
             self.is_email_verified = True
             self.save()
     
+    @classmethod
+    def does_user_exists(cls, username):
+        """
+        Check if a user with the given username exists in the database.
+
+        This class method queries the database to determine if a user with
+        the specified username is present. It returns a boolean indicating
+        the existence of the user.
+
+        This method doesn't load a user object into memory; it only checks
+        for the existence of a user. It can be called without instantiating 
+        the class.
+
+        Args:
+            username (str): The username to search for in the database.
+
+        Returns:
+            bool: True if a user with the given username exists, False otherwise.
+        """
+        return cls.objects.filter(username=username).exists()

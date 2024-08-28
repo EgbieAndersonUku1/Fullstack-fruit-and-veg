@@ -1,0 +1,26 @@
+**EU Organics Online Store**
+
+Hello {{ username }},
+
+We noticed that you started your registration at EUOrganics but did not complete it in time. Unfortunately, your previous verification link has expired.
+
+But don't worry! We have generated a new verification code for you. You have three days to use it before it expires. Please use the new code below to complete your registration and start enjoying all the benefits EUOrganics has to offer.
+
+**Your New Verification Code:** {{ verification_url }}
+
+To verify your email address and activate your account, please enter the code on our website or simply click the link below:
+
+[**Verify Your Email Now**]({{ verification_url }})
+
+If the button above doesn't work, you can copy and paste the link below into your web browser:
+
+{{ verification_url }}
+
+We encourage you to complete your registration within the next three days to enjoy access to our exclusive organic products, special offers, and expert advice.
+
+If you have any questions or need further assistance, please don't hesitate to reach out to our support team. We're here to help!
+
+Thank you for choosing EUOrganics. We look forward to welcoming you to our community!
+
+Warm regards,  
+The

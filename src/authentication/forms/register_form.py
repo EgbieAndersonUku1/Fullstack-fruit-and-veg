@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 
 from ..utils.generator import generate_token
-from ..utils.send_emails import send_registration_email
+from ..utils.send_emails_types import send_registration_email
 
 
 User = get_user_model()

@@ -1,4 +1,5 @@
 import json
+import logging
 from django.http import JsonResponse
 from django.contrib import messages
 from django.conf import settings
@@ -8,9 +9,17 @@ from .utils.password_validator import PasswordStrengthChecker
 from .views_helper import validate_helper
 
 from .forms.register_form import RegisterForm
-from .utils.generator import generate_token, generate_verification_url
-from .utils.send_emails import send_registration_email
+from .views_helper import send_verification_email
+from .utils.send_emails_types import send_registration_email, resend_expired_verification_email
 
+
+# Configure logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+handler = logging.StreamHandler()  # Log to console
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 
 # Create your views here.
@@ -29,30 +38,19 @@ def register(request):
             
             user = form.save(commit=False)
             user.set_password(form.cleaned_data["password"])
-            user.set_verification_code(code=generate_token(), expiry_minutes=4320) # expiries in 3 days
+            
+            subject           ="Please verify your email address"
+            follow_up_message = "An email verification email has been sent. Please verify your email address."
+            send_verification_email(request, user, subject, follow_up_message, send_registration_email)
          
-            verification_url = generate_verification_url(request, user)
-            
-            resp = send_registration_email(subject="Please verify your email address",
-                                    from_email=settings.EMAIL_HOST_USER,
-                                    user=user,
-                                    verification_url=verification_url,
-                                    )
-            
-            messages.success(request, "You have successfully registered")
-            
-            if resp:  
-                messages.success(request, "An email verification email has been sent. Please verify your email address.")
-            else:
-                messages.error(request, "Failed to send email verification email.")
-
             return redirect('home')
         else:
             messages.error(request, "Please correct the errors below.")
     
     return redirect('home')
     
-    
+
+
 def validate_password(request):
     def password_strength_checker(password):
         checker = PasswordStrengthChecker(password)
@@ -75,5 +73,57 @@ def validate_username(request):
 
 
 
-def verify_email(request, username, token):
-    pass
+def verify_email_token(request, username, token):
+    """
+    Verifies the email token for a user and handles different verification scenarios.
+
+    Parameters:
+    - request (HttpRequest): The HTTP request object.
+    - username (str): The username of the user whose email is being verified.
+    - token (str): The verification token sent to the user's email.
+
+    Returns:
+    - HttpResponseRedirect: Redirects to the home page with appropriate messages.
+    """
+    
+    user = User.get_by_username(username=username)
+   
+    if not user:
+        messages.error(request, "The user associated with this code doesn't exist.")
+        logger.error(f"Verification attempt for non-existent user: {username}")
+        return redirect("home")
+    
+    # Check if the user is already logged in
+    is_valid, status = user.is_verification_code_valid(token)
+    
+    if request.user.is_authenticated and not user.verification_data:
+        messages.info(request, "You have already confirmed your email.")
+        logger.info(f"Authenticated user attempted to verify email again: {username}")
+        return redirect("home")
+    
+   
+    # Validate the verification token
+    if not is_valid:
+        messages.error(request, "The token you entered is invalid.")
+        logger.warning(f"Invalid token provided for user: {username}. Token: {token}")
+        return redirect("home")
+    
+    if status == "EXPIRED":
+        
+        # Token has expired, send a new one
+        messages.info(request, "The token you entered has expired. A new one has been sent to your email address.")
+        logger.info(f"Expired token for user: {username}. Sending new verification email.")
+        
+        subject           = "Please verify your email address"
+        follow_up_message = "Another verification token has been sent. Please verify your email address."
+        send_verification_email(request, user, subject, follow_up_message, resend_expired_verification_email)
+        return redirect("home")
+    
+    # Token is valid, mark email as verified
+    if is_valid:
+        user.mark_email_as_verified()
+        user.clear_verification_data()
+    
+        messages.success(request, "You have successfully confirmed your email. You can now log in.")
+        logger.info(f"Email verified successfully for user: {username}.")
+        return redirect("home")

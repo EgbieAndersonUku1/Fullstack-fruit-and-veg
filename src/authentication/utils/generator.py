@@ -22,5 +22,5 @@ def generate_verification_url(request, user):
     token            = user.verification_data.get("verification_code")
     current_site     = request.get_host()
     protocol         = 'https' if request.is_secure() else 'http'
-    verification_url = f"{protocol}://{current_site}/verify-email/{ user.username }/{token}/"
+    verification_url = f"{protocol}://{current_site}/authentication/verify/{ user.username }/{token}/"
     return verification_url
