@@ -93,9 +93,9 @@ def verify_email_token(request, username, token):
         logger.error(f"Verification attempt for non-existent user: {username}")
         return redirect("home")
     
-    # Check if the user is already logged in
     is_valid, status = user.is_verification_code_valid(token)
     
+    # Check if the user is already logged in
     if request.user.is_authenticated and not user.verification_data:
         messages.info(request, "You have already confirmed your email.")
         logger.info(f"Authenticated user attempted to verify email again: {username}")
