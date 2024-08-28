@@ -16,13 +16,17 @@ class PasswordStrengthChecker {
         this.password = password;
     }
     
+    setDefaultPasswordLength(length) {
+        this.defaultPasswordLength = length
+    }
+
     /**
      * Checks if the password contains at least one special character.
      * @param {string} password - The password to be checked.
      * @returns {boolean} True if the password contains at least one special character, otherwise false.
      */
-    containsAtLeastOneSpecialChar(password) {
-        return /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(password);
+    containsAtLeastOneSpecialChar() {
+        return /[!@#$%^&*()£_+\-=\[\]{};':"\\|,.<>\/?]+/.test(this.password);
     }
 
     /**
@@ -31,12 +35,12 @@ class PasswordStrengthChecker {
      * @param {number} [length=this.defaultPasswordLength] - The minimum length required for the password.
      * @returns {boolean} True if the password meets the minimum length requirement, otherwise false.
      */
-    containsAtLeastLengthChars(password, length = this.defaultPasswordLength) {
+    containsAtLeastLengthChars() {
 
-        if(!password) {
+        if(!this.password) {
             return false;
         }
-        return password && password.length >= length;
+        return this.password.length >= this.defaultPasswordLength;
     }
 
     /**
@@ -44,8 +48,8 @@ class PasswordStrengthChecker {
      * @param {string} password - The password to be checked.
      * @returns {boolean} True if the password contains at least one digit, otherwise false.
      */
-    containsNumber(password) {
-        return /\d/.test(password);
+    containsNumber() {
+        return /\d/.test(this.password);
     }
 
     /**
@@ -53,8 +57,8 @@ class PasswordStrengthChecker {
      * @param {string} password - The password to be checked.
      * @returns {boolean} True if the password contains at least one lowercase letter, otherwise false.
      */
-    containsLowercaseChars(password) {
-        return /[a-z]/.test(password);
+    containsLowercaseChars() {
+        return /[a-z]/.test(this.password);
     }
 
     /**
@@ -62,8 +66,8 @@ class PasswordStrengthChecker {
      * @param {string} password - The password to be checked.
      * @returns {boolean} True if the password contains at least one uppercase letter, otherwise false.
      */
-    containsUppercaseChars(password) {
-        return /[A-Z]/.test(password);
+    containsUppercaseChars() {
+        return /[A-Z]/.test(this.password);
     }
 
  
@@ -75,11 +79,11 @@ class PasswordStrengthChecker {
     checkPasswordStrength() {
         const passwordObj = {};
 
-        passwordObj.HAS_AT_LEAST_ONE_SPECIAL_CHARS = this.containsAtLeastOneSpecialChar(this.password);
-        passwordObj.HAS_AT_LEAST_LENGTH_CHARS = this.containsAtLeastLengthChars(this.password);
-        passwordObj.HAS_AT_LEAST_ONE_NUMBER = this.containsNumber(this.password);
-        passwordObj.HAS_AT_LEAST_ONE_LOWERCASE = this.containsLowercaseChars(this.password);
-        passwordObj.HAS_AT_LEAST_ONE_UPPERCASE = this.containsUppercaseChars(this.password);
+        passwordObj.HAS_AT_LEAST_ONE_SPECIAL_CHARS = this.containsAtLeastOneSpecialChar();
+        passwordObj.HAS_AT_LEAST_LENGTH_CHARS = this.containsAtLeastLengthChars();
+        passwordObj.HAS_AT_LEAST_ONE_NUMBER = this.containsNumber();
+        passwordObj.HAS_AT_LEAST_ONE_LOWERCASE = this.containsLowercaseChars();
+        passwordObj.HAS_AT_LEAST_ONE_UPPERCASE = this.containsUppercaseChars();
 
         passwordObj.IS_PASSWORD_STRONG =
             passwordObj.HAS_AT_LEAST_ONE_SPECIAL_CHARS &&
@@ -87,36 +91,12 @@ class PasswordStrengthChecker {
             passwordObj.HAS_AT_LEAST_ONE_NUMBER &&
             passwordObj.HAS_AT_LEAST_ONE_LOWERCASE &&
             passwordObj.HAS_AT_LEAST_ONE_UPPERCASE;
-
+        
         return passwordObj;
     }
 
 
-    /**
-     * Checks if the password meets the defined strength criteria.
-     * @returns {boolean} True if the password meets the strength criteria, otherwise false.
-     */
-    isValid() {
-        // Get password strength indicators
-        const passwordStrengthIndicators = this.checkPasswordStrength();
-        let validIndicatorsCount         = 0;
-
-        // Get the expected count of valid indicators
-        const expectedValidIndicatorsCount = Object.keys(passwordStrengthIndicators).length;
-
-       
-        for (let key in passwordStrengthIndicators) {
-          
-            if (passwordStrengthIndicators[key]) {
-                validIndicatorsCount++;
-            }
-        }
-
-    
-    return expectedValidIndicatorsCount === validIndicatorsCount;
-}
-
-
+  
 }
 
 export default PasswordStrengthChecker;

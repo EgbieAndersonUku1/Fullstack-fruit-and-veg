@@ -1,0 +1,28 @@
+{% load static %}
+
+<div class="login authentication">
+    <div class="container">
+        <div class="close flex-end">
+            <img src="{% static 'img/icons/window-close.svg' %}" alt="window close icon" class="close-icon auth-close-icon">
+        </div>
+        <div class="greeting center">
+            <img src="{% static '/img/display/jpg/logo.png' %}" alt="logo" class="logo-img center">
+
+        </div>
+        <form action="" method="post" id="login-form" role="form">
+            {% csrf_token %}
+            <label for="login-email">Email</label>
+            <input type="email" name="email" id="login-email" required>
+
+            <label for="login-password">Password</label>
+            <input type="password" name="password" id="login-password" required>
+
+            {% comment %} NOTE - to self- change the html to django but for now leave {% endcomment %}
+            <a href="templates/account/auth/forgotten-password.html" class="login-link">Forgotten password?</a>
+            <a href="#" class="login-link" id="not-registered-link">Not registered - click here?</a>
+
+            <button type="submit" class="auth-button text-capitalize">login</button>
+        </form>
+
+    </div>
+</div>

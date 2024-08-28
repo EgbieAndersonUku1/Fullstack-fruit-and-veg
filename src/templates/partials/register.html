@@ -1,0 +1,91 @@
+{% load static %}
+
+<div class="register authentication">
+
+    <div class="close flex-end">
+        <img src="{% static '/img/icons/window-close.svg' %}" alt="window close icon" class="close-icon auth-close-icon"
+            id="reg-close-icon">
+    </div>
+    <div class="greeting center">
+        <img src="{% static '/img/display/jpg/logo.png'  %}" alt="logo" class="logo-img center">
+
+    </div>
+
+    <div class="register-container">
+        <div id="registration-form">
+
+            {% include "partials/form_errors.html" %}
+
+            <form action="{% url 'register' %}" method="post" id="register-form" role="form">
+
+                {% csrf_token %}
+
+                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+                {{ form.username.label_tag }}
+                {{ form.username }}
+                 <p class="errors highlight username-error-field d-none"></p>
+                
+                {{ form.email.label_tag }}
+                {{ form.email}}
+                <p class="errors highlight email-error-field d-none"></p>
+                
+                {{ form.password.label_tag }}
+                {{ form.password }}
+
+                {{ form.confirm_password.label_tag }}
+                {{ form.confirm_password }}
+                
+
+                <div class="flex-row checkbox">
+                   
+                    {{ form.show_password }}
+                    {{ form.show_password.label_tag }}
+                  
+
+                </div>
+
+                <a href="#" class="register-link auth-link already-registered" id="have-an-account-link">Have
+                    account - click here?</a>
+
+                <button type="submit" class="auth-button text-capitalize register-btn">Register</button>
+            </form>
+        </div>
+
+        <div id="password-strength-feedback">
+            <p id="inputField" class="requirement">
+                <span><img src="{% static '/img/icons/checkmark-running.svg' %}" alt="a check mark icon" class="icon"></span>
+                Password Input Field
+            </p>
+            <p id="has-capital" class="requirement opacity-md">
+                <span><img src="{% static '/img/icons/checkmark-running.svg' %}" alt="a check mark icon" class="icon"></span>
+                Has Capital
+            </p>
+            <p id="has-lowercase" class="requirement opacity-md">
+                <span><img src="{% static '/img/icons/checkmark-running.svg' %}" alt="a check mark icon" class="icon"></span>
+                Has Lowercase
+            </p>
+            <p id="has-special" class="requirement opacity-md">
+                <span><img src="{% static '/img/icons/checkmark-running.svg' %}" alt="a check mark icon" class="icon"></span>
+                Has special character
+            </p>
+            <p id="has-number" class="requirement opacity-md">
+                <span><img src="{% static '/img/icons/checkmark-running.svg' %}" alt="a check mark icon" class="icon"></span>
+                Has at least one number
+            </p>
+            <p id="has-min-length" class="requirement opacity-md">
+                <span><img src="{% static '/img/icons/checkmark-running.svg' %}" alt="a check mark icon" class="icon"></span>
+                Has a minimum of 8 characters
+            </p>
+
+            <p id="is-password-a-match" class="requirement opacity-md">
+                <span><img src="{% static '/img/icons/checkmark-running.svg' %}" alt="a check mark icon" class="icon"></span>
+                The password is a match
+            </p>
+            <p id="is-success" class="requirement opacity-md">
+                <span><img src="{% static '/img/icons/checkmark-running.svg' %}" alt="a check mark icon" class="icon"></span>
+                The password chosen is a strong password
+            </p>
+        </div>
+
+    </div>

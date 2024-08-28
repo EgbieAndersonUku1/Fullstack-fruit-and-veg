@@ -1,7 +1,10 @@
 from django.db import models
+from datetime import datetime, timedelta
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
+
+
 
 from typing import Optional
 
@@ -27,6 +30,7 @@ class CustomBaseUser(BaseUserManager):
         extra_fields.setdefault("is_active", True)
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_admin", True)
         return self.create_user(username, email, password, **extra_fields)
     
     def create_user(self, username:str, email:str, password:str=None, **extra_fields:any) -> "User":
@@ -81,6 +85,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_banned         = models.BooleanField(_("is banned"), default=False) 
     last_login        = models.DateTimeField(_("last login"), auto_now=True) 
     date_created      = models.DateTimeField(_("date created"), auto_now_add=True)
+    verification_data = models.JSONField(default=dict, blank=True, null=False)
 
     objects = CustomBaseUser()
 
@@ -166,3 +171,113 @@ class User(AbstractBaseUser, PermissionsMixin):
                 return cls.objects.get(email=value)
         except cls.DoesNotExist:
             return None
+    
+    def set_verification_code(self, code:str, expiry_minutes:int) -> None:
+        """Set the verification data in the JSONField.
+        
+           Args:
+                code: The verification code to set to JSONField 
+                expiry_minutes: The minutes that code will expiry by
+             
+           Returns:
+                Returns none
+        """
+        current_date = datetime.now()
+        self.verification_data = {
+            "verification_code": code,
+            "date_sent": current_date.isoformat(),
+            "expiry_date": (current_date + timedelta(minutes=expiry_minutes)).isoformat()
+        }
+        self.save()
+    
+    def clear_verification_data(self) -> None:
+        """Clear the verification data"""
+        self.verification_data = {}
+        self.save()
+    
+    def is_verification_code_valid(self, verification_code: str) -> tuple[bool, str]:
+        """
+        Checks if the verification code is valid and if it has expired.
+
+        Args:
+            verification_code (str): The verification code to check.
+
+        Returns:
+            tuple: A tuple where the first element is a boolean indicating
+                if the code is valid, and the second element is a string
+                indicating the status:
+                - 'EXPIRED' if the code has expired,
+                - None if the code is invalid or the verification data is missing.
+        """
+        HAS_EXPIRED = "EXPIRED"
+        if not self.verification_data:
+            return False, None
+
+        stored_code = self.verification_data.get("verification_code")
+        
+        if stored_code != verification_code:
+            return False, None
+
+        try:
+            expiry_date = self.verification_data.get('expiry_date')
+            expiration_datetime = datetime.fromisoformat(expiry_date)
+            
+            if expiration_datetime < datetime.now():
+                return False, HAS_EXPIRED
+            return True, None
+        
+        except (TypeError, ValueError):
+            return False, None
+    
+    def ban(self):
+        """Ban the user from using the application"""
+        if not self.is_banned:
+            self.is_banned = True
+            self.save()
+    
+    def un_ban(self):
+        """Unban the user from using the application"""
+        if self.is_banned:
+            self.is_banned = False
+            self.save()
+        
+    def mark_email_as_verified(self):
+        """
+        Mark the user's email as verified and save the updated instance.
+
+        This method sets the `is_emailed_verified` field to `True` and
+        persists the change to the database. It is typically called when
+        a user successfully verifies their email address.
+
+        Example:
+            user = User.objects.get(email='user@example.com')
+            user.mark_email_as_verified()
+
+        Note:
+            This method does not perform any additional checks or validations.
+            It directly updates the field and saves the instance.
+        """
+        if not self.is_email_verified:
+            self.is_email_verified = True
+            self.save()
+    
+    @classmethod
+    def does_user_exists(cls, username):
+        """
+        Check if a user with the given username exists in the database.
+
+        This class method queries the database to determine if a user with
+        the specified username is present. It returns a boolean indicating
+        the existence of the user.
+
+        This method doesn't load a user object into memory; it only checks
+        for the existence of a user. It can be called without instantiating 
+        the class.
+
+        Args:
+            username (str): The username to search for in the database.
+
+        Returns:
+            bool: True if a user with the given username exists, False otherwise.
+        """
+        return cls.objects.filter(username=username).exists()

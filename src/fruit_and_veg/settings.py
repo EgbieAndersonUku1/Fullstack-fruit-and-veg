@@ -14,6 +14,7 @@ from pathlib import Path
 from os.path import join
 from dotenv import load_dotenv
 from os import getenv
+import logging
 
 # Enables the `.env` file to be loaded
 load_dotenv()
@@ -102,10 +103,17 @@ JAZZMIN_SETTINGS = {
         "welcome_sign": "Welcome to the EUOrganics",
         "copyright": "EUOrganics Ltd",
       
-                    
-
-
+                
 }
+
+# Gmail 
+EMAIL_BACKEND       = getenv('EMAIL_BACKEND')
+EMAIL_HOST          = getenv('EMAIL_HOST')
+EMAIL_PORT          = getenv('EMAIL_PORT')
+EMAIL_USE_TLS       = getenv('EMAIL_USE_TLS')
+EMAIL_HOST_USER     = getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = getenv('EMAIL_HOST_PASSWORD')
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -115,6 +123,7 @@ DB_USER     = getenv("DB_USER")
 DB_PASSWORD = getenv("DB_PASSWORD")
 DB_HOST     = getenv("DB_HOST")
 DB_PORT     = getenv("DB_PORT")
+
 
 DATABASES = {
     'default': {
@@ -138,6 +147,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTION': {'min_length': 8},
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -185,3 +195,50 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+
+
+#logging for debugging
+# settings.py
+# settings.py
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': 'django_error.log',
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'fruit_and_veg': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
