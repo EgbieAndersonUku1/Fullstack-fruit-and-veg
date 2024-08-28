@@ -9,16 +9,24 @@
             <img src="{% static '/img/display/jpg/logo.png' %}" alt="logo" class="logo-img center">
 
         </div>
-        <form action="" method="post" id="login-form" role="form">
+        <form action="{% url 'login' %}" method="post" id="login-form" role="form">
             {% csrf_token %}
-            <label for="login-email">Email</label>
-            <input type="email" name="email" id="login-email" required>
 
-            <label for="login-password">Password</label>
-            <input type="password" name="password" id="login-password" required>
+            {% include "partials/form_errors.html" %}
 
-            {% comment %} NOTE - to self- change the html to django but for now leave {% endcomment %}
-            <a href="templates/account/auth/forgotten-password.html" class="login-link">Forgotten password?</a>
+            {% if invalid %}
+                 <p class="highlight">{{ invalid }}</p>
+            {% endif %}
+
+            {{ login_form.email.label_tag }}
+            {{ login_form.email}}
+            <span id="email-description" class="sr-only">Enter your email address.</span>
+
+            {{ login_form.password.label_tag }}
+            {{ login_form.password }}
+            <span id="password-description" class="sr-only">Enter your password.</span>
+
+            <a href="#" class="login-link">Forgotten password?</a>
             <a href="#" class="login-link" id="not-registered-link">Not registered - click here?</a>
 
             <button type="submit" class="auth-button text-capitalize">login</button>

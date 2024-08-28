@@ -75,7 +75,7 @@ def send_verification_email(request, user, subject, follow_up_message, send_func
         if resp:
             messages.success(request, follow_up_message)
         else:
-            messages.error(request, "Failed to send email verification email.")
+            messages.error(request, "Failed to send email")
             
         return resp
 

@@ -29,7 +29,7 @@ def register(request):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data["password"])
             
-            subject           ="Please verify your email address"
+            subject           = "Please verify your email address"
             follow_up_message = "An email verification email has been sent. Please verify your email address."
             send_verification_email(request, user, subject, follow_up_message, send_registration_email)
          
@@ -41,9 +41,11 @@ def register(request):
     
 
 
+
+
 def validate_password(request):
     def password_strength_checker(password):
-        checker = PasswordStrengthChecker(password)
+        checker = PasswordStrengthChecker(password)  
         return checker.is_strong_password()
 
     return validate_helper(request, 'password', 'Password is valid', password_strength_checker)
@@ -51,14 +53,14 @@ def validate_password(request):
 
 def validate_email(request):
     def is_email_unique(email):
-        return not User.objects.filter(email=email).exists()
+        return not User.objects.filter(email=email).exists() # Note to self change to use the model version
     return validate_helper(request, 'email', 'Email is valid', is_email_unique)
 
 
 def validate_username(request):
    
     def is_username_unique(username):
-        return not User.objects.filter(username=username).exists()
+        return not User.objects.filter(username=username).exists() # Note to self change to use the model version
     return validate_helper(request, 'username', 'Username is valid',  is_username_unique)
 
 
@@ -76,7 +78,7 @@ def verify_email_token(request, username, token):
     - HttpResponseRedirect: Redirects to the home page with appropriate messages.
     """
     
-    user = User.get_by_username(username=username)
+    user = User.get_by_username(username)
    
     if not user:
         messages.error(request, "The user associated with this code doesn't exist.")

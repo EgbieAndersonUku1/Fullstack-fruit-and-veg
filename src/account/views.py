@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from django.urls      import reverse
+from django.contrib.auth import authenticate, login, logout
+
 
 from account.utils.utils import save_file_temporarily
+from authentication.forms.login_form import LoginForm
 
 from .views_helpers   import handle_form
 from .forms.forms     import (BasicFormDescription, 
@@ -18,6 +21,30 @@ from .views_helpers import get_base64_images_from_session
 
 
 # Create your views here.
+
+def login(request):
+    form = LoginForm()
+    context = {}
+    
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            email    = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
+            
+            # checks the user details
+            user = authenticate(request, email=email, password=password)
+            
+            print("I am here")
+            if user:
+                return
+            
+        context["invalid"] = "The email and password entered is incorrect"
+
+    context["login_form"] = form
+    
+    return render(request, "index.html", context=context)
+    
 
 
 def account(request):

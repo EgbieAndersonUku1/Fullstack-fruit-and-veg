@@ -1,10 +1,3 @@
-
-import sys
-import os
-
-# Add the src directory to sys.path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
-
 from authentication.utils.send_email import send_email
 
 
@@ -43,6 +36,10 @@ def send_registration_email(subject, from_email, user, verification_url):
 def resend_expired_verification_email(subject, from_email, user, verification_url):
     """
     Sends an email to a user with a new verification token after the previous one has expired.
+    This function uses pre-defined HTML and plain text email templates to re-send 
+    a registration email to the specified user. The email includes a verification 
+    link that the user must click to verify their email address and activate their account.
+
     
     Parameters:
     - subject (str): The subject line of the email.
@@ -71,9 +68,11 @@ def send_email_helper(email_template_html, email_template_text, **kwargs):
     """
     Helper function to send an email with the specified templates and context.
 
-    Parameters for kwargs:
+    Parameters:
         - email_template_html (str): Path to the HTML email template.
         - email_template_text (str): Path to the plain text email template.
+    Parameters for kwargs:
+      
         - subject (str): The subject line of the email.
         - from_email (str): The sender's email address.
         - to_email (str): The recipient's email address.
