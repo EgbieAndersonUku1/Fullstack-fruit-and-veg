@@ -5,7 +5,7 @@ import os
 # Add the src directory to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 
-from src.utils.send_email import send_email
+from authentication.utils.send_email import send_email
 
 
 def send_registration_email(subject, from_email, user, verification_url):
