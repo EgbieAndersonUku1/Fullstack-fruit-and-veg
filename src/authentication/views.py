@@ -53,14 +53,14 @@ def validate_password(request):
 
 def validate_email(request):
     def is_email_unique(email):
-        return not User.objects.filter(email=email).exists() # Note to self change to use the model version
+        return not User.objects.filter(email=email).exists() 
     return validate_helper(request, 'email', 'Email is valid', is_email_unique)
 
 
 def validate_username(request):
    
     def is_username_unique(username):
-        return not User.objects.filter(username=username).exists() # Note to self change to use the model version
+        return not User.objects.filter(username=username).exists()
     return validate_helper(request, 'username', 'Username is valid',  is_username_unique)
 
 
