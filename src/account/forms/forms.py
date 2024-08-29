@@ -14,7 +14,7 @@ class BasicFormDescription(forms.Form):
         ("n", "No"),
         ("y", "Yes")
     ]
-    name = forms.CharField(label="Product name", max_length=100, min_length=3,
+    name = forms.CharField(label="Product name", max_length=100, min_length=3, 
                            widget=forms.TextInput(attrs={
                                "id": "product-name",
                                "placeholder": "Enter a product name..."
@@ -30,7 +30,7 @@ class BasicFormDescription(forms.Form):
                                      "class": "select-category",
                                  }))
 
-    new_category = forms.CharField(max_length=100, required=False,
+    new_category = forms.CharField(max_length=100, required=False, 
                                    widget=forms.TextInput(attrs={
                                        "id": "add-category",
                                        "placeholder": "Enter a category"
@@ -180,7 +180,8 @@ class SeoAndMetaForm(forms.Form):
                                      "placeholder": "Enter a meta title...",
                                  }))
 
-    meta_keywords = forms.CharField(label="Add meta keywords (separate by commas)", min_length=3, max_length=40,
+    meta_keywords = forms.CharField(label="Add meta keywords (separate by commas)", min_length=3, 
+                                    max_length=40, 
                                     widget=forms.TextInput(attrs={
                                         "id": "meta-keyword-input",
                                         "aria-labelledby": "meta-keyword-label",
@@ -199,7 +200,8 @@ class AdditionalInformationForm(forms.Form):
     RETURN_POLICY_OPTIONS = [("n", "No"), ("y", "Yes")]
     COUNTRIES_CHOICES = parse_country_file("data/countries.txt")
 
-    title = forms.CharField(label="Manufacturer title", min_length=4, max_length=40,
+    title = forms.CharField(label="Manufacturer title", min_length=4, 
+                            max_length=40, 
                             widget=forms.TextInput(attrs={
                                 "id": "manufacturer-title",
                                 "aria-labelledby": "manufacturer-title",

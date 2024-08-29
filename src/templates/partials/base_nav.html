@@ -8,6 +8,8 @@
             </div>
         </div>
 
+
+        {% if request.user.is_authenticated %}
         <div class="nav-info nav-footer">
             <div class="nav-container__account">
                 <a href="#" aria-label="View account" class="nav-link">My account</a>
@@ -136,8 +138,31 @@
                     </div>
                 </div>
 
-                <a href="#" aria-label="Login to your account" class="nav-link" id="login">Login</a>
-                <a href="#" aria-label="Register a new account" class="nav-link" id="register-link">Register</a>
+                {% endif %}
+
+                {% if request.user.is_authenticated %}
+                {% if request.user.is_superuser %}
+                    <a href="#" aria-label="Logged in as superuser" class="nav-link">Hi {{ request.user.username|title }} | (logged in as superuser)</a>
+                {% elif request.user.is_admin %}
+                    <a href="#" aria-label="Logged in as admin" class="nav-link">Hi {{ request.user.username|title }} | (logged in as admin)</a>
+                {% elif request.user.is_staff %}
+                    <a href="#" aria-label="Logged in as staff" class="nav-link">Hi {{ request.user.username|title }} | (logged in as staff)</a>
+                {% else %}
+                    <a href="#" aria-label="Logged in user" class="nav-link">Hi {{ request.user.username|title }}</a>
+                {% endif %}
+                <a href="#" aria-label="Sign out" class="nav-link" id="signout-link">Logout</a>
+            {% else %}
+                
+                <div class="auth-links">
+                    <a href="{% url 'login' %}" aria-label="Login to your account" class="nav-link" id="login">Login</a>
+
+                    <a href="{% url 'register' %}" aria-label="Register a new account" class="nav-link" id="register-link">Register</a>
+                </div>
+
+              
+            {% endif %}
+            
+
             </div>
         </div>
     </div>

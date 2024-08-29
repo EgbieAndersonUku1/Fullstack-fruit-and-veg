@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from django.urls      import reverse
 
+from django.contrib.auth.decorators import login_required
+
 from account.utils.utils import save_file_temporarily
+from authentication.forms.login_form import LoginForm
 
 from .views_helpers   import handle_form
 from .forms.forms     import (BasicFormDescription, 
@@ -19,7 +22,7 @@ from .views_helpers import get_base64_images_from_session
 
 # Create your views here.
 
-
+@login_required
 def account(request):
     return render(request, "account/account/account.html")
 
