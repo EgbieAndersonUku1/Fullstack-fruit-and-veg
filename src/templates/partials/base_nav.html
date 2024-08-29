@@ -150,7 +150,7 @@
                 {% else %}
                     <a href="#" aria-label="Logged in user" class="nav-link">Hi {{ request.user.username|title }}</a>
                 {% endif %}
-                <a href="#" aria-label="Sign out" class="nav-link" id="signout-link">Logout</a>
+                <a href="{% url 'logout' %}" aria-label="Sign out" class="nav-link" id="signout-link">Logout</a>
             {% else %}
                 
                 <div class="auth-links">
