@@ -12,12 +12,14 @@
         <form action="{% url 'login' %}" method="post" id="login-form" role="form">
             {% csrf_token %}
 
+             
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+            
             {% include "partials/form_errors.html" %}
 
-            {% if invalid %}
-                 <p class="highlight">{{ invalid }}</p>
-            {% endif %}
-
+           
+            <p class="light-red d-none" id="login-msg"></p>
             {{ login_form.email.label_tag }}
             {{ login_form.email}}
             <span id="email-description" class="sr-only">Enter your email address.</span>
@@ -29,7 +31,7 @@
             <a href="#" class="login-link">Forgotten password?</a>
             <a href="#" class="login-link" id="not-registered-link">Not registered - click here?</a>
 
-            <button type="submit" class="auth-button text-capitalize">login</button>
+            <button type="submit" class="auth-button text-capitalize" id="login-btn">login</button>
         </form>
 
     </div>

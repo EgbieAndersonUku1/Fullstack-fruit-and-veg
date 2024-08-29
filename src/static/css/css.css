@@ -613,6 +613,12 @@ nav {
     display: none;
 }
 
+
+.auth-links {
+    width: 10%;
+    display: flex;
+    justify-content: space-between;
+}
 /* dropdown elements with my  `my account`  */
 .my-account__container {
 

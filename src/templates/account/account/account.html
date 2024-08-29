@@ -179,9 +179,9 @@
 </section>
 
 <!-- Administration -->
-<!-- This section will be visible only to the admin and not to customers when the backend is built.
-        For now, it will be displayed along with the normal user section.
-    -->
+<!-- This section will be visible only to the admin and not to customers when the backend is built. -->
+
+{% if request.user.is_superuser or request.user.is_admin %} 
 
 <section id="administration" aria-labelledby="administration-heading">
     <div class="content-container">
@@ -306,4 +306,8 @@
         </div>
     </div>
 </section>
+
+{% endif %}
+
+
 {% endblock %}

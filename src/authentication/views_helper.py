@@ -6,7 +6,7 @@ from django.contrib import messages
 from authentication.utils.generator import generate_token, generate_verification_url
 
 
-def validate_helper(request, field_name, succ_message, validation_func):
+def validate_helper(request, field_name, follow_up_message, validation_func):
     if request.method == 'POST':
         try:
             # Parse JSON body
@@ -16,11 +16,11 @@ def validate_helper(request, field_name, succ_message, validation_func):
             if not resp:
                 return JsonResponse({"IS_VALID": False, "message": f"{field_name.title()} is required"}, status=400)
 
-            is_valid = validation_func(resp)
+            is_valid, error_msg = validation_func(resp)
             
             return JsonResponse({
                 "IS_VALID": is_valid,
-                "message": succ_message if is_valid else f"{field_name.title()} is already in use",
+                "message": follow_up_message if is_valid else (error_msg or 'There was a problem with your request. Please review and submit again.'),
             }, status=200)
 
         except json.JSONDecodeError:

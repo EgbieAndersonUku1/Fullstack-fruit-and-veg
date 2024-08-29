@@ -1,5 +1,7 @@
 import PasswordStrengthChecker from "../utils/password.js";
 import fetchData from "../utils/fetch.js";
+import { getFormEntries } from "../utils/formUtils.js";
+
 
 // DOM Elements for Authentication
 const loginAuthenticationContainer    = document.querySelector(".login");
@@ -32,9 +34,9 @@ const notRegisteredLink               = document.getElementById("not-registered-
 const showPasswordElement             = document.getElementById("show-password");
 const showPasswordLabelElement        = document.querySelector(".checkbox label");
 
-// DOM Element for Register Form
+// DOM Element for Register and Login Form
 const registerForm                    = document.getElementById("register-form");
-
+const loginForm                       = document.getElementById("login-form")
 
 // DOM Element for display which password field the user is currently using
 const activePasswordField   = document.getElementById('current-password-field-name');
@@ -43,9 +45,15 @@ const activePasswordField   = document.getElementById('current-password-field-na
 const usernameErrorField    = document.querySelector(".username-error-field")
 const emailErrorField       = document.querySelector(".email-error-field")
 
+// login message field
+const loginMsgFElement      = document.getElementById("login-msg");
 
 // csrf token
-const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+const csrfToken             =  document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+// form buttons
+const loginButtonElement    = document.getElementById("login-btn");
+const registerButtonElement = document.getElementById("register-btn");
 
 
 const passwordStrengthChecker = new PasswordStrengthChecker()
@@ -69,9 +77,9 @@ notRegisteredLink?.addEventListener("click", handleNotRegisteredLink);
 // Toggle password visibility when the checkbox is changed
 showPasswordElement?.addEventListener("change", handlePasswordToggle);
 
-// form submission
+// form submissions
 registerForm?.addEventListener("submit", handleRegisterFormSubmit);
-
+loginForm?.addEventListener("submit", handleLoginFormSubmit);
 
 
 /**
@@ -97,58 +105,165 @@ confirmPasswordElement.addEventListener("click", () => handlePasswordFieldValida
  * Handles the submission of the registration form.
  * 
  * This function performs the following tasks:
- * 1. Prevents the default form submission behavior.
- * 2. Collects form data and validates password match.
- * 3. Sends requests to validate the password, username, and email.
- * 4. Displays validation messages and submits the form if all validations pass.
+ * 1. Collects form data and validates password match.
+ * 2. Sends requests to validate the password, username, and email.
+ * 3. Displays validation messages and submits the form if all validations pass.
  * 
  * @param {Event} e - The form submit event.
  */
 async function handleRegisterFormSubmit(e) {
     e.preventDefault();
 
-    const formData = new FormData(registerForm);
 
-    const password        = formData.get("password");
-    const confirmPassword = formData.get("confirm_password");
-    const email           = formData.get("email");
-    const username        = formData.get("username");
+    const formData =  getFormEntries(registerForm);
 
-    // Check if password and confirm password match
-    if (!doPasswordMatch(password, confirmPassword)) {
+    if (!doPasswordMatch(formData.password, formData["confirm_password"]) ) {
         return;
     }
 
-    // Validate password
-    const passwordValidation = await fetchData({
-        url: "authentication/validate/password/",
-        csrfToken: csrfToken,
-        body: { password }
-    });
-
-    // Validate username
-    const usernameValidation = await fetchData({
-        url: "authentication/validate/username/",
-        csrfToken: csrfToken,
-        body: { username }
-    });
-
-    // Validate email
-    const emailValidation = await fetchData({
-        url: "authentication/validate/email/",
-        csrfToken: csrfToken,
-        body: { email }
-    });
-
-    // Handle validation reports and determine if form can be submitted
-    const isEmailValid     = handleFieldReport(emailErrorField, emailValidation);
-    const isUsernameValid  = handleFieldReport(usernameErrorField, usernameValidation);
-
-    if (passwordValidation?.IS_VALID && isEmailValid && isUsernameValid) {
+    const resp = await processRegistrationform(formData)    
+  
+    if (resp) {
         console.log("Registration successful");
         registerForm.submit();
     }
+};
+
+
+
+
+
+/**
+ * Asynchronously processes and validates the registration form data.
+ *
+ * This function handles the registration process by performing asynchronous validation
+ * on the provided form data. It validates the password, username, and email by sending
+ * requests to the respective validation endpoints. It also manages the button state during
+ * the validation process to provide feedback to the user.
+ *
+ * @param {Object} formData - An object containing the registration form data.
+ * @param {string} formData.username - The username to be validated.
+ * @param {string} formData.password - The password to be validated.
+ * @param {string} formData.email - The email to be validated.
+ *
+ * @returns {Promise<boolean>} A promise that resolves to a boolean indicating whether
+ *                             all validations passed. Returns `true` if the password, 
+ *                             email, and username are valid; otherwise, returns `false`.
+ *
+ * @throws {Error} Throws an error if there is an issue with making the validation requests.
+ */
+async function processRegistrationform(formData) {
+   
+    setButtonState(true, registerButtonElement, "register", "please wait");
+
+    try {
+       
+        const passwordValidation = await fetchData({
+            url: "authentication/validate/password/",
+            csrfToken: csrfToken,
+            body: { password: formData.password },
+        });
+
+       
+        const usernameValidation = await fetchData({
+            url: "authentication/validate/username/",
+            csrfToken: csrfToken,
+            body: { username: formData.username }
+        });
+
+
+        const emailValidation = await fetchData({
+            url: "authentication/validate/email/",
+            csrfToken: csrfToken,
+            body: { email: formData.email }
+        });
+
+
+        setButtonState(false, registerButtonElement, "register", "please wait");
+
+        const isEmailValid     = handleFieldReport(emailErrorField, emailValidation);
+        const isUsernameValid  = handleFieldReport(usernameErrorField, usernameValidation);
+
+    
+        return passwordValidation?.IS_VALID && isEmailValid && isUsernameValid;
+
+    } catch (error) {
+        setButtonState(true, registerButtonElement, "register", "please wait");
+    }
 }
+
+
+
+/**
+ * Handles the submission of the login form by processing and validating the form data.
+ *
+ * This function is triggered when the login form is submitted. It prevents the default form
+ * submission behavior, retrieves form data, and validates it using the `processLoginForm`
+ * function. If the validation is successful, the user is redirected to the account page.
+ *
+ * @param {Event} e - The submit event object from the form submission.
+ *
+ * @returns {Promise<void>} This function does not return a value but performs actions based
+ *                          on the result of the login validation.
+ *
+ */
+async function handleLoginFormSubmit(e) {
+    e.preventDefault();
+
+    const formData = getFormEntries(loginForm);
+
+    if (!formData.email && !formData.password) {
+        return;
+    }
+
+    const resp = await processLoginForm(formData);
+
+    if (resp) {
+        console.log("You have registed...");
+        window.location.href = "/account/";
+      
+    }
+      
+}
+
+
+
+/**
+ * Processes and validates the login form data by sending it to the server for authentication.
+ *
+ * This function manages the login process by sending the provided form data to the server
+ * for validation. It handles the state of the login button to provide user feedback during
+ * the process. It also processes the server's response to update the UI with validation messages.
+ *
+ * @param {Object} formData - An object containing the login form data.
+ * @param {string} formData.email - The email address entered by the user.
+ * @param {string} formData.password - The password entered by the user.
+ *
+ * @returns {Promise<boolean>} A promise that resolves to a boolean indicating whether
+ *                             the login process was successful. Returns `true` if the
+ *                             login is successful and the UI is updated accordingly; otherwise, returns `false`.
+ *
+ */
+async function processLoginForm(formData) {
+     
+    setButtonState(true, loginButtonElement, "Login", "please wait...");
+
+
+    try {
+        const validateReport = await fetchData({url: "authentication/login/",
+            csrfToken: csrfToken,
+            body: { auth: {email:formData.email, password:formData.password }},
+            });
+
+       
+        setButtonState(false, loginButtonElement, "Login", "please wait...");
+        return handleFieldReport(loginMsgFElement, validateReport);
+
+    } catch (error) {
+        setButtonState(false, loginButtonElement, "Login", "please wait...");
+    }
+}
+
 
 /**
  * Updates the UI based on the validation report for a given field.
@@ -168,6 +283,7 @@ function handleFieldReport(fieldElement, validationReport) {
     fieldElement.innerHTML = "";
 
     const isValid = validationReport?.IS_VALID;
+   
     if (isValid) {
         fieldElement.classList.add("d-none");
     } else {
@@ -178,6 +294,43 @@ function handleFieldReport(fieldElement, validationReport) {
     return isValid;
 }
 
+
+
+/**
+ * Updates the state of a button element to indicate loading or completion.
+ * 
+ * This function changes the button text and disables/enables the button 
+ * based on the `isLoading` parameter. It's goal is for providing feedback 
+ * to users during asynchronous operations like form submissions or data fetching.
+ *
+ * @param {boolean} isLoading - Determines the state of the button. If `true`, the button is set to a loading state; if `false`, 
+ *                             the button is reset to its default state.
+ * @param {HTMLElement} buttonElement - The button element whose state will be updated.
+ * @param {string} defaultMsg - The text to display on the button when not loading.
+ * @param {string} processingMsg - The text to display on the button while loading.
+ *
+ * @example
+ * // Disables the button and sets the text to "Processing..."
+ * setButtonState(true, submitButton, "Submit", "Processing...");
+ *
+ * @example
+ * // Enables the button and sets the text back to "Submit"
+ * setButtonState(false, submitButton, "Submit", "Processing...");
+ */
+function setButtonState(isLoading, buttonElement, defaultMsg = "Submit", processingMsg = "Please wait...") {
+    if (!buttonElement) {
+        console.error("Invalid button element provided.");
+        return;
+    }
+
+    if (isLoading) {
+        buttonElement.textContent = processingMsg;
+        buttonElement.disabled = true;
+    } else {
+        buttonElement.textContent = defaultMsg;
+        buttonElement.disabled = false;
+    }
+}
 
 
 
@@ -299,7 +452,7 @@ function handleLoginClick(e) {
  * Handles the "register" link click event in the navigation bar.
  * 
  * This function is triggered when the user clicks the "register" link in the nav bar.
- * It displays the register form, and hides the registration form if active.
+ * It displays the register form, and hides the login form if active.
  *
  * @param {Event} e - The event object representing the user's click action.
  * @throws {Error} Throws an error if the login container element is not found.

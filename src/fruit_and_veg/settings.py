@@ -198,3 +198,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 
+# redirects to a given url if the user is not login in
+
+LOGIN_URL = '/'
