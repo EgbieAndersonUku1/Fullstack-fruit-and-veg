@@ -172,15 +172,32 @@ class User(AbstractBaseUser, PermissionsMixin):
         except cls.DoesNotExist:
             return None
     
-    def set_verification_code(self, code:str, expiry_minutes:int) -> None:
-        """Set the verification data in the JSONField.
-        
-           Args:
-                code: The verification code to set to JSONField 
-                expiry_minutes: The minutes that code will expiry by
-             
-           Returns:
-                Returns none
+    def set_verification_code(self, code: str, expiry_minutes: int, save:bool=True) -> None:
+        """
+        Set the verification code and its expiration time in the user's verification data.
+
+        This method updates the `verification_data` JSONField with a verification code, the date
+        it was sent, and its expiry date. The instance is saved to the database by default, but
+        this can be controlled with the `save` parameter.
+
+        Args:
+            code (str): The verification code to set in the `verification_data`.
+            expiry_minutes (int): The number of minutes after which the verification code expires.
+            save (bool, optional): Whether to save the instance after setting the verification code.
+                                Defaults to `True`. Set to `False` to defer saving.
+
+        Returns:
+            None
+
+        Example:
+            user = User.objects.get(email='user@example.com')
+            user.set_verification_code(code='123456', expiry_minutes=30, save=False)  # Set code without saving
+            user.perform_other_updates()
+            user.save()  # Save all changes at once
+
+        Note:
+            This method does not perform any validation on the verification code or the expiration time.
+            It directly updates the `verification_data` field and saves the instance if `save=True`.
         """
         current_date = datetime.now()
         self.verification_data = {
@@ -188,12 +205,38 @@ class User(AbstractBaseUser, PermissionsMixin):
             "date_sent": current_date.isoformat(),
             "expiry_date": (current_date + timedelta(minutes=expiry_minutes)).isoformat()
         }
-        self.save()
+
+        if save:
+            self.save()
     
-    def clear_verification_data(self) -> None:
-        """Clear the verification data"""
+    def clear_verification_data(self, save:bool=True) -> None:
+        """
+        Clear the user's verification data and optionally save the updated instance.
+
+        This method sets the `verification_data` field to an empty dictionary (`{}`).
+        By default, it saves the instance to the database, but you can prevent an immediate
+        save by setting the `save` parameter to `False`. This is useful when you want to 
+        perform multiple operations on the user instance and save all changes at once.
+
+        Args:
+            save (bool): Whether to save the instance after clearing the verification data. 
+                        Defaults to `True`. Set to `False` to defer saving.
+
+        Example:
+            user = User.objects.get(email='user@example.com')
+            user.clear_verification_data(save=False)  # Clear data without saving
+            user.perform_other_updates()
+            user.save()  # Save all changes at once
+
+        Note:
+            This method does not perform any additional checks or validations.
+            It directly updates the `verification_data` field and saves the instance if `save=True`.
+        """
         self.verification_data = {}
-        self.save()
+
+        if save:
+            self.save()
+
     
     def is_verification_code_valid(self, verification_code: str) -> tuple[bool, str]:
         """
@@ -241,25 +284,36 @@ class User(AbstractBaseUser, PermissionsMixin):
             self.is_banned = False
             self.save()
         
-    def mark_email_as_verified(self):
+    def mark_email_as_verified(self, save:bool=True):
         """
-        Mark the user's email as verified and save the updated instance.
+        Mark the user's email as verified and optionally save the updated instance.
 
-        This method sets the `is_emailed_verified` field to `True` and
-        persists the change to the database. It is typically called when
-        a user successfully verifies their email address.
+        This method sets the `is_email_verified` field to `True`. By default, it
+        saves the instance to the database. However, you can prevent an immediate
+        save by setting the `save` parameter to `False`. This can be useful if you 
+        need to perform multiple updates on the user instance without hitting the 
+        database each time.
+
+        Args:
+            save (bool): Whether to save the instance after marking the email as verified. 
+                        Defaults to `True`. Set to `False` to defer saving.
 
         Example:
             user = User.objects.get(email='user@example.com')
-            user.mark_email_as_verified()
+            user.mark_email_as_verified(save=False)  # Mark as verified without saving
+            user.perform_other_updates()
+            user.save()  # Save all changes at once
 
         Note:
             This method does not perform any additional checks or validations.
-            It directly updates the field and saves the instance.
+            It directly updates the `is_email_verified` field and saves the instance if `save=True`.
         """
         if not self.is_email_verified:
             self.is_email_verified = True
+
+        if save:
             self.save()
+
     
     @classmethod
     def does_user_exists(cls, username):

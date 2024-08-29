@@ -197,8 +197,8 @@ async function processRegistrationform(formData) {
 /**
  * Handles the submission of the login form by processing and validating the form data.
  *
- * This function is triggered when the login form is submitted. It prevents the default form
- * submission behavior, retrieves form data, and validates it using the `processLoginForm`
+ * This function is triggered when the login form is submitted.  retrieves form data, 
+ * and validates it using the `processLoginForm`
  * function. If the validation is successful, the user is redirected to the account page.
  *
  * @param {Event} e - The submit event object from the form submission.
@@ -303,7 +303,8 @@ function handleFieldReport(fieldElement, validationReport) {
  * based on the `isLoading` parameter. It's goal is for providing feedback 
  * to users during asynchronous operations like form submissions or data fetching.
  *
- * @param {boolean} isLoading - Determines the state of the button. If `true`, the button is set to a loading state; if `false`, 
+ * @param {boolean} isLoading - Determines the state of the button. If `true`, 
+ *                              the button is set to a loading state; if `false`, 
  *                             the button is reset to its default state.
  * @param {HTMLElement} buttonElement - The button element whose state will be updated.
  * @param {string} defaultMsg - The text to display on the button when not loading.

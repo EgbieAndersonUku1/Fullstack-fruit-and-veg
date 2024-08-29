@@ -1,12 +1,9 @@
-
-
 from django.contrib import messages
-from django.conf import settings
+
 from django.contrib.auth import get_user_model, authenticate, login, logout 
 from django.shortcuts import render, redirect
 
 
-from authentication.forms.login_form import LoginForm
 from .utils.password_validator import PasswordStrengthChecker
 from .views_helper import validate_helper
 
@@ -38,8 +35,8 @@ def register(request):
             send_verification_email(request, user, subject, follow_up_message, send_registration_email)
          
             return redirect('home')
-        else:
-            messages.error(request, "Please correct the errors below.")
+        
+        messages.error(request, "Please correct the errors below.")
     
     return redirect('home')
     
@@ -86,7 +83,7 @@ def user_login(request):
             elif not user.is_active:
                 error_msg = "Your account is no longer active, please contact support."
             else:
-                messages.success(request, "You have successfully logged in.")
+                messages.success(request, "Welcome back, you have successfully logged in.")
                 login(request, user)
                 return True, ''
         else:
@@ -101,6 +98,19 @@ def user_login(request):
                             validation_func=validate_user_login,
         
     )
+
+
+def user_logout(request):
+    """
+    Logouts the user out and clears the session from the browser.
+    
+    Args:
+        request (HttpRequest): The request containing the session
+
+    """
+    logout(request)
+    messages.success(request, "You have successfully logged out")
+    return redirect("home")
 
 
 def validate_password(request):
@@ -234,7 +244,7 @@ def verify_email_token(request, username, token):
     
     # Token is valid, mark email as verified
     if is_valid:
-        user.mark_email_as_verified()
+        user.mark_email_as_verified(save=False) # don't save yet
         user.clear_verification_data()
     
         messages.success(request, "You have successfully confirmed your email. You can now log in.")
