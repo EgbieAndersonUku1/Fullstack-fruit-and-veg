@@ -6,8 +6,17 @@
 
 {% block body%}
 
+
+
 <section id="account" aria-labelledby="account-heading">
+    <div class="messages">
+        {% include "partials/messages.html" %}
+    </div>
+    
     <div class="content-container">
+
+       
+
         {% include "partials/logo_link.html" %}
         <ul class="breadcrumb">
             <li><a href="{%  url 'home' %}">Home</a></li>
