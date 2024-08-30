@@ -28,7 +28,7 @@ class CustomUserModelTestCase(TestCase):
         """Test the number of objects created"""
         
         # There should be a normal user and a superuser
-        query_set = self.User.all()
+        query_set = self.User.objects.all()
         self.assertEqual(query_set.count(), 2)
         
     def test_user_creation(self):

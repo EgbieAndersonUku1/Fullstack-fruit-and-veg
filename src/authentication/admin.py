@@ -3,14 +3,17 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.db.models.query import QuerySet
 from django.http import HttpRequest 
-from .models import (User, 
-                     VerifiedUserProxy, 
-                     BannedUserProxy,
-                     SuperUserProxy,
-                     AdminUserProxy,
-                     StaffUserProxy
-                     
-                     )
+from .models import (
+                    ActiveUserProxy,
+                    AdminUserProxy,
+                    BannedUserProxy,
+                    NonActiveUserProxy,
+                    StaffUserProxy,
+                    SuperUserProxy,
+                    User,
+                    VerifiedUserProxy
+)
+
 
 
 class BaseUserAdmin(admin.ModelAdmin):
@@ -135,9 +138,48 @@ class AdminStaffUserProxy(BaseUserAdmin):
         return query_set.filter(is_staff=True)
 
 
+
+class AdminActiveUserProxy(BaseUserAdmin):
+    """
+    Custom admin class for the ActiveUserProxy model to manage staff in the Django admin interface.
+
+    This class extends the functionality of the BaseUserAdmin to display only users who have active status.
+
+    Methods
+    -------
+    get_queryset(request: HttpRequest) -> QuerySet[Any]
+        Returns a queryset filtered to include only staff/admin users.
+    """
+    
+    def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
+        query_set = super().get_queryset(request)
+        return query_set.filter(is_active=True)
+
+
+
+class AdminNonActiveUserProxy(BaseUserAdmin):
+    """
+    Custom admin class for the NonActiveUserProxy model to manage staff in the Django admin interface.
+
+    This class extends the functionality of the BaseUserAdmin to display only users who are no longer
+    have active status.
+
+    Methods
+    -------
+    get_queryset(request: HttpRequest) -> QuerySet[Any]
+        Returns a queryset filtered to include only staff/admin users.
+    """
+    
+    def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
+        query_set = super().get_queryset(request)
+        return query_set.filter(is_active=False)
+
+
+admin.site.register(ActiveUserProxy, AdminActiveUserProxy)
+admin.site.register(AdminUserProxy, AdminUserProxyModel)
+admin.site.register(BannedUserProxy, AdminBannedUserProxy)
+admin.site.register(NonActiveUserProxy, AdminNonActiveUserProxy)
+admin.site.register(SuperUserProxy, AdminSuperUserProxy)
+admin.site.register(StaffUserProxy, AdminStaffUserProxy)
 admin.site.register(User, AdminUser)
 admin.site.register(VerifiedUserProxy, AdminVerifiedUserProxy)
-admin.site.register(BannedUserProxy, AdminBannedUserProxy)
-admin.site.register(SuperUserProxy, AdminSuperUserProxy)
-admin.site.register(AdminUserProxy, AdminUserProxyModel)
-admin.site.register(StaffUserProxy, AdminStaffUserProxy)

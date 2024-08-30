@@ -407,3 +407,30 @@ class StaffUserProxy(User):
         proxy = True
         verbose_name = "Staff User"
         verbose_name_plural = "Staff Users"
+        
+
+class ActiveUserProxy(User):
+    """
+    Proxy model for the User class representing a active users.
+
+    This proxy model allows for custom behaviour or display options for 
+    users who are have active status,
+    """
+    class Meta:
+        proxy = True
+        verbose_name = "Active User"
+        verbose_name_plural = "Active Users"
+        
+
+
+class NonActiveUserProxy(User):
+    """
+    Proxy model for the User class representing a active users.
+
+    This proxy model allows for custom behaviour or display options for 
+    users who are have active status,
+    """
+    class Meta:
+        proxy = True
+        verbose_name = "Non-active User"
+        verbose_name_plural = "Non-active Users"
