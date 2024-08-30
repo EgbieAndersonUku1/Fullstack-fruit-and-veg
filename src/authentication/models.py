@@ -335,3 +335,102 @@ class User(AbstractBaseUser, PermissionsMixin):
             bool: True if a user with the given username exists, False otherwise.
         """
         return cls.objects.filter(username=username).exists()
+
+
+
+class VerifiedUserProxy(User):
+    """
+    Proxy model for the User class representing a verified user.
+
+    This proxy model is used to differentiate verified users and provide 
+    additional functionality or behaviour specific to them without altering 
+    the original User model or creating a new database table.
+    """
+    class Meta:
+        proxy = True
+        verbose_name = "Verified User"
+        verbose_name_plural = "Verified Users"
+
+
+
+class BannedUserProxy(User):
+    """
+    Proxy model for the User class representing a banned user.
+
+    This proxy model allows for custom behaviour or display options for 
+    users who are banned, while leveraging the existing User model's 
+    database structure.
+    """
+    class Meta:
+        proxy = True
+        verbose_name = "Banned User"
+        verbose_name_plural = "Banned Users"
+
+
+
+class SuperUserProxy(User):
+    """
+    Proxy model for the User class representing a super users.
+
+    This proxy model allows for custom behaviour or display options for 
+    users who are have superuser status,
+    """
+    class Meta:
+        proxy = True
+        verbose_name = "Superuser"
+        verbose_name_plural = "Superusers"
+        
+        
+
+class AdminUserProxy(User):
+    """
+    Proxy model for the User class representing a admin users.
+
+    This proxy model allows for custom behaviour or display options for 
+    users who are have admin status,
+    """
+    class Meta:
+        proxy = True
+        verbose_name = "Admin User"
+        verbose_name_plural = "Admin Users"
+        
+        
+        
+class StaffUserProxy(User):
+    """
+    Proxy model for the User class representing a staff users.
+
+    This proxy model allows for custom behaviour or display options for 
+    users who are have staff status,
+    """
+    class Meta:
+        proxy = True
+        verbose_name = "Staff User"
+        verbose_name_plural = "Staff Users"
+        
+
+class ActiveUserProxy(User):
+    """
+    Proxy model for the User class representing a active users.
+
+    This proxy model allows for custom behaviour or display options for 
+    users who are have active status,
+    """
+    class Meta:
+        proxy = True
+        verbose_name = "Active User"
+        verbose_name_plural = "Active Users"
+        
+
+
+class NonActiveUserProxy(User):
+    """
+    Proxy model for the User class representing a active users.
+
+    This proxy model allows for custom behaviour or display options for 
+    users who are have active status,
+    """
+    class Meta:
+        proxy = True
+        verbose_name = "Non-active User"
+        verbose_name_plural = "Non-active Users"
