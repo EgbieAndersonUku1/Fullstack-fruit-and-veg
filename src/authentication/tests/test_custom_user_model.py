@@ -24,6 +24,13 @@ class CustomUserModelTestCase(TestCase):
             email="super_user@example.com"
         )
     
+    def test_creation_count(self):
+        """Test the number of objects created"""
+        
+        # There should be a normal user and a superuser
+        query_set = self.User.all()
+        self.assertEqual(query_set.count(), 2)
+        
     def test_user_creation(self):
         """Test if the regular user was created correctly."""
         user = self.User.objects.get(username="user")
