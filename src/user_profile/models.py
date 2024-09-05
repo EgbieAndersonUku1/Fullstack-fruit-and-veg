@@ -60,8 +60,11 @@ class GiftCard(models.Model):
     def __str__(self):
         return f"Gift card for {self.user.username.title()} with the amount of £{self.value:.2f}"
 
-    def is_valid(self):
+    def is_valid(self, code):
         """Check if the gift card is still valid."""
+        
+        if self.code != code:
+            return False
         
         current_date = timezone.now().date()
         return self.is_active and (self.expiration_date is None or self.expiration_date >= current_date)
@@ -90,10 +93,15 @@ class GiftCard(models.Model):
 
 
 class UserProfile(models.Model):
+    PROFILE_PIC_PATH   = "users/profile/"
+    COVER_PIC_PATH     = "users/cover/"
+    
     first_name         = models.CharField(max_length=40, null=True, blank=True)
     last_name          = models.CharField(max_length=40, null=True, blank=True)
     telephone          = models.CharField(max_length=12, null=True, blank=True)
     mobile             = models.CharField(max_length=12, null=True, blank=True)
+    profile_pic        = models.ImageField(verbose_name="Profile picture", upload_to=PROFILE_PIC_PATH)
+    cover_pic          = models.ImageField(verbose_name="Cover picture", null=True, blank=True, upload_to=COVER_PIC_PATH)
     user               = models.ForeignKey(User, on_delete=models.CASCADE, related_name="profile")
     gift_cards         = models.ManyToManyField(GiftCard, related_name="profiles", blank=True)
     shipping_addresses = models.ManyToManyField(ShippingAddress, related_name="profiles", blank=True)
