@@ -1,5 +1,5 @@
 from django import forms
-from ..utils.country_parser import parse_country_file
+from utils.country_parser import parse_country_file
 
 from  .base_form_helper  import BaseFormMeasurements
 from ..utils.product_category_utils import (get_product_category_choices,
