@@ -93,15 +93,15 @@ class GiftCard(models.Model):
 
 
 class UserProfile(models.Model):
-    PROFILE_PIC_PATH   = "users/profile/"
-    COVER_PIC_PATH     = "users/cover/"
+    PROFILE_PIC_PATH   = "users/profile/pic/"
+    COVER_PHOTO_PATH   = "users/cover/photo/"
     
     first_name         = models.CharField(max_length=40, null=True, blank=True)
     last_name          = models.CharField(max_length=40, null=True, blank=True)
     telephone          = models.CharField(max_length=12, null=True, blank=True)
     mobile             = models.CharField(max_length=12, null=True, blank=True)
     profile_pic        = models.ImageField(verbose_name="Profile picture", upload_to=PROFILE_PIC_PATH)
-    cover_pic          = models.ImageField(verbose_name="Cover picture", null=True, blank=True, upload_to=COVER_PIC_PATH)
+    cover_photo        = models.ImageField(verbose_name="Cover picture", null=True, blank=True, upload_to=COVER_PHOTO_PATH)
     user               = models.ForeignKey(User, on_delete=models.CASCADE, related_name="profile")
     gift_cards         = models.ManyToManyField(GiftCard, related_name="profiles", blank=True)
     shipping_addresses = models.ManyToManyField(ShippingAddress, related_name="profiles", blank=True)
