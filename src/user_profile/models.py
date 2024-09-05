@@ -3,9 +3,12 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 
-
-from .utils.choices import COUNTRIES_CHOICES
 from utils.generator import generate_token
+from utils.country_parser import parse_country_file
+
+
+COUNTRIES_CHOICES  = parse_country_file("data/countries.txt")
+
 
 
 # Create your models here.
@@ -59,11 +62,13 @@ class GiftCard(models.Model):
 
     def is_valid(self):
         """Check if the gift card is still valid."""
+        
         current_date = timezone.now().date()
         return self.is_active and (self.expiration_date is None or self.expiration_date >= current_date)
 
     def apply(self, amount, save=True):
         """Apply an amount to the gift card and reduce its value."""
+        
         if not self.is_active:
             raise ValueError("The gift card is not valid")
         if not isinstance(amount, (float, int)):
