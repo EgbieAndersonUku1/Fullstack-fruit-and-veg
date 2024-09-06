@@ -3,7 +3,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.contrib import messages
 
-from authentication.utils.generator import generate_token, generate_verification_url
+from utils.generator import generate_token, generate_verification_url
 
 
 def validate_helper(request, field_name, follow_up_message, validation_func):

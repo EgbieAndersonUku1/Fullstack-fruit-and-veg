@@ -37,6 +37,8 @@ DEBUG = getenv("DEBUG")
 AUTH_USER_MODEL = "authentication.User"
 
 
+
+
 # Fetch the ALLOWED_HOSTS environment variable, defaulting to an empty string if not set
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -56,6 +58,7 @@ INSTALLED_APPS = [
     "home.apps.HomeConfig",
     "account.apps.AccountConfig",
     "authentication.apps.AuthenticationConfig",
+    "user_profile.apps.UserProfileConfig",
     
     # third party django apps
     'django.contrib.admin',
