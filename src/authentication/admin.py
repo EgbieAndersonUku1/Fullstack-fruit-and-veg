@@ -16,12 +16,17 @@ from .models import (
 
 
 
+
+class BaseUserAdminReadonlyFields(admin.ModelAdmin):
+    readonly_fields = ["password", "email", "username"]
+    
+    
+    
 class BaseUserAdmin(admin.ModelAdmin):
     ordering            = ['-date_created']
     list_display        = ('id', 'email', 'username', 'is_superuser', 'is_staff', 'is_active', 'is_email_verified', 'last_login')
     list_display_links  = ("id", "username", "email")
     list_per_page       = 25 
-    readonly_fields     = ('email', 'username', 'last_login')
     search_fields       = ('email', 'username')
     
     
@@ -34,8 +39,8 @@ class AdminUser(BaseUserAdmin):
     
     # Fieldsets define the layout of the form view
     fieldsets = (
-        (None, {'fields': ('email', 'password', )}),
-        ('Personal info', {'fields': ('username', 'verification_data', 'last_login', )}),
+        (None, {'fields': ('email', 'password' )}),
+        ('Personal info', {'fields': ('username', 'verification_data',  )}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'is_admin', 'is_banned', 'user_permissions', 'groups')}),
       
     )
@@ -47,7 +52,7 @@ class AdminUser(BaseUserAdmin):
 
 
 
-class AdminVerifiedUserProxy(BaseUserAdmin):
+class AdminVerifiedUserProxy(BaseUserAdmin, BaseUserAdminReadonlyFields):
     """
     Custom admin class for the VerifiedUserProxy model to manage verified users in the Django admin interface.
 
@@ -60,13 +65,14 @@ class AdminVerifiedUserProxy(BaseUserAdmin):
         Returns a queryset filtered to include only users with verified email addresses.
     """
     
+    readonly_fields  = ['username', 'last_login', 'password', 'email']
     def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
         query_set = super().get_queryset(request)
         return query_set.filter(is_email_verified=True)
 
 
 
-class AdminBannedUserProxy(BaseUserAdmin):
+class AdminBannedUserProxy(BaseUserAdmin, BaseUserAdminReadonlyFields):
     """
     Custom admin class for the BannedUserProxy model to manage banned users in the Django admin interface.
 
@@ -77,7 +83,7 @@ class AdminBannedUserProxy(BaseUserAdmin):
     get_queryset(request: HttpRequest) -> QuerySet[Any]
         Returns a queryset filtered to include only banned users.
     """
-    
+    readonly_fields  = ['username', 'last_login', 'password', 'email']
     def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
         query_set = super().get_queryset(request)
         return query_set.filter(is_banned=True)
@@ -95,7 +101,7 @@ class AdminSuperUserProxy(BaseUserAdmin):
     get_queryset(request: HttpRequest) -> QuerySet[Any]
         Returns a queryset filtered to include only superusers.
     """
-    
+    readonly_fields  = ['username', 'last_login', 'password', 'email']
     def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
         query_set = super().get_queryset(request)
         return query_set.filter(is_superuser=True)
@@ -113,7 +119,7 @@ class AdminUserProxyModel(BaseUserAdmin):
     get_queryset(request: HttpRequest) -> QuerySet[Any]
         Returns a queryset filtered to include only superusers.
     """
-    
+    readonly_fields  = ['username', 'last_login', 'password', 'email']
     def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
         query_set = super().get_queryset(request)
         return query_set.filter(is_admin=True)
@@ -132,14 +138,14 @@ class AdminStaffUserProxy(BaseUserAdmin):
     get_queryset(request: HttpRequest) -> QuerySet[Any]
         Returns a queryset filtered to include only staff/admin users.
     """
-    
+    readonly_fields  = ['username', 'last_login', 'password', 'email']
     def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
         query_set = super().get_queryset(request)
         return query_set.filter(is_staff=True)
 
 
 
-class AdminActiveUserProxy(BaseUserAdmin):
+class AdminActiveUserProxy(BaseUserAdmin, BaseUserAdminReadonlyFields):
     """
     Custom admin class for the ActiveUserProxy model to manage staff in the Django admin interface.
 
@@ -150,7 +156,7 @@ class AdminActiveUserProxy(BaseUserAdmin):
     get_queryset(request: HttpRequest) -> QuerySet[Any]
         Returns a queryset filtered to include only staff/admin users.
     """
-    
+    readonly_fields  = ['username', 'last_login', 'password', 'email']
     def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
         query_set = super().get_queryset(request)
         return query_set.filter(is_active=True)
@@ -169,7 +175,7 @@ class AdminNonActiveUserProxy(BaseUserAdmin):
     get_queryset(request: HttpRequest) -> QuerySet[Any]
         Returns a queryset filtered to include only staff/admin users.
     """
-    
+    readonly_fields  = ('username', 'last_login', 'password', 'email')
     def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
         query_set = super().get_queryset(request)
         return query_set.filter(is_active=False)

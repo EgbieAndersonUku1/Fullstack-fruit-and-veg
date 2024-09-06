@@ -50,14 +50,62 @@ class BillingAddress(BaseAddress):
         verbose_name_plural = "Billing Addresses"
         
         
+   
+class UserProfile(models.Model):
+    PROFILE_PIC_PATH   = "users/profile/pic/"
+    COVER_PHOTO_PATH   = "users/cover/photo/"
+    
+    first_name         = models.CharField(max_length=40, null=True, blank=True)
+    last_name          = models.CharField(max_length=40, null=True, blank=True)
+    telephone          = models.CharField(max_length=12, null=True, blank=True)
+    mobile             = models.CharField(max_length=12, null=True, blank=True)
+    profile_pic        = models.ImageField(verbose_name="Profile picture", null=True, blank=True, upload_to=PROFILE_PIC_PATH)
+    cover_photo        = models.ImageField(verbose_name="Cover picture", null=True, blank=True, upload_to=COVER_PHOTO_PATH)
+    user               = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    shipping_addresses = models.ForeignKey(ShippingAddress, related_name="profiles", blank=True, null=True, on_delete=models.SET_NULL)
+    billing_addresses  = models.ForeignKey(BillingAddress, related_name="profiles", null=True, on_delete=models.SET_NULL)
+    date_created       = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    @property
+    def full_name(self):
+        """
+        Returns the user's full name in title case, combining 
+        first_name and last_name. If either first_name or last_name 
+        is missing, returns an empty string.
         
+        :return: str - The formatted full name of the user.
+        """
+        if self.first_name and self.last_name:
+            return f"{self.first_name.title()} {self.last_name.title()}"
+        return ""  
+
+    @property
+    def username(self):
+        """
+        Returns the username in title case. This method is particularly 
+        useful for displaying the username in the UserProfile admin page, 
+        providing a more readable format in the admin interface.
+        
+        :return: str - The formatted username of the user.
+        """
+        return self.user.username.title()
+    
+    def __str__(self):
+        return f"Profile for {self.user.username}"
+
+    @property
+    def num_of_gift_cards(self):
+        return self.gift_cards.count()
+
+
+     
 class GiftCard(models.Model):
     card_type        = models.CharField(max_length=100, blank=True, null=True)
     code             = models.CharField(max_length=43, unique=True, blank=True, null=True)
     is_active        = models.BooleanField(default=False)
     expiration_date  = models.DateField(null=True, blank=True)
     does_not_expire  = models.BooleanField(default=False)
-    user             = models.ForeignKey(User, related_name="gift_cards", on_delete=models.CASCADE, null=True, blank=True)
+    user_profile     = models.ForeignKey(UserProfile, related_name="gift_cards", on_delete=models.CASCADE, null=True, blank=True)    
     value            = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     is_redeemed      = models.BooleanField(default=False)
     date_created     = models.DateTimeField(auto_now_add=True, null=True, blank=True)
@@ -67,8 +115,10 @@ class GiftCard(models.Model):
         verbose_name_plural = "gift cards"
         
     def __str__(self):
-        return f"Gift card for {self.user.username.title() if self.user else 'No User'} with the amount of £{self.value:.2f}"
-
+        user = self.user_profile.user if self.user_profile else None
+        return f"Gift card for {user.username.title() if user else 'No User'} with the amount of £{self.value:.2f}"
+ 
+    
     def is_valid(self, code):
         """Check if the gift card is still valid, considering does_not_expire."""
         
@@ -120,7 +170,7 @@ class GiftCard(models.Model):
         gift_card.code = generate_token()
         
         if user:
-            gift_card.user = user
+            gift_card.user_profile = user
         
         gift_card.activate(save=False) if is_active else gift_card.deactivate(save=False)
         gift_card.set_card_type(card_type)
@@ -166,23 +216,3 @@ class GiftCard(models.Model):
             self.card_type = card_type
         
       
-
-class UserProfile(models.Model):
-    PROFILE_PIC_PATH   = "users/profile/pic/"
-    COVER_PHOTO_PATH   = "users/cover/photo/"
-    
-    first_name         = models.CharField(max_length=40, null=True, blank=True)
-    last_name          = models.CharField(max_length=40, null=True, blank=True)
-    telephone          = models.CharField(max_length=12, null=True, blank=True)
-    mobile             = models.CharField(max_length=12, null=True, blank=True)
-    profile_pic        = models.ImageField(verbose_name="Profile picture", null=True, blank=True, upload_to=PROFILE_PIC_PATH)
-    cover_photo        = models.ImageField(verbose_name="Cover picture", null=True, blank=True, upload_to=COVER_PHOTO_PATH)
-    user               = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-    gift_cards         = models.ForeignKey(GiftCard, related_name="profiles", blank=True, null=True, on_delete=models.SET_NULL)
-    shipping_addresses = models.ForeignKey(ShippingAddress, related_name="profiles", blank=True, null=True, on_delete=models.SET_NULL)
-    billing_addresses  = models.ForeignKey(BillingAddress, related_name="profiles", null=True, on_delete=models.SET_NULL)
-    date_created       = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-
-    def __str__(self):
-        return f"Profile for {self.user.username}"
-
