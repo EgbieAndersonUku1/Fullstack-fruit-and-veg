@@ -113,7 +113,7 @@ class GiftCard(models.Model):
             self.save()
     
     @classmethod
-    def issue_gift_card(cls, card_type=None, amount=None, expiry_date=None, user=None, does_not_expire=False):
+    def issue_gift_card(cls, card_type=None, amount=None, expiry_date=None, user=None, does_not_expire=False, is_active=True):
         """Class method to issue a new gift card."""
         
         gift_card      = cls()
@@ -122,7 +122,7 @@ class GiftCard(models.Model):
         if user:
             gift_card.user = user
         
-        gift_card.activate(save=False)
+        gift_card.activate(save=False) if is_active else gift_card.deactivate(save=False)
         gift_card.set_card_type(card_type)
         gift_card.set_expiry_date(expiry_date, does_not_expire)
         gift_card.set_amount(amount)

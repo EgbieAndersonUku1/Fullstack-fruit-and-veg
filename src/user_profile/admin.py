@@ -33,12 +33,14 @@ class UserProfileAdmin(admin.ModelAdmin):
     list_per_page      = 30
 
 
-class GiftCardAdmin(admin.ModelAdmin):
+class GiftCardFormAdmin(admin.ModelAdmin):
     
     
     form = IssueGiftCardForm
     ordering = ["-date_created"]
     list_display = ['card_type', 'user', 'code', 'value', 'is_active', 'expiration_date', 'does_not_expire']
+    list_filter  = ["user", "is_active", "does_not_expire"]
+    search_fields = ["user"]
    
     list_per_page = 50
     
@@ -56,8 +58,15 @@ class GiftCardAdmin(admin.ModelAdmin):
                         form.save_m2m()
     
    
-        
+
+
+
+
+    
+  
+    
+
 admin.site.register(ShippingAddress, ShippingAddressAdminModel)
 admin.site.register(BillingAddress, BillingAddressAdminModel)
 admin.site.register(UserProfile, UserProfileAdmin)
-admin.site.register(GiftCard, GiftCardAdmin)
+admin.site.register(GiftCard, GiftCardFormAdmin)
