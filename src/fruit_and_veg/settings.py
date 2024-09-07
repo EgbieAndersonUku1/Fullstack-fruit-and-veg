@@ -59,7 +59,7 @@ INSTALLED_APPS = [
     "account.apps.AccountConfig",
     "authentication.apps.AuthenticationConfig",
     "user_profile.apps.UserProfileConfig",
-    
+                       
     # third party django apps
     'django.contrib.admin',
     'django.contrib.auth',
