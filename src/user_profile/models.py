@@ -29,27 +29,7 @@ class BaseAddress(models.Model):
     class Meta:
         abstract = True
 
-    def __str__(self):
-        return f"{self.__class__.__name__} for {self.user.username}"
 
-
-class ShippingAddress(BaseAddress):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="shipping_address")
-
-    class Meta:
-        verbose_name        = "Shipping Address"
-        verbose_name_plural = "Shipping Addresses"
-
-
-class BillingAddress(BaseAddress):
-    user            = models.ForeignKey(User, on_delete=models.CASCADE, related_name="billing_address")
-    primary_address = models.BooleanField(default=False)
-
-    class Meta:
-        verbose_name = "Billing Address"
-        verbose_name_plural = "Billing Addresses"
-        
-        
    
 class UserProfile(models.Model):
     PROFILE_PIC_PATH   = "users/profile/pic/"
@@ -62,10 +42,22 @@ class UserProfile(models.Model):
     profile_pic        = models.ImageField(verbose_name="Profile picture", null=True, blank=True, upload_to=PROFILE_PIC_PATH)
     cover_photo        = models.ImageField(verbose_name="Cover picture", null=True, blank=True, upload_to=COVER_PHOTO_PATH)
     user               = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-    shipping_addresses = models.ForeignKey(ShippingAddress, related_name="profiles", blank=True, null=True, on_delete=models.SET_NULL)
-    billing_addresses  = models.ForeignKey(BillingAddress, related_name="profiles", null=True, on_delete=models.SET_NULL)
     date_created       = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
+    
+    def num_of_shipping_addresses(self):
+        try:
+            return self.shipping_addresses.count()
+        except:
+            return 0
+    
+    def num_of_billing_addresses(self):
+        try:
+            return self.billing_addresses.count()
+        except:
+            return 0
+       
+        
     @property
     def full_name(self):
         """
@@ -93,7 +85,6 @@ class UserProfile(models.Model):
     def __str__(self):
         return f"Profile for {self.user.username}"
 
-    @property
     def num_of_gift_cards(self):
         return self.gift_cards.count()
 
@@ -216,3 +207,22 @@ class GiftCard(models.Model):
             self.card_type = card_type
         
       
+
+class BillingAddress(BaseAddress):
+    user_profile    = models.ForeignKey(UserProfile, related_name="billing_addresses", on_delete=models.CASCADE, blank=True, null=False,)
+    primary_address = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name        = "Billing Address"
+        verbose_name_plural = "Billing Addresses"
+        
+
+
+class ShippingAddress(BaseAddress):
+    user_profile       = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="shipping_addresses",  blank=True, null=True)
+
+    class Meta:
+        verbose_name        = "Shipping Address"
+        verbose_name_plural = "Shipping Addresses"
+
+

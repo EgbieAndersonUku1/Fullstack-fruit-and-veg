@@ -12,8 +12,8 @@ from .forms.gift_card_form import IssueGiftCardForm
 class BaseAddressAdmin(admin.ModelAdmin):
     
     ordering           = ["-date_created"]
-    list_display       = ["id", "country", "address_1", "city", "postcode", "user"]
-    list_filter        = ["city", "user"]
+    list_display       = ["id", "country", "address_1", "city", "postcode", "user_profile"]
+    list_filter        = ["city", "user_profile"]
     search_fields      = ["city", "address_1", "postcode", "country"]
     list_display_links = ["id", "address_1"]
     list_per_page      = 30
@@ -63,10 +63,11 @@ class GiftCardFormAdmin(admin.ModelAdmin):
 
 class UserProfileAdmin(admin.ModelAdmin):
     
-    ordering      = ["-date_created"]
-    list_display  = ['id', 'username', 'email', 'first_name', 'last_name', 'mobile', "num_of_gift_cards", "date_created"]
-    list_filter   = ['id', 'first_name', 'last_name', 'mobile']
-    search_fields = ['id', 'first_name', 'last_name', 'mobile']
+    ordering           = ["-date_created"]
+    list_display       = ['id', 'username', 'email', 'num_of_billing_addresses', 'num_of_shipping_addresses', "num_of_gift_cards", "date_created"]
+    list_filter        = ['id', 'first_name', 'last_name', 'mobile']
+    search_fields      = ['id', 'first_name', 'last_name', 'mobile']
+    list_display_links = ["username", "email"]
     
     list_per_page  = 30
     
@@ -80,12 +81,20 @@ class UserProfileAdmin(admin.ModelAdmin):
         return obj.user.email
     
     def num_of_gift_cards(self, obj):
-        return obj.num_of_gift_cards
+        return obj.num_of_gift_cards()
+    
+    def num_of_billing_addresses(self, obj):
+        return obj.num_of_billing_addresses()
+    
+    def num_of_shipping_addresses(self, obj):
+        return obj.num_of_shipping_addresses()
     
     
-    full_name.short_description = "Full name"
-    email.short_description     = "Email"
-    num_of_gift_cards.short_description = "Num of gift cards"
+    full_name.short_description                 = "Full name"
+    email.short_description                     = "Email"
+    num_of_gift_cards.short_description         = "Num of gift cards"
+    num_of_billing_addresses.short_description  = "No. of billing addresses"
+    num_of_shipping_addresses.short_description = "No. of shipping addresses"
     
 
 

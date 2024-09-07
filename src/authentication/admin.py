@@ -39,8 +39,7 @@ class AdminUser(BaseUserAdmin):
     
     # Fieldsets define the layout of the form view
     fieldsets = (
-        (None, {'fields': ('email', 'password' )}),
-        ('Personal info', {'fields': ('username', 'verification_data',  )}),
+        (None, {'fields': ('email', 'username','password' )}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'is_admin', 'is_banned', 'user_permissions', 'groups')}),
       
     )
