@@ -178,7 +178,8 @@ class UserProfileIntegrationTests(TestCase):
         billing_address = BillingAddress.objects.filter(country=random_country).first()
         self.assertIsNotNone(billing_address)
         
-
+        billing_address.delete()
+        
         # Verify that the billing address count is back to 0 after deletion
         self.assertEqual(self.user_profile.num_of_billing_addresses(), 0)
 

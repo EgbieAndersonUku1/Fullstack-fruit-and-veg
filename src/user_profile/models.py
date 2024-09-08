@@ -215,7 +215,22 @@ class BillingAddress(BaseAddress):
     class Meta:
         verbose_name        = "Billing Address"
         verbose_name_plural = "Billing Addresses"
-        
+    
+    def mark_as_primary(self, save=True):
+        """
+        Set this billing address as the primary address for the user profile.
+        """
+        self.primary_address = True
+        if save:
+            self.save()
+    
+    def unmark_as_primary(self, save=True):
+        """
+        Set this billing address as not the primary address for the user profile.
+        """
+        self.primary_address = False
+        if save:
+            self.save()
 
 
 class ShippingAddress(BaseAddress):
