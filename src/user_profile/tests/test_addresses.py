@@ -5,11 +5,11 @@ from user_profile.models import UserProfile, ShippingAddress, BillingAddress
 from utils.country_parser import parse_country_file
 
 
-def set_up_user_profile():
+def set_up_user_profile(username="user", email="egbie@example.com", password="password"):
      User     = get_user_model()
-     user     = User.objects.create_user(username="user", 
-                                        email="egbie@example.com", 
-                                        password="password",
+     user     = User.objects.create_user(username=username, 
+                                        email=email, 
+                                        password=password,
                                         )
      user_profile = UserProfile.objects.get(user=user)
      return user_profile
@@ -94,7 +94,62 @@ class BillingAddressTests(TestCase):
         
         self.assertFalse(billing_address.primary_address)
         
-       
+    def test_that_only_one_address_is_marked_as_primary(self):
+        """
+        Test that only one billing address is marked as primary for a given user profile, and ensure that 
+        marking a new address as primary unmarks the previous one. Also verify that other user profiles
+        are not affected by this change.
+        """
+        
+        # Create three new user profiles
+        user_profile_1 = set_up_user_profile(username="user1", email="user@example.com", password="password1")
+        user_profile_2 = set_up_user_profile(username="user2", email="user2@example.com", password="password2")
+        user_profile_3 = set_up_user_profile(username="user3", email="user3@example.com", password="password3")
+        
+        
+        # Create a billing address for each user profile
+        self.billing_address_1 = BillingAddress.objects.create(
+            country=self.RANDOM_COUNTRY, address_1=self.ADDRESS_1, address_2=self.ADDRESS_2,
+            city=self.CITY, postcode=self.POSTCODE, user_profile=user_profile_1)
+        
+        self.billing_address_2 = BillingAddress.objects.create(
+            country=self.RANDOM_COUNTRY, address_1=self.ADDRESS_1, address_2=self.ADDRESS_2,
+            city=self.CITY, postcode=self.POSTCODE, user_profile=user_profile_2)
+        
+        self.billing_address_3 = BillingAddress.objects.create(
+            country=self.RANDOM_COUNTRY, address_1=self.ADDRESS_1, address_2=self.ADDRESS_2,
+            city=self.CITY, postcode=self.POSTCODE, user_profile=user_profile_3)
+    
+        # Create three more billing addresses for user_profile_1 and mark them all as primary addresses
+        BillingAddress.objects.create(
+            country=self.RANDOM_COUNTRY, address_1="121A Thor rules", address_2="Crossway groves",
+            city="London", postcode="E5 u1", user_profile=user_profile_1, primary_address=True)
+        
+        BillingAddress.objects.create(
+            country=self.RANDOM_COUNTRY, address_1="131 Black widow rules", address_2="Crossway groves",
+            city="London", postcode="E5 u2", user_profile=user_profile_1, primary_address=True)
+        
+        BillingAddress.objects.create(
+            country=self.RANDOM_COUNTRY, address_1="131 Stranger Things rules", address_2="Crossway groves", 
+            city="London", postcode="E5 u3", user_profile=user_profile_1, primary_address=True)
+        
+        # Verify that only the last billing address is marked as primary, and the previous ones are unmarked
+        billing_address_1 = BillingAddress.objects.filter(postcode="E5 u1").first()
+        billing_address_2 = BillingAddress.objects.filter(postcode="E5 u2").first()
+        billing_address_3 = BillingAddress.objects.filter(postcode="E5 u3").first()
+        
+        self.assertFalse(billing_address_1.primary_address)
+        self.assertFalse(billing_address_2.primary_address)
+        self.assertTrue(billing_address_3.primary_address)
+        
+        # Verify that other user profiles have not been marked as primary addresses
+        billing_address_profile_2 = BillingAddress.objects.filter(user_profile=user_profile_2, primary_address=True).all()
+        billing_address_profile_3 = BillingAddress.objects.filter(user_profile=user_profile_3, primary_address=True).all()
+        
+        # Assert no primary addresses exist for user_profile_2 and user_profile_3
+        self.assertFalse(billing_address_profile_2.exists())
+        self.assertFalse(billing_address_profile_3.exists())
+
 
 class ShippngAddressTests(TestCase):
     
