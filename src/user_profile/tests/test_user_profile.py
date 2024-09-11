@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from user_profile.models import UserProfile
-
+from .user_profile_set_up import set_up_user_profile
 
 class UserProfileCreationTests(TestCase):
     
@@ -54,6 +54,64 @@ class UserProfileCreationTests(TestCase):
         user               = self.User.objects.get(email=email)
         self.assertEqual(super_user_profile.user, user)
     
+    def test_user_delete_cascades_to_user_profile(self):
+        """Test that when a user is deleted, the user profile is automatically deleted as well"""
+        
+        # Create a new user
+        new_user = self.User.objects.create_user(username="new user", email="new_user@example.com", password="password")
+        self.assertIsNotNone(new_user)
+        
+        new_user_profile    = UserProfile.objects.filter(user=new_user).first()
+        new_user_profile_id = new_user_profile.id
+        self.assertIsNotNone(new_user_profile)
+        
+        new_user.delete()
+        
+        # Verify that the UserProfile was also deleted
+        new_user_profile = UserProfile.objects.filter(id=new_user_profile_id).first()
+        self.assertIsNone(new_user_profile)
+
+    def test_superuser_delete_cascades_to_user_profile(self):
+        """Test that when a superuser is deleted, the associated user profile is automatically deleted as well."""
+        
+        # Create a new superuser
+        new_super_user = self.User.objects.create_superuser(username="super new user", email="super_user@example.com", password="password")
+        self.assertIsNotNone(new_super_user)
+        
+        # Check that the UserProfile was created
+        new_user_profile = UserProfile.objects.filter(user=new_super_user).first()
+        profile_id       = new_user_profile.id
+        self.assertIsNotNone(new_user_profile)
+        
+        new_super_user.delete()
+        
+        # Verify that the UserProfile was also deleted
+        new_user_profile = UserProfile.objects.filter(id=profile_id)
+        self.assertFalse(new_user_profile.exists())
+       
+    
+    def test_deleting_user_profile_does_not_delete_user(self):
+        """Ensure that deleting a UserProfile does not delete the associated User."""
+        
+        USERNAME = "test profile"
+        
+        # create a user profile
+        new_profile = set_up_user_profile(username=USERNAME, email="test_profile@example.com", password="password")
+        
+        newly_created_user    = self.User.objects.filter(username=USERNAME).first()
+        newly_created_user_id = newly_created_user.id
+        self.assertIsNotNone(newly_created_user)
+
+        new_profile.delete()
+        
+        # verify that the user profile is deleted
+        user_profile = UserProfile.objects.filter(id=newly_created_user_id)
+        self.assertFalse(user_profile.exists())
+        
+        # check if the user model still exists after deleting new_profile
+        newly_created_user = self.User.objects.filter(username=USERNAME)
+        self.assertTrue(newly_created_user.exists(), "The user model should not be deleted")
+
     def tearDown(self):
         # Clean up any data created after every test
         UserProfile.objects.all().delete()
