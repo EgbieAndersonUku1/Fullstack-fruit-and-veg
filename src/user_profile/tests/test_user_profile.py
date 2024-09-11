@@ -126,3 +126,7 @@ class UserProfileMethodTests(TestCase):
         # Check that the string representation matches the expected format
         self.assertEqual(str(self.user_profile), f"Profile for {self.user.username}")
 
+    def tearDown(self):
+        # Clean up any data created after every test
+        UserProfile.objects.all().delete()
+        self.User.objects.all().delete()

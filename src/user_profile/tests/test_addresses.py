@@ -3,16 +3,8 @@ from django.contrib.auth import get_user_model
 from user_profile.models import UserProfile, ShippingAddress, BillingAddress
 
 from utils.country_parser import parse_country_file
+from .user_profile_set_up import set_up_user_profile
 
-
-def set_up_user_profile(username="user", email="egbie@example.com", password="password"):
-     User     = get_user_model()
-     user     = User.objects.create_user(username=username, 
-                                        email=email, 
-                                        password=password,
-                                        )
-     user_profile = UserProfile.objects.get(user=user)
-     return user_profile
 
 
 class BillingAddressTests(TestCase):
@@ -146,11 +138,44 @@ class BillingAddressTests(TestCase):
         billing_address_profile_2 = BillingAddress.objects.filter(user_profile=user_profile_2, primary_address=True).all()
         billing_address_profile_3 = BillingAddress.objects.filter(user_profile=user_profile_3, primary_address=True).all()
         
-        # Assert no primary addresses exist for user_profile_2 and user_profile_3
         self.assertFalse(billing_address_profile_2.exists())
         self.assertFalse(billing_address_profile_3.exists())
 
 
+    def test_no_primary_address_set(self):
+        """
+        Test that no billing address is marked as primary when none is explicitly set.
+        The system should allow multiple addresses without requiring a primary one.
+        """
+        user_profile = set_up_user_profile(username="user_profile6", email="user_profile6@example.com", password="password6")
+        
+        CITY = "Sin City"
+        
+        # Create a billing address without marking it as primary
+        BillingAddress.objects.create(
+            country=self.RANDOM_COUNTRY,
+            address_1=self.ADDRESS_1,
+            address_2=self.ADDRESS_2,
+            city=CITY,
+            postcode=self.POSTCODE,
+            user_profile=user_profile
+        )
+        
+        address = BillingAddress.objects.filter(city=CITY).first()
+        
+        # Ensure the address is created and belongs to the user_profile
+        self.assertIsNotNone(address)
+        self.assertEqual(address.user_profile, user_profile)
+        
+        # Ensure the address is not marked as primary
+        self.assertFalse(address.primary_address)
+
+        
+        
+        
+        
+        
+        
 class ShippngAddressTests(TestCase):
     
     def setUp(self):
@@ -189,8 +214,5 @@ class ShippngAddressTests(TestCase):
         self.assertEqual(shipping_address.city, self.CITY)
         self.assertEqual(shipping_address.postcode, self.POSTCODE)
         self.assertEqual(shipping_address.user_profile, self.user_profile)
-    
  
-  
-        
    
