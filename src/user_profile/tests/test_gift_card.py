@@ -400,7 +400,6 @@ class GiftCardMethodsTest(TestCase):
         Test that the `does_not_expire` flag can be set using the `set_expiry_date` method.
         """
         
-        # set does not expire flag to false
         self.gift_card.does_not_expire = False
         self.gift_card.save()
         self.gift_card.refresh_from_db()

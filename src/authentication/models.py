@@ -80,9 +80,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_admin          = models.BooleanField(_("is admin"), default=False)
     is_email_verified = models.BooleanField(_("is email verified"), default=False)
     is_banned         = models.BooleanField(_("is banned"), default=False) 
+    is_temp_ban       = models.BooleanField(_("is_temp_ban"), default=False)
     last_login        = models.DateTimeField(_("last login"), auto_now=True) 
     date_created      = models.DateTimeField(_("date created"), auto_now_add=True)
     verification_data = models.JSONField(default=dict, blank=True, null=False)
+    banned_data       = models.JSONField(default=dict, blank=True, null=False)
+    ban_reason        = models.CharField(max_length=255, blank=True, null=True)
+
 
     objects = CustomBaseUser()
 
@@ -249,9 +253,10 @@ class User(AbstractBaseUser, PermissionsMixin):
                 - 'EXPIRED' if the code has expired,
                 - None if the code is invalid or the verification data is missing.
         """
-        HAS_EXPIRED = "EXPIRED"
+        HAS_EXPIRED  = "EXPIRED"
+        INVALID_CODE =  "Ivalid code"
         if not self.verification_data:
-            return False, None
+            return False, INVALID_CODE
 
         stored_code = self.verification_data.get("verification_code")
         
@@ -268,19 +273,125 @@ class User(AbstractBaseUser, PermissionsMixin):
         
         except (TypeError, ValueError):
             return False, None
-    
+        
     def ban(self):
-        """Ban the user from using the application"""
+        """
+        Permanently ban the user from accessing the application.
+
+        This method sets the `is_banned` flag to `True` and ensures that any 
+        temporary ban (`is_temp_ban`) is also cleared. The user instance is 
+        saved after applying the ban.
+        
+        Returns:
+            None
+        """
         if not self.is_banned:
             self.is_banned = True
+            self.is_temp_ban = False
             self.save()
-    
+
     def un_ban(self):
-        """Unban the user from using the application"""
+        """
+        Lift the permanent or temporary ban on the user.
+
+        This method resets both the `is_banned` and `is_temp_ban` flags to `False`, 
+        unbanning the user and restoring their access to the application. The user 
+        instance is saved after lifting the ban.
+        
+        Returns:
+            None
+        """
         if self.is_banned:
             self.is_banned = False
+            self.is_temp_ban = False
             self.save()
-        
+
+    def is_user_already_banned(self):
+        """
+        Check if the user is already banned.
+
+        This method checks whether the user has a permanent or temporary ban 
+        and returns a corresponding message. If the user is not banned, it returns `None`.
+
+        Returns:
+            str or None: A message indicating the ban type if the user is banned, 
+                        or `None` if no ban exists.
+        """
+        BAN_MESSAGE = "User already has a permanent ban"
+        TEMP_BAN_MESSAGE = "User already has a temporary ban"
+
+        if self.is_banned:
+            return BAN_MESSAGE
+        elif self.is_temp_ban:
+            return TEMP_BAN_MESSAGE
+        return None
+
+    def ban_for_x_amount_of_days(self, ban_reason: str = None, num_of_days_to_ban: int = 30, save: bool = True):
+        """
+        Temporarily ban the user for a specified number of days.
+
+        This method bans the user for a given period, specified in `num_of_days_to_ban`. 
+        The ban reason can optionally be provided and will be stored in the `ban_reason` field.
+        If the `num_of_days_to_ban` is not an integer, a `TypeError` will be raised.
+
+        Args:
+            ban_reason (str, optional): The reason for the ban, limited to 255 characters.
+            num_of_days_to_ban (int, optional): The number of days for which the user will be banned.
+                                                Defaults to 30 days. Must be an integer.
+            save (bool, optional): Whether to save the instance after applying the ban.
+                                Defaults to `True`. Set to `False` to defer saving.
+
+        Raises:
+            TypeError: If `num_of_days_to_ban` is not an integer.
+
+        Returns:
+            bool or str: `True` if the ban is applied successfully, or a message indicating 
+                        if the user is already banned (permanently or temporarily).
+        """
+        is_banned_resp = self.is_user_already_banned()
+
+        if is_banned_resp is None:
+            if not isinstance(num_of_days_to_ban, int):
+                raise TypeError("The number of days to ban must be an integer")
+            
+            current_date = datetime.now()
+            if ban_reason:
+                self.ban_reason = ban_reason[:255]
+            self.banned_data = {
+                "date_ban_was_sent": current_date.isoformat(),
+                "ban_expires_on": (current_date + timedelta(days=num_of_days_to_ban)).isoformat()
+            }
+            self.is_banned = False
+            self.is_temp_ban = True
+
+            if save:
+                self.save()
+            return True
+        return is_banned_resp
+
+    def has_ban_expired(self) -> bool:
+        """
+        Check if the user's temporary ban has expired.
+
+        This method compares the current date to the ban expiration date stored 
+        in `banned_data`. If the user has a permanent ban (`is_banned=True`), it 
+        always returns `False`.
+
+        Returns:
+            bool: `True` if the temporary ban has expired, `False` otherwise.
+        """
+        # If the user is permanently banned, the ban hasn't expired
+        if self.is_banned:
+            return False
+
+        if self.is_temp_ban and self.banned_data:
+            try:
+                ban_expires_on = datetime.fromisoformat(self.banned_data.get("ban_expires_on"))
+                return datetime.now() > ban_expires_on  
+            except (TypeError, ValueError):
+                return False
+        return False
+
     def mark_email_as_verified(self, save:bool=True):
         """
         Mark the user's email as verified and optionally save the updated instance.
@@ -311,7 +422,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         if save:
             self.save()
 
-    
     @classmethod
     def does_user_exists(cls, username):
         """
