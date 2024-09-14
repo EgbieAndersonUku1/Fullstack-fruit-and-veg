@@ -329,7 +329,7 @@ class BanUser(models.Model):
     user                = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bans")
     ban_reason          = models.TextField(max_length=255)
     ban_expires_on      = models.DateTimeField()
-    date_ban_was_issued = models.DateTimeField(auto_now_add=True)
+    date_ban_was_issued = models.DateTimeField()
     modified_on         = models.DateTimeField(auto_now=True)
 
     def __str__(self):

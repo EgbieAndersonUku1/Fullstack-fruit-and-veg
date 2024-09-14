@@ -183,8 +183,9 @@ class AdminNonActiveUserProxy(BaseUserAdmin, BaseUserAdminReadonlyFields):
 
 class UserBanAdmin(admin.ModelAdmin):
     
-    list_display    = ["id", "user", "username", "date_ban_was_issued", "ban_expires_on", "ban_duration_days", "remaining_days"]
-    readonly_fields = ['date_ban_was_issued', 'ban_expires_on', 'modified_on']
+    list_display       = ["id", "user", "username", "date_ban_was_issued", "ban_expires_on", "ban_duration_days", "remaining_days"]
+    readonly_fields    = ['modified_on']
+    list_display_links = ["id", "user"]
 
     def username(self, obj):
         return obj.username
