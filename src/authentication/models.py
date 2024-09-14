@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime, timedelta
+from django.utils.timezone import make_aware
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
@@ -84,10 +85,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_login        = models.DateTimeField(_("last login"), auto_now=True) 
     date_created      = models.DateTimeField(_("date created"), auto_now_add=True)
     verification_data = models.JSONField(default=dict, blank=True, null=False)
-    banned_data       = models.JSONField(default=dict, blank=True, null=False)
-    ban_reason        = models.CharField(max_length=255, blank=True, null=True)
-
-
+  
     objects = CustomBaseUser()
 
     USERNAME_FIELD = 'email'
@@ -274,124 +272,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         except (TypeError, ValueError):
             return False, None
         
-    def ban(self):
-        """
-        Permanently ban the user from accessing the application.
-
-        This method sets the `is_banned` flag to `True` and ensures that any 
-        temporary ban (`is_temp_ban`) is also cleared. The user instance is 
-        saved after applying the ban.
-        
-        Returns:
-            None
-        """
-        if not self.is_banned:
-            self.is_banned = True
-            self.is_temp_ban = False
-            self.save()
-
-    def un_ban(self):
-        """
-        Lift the permanent or temporary ban on the user.
-
-        This method resets both the `is_banned` and `is_temp_ban` flags to `False`, 
-        unbanning the user and restoring their access to the application. The user 
-        instance is saved after lifting the ban.
-        
-        Returns:
-            None
-        """
-        if self.is_banned:
-            self.is_banned = False
-            self.is_temp_ban = False
-            self.save()
-
-    def is_user_already_banned(self):
-        """
-        Check if the user is already banned.
-
-        This method checks whether the user has a permanent or temporary ban 
-        and returns a corresponding message. If the user is not banned, it returns `None`.
-
-        Returns:
-            str or None: A message indicating the ban type if the user is banned, 
-                        or `None` if no ban exists.
-        """
-        BAN_MESSAGE = "User already has a permanent ban"
-        TEMP_BAN_MESSAGE = "User already has a temporary ban"
-
-        if self.is_banned:
-            return BAN_MESSAGE
-        elif self.is_temp_ban:
-            return TEMP_BAN_MESSAGE
-        return None
-
-    def ban_for_x_amount_of_days(self, ban_reason: str = None, num_of_days_to_ban: int = 30, save: bool = True):
-        """
-        Temporarily ban the user for a specified number of days.
-
-        This method bans the user for a given period, specified in `num_of_days_to_ban`. 
-        The ban reason can optionally be provided and will be stored in the `ban_reason` field.
-        If the `num_of_days_to_ban` is not an integer, a `TypeError` will be raised.
-
-        Args:
-            ban_reason (str, optional): The reason for the ban, limited to 255 characters.
-            num_of_days_to_ban (int, optional): The number of days for which the user will be banned.
-                                                Defaults to 30 days. Must be an integer.
-            save (bool, optional): Whether to save the instance after applying the ban.
-                                Defaults to `True`. Set to `False` to defer saving.
-
-        Raises:
-            TypeError: If `num_of_days_to_ban` is not an integer.
-
-        Returns:
-            bool or str: `True` if the ban is applied successfully, or a message indicating 
-                        if the user is already banned (permanently or temporarily).
-        """
-        is_banned_resp = self.is_user_already_banned()
-
-        if is_banned_resp is None:
-            if not isinstance(num_of_days_to_ban, int):
-                raise TypeError("The number of days to ban must be an integer")
-            
-            current_date = datetime.now()
-            if ban_reason:
-                self.ban_reason = ban_reason[:255]
-            self.banned_data = {
-                "date_ban_was_sent": current_date.isoformat(),
-                "ban_expires_on": (current_date + timedelta(days=num_of_days_to_ban)).isoformat()
-            }
-            self.is_banned = False
-            self.is_temp_ban = True
-
-            if save:
-                self.save()
-            return True
-        return is_banned_resp
-
-    def has_ban_expired(self) -> bool:
-        """
-        Check if the user's temporary ban has expired.
-
-        This method compares the current date to the ban expiration date stored 
-        in `banned_data`. If the user has a permanent ban (`is_banned=True`), it 
-        always returns `False`.
-
-        Returns:
-            bool: `True` if the temporary ban has expired, `False` otherwise.
-        """
-        # If the user is permanently banned, the ban hasn't expired
-        if self.is_banned:
-            return False
-
-        if self.is_temp_ban and self.banned_data:
-            try:
-                ban_expires_on = datetime.fromisoformat(self.banned_data.get("ban_expires_on"))
-                return datetime.now() > ban_expires_on  
-            except (TypeError, ValueError):
-                return False
-        return False
-
     def mark_email_as_verified(self, save:bool=True):
         """
         Mark the user's email as verified and optionally save the updated instance.
@@ -445,6 +325,100 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 
+class BanUser(models.Model):
+    user                = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bans")
+    ban_reason          = models.TextField(max_length=255)
+    ban_expires_on      = models.DateTimeField()
+    date_ban_was_issued = models.DateTimeField(auto_now_add=True)
+    modified_on         = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user} banned for {self.ban_reason}"
+
+    @property
+    def username(self):
+        """Mostly for the admin interface. When called displlays the name of the user who is banned"""
+        return self.user.username.title()
+    
+    @property
+    def ban_duration_days(self):
+        """Return the total number of days for the ban."""
+        return (self.ban_expires_on - self.date_ban_was_issued).days
+    
+    @property
+    def remaining_days(self):
+        """Return the number of days remaining until the ban expires."""
+        current_time = make_aware(datetime.now())
+        if self.ban_expires_on < current_time:
+            return 0
+        return (self.ban_expires_on - current_time).days
+    
+    def ban(self):
+        """
+        Permanently ban the user from accessing the application.
+        """
+        if not self.user.is_banned:
+            self.user.is_banned = True
+            self.user.is_temp_ban = False
+            self.user.save()
+
+    def un_ban(self):
+        """
+        Lift the permanent or temporary ban on the user.
+        """
+        if self.user.is_banned or self.user.is_temp_ban:
+            self.user.is_banned = False
+            self.user.is_temp_ban = False
+            self.user.save()
+
+    def is_user_already_banned(self):
+        """
+        Check if the user is already banned.
+        """
+        if self.user.is_banned:
+            return "User already has a permanent ban"
+        elif self.user.is_temp_ban:
+            return "User already has a temporary ban"
+        return None
+
+    def ban_for_x_amount_of_days(self, ban_reason: str = None, num_of_days_to_ban: int = 30, save: bool = True):
+        """
+        Temporarily ban the user for a specified number of days.
+        """
+        is_banned_resp = self.is_user_already_banned()
+
+        if is_banned_resp is None:
+            if not isinstance(num_of_days_to_ban, int):
+                raise TypeError("The number of days to ban must be an integer")
+
+            current_date = make_aware(datetime.now())
+            self.ban_reason = ban_reason[:255] if ban_reason else None
+            self.ban_expires_on = current_date + timedelta(days=num_of_days_to_ban)
+
+            self.user.is_banned = False
+            self.user.is_temp_ban = True
+
+            if save:
+                self.save()
+            self.user.save()
+            
+            return True
+        return is_banned_resp
+
+    def has_ban_expired(self) -> bool:
+        """
+        Check if the user's temporary ban has expired.
+        """
+        if self.user.is_banned:
+            return False
+
+        if self.user.is_temp_ban:
+            current_date = make_aware(datetime.now())
+            return current_date > self.ban_expires_on
+        
+        return False
+
+    
 class VerifiedUserProxy(User):
     """
     Proxy model for the User class representing a verified user.

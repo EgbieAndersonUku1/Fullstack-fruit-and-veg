@@ -208,25 +208,6 @@ class CustomUserModelTestCase(TestCase):
         # call the method after wiping the data
         self.assertFalse(user.verification_data)
     
-    def test_user_is_banned_after_ban_action(self):
-        """
-        Test that a user becomes banned after a ban action is applied.
-        """
-        self.user.ban()  
-        self.assertTrue(self.user.is_banned)
-
-    def test_un_ban_user(self):
-        """
-        Test that a user becomes unbanned after a ban action is applied.
-        """
-        # apply the ban and test if is banned
-        self.user.ban()
-        self.assertTrue(self.user.is_banned)
-        
-        # unban the user
-        self.user.un_ban()
-        self.assertFalse(self.user.is_banned)
-    
     
     def test_mark_email_as_verified_method(self):
         """Test if the method successfully marks the email as verified"""
@@ -248,42 +229,4 @@ class CustomUserModelTestCase(TestCase):
         # call a user that doesn't exists
         self.assertFalse(self.User.does_user_exists(username="user_does_exists"))
     
-    def test_ban_for_x_amount_of_days_method(self):
-        """Test if the user can banned for x-amount of days"""
-        
-        current_date       = datetime.now().date()
-        BAN_REASON         = "User banned for causing trouble"
-        NUM_OF_DAYS_BANNED = 30
-        
-        # call the method under test
-        resp  = self.user.ban_for_x_amount_of_days(ban_reason=BAN_REASON) # default ban days 30
-        
-        self.assertEqual(resp, True)
-        self.user.refresh_from_db()
-        
-        
-        self.assertTrue(self.user.banned_data)
-        
-        date_ban_was_issued = string_to_date(self.user.banned_data.get("date_ban_was_sent"))
-        date_ban_expires    = string_to_date(self.user.banned_data.get("ban_expires_on"))
-        
-        expected_ban_expiry = current_date + timedelta(days=NUM_OF_DAYS_BANNED)
-        
-        self.assertEqual(self.user.ban_reason, BAN_REASON)
-        self.assertEqual(date_ban_expires, expected_ban_expiry)
-        self.assertLessEqual(date_ban_was_issued, current_date)
-        self.assertGreaterEqual(date_ban_expires, current_date)
-        
-    def test_ban_for_x_amount_of_days_with_invalid_days(self):
-        """Test if a TypeError is raised for invalid number of ban days"""
-        with self.assertRaises(TypeError):
-            self.user.ban_for_x_amount_of_days(ban_reason="Test", num_of_days_to_ban="invalid_days")
-
-    def test_user_already_banned(self):
-        """Test if the method returns the correct response if the user is already banned"""
-        self.user.is_banned = True
-        self.user.save()
-
-        self.user.refresh_from_db()
-        resp = self.user.ban_for_x_amount_of_days(ban_reason="Already banned")
-        self.assertEqual(resp, "User already has a permanent ban")
+    

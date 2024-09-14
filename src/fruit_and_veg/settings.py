@@ -53,7 +53,8 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     'jazzmin',     
-    
+    'django_select2',
+     
     # my apps
     "home.apps.HomeConfig",
     "account.apps.AccountConfig",
@@ -108,6 +109,7 @@ JAZZMIN_SETTINGS = {
       
                 
 }
+
 
 # Gmail 
 EMAIL_BACKEND       = getenv('EMAIL_BACKEND')
