@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime, timedelta
+from django.utils.timezone import make_aware
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
@@ -80,10 +81,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_admin          = models.BooleanField(_("is admin"), default=False)
     is_email_verified = models.BooleanField(_("is email verified"), default=False)
     is_banned         = models.BooleanField(_("is banned"), default=False) 
+    is_temp_ban       = models.BooleanField(_("is_temp_ban"), default=False)
     last_login        = models.DateTimeField(_("last login"), auto_now=True) 
     date_created      = models.DateTimeField(_("date created"), auto_now_add=True)
     verification_data = models.JSONField(default=dict, blank=True, null=False)
-
+  
     objects = CustomBaseUser()
 
     USERNAME_FIELD = 'email'
@@ -249,9 +251,10 @@ class User(AbstractBaseUser, PermissionsMixin):
                 - 'EXPIRED' if the code has expired,
                 - None if the code is invalid or the verification data is missing.
         """
-        HAS_EXPIRED = "EXPIRED"
+        HAS_EXPIRED  = "EXPIRED"
+        INVALID_CODE =  "Ivalid code"
         if not self.verification_data:
-            return False, None
+            return False, INVALID_CODE
 
         stored_code = self.verification_data.get("verification_code")
         
@@ -268,18 +271,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         
         except (TypeError, ValueError):
             return False, None
-    
-    def ban(self):
-        """Ban the user from using the application"""
-        if not self.is_banned:
-            self.is_banned = True
-            self.save()
-    
-    def un_ban(self):
-        """Unban the user from using the application"""
-        if self.is_banned:
-            self.is_banned = False
-            self.save()
         
     def mark_email_as_verified(self, save:bool=True):
         """
@@ -311,7 +302,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         if save:
             self.save()
 
-    
     @classmethod
     def does_user_exists(cls, username):
         """
@@ -335,6 +325,100 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 
+class BanUser(models.Model):
+    user                = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bans")
+    ban_reason          = models.TextField(max_length=255)
+    ban_expires_on      = models.DateTimeField()
+    date_ban_was_issued = models.DateTimeField()
+    modified_on         = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user} banned for {self.ban_reason}"
+
+    @property
+    def username(self):
+        """Mostly for the admin interface. When called displlays the name of the user who is banned"""
+        return self.user.username.title()
+    
+    @property
+    def ban_duration_days(self):
+        """Return the total number of days for the ban."""
+        return (self.ban_expires_on - self.date_ban_was_issued).days
+    
+    @property
+    def remaining_days(self):
+        """Return the number of days remaining until the ban expires."""
+        current_time = make_aware(datetime.now())
+        if self.ban_expires_on < current_time:
+            return 0
+        return (self.ban_expires_on - current_time).days
+    
+    def ban(self):
+        """
+        Permanently ban the user from accessing the application.
+        """
+        if not self.user.is_banned:
+            self.user.is_banned = True
+            self.user.is_temp_ban = False
+            self.user.save()
+
+    def un_ban(self):
+        """
+        Lift the permanent or temporary ban on the user.
+        """
+        if self.user.is_banned or self.user.is_temp_ban:
+            self.user.is_banned = False
+            self.user.is_temp_ban = False
+            self.user.save()
+
+    def is_user_already_banned(self):
+        """
+        Check if the user is already banned.
+        """
+        if self.user.is_banned:
+            return "User already has a permanent ban"
+        elif self.user.is_temp_ban:
+            return "User already has a temporary ban"
+        return None
+
+    def ban_for_x_amount_of_days(self, ban_reason: str = None, num_of_days_to_ban: int = 30, save: bool = True):
+        """
+        Temporarily ban the user for a specified number of days.
+        """
+        is_banned_resp = self.is_user_already_banned()
+
+        if is_banned_resp is None:
+            if not isinstance(num_of_days_to_ban, int):
+                raise TypeError("The number of days to ban must be an integer")
+
+            current_date = make_aware(datetime.now())
+            self.ban_reason = ban_reason[:255] if ban_reason else None
+            self.ban_expires_on = current_date + timedelta(days=num_of_days_to_ban)
+
+            self.user.is_banned = False
+            self.user.is_temp_ban = True
+
+            if save:
+                self.save()
+            self.user.save()
+            
+            return True
+        return is_banned_resp
+
+    def has_ban_expired(self) -> bool:
+        """
+        Check if the user's temporary ban has expired.
+        """
+        if self.user.is_banned:
+            return False
+
+        if self.user.is_temp_ban:
+            current_date = make_aware(datetime.now())
+            return current_date > self.ban_expires_on
+        
+        return False
+
+    
 class VerifiedUserProxy(User):
     """
     Proxy model for the User class representing a verified user.

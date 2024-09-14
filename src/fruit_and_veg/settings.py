@@ -53,13 +53,14 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     'jazzmin',     
-    
+    'django_select2',
+     
     # my apps
     "home.apps.HomeConfig",
     "account.apps.AccountConfig",
     "authentication.apps.AuthenticationConfig",
     "user_profile.apps.UserProfileConfig",
-    
+                       
     # third party django apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -108,6 +109,7 @@ JAZZMIN_SETTINGS = {
       
                 
 }
+
 
 # Gmail 
 EMAIL_BACKEND       = getenv('EMAIL_BACKEND')

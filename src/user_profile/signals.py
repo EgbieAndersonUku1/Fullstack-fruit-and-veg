@@ -1,7 +1,7 @@
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 
-from .models import User, UserProfile
+from .models import User, UserProfile, BillingAddress
 
 
 
@@ -22,3 +22,13 @@ def handle_existing_user_profile(user):
         UserProfile.objects.create(user=user)
     else:
         profile.save()
+        
+
+@receiver(post_save, sender=BillingAddress)
+def handle_billing_address_update(sender, instance, **kwargs):
+    
+    if instance.primary_address:
+        
+        # Unmark all other primary addresses for this user profile except for one excluded
+        BillingAddress.objects.filter(user_profile=instance.user_profile, primary_address=True).exclude(pk=instance.pk).update(primary_address=False)
+

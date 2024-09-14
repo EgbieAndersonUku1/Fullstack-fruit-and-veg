@@ -3,7 +3,6 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model, authenticate, login, logout 
 from django.shortcuts import render, redirect
 
-
 from .utils.password_validator import PasswordStrengthChecker
 from .views_helper import validate_helper
 
@@ -249,3 +248,6 @@ def verify_email_token(request, username, token):
     
         messages.success(request, "You have successfully confirmed your email. You can now log in.")
         return redirect("home")
+
+
+

@@ -4,6 +4,8 @@ from django.test import TestCase
 
 from django.contrib.auth import get_user_model
 
+from utils.converter import string_to_date
+
 
 class CustomUserModelTestCase(TestCase):
     
@@ -206,24 +208,6 @@ class CustomUserModelTestCase(TestCase):
         # call the method after wiping the data
         self.assertFalse(user.verification_data)
     
-    def test_user_is_banned_after_ban_action(self):
-        """
-        Test that a user becomes banned after a ban action is applied.
-        """
-        self.user.ban()  
-        self.assertTrue(self.user.is_banned)
-
-    def test_un_ban_user(self):
-        """
-        Test that a user becomes unbanned after a ban action is applied.
-        """
-        # apply the ban and test if is banned
-        self.user.ban()
-        self.assertTrue(self.user.is_banned)
-        
-        # unban the user
-        self.user.un_ban()
-        self.assertFalse(self.user.is_banned)
     
     def test_mark_email_as_verified_method(self):
         """Test if the method successfully marks the email as verified"""
@@ -244,3 +228,5 @@ class CustomUserModelTestCase(TestCase):
         
         # call a user that doesn't exists
         self.assertFalse(self.User.does_user_exists(username="user_does_exists"))
+    
+    

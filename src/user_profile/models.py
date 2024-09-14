@@ -109,18 +109,18 @@ class GiftCard(models.Model):
         user = self.user_profile.user if self.user_profile else None
         return f"Gift card for {user.username.title() if user else 'No User'} with the amount of £{self.value:.2f}"
  
-    
     def is_valid(self, code):
         """Check if the gift card is still valid, considering does_not_expire."""
         
         if self.code != code:
             return False
         
-        current_date = timezone.now().date()
-    
-        return (self.is_active and not self.is_redeemed 
-                and (self.does_not_expire or self.expiration_date is None 
-                     or self.expiration_date >= current_date))
+        current_date    = timezone.now().date()
+        expiration_date = datetime.strptime(str(self.expiration_date), "%Y-%m-%d").date()
+        
+        is_active_and_not_redeemed = self.is_active and not self.is_redeemed
+        is_not_expired             = (self.does_not_expire or self.expiration_date is None) or (expiration_date >= current_date)
+        return is_active_and_not_redeemed and is_not_expired
 
     def apply(self, amount, save=True):
         """Apply an amount to the gift card and reduce its value."""
@@ -171,14 +171,12 @@ class GiftCard(models.Model):
         
         return gift_card
         
-    def set_expiry_date(self, expiry_date=None, does_not_expire=False):
+    def set_expiry_date(self, expiry_date=None, does_not_expire=False, save=True):
         """Helper method to set the expiration date."""
         
         if does_not_expire:
             self.does_not_expire = True
-            return
-        
-        if expiry_date:
+        elif expiry_date and not does_not_expire:
             if isinstance(expiry_date, str):
                 # If expiry_date is a string, parse it into a date object
                 try:
@@ -188,6 +186,9 @@ class GiftCard(models.Model):
             elif isinstance(expiry_date, date):
                 self.expiration_date = expiry_date
             self.does_not_expire = False
+        
+        if save:
+            self.save()
     
     def set_amount(self, amount=None):
         """Set the amount for the gift card"""
@@ -215,7 +216,22 @@ class BillingAddress(BaseAddress):
     class Meta:
         verbose_name        = "Billing Address"
         verbose_name_plural = "Billing Addresses"
-        
+    
+    def mark_as_primary(self, save=True):
+        """
+        Set this billing address as the primary address for the user profile.
+        """
+        self.primary_address = True
+        if save:
+            self.save()
+    
+    def unmark_as_primary(self, save=True):
+        """
+        Set this billing address as not the primary address for the user profile.
+        """
+        self.primary_address = False
+        if save:
+            self.save()
 
 
 class ShippingAddress(BaseAddress):
