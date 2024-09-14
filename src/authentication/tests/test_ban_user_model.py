@@ -31,7 +31,10 @@ class CustomBanUserModelTestCase(TestCase):
         
         self.ban_user = BanUser.objects.create(user=self.regular_user, 
                                                ban_reason=self.BAN_REASON, 
-                                               ban_expires_on=self.BAN_EXPIRES_ON)
+                                               ban_expires_on=self.BAN_EXPIRES_ON,
+                                                date_ban_was_issued=self.current_date
+                                               )
+                                              
         self.ban_user.ban()
       
     def test_creation_count(self):
@@ -44,6 +47,7 @@ class CustomBanUserModelTestCase(TestCase):
         
         self.assertEqual(self.ban_user.ban_reason, self.BAN_REASON)
         self.assertEqual(self.ban_user.ban_expires_on, self.BAN_EXPIRES_ON)
+        self.assertEqual(self.ban_user.date_ban_was_issued, self.current_date)
         self.assertEqual(self.ban_user.user, self.regular_user)
     
     def test_user_is_permanently_banned(self):
@@ -61,9 +65,13 @@ class CustomBanUserModelTestCase(TestCase):
         
         ban_regular_user = BanUser.objects.create(user=new_regular_user, 
                                                       ban_reason=self.BAN_REASON, 
-                                                      ban_expires_on=self.BAN_EXPIRES_ON)
+                                                      ban_expires_on=self.BAN_EXPIRES_ON,
+                                                      date_ban_was_issued=self.current_date,
+                                                      )
         
         ban_regular_user.ban_for_x_amount_of_days(ban_reason="Temporary ban", num_of_days_to_ban=7)
+        
+        ban_regular_user.refresh_from_db()
         self.assertTrue(new_regular_user.is_temp_ban)
         self.assertFalse(new_regular_user.is_banned)  # Ensure it's not a permanent ban
     
@@ -90,10 +98,13 @@ class CustomBanUserModelTestCase(TestCase):
         expired_ban_user = BanUser.objects.create(
             user=regular_user, 
             ban_reason="Temporary ban", 
+            date_ban_was_issued=self.current_date,
             ban_expires_on=self.current_date - timedelta(days=1)  # Already expired
+            
         )
         
         expired_ban_user.ban()
+        expired_ban_user.refresh_from_db()
         
         self.assertTrue(regular_user.is_banned)
         self.assertFalse(regular_user.is_temp_ban)
@@ -114,6 +125,7 @@ class CustomBanUserModelTestCase(TestCase):
         expired_ban_user = BanUser.objects.create(
             user=regular_user, 
             ban_reason="Temporary ban", 
+             date_ban_was_issued=self.current_date,
             ban_expires_on=ban_expiration_date
         )
         
@@ -123,6 +135,9 @@ class CustomBanUserModelTestCase(TestCase):
             num_of_days_to_ban=-2,  # Negative days to simulate an expired ban
             save=True
         )
+        
+        regular_user.refresh_from_db()
+        expired_ban_user.refresh_from_db()
         
         # Check that the user is not permanently banned
         self.assertFalse(regular_user.is_banned)
