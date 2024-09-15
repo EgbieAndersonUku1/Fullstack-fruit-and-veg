@@ -4,6 +4,8 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.db.models.query import QuerySet
 from django.http import HttpRequest
 
+from authentication.forms.ban_user_form import BanUserAdminForm
+
 from .models import (
                     ActiveUserProxy,
                     AdminUserProxy,
@@ -13,7 +15,8 @@ from .models import (
                     StaffUserProxy,
                     SuperUserProxy,
                     User,
-                    VerifiedUserProxy
+                    VerifiedUserProxy,
+                    TempBannedUserProxy
 )
 
 
@@ -89,6 +92,22 @@ class AdminBannedUserProxy(BaseUserAdmin, BaseUserAdminReadonlyFields):
         query_set = super().get_queryset(request)
         return query_set.filter(is_banned=True)
 
+
+class AdminBTempBannedUserProxy(BaseUserAdmin, BaseUserAdminReadonlyFields):
+    """
+    Custom admin class for the BannedUserProxy model to manage banned users in the Django admin interface.
+
+    This class extends the functionality of the BaseUserAdmin to display only users who have been banned.
+
+    Methods
+    -------
+    get_queryset(request: HttpRequest) -> QuerySet[Any]
+        Returns a queryset filtered to include only banned users.
+    """
+   
+    def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
+        query_set = super().get_queryset(request)
+        return query_set.filter(is_temp_ban=True)
         
 
 class AdminSuperUserProxy(BaseUserAdmin, BaseUserAdminReadonlyFields):
@@ -183,10 +202,12 @@ class AdminNonActiveUserProxy(BaseUserAdmin, BaseUserAdminReadonlyFields):
 
 class UserBanAdmin(admin.ModelAdmin):
     
-    list_display       = ["id", "user", "username", "date_ban_was_issued", "ban_expires_on", "ban_duration_days", "remaining_days"]
+    list_display       = ["id", "user", "username", "ban_start_date", "ban_expires_on", "ban_duration_days", "remaining_days"]
     readonly_fields    = ['modified_on']
     list_display_links = ["id", "user"]
-
+ 
+    form = BanUserAdminForm
+    
     def username(self, obj):
         return obj.username
     
@@ -195,6 +216,9 @@ class UserBanAdmin(admin.ModelAdmin):
     
     def remaining_days(self, obj):
         return obj.remaining_days
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
 
 
 
@@ -205,5 +229,6 @@ admin.site.register(BanUser, UserBanAdmin)
 admin.site.register(NonActiveUserProxy, AdminNonActiveUserProxy)
 admin.site.register(SuperUserProxy, AdminSuperUserProxy)
 admin.site.register(StaffUserProxy, AdminStaffUserProxy)
+admin.site.register(TempBannedUserProxy, AdminBTempBannedUserProxy)
 admin.site.register(User, AdminUser)
 admin.site.register(VerifiedUserProxy, AdminVerifiedUserProxy)

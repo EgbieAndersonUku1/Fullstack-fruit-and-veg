@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 from typing import Optional
 
+from utils.dates import calculate_days_between_dates
 # Create your models here.
 
 class CustomBaseUser(BaseUserManager):
@@ -328,8 +329,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 class BanUser(models.Model):
     user                = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bans")
     ban_reason          = models.TextField(max_length=255)
+    ban_start_date      = models.DateTimeField()
     ban_expires_on      = models.DateTimeField()
-    date_ban_was_issued = models.DateTimeField()
     modified_on         = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -343,15 +344,17 @@ class BanUser(models.Model):
     @property
     def ban_duration_days(self):
         """Return the total number of days for the ban."""
-        return (self.ban_expires_on - self.date_ban_was_issued).days
+        return calculate_days_between_dates(self.ban_expires_on, self.ban_start_date)
+       
     
     @property
     def remaining_days(self):
         """Return the number of days remaining until the ban expires."""
-        current_time = make_aware(datetime.now())
-        if self.ban_expires_on < current_time:
+        current_date = make_aware(datetime.now())
+        if self.ban_expires_on < current_date:
             return 0
-        return (self.ban_expires_on - current_time).days
+        return calculate_days_between_dates(self.ban_expires_on, current_date)
+      
     
     def ban(self):
         """
@@ -447,6 +450,19 @@ class BannedUserProxy(User):
         verbose_name = "Banned User"
         verbose_name_plural = "Banned Users"
 
+
+class TempBannedUserProxy(User):
+    """
+    Proxy model for the User class representing a banned user.
+
+    This proxy model allows for custom behaviour or display options for 
+    users who are banned, while leveraging the existing User model's 
+    database structure.
+    """
+    class Meta:
+        proxy = True
+        verbose_name = "Temporary Banned User"
+        verbose_name_plural = "Temporary Banned Users"
 
 
 class SuperUserProxy(User):
