@@ -202,7 +202,7 @@ class AdminNonActiveUserProxy(BaseUserAdmin, BaseUserAdminReadonlyFields):
 
 class UserBanAdmin(admin.ModelAdmin):
     
-    list_display       = ["id", "user", "username", "ban_start_date", "ban_expires_on", "ban_duration_days", "remaining_days"]
+    list_display       = ["id", "user", "username", "start_date", "expires_on", "ban_duration_days", "remaining_days"]
     readonly_fields    = ['modified_on']
     list_display_links = ["id", "user"]
  
@@ -211,11 +211,20 @@ class UserBanAdmin(admin.ModelAdmin):
     def username(self, obj):
         return obj.username
     
+    def start_date(self, obj):
+        return obj.ban_start_date if obj.ban_start_date else "N/A"
+
+    def expires_on(self, obj):
+        return obj.ban_expires_on if obj.ban_expires_on else "N/A"
+  
+        
     def ban_duration_days(self, obj):
-        return obj.ban_duration_days
+        ban_duration = obj.ban_duration_days
+        return "Permanent Ban" if ban_duration == None else ban_duration
     
     def remaining_days(self, obj):
-        return obj.remaining_days
+        remaining_days = obj.remaining_days
+        return "Permanent Ban" if remaining_days == None else remaining_days
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
