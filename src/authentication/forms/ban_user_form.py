@@ -40,7 +40,6 @@ class BanUserAdminForm(forms.ModelForm):
      
         user_ban_record = super().save(commit=False)
 
-        ban_reason      = self.cleaned_data["ban_reason"]
         ban_start_date  = self.cleaned_data.get("ban_start_date", None)
         ban_expires_on  = self.cleaned_data.get("ban_expires_on", None)
         
