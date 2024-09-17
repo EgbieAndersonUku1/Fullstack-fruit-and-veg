@@ -6,8 +6,9 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 
 from typing import Optional
+from utils.dates import calculate_days_between_dates, is_date_valid
 
-from utils.dates import calculate_days_between_dates
+
 # Create your models here.
 
 class CustomBaseUser(BaseUserManager):
@@ -166,9 +167,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         try:
             if value_type.lower() == "username":
-                return cls.objects.get(username=value)
+                return cls.objects.get(username=value.lower())
             elif value_type.lower() == "email":
-                return cls.objects.get(email=value)
+                return cls.objects.get(email=value.lower())
         except cls.DoesNotExist:
             return None
     
@@ -325,12 +326,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         return cls.objects.filter(username=username).exists()
 
 
-
 class BanUser(models.Model):
     user                = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bans")
-    ban_reason          = models.TextField(max_length=255)
-    ban_start_date      = models.DateTimeField()
-    ban_expires_on      = models.DateTimeField()
+    ban_reason          = models.TextField()  
+    ban_start_date      = models.DateTimeField(null=True, blank=True)
+    ban_expires_on      = models.DateTimeField(null=True, blank=True)
     modified_on         = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -344,12 +344,17 @@ class BanUser(models.Model):
     @property
     def ban_duration_days(self):
         """Return the total number of days for the ban."""
-        return calculate_days_between_dates(self.ban_expires_on, self.ban_start_date)
+        if self.ban_start_date and self.ban_expires_on:
+            return calculate_days_between_dates(self.ban_expires_on, self.ban_start_date)
+        return None
        
     
     @property
     def remaining_days(self):
         """Return the number of days remaining until the ban expires."""
+        
+        if not self.ban_expires_on:
+            return None
         current_date = make_aware(datetime.now())
         if self.ban_expires_on < current_date:
             return 0
@@ -383,10 +388,28 @@ class BanUser(models.Model):
         elif self.user.is_temp_ban:
             return "User already has a temporary ban"
         return None
-
-    def ban_for_x_amount_of_days(self, ban_reason: str = None, num_of_days_to_ban: int = 30, save: bool = True):
+    
+    def ban_for_x_amount_of_days(self, num_of_days_to_ban: int = 30, save: bool = True):
         """
-        Temporarily ban the user for a specified number of days.
+        Temporarily ban the user for a specified number of days starting from the day of the ban.
+        
+        Parameters:
+          - num_of_days_to_ban (int): The number of days to ban a given user
+          
+          - save (bool): Optional. If True (default), saves the updated `BanUser` 
+          instance and the associated `User` object to the database. If False, 
+          the method returns the updated `BanUser` instance without saving.
+
+        Raises:
+        - TypeError: If num_of_days_to_ban is not int 
+        
+        Returns:
+        - True if `save` is True.
+        - The updated `BanUser` instance if `save` is False.
+
+        Example:
+        >>> ban_user_instance = BanUser.objects.get(user=some_user)
+        >>> ban_user_instance.ban_for_x_amount_of_days(num_of_days_to_ban=10)
         """
         is_banned_resp = self.is_user_already_banned()
 
@@ -394,20 +417,75 @@ class BanUser(models.Model):
             if not isinstance(num_of_days_to_ban, int):
                 raise TypeError("The number of days to ban must be an integer")
 
-            current_date = make_aware(datetime.now())
-            self.ban_reason = ban_reason[:255] if ban_reason else None
-            self.ban_expires_on = current_date + timedelta(days=num_of_days_to_ban)
+            self.ban_start_date   = make_aware(datetime.now())
+            self.ban_expires_on   = self.ban_start_date + timedelta(days=num_of_days_to_ban)
 
-            self.user.is_banned = False
+            self.user.is_banned   = False
             self.user.is_temp_ban = True
-
-            if save:
-                self.save()
             self.user.save()
             
-            return True
+            if save:
+                self.save()
+                return True
+            else:
+                return self
         return is_banned_resp
 
+    def ban_for_date_range(self, start_date, end_date, save=True):
+        """
+        Temporarily bans a user for a specified date range.
+
+        This method sets a ban on the user from the provided start date to the end date.
+        If `save` is set to True, the  changes are saved to the database. If `save` is False, 
+        the instance is returned for further modifications or inspection.
+
+        Parameters:
+        - start_date (datetime): The start date and time for the ban. Must be a valid 
+          `datetime` object and should be earlier than the `end_date`.
+          
+        - end_date (datetime): The end date and time for the ban. Must be a valid 
+          `datetime` object and should be later than the `start_date`.
+          
+        - save (bool): Optional. If True (default), saves the updated `BanUser` 
+          instance and the associated `User` object to the database. If False, 
+          the method returns the updated `BanUser` instance without saving.
+
+        Raises:
+        - ValueError: If either `start_date` or `end_date` is not a valid `datetime` 
+          object, or if `start_date` is not earlier than `end_date`.
+
+        Returns:
+        - None if `save` is True.
+        - The updated `BanUser` instance if `save` is False.
+
+        Example:
+        >>> ban_user_instance = BanUser.objects.get(user=some_user)
+        >>> ban_user_instance.ban_for_date_range(datetime(2024, 9, 1), datetime(2024, 9, 30))
+       """
+       
+        if not is_date_valid(start_date) and not is_date_valid(end_date):
+            raise ValueError("The dates entered must be datetime objects")
+        
+        if start_date > end_date:
+            raise ValueError("The start date cannot be greater than the end date")
+        
+        is_banned_resp = self.is_user_already_banned()
+        
+        if is_banned_resp is None:
+            
+            self.ban_start_date = make_aware(start_date)
+            self.ban_expires_on = make_aware(end_date)
+            
+            self.user.is_temp_ban = True
+            self.user.is_banned   = False
+            self.user.save()
+        
+            if save:
+                self.save()
+            else:
+                return self
+        return is_banned_resp
+    
     def has_ban_expired(self) -> bool:
         """
         Check if the user's temporary ban has expired.

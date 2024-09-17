@@ -212,10 +212,12 @@ class UserBanAdmin(admin.ModelAdmin):
         return obj.username
     
     def ban_duration_days(self, obj):
-        return obj.ban_duration_days
+        ban_duration = obj.ban_duration_days
+        return "Permanent Ban" if ban_duration == None else ban_duration
     
     def remaining_days(self, obj):
-        return obj.remaining_days
+        remaining_days = obj.remaining_days
+        return "Permanent Ban" if remaining_days == None else remaining_days
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
