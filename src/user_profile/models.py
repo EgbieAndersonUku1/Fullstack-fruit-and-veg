@@ -16,18 +16,20 @@ COUNTRIES_CHOICES  = parse_country_file("data/countries.txt")
 # Create your models here.
 User = get_user_model()
 
-
 class BaseAddress(models.Model):
-    country      = models.CharField(max_length=40, choices=COUNTRIES_CHOICES, default=COUNTRIES_CHOICES[0])
-    address_1    = models.CharField(max_length=200, blank=True, null=True)
-    address_2    = models.CharField(max_length=200, blank=True, null=True)
-    city         = models.CharField(max_length=50, blank=True, null=True)
-    postcode     = models.CharField(max_length=10, blank=True, null=True)
-    modified     = models.DateTimeField(auto_now=True, null=True, blank=True)
-    date_created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    country            = models.CharField(max_length=40, choices=COUNTRIES_CHOICES, default=COUNTRIES_CHOICES[0])
+    address_1          = models.CharField(verbose_name="Address One", max_length=200, blank=False, null=False)
+    address_2          = models.CharField(verbose_name="Address Two (Optional)", max_length=200, blank=True, null=True)
+    city               = models.CharField(max_length=50, blank=False, null=False)
+    state              = models.CharField(max_length=50, blank=False, null=False)
+    postcode           = models.CharField(max_length=10, blank=False, null=False)
+    is_primary_address = models.BooleanField(default=False)
+    modified           = models.DateTimeField(auto_now=True, null=True, blank=True, editable=False)
+    date_created       = models.DateTimeField(auto_now_add=True, null=True, blank=True, editable=False)
 
     class Meta:
         abstract = True
+
 
 
    
@@ -35,29 +37,22 @@ class UserProfile(models.Model):
     PROFILE_PIC_PATH   = "users/profile/pic/"
     COVER_PHOTO_PATH   = "users/cover/photo/"
     
-    first_name         = models.CharField(max_length=40, null=True, blank=True)
-    last_name          = models.CharField(max_length=40, null=True, blank=True)
+    first_name         = models.CharField(max_length=40, blank=False, null=False)
+    last_name          = models.CharField(max_length=40, blank=False, null=False)
     telephone          = models.CharField(max_length=12, null=True, blank=True)
-    mobile             = models.CharField(max_length=12, null=True, blank=True)
+    mobile             = models.CharField(max_length=12, blank=False, null=False)
     profile_pic        = models.ImageField(verbose_name="Profile picture", null=True, blank=True, upload_to=PROFILE_PIC_PATH)
     cover_photo        = models.ImageField(verbose_name="Cover picture", null=True, blank=True, upload_to=COVER_PHOTO_PATH)
-    user               = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-    date_created       = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    user               = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile", editable=False)
+    date_created       = models.DateTimeField(auto_now_add=True, null=True, blank=True, editable=False)
 
     
     def num_of_shipping_addresses(self):
-        try:
-            return self.shipping_addresses.count()
-        except:
-            return 0
-    
-    def num_of_billing_addresses(self):
-        try:
-            return self.billing_addresses.count()
-        except:
-            return 0
+        return self.shipping_addresses.count()
        
-        
+    def num_of_billing_addresses(self):
+        return self.billing_addresses.count()
+      
     @property
     def full_name(self):
         """
@@ -210,7 +205,7 @@ class GiftCard(models.Model):
       
 
 class BillingAddress(BaseAddress):
-    user_profile    = models.ForeignKey(UserProfile, related_name="billing_addresses", on_delete=models.CASCADE, blank=True, null=False,)
+    user_profile    = models.ForeignKey(UserProfile, related_name="billing_addresses", on_delete=models.CASCADE, blank=True, null=False)
     primary_address = models.BooleanField(default=False)
 
     class Meta:

@@ -31,6 +31,7 @@
     --dodger-blue: #1E90FF;
     --secondary-color: #FF4500;
     --dark-red: #820f0f;
+    --light-gray: #8080801c;
 
     /* paddings */
     --padding-sm: 8px;
@@ -124,6 +125,10 @@ textarea {
 input:hover,
 textarea:hover {
     background: ghostwhite;
+}
+
+textarea {
+    width: 100%;
 }
 
 
@@ -337,6 +342,11 @@ table tr td a:nth-child(even):hover {
 }
 
 
+/* fonts */
+.text-lower {
+    text-transform: lowercase;
+}
+
 /* search button */
 .search-btn {
     height: 40px;
@@ -388,6 +398,9 @@ table tr td a:nth-child(even):hover {
     left: 15px;
 
 }
+
+
+
 
 .banner__sales_display {
     font-size: 1.15rem;
@@ -613,12 +626,6 @@ nav {
     display: none;
 }
 
-
-.auth-links {
-    width: 10%;
-    display: flex;
-    justify-content: space-between;
-}
 /* dropdown elements with my  `my account`  */
 .my-account__container {
 
@@ -2559,7 +2566,7 @@ footer .container h4 {
 .authentication {
     border: 1px solid rgb(3, 3, 56);
     background: white;
-    height: 690px;
+    height: 660px;
     margin: auto;
     width: 80%;
 
@@ -2769,30 +2776,19 @@ footer .container h4 {
 label {
     font-weight: 500;
     text-transform: capitalize;
-   
 }
+
 
 
 label:not(label:first-child){
     padding-top: var(--padding-sm);
 }
 
-div.checkbox label {
-    padding-top: 0!important;
-    font-size: var(--font-size-sm);
-    font-weight: 300;
-}
-
-
 .requirement.met {
     color: green;
     font-weight: bold;
     opacity: 1;
 }
-
-
-
-
 
 
 /* add basic product */
@@ -2828,7 +2824,6 @@ div.checkbox label {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    margin-bottom: var(--padding-xl);
 }
 
 .add-product-form input,
@@ -2854,6 +2849,7 @@ div.checkbox label {
 
 .prev-button,
 .next-button {
+   
    
     box-shadow: var(--box-shadow3);
     color: white;
@@ -2884,7 +2880,6 @@ div.checkbox label {
 
 .shipping-options label {
     font-weight: 300;
-    padding-top: var(--padding-md);
 }
 
 .colors {
@@ -2943,14 +2938,6 @@ legend {
     padding-top: var(--padding-md);
 }
 
-#image-media-form label {
-    color: var(--dark-red);
-}
-
-#image-media-form label:not(label:last-child) {
-    color: black;
-}
-
 .image-media-form input:last-child {
     padding-bottom: var(--padding-lg);
 }
@@ -2966,6 +2953,8 @@ legend {
     text-transform: lowercase;
     font-weight: 300;
 }
+
+
 
 
 .shipping-options input {
@@ -3047,7 +3036,7 @@ legend {
 
 .review-product-container {
     display: grid;
-    grid-template-columns: 68% 32%;
+    grid-template-columns: 70% 30%;
     grid-template-rows: auto;
     column-gap: 4px;
 }
@@ -3058,14 +3047,14 @@ legend {
 
 .review-img {
     height: 150px;
-    width: 150px;
+    width: 220px;
 }
 
 .img-preview  {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: auto;
-    column-gap: 6px;
+    column-gap: 2px;
     margin-bottom: var(--padding-lg);
 }
 
@@ -3123,102 +3112,163 @@ legend {
 }
 
 
-#edit-or-delete .container input {
-    width: 100%;
+#edit-or-delete .container form .product-info input[type="text"] {
+    font-size: var(--font-size-normal);
     height: 35px;
-    font-size: var(--font-size-normal);
-}
-
-#edit-or-delete .container textarea{
     width: 100%;
-    font-size: var(--font-size-normal);
-}
-
-#edit-or-delete .container .product-info {
-    margin-bottom: 8px;
 }
 
 
-#edit-or-delete .container .colors input {
-    width: auto;
-    height: auto;
-}
 
-#edit-or-delete .container .colors  {
+
+.image-and-media-edit {
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: 80% 20%;
     grid-template-rows: auto;
+    /* margin-top: var(--padding-lg); */
 }
 
-
-.add-product-section {
-    margin-bottom: var(--padding-xl);
+.edit-label {
+    margin-top: var(--padding-xl);
+   
 }
 
-#detailed-description-form h4 {
-    margin-top: var(--padding-md);
+.product-info input,
+.product-info textarea {
+    width: 100%;
 }
 
-/* The form buttons located within add product page */
-.button {
-    margin-top: var(--padding-md);
-}
-
-
-/* For screen reader */
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
-}
-
-
-/* django display messages */
-.messages {
-    margin-top: 4px;
-}
-
-.message {
-    padding: 10px;
-  
-    border-radius: 5px;
+.product-info input {
+    height: 30px;
     font-size: var(--font-size-normal);
-    width: var(--global-width-md);
-    margin: auto;
+}
+
+.product-info {
+    margin-top: var(--padding-md);
+}
+
+.shipping-info input[type="checkbox"] {
+    height: auto;
+    width: auto;
+}
+
+#additional-information  select {
+    width: 100%;
+}
+
+
+/* the profile */
+.profile-container {
+    display: grid;
+    grid-template-columns: 25% 75%;
+    grid-template-rows: auto;
+    column-gap: 8px;
+    cursor: pointer;
+}
+
+.profile-img {
+    cursor: pointer;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    transform: translateY(6px);
+    border-radius: 4%;
+}
+
+.sidebar-link {
+    background: var(--light-gray);
+    margin-top: 3px;
+}
+
+.sidebar-link:hover {
+   transform: scale(1.01);
+}
+
+.profile__username {
+    background: var(--light-gray);
+    margin-top: 4px;
+    padding-top: 20px;
+  
+    padding-left: 5px;
+    padding-right: 5px;
+    transform: translateY(-3px);
+}
+
+
+.profile__username .profile-group .username  {
+    display: grid;
+    column-gap: 30px;
+}
+
+
+.profile-group-img {
+    height: 35px;
+    width: 35px; 
+}
+
+.edit-profile-btn {
+    background: #041e38;
+    color: white;
+    text-transform: capitalize;
+
+    font-size: var(--font-size-normal);
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.profile-attributes {
+    display: grid;
+    grid-template-columns: 45% 55%;
+    grid-template-rows: auto;
+    
+    column-gap: 25px;
+}
+
+
+.profile_username_img {
+    position: relative;
+    height: 60px;
+    width: 60px;
+}
+
+.profile-group-img {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    transform: translateY(-9px);
+    border: 1px solid gray;
+    border-radius: 50%;
+    padding: 2px;
+    background: white;
+}
+
+
+.shipping-grid {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: auto;
+    margin-top: 10px;
+}
+
+.triple-grid {
+    display: grid;
+    grid-template-columns: 35% 35% 30%;
+    grid-template-rows: auto;
+    margin-top: 10px;
+}
+
+.profile-container input {
+    font-size: var(--font-size-normal);
+    border: 2px solid rgb(217, 217, 247);
     
 }
 
-/* Success message */
-.message.success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-/* Error message */
-.message.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-/* Info message */
-.message.info {
-    background-color: #d1ecf1;
-    color: #0c5460;
-    border: 1px solid #bee5eb;
-}
-
-/* Warning message */
-.message.warning {
-    background-color: #fff3cd;
-    color: #856404;
-    border: 1px solid #ffeeba;
+.billing-address {
+    border: 1px solid lavender;
+    margin-top: 30px;
+    padding: 10px;
 }
 
 
@@ -3226,3 +3276,22 @@ legend {
     display: none;
 }
 
+.save-btn {
+   
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-transform: uppercase;
+    background: #1c7920;
+    font-weight: bold;
+}
+
+
+
+.profile-country-field > select {
+    width: 100%;
+}
+
+.profile-radio-buttons > div {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+}

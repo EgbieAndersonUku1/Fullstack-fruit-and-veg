@@ -1,0 +1,55 @@
+{% if form.errors %}
+    <div class="form-errors">
+        <h3>Errors in User Profile Form:</h3>
+        <ul>
+            {% for field in form %}
+                {% if field.errors %}
+                    
+                      
+                        <ul>
+                            {% for error in field.errors %}
+                                <li class="highlight">Error: {{ field.label_tag }} - {{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+{% if billing_address_form.errors %}
+    <div class="form-errors">
+        <h3>Errors in Billing Address Form:</h3>
+        <ul>
+            {% for field in billing_address_form %}
+                {% if field.errors %}
+                        <ul>
+                            {% for error in field.errors %}
+                                <li class="highlight">Error: {{ field.label_tag }} - {{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+{% if shipping_address_form.errors %}
+    <div class="form-errors">
+        <h3>Errors in Shipping Address Form:</h3>
+        <ul>
+            {% for field in shipping_address_form %}
+                {% if field.errors %}
+                    
+                        <ul>
+                            {% for error in field.errors %}
+                                <li class="highlight">Error: {{ field.label_tag }} - {{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
