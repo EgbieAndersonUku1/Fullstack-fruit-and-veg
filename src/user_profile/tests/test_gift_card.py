@@ -17,7 +17,7 @@ class GiftCardTest(TestCase):
     def setUp(self):
         
         self.REWARD_CARD_TYPE = "Reward card"
-        self.VALID_TOKEN            = generate_token()
+        self.VALID_TOKEN      = generate_token()
         self.EXPIRY_DATE      = "2024-10-09"
         self.VALUE            = 25
     
@@ -311,6 +311,8 @@ class GiftCardMethodsTest(TestCase):
         """Test the activate method of the GiftCard model."""
 
         # Deactivate the card and verify the change
+        self.assertTrue(self.gift_card.is_active)
+        
         self.gift_card.deactivate()
         self.gift_card.save()  
         self.gift_card.refresh_from_db()

@@ -108,8 +108,8 @@ class AdminBTempBannedUserProxy(BaseUserAdmin, BaseUserAdminReadonlyFields):
     def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
         query_set = super().get_queryset(request)
         return query_set.filter(is_temp_ban=True)
-        
-
+    
+    
 class AdminSuperUserProxy(BaseUserAdmin, BaseUserAdminReadonlyFields):
     """
     Custom admin class for the SuperUserProxy model to manage superusers in the Django admin interface.
