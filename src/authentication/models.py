@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import datetime, timedelta
-from django.utils.timezone import make_aware
+from django.utils.timezone import make_aware, is_naive
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
@@ -238,7 +238,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         if save:
             self.save()
 
-    
     def is_verification_code_valid(self, verification_code: str) -> tuple[bool, str]:
         """
         Checks if the verification code is valid and if it has expired.
@@ -359,7 +358,6 @@ class BanUser(models.Model):
             return calculate_days_between_dates(self.ban_expires_on, self.ban_start_date)
         return None
        
-    
     @property
     def remaining_days(self):
         """Return the number of days remaining until the ban expires."""
@@ -484,8 +482,8 @@ class BanUser(models.Model):
         
         if is_banned_resp is None:
             
-            self.ban_start_date = make_aware(start_date)
-            self.ban_expires_on = make_aware(end_date)
+            self.ban_start_date = make_aware(start_date) if is_naive(start_date) else start_date
+            self.ban_expires_on = make_aware(end_date) if is_naive(end_date) else end_date
             
             self.user.is_temp_ban = True
             self.user.is_banned   = False
