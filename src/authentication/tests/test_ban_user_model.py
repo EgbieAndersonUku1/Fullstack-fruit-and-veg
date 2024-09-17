@@ -229,8 +229,8 @@ class CustomBanUserModelTestCase(TestCase):
         user = User.get_by_email(email=self.temporarily_banned_user.user.email)
         
         self.assertIsNotNone(user)
-        self.assertFalse(user.is_banned)     # Ensure the user is flagged as temporarily banned
-        self.assertTrue(user.is_temp_ban)
+        self.assertFalse(user.is_banned)     
+        self.assertTrue(user.is_temp_ban) # Ensure the user is flagged as temporarily banned
         
         user_ban_record = BanUser.objects.filter(user=user).first()
         

@@ -16,9 +16,13 @@ class BanUserAdminForm(forms.ModelForm):
         ban_start_date = cleaned_data.get("ban_start_date", None)
         ban_expires_on = cleaned_data.get("ban_expires_on", None)
         
+        is_banned_msg  = ""
+        
          # Check if the user is already banned
         user_ban_record = BanUser.objects.filter(user=cleaned_data["user"]).first()
-        is_banned_msg = user_ban_record.is_user_already_banned()
+        
+        if user_ban_record:
+            is_banned_msg = user_ban_record.is_user_already_banned()
         
         if is_banned_msg:
             raise forms.ValidationError(is_banned_msg)
@@ -43,7 +47,7 @@ class BanUserAdminForm(forms.ModelForm):
         if ban_start_date and ban_expires_on:
 
             num_of_days_to_ban = calculate_days_between_dates(ban_expires_on, ban_start_date)
-            user_ban_record.ban_for_x_amount_of_days(ban_reason, num_of_days_to_ban, save=False)
+            user_ban_record.ban_for_x_amount_of_days(num_of_days_to_ban, save=False)
       
           
         if commit:
