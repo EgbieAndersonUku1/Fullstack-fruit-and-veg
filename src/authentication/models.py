@@ -337,6 +337,17 @@ class BanUser(models.Model):
         return f"{self.user} banned for {self.ban_reason}"
 
     @property
+    def start_date(self):
+        """Mostly for the admin interface. When called displays the start date of the ban"""
+        return self.ban_start_date
+    
+    @property
+    def expires_on(self):
+        """Mostly for the admin interface. When called displays the date the ban will end"""
+        return self.ban_expires_on
+    
+    
+    @property
     def username(self):
         """Mostly for the admin interface. When called displlays the name of the user who is banned"""
         return self.user.username.title()
