@@ -21,15 +21,19 @@ import { validateElement } from "../errors/customErrors.js";
 
 
 const billingAddressRadioContainer = document.getElementById("billing-address-radio-buttons");
-const billingAddressElement        = document.getElementById("billing-address-details");
-const billingDivElements           = document.querySelectorAll(".billing-field");
+const shippingAddressContainer       = document.getElementById("shipping-address-container");
+const shippingDivElements          = document.querySelectorAll(".shipping-field");
 
 
 billingAddressRadioContainer?.addEventListener("click", handleRadioButtonClick);
 
+
 document.addEventListener("DOMContentLoaded", handleSetup);
 
 
+function handleSetup() {
+    toggleRequiredForAllFields(shippingDivElements, false)
+}
 
 
 
@@ -109,15 +113,17 @@ function extractInputFieldFromDiv(divElement, fieldSelector="input") {
  */
 function handleRadioButtonClick(e) {
 
-    validateElement(billingAddressElement, "The billing address element couldn't be found", true);
-    const value  = e.target.value.toLowerCase();
+    validateElement(shippingAddressContainer, "The shipping address container element couldn't be found", true);
+    const value  = e.target.value?.toLowerCase();
 
+    console.log(value)
     if (value === "no") {
-        billingAddressElement.classList.remove("d-none");
-        toggleRequiredForAllFields(billingDivElements, false);
+        shippingAddressContainer.classList.remove("d-none");
+       
+        toggleRequiredForAllFields(shippingDivElements, true);
     } else {
-        billingAddressElement.classList.add("d-none");
-        toggleRequiredForAllFields(billingDivElements, true);
+        shippingAddressContainer.classList.add("d-none");
+        toggleRequiredForAllFields(shippingDivElements, false);
     }
 }
 

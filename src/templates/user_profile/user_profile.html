@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 {% load static %}
 {% block title %} User Profile{% endblock %}
@@ -7,7 +6,7 @@
 
 <section id="account" aria-labelledby="account-heading">
     <div class="content-container">
-        
+
         {% include "partials/logo_link.html" %}
 
         <ul class="breadcrumb">
@@ -19,12 +18,12 @@
         <h1 id="account-heading" class="padding-top-md lighten">My Account</h1>
         <p class="account-info">Manage my profile</p>
         <hr class="dividor">
-        
+
         <div class="profile-container">
 
 
             <div class="sidebar">
-                
+
                 <div class="sidebar-link">
                     <img src="{% static 'img/icons/closed-lock-with-key.svg' %}" alt="image" class="profile-img">
                     <a href="" class="edit-profile text-capitalize">Login and authentication </a>
@@ -53,8 +52,8 @@
 
             <div class="main">
                 <h2>Edit Profile</h2>
-            
-                <form action="{% url 'user_profile' %}" method="post">
+
+                <form action="{% url 'user_profile' %}" method="post" enctype="multipart/form-data">
 
                     {% csrf_token %}
 
@@ -63,179 +62,187 @@
                     <div class="profile__username space-between">
                         <div class="profile-group profile-attributes">
                             <div class="profile_username_img">
-                                <img src="{% static 'img/icons/person-add.svg' %}" alt="Profile Picture" class="profile-group-img">
+                                <img src="{% static 'img/icons/person-add.svg' %}" alt="Profile Picture"
+                                    class="profile-group-img">
                             </div>
-            
+
                             <div class="profile_username">
-                                <a href="" class="edit-profile text-capitalize" aria-label="Edit Profile">{{ user.username | title}}</a>
+                                <a href="" class="edit-profile text-capitalize" aria-label="Edit Profile">{{user.username | title}}</a>
                                 <a href="" class="edit-profile text-lower" aria-label="Edit Profile">{{ user.email | lower }}</a>
                             </div>
                         </div>
-            
+
                         <div class="profile-group">
                             <div class="username_footer">
-                                <button type="button" class="edit-profile-btn" aria-label="Change Photo">Change photo</button>
+                                <button type="button" class="edit-profile-btn" aria-label="Change Photo">Change
+                                    photo</button>
                             </div>
                         </div>
                     </div>
-            
+
                     <div class="two-column-grid padding-top-md">
                         <div class="first-name flex-col">
-                            {{ form.first_name.label }}
-                            {{ form.first_name }}
+                            {{ user_profile_form.first_name.label }}
+                            {{ user_profile_form.first_name }}
                         </div>
-            
+
                         <div class="last-name flex-col">
-                            {{ form.last_name.label }}
-                            {{ form.last_name }}
+                            {{ user_profile_form.last_name.label }}
+                            {{ user_profile_form.last_name }}
                         </div>
                     </div>
-            
+
                     <div class="two-column-grid">
                         <div class="phone flex-col">
-                            {{ form.mobile.label }}
-                            {{ form.mobile }}
+                            {{ user_profile_form.mobile.label }}
+                            {{ user_profile_form.mobile }}
                         </div>
-            
+
                         <div class="phone flex-col">
-                            {{ form.telephone.label }}
-                            {{ form.telephone }}
+                            {{ user_profile_form.telephone.label }}
+                            {{ user_profile_form.telephone }}
                         </div>
                     </div>
-            
-                    <div class="shipping-address padding-top-md">
-                        <h4>Shipping Address</h4>
+
+                    <div class="billing-address padding-top-md">
+                        <h4>Billing Address</h4>
 
                         <hr class="dividor">
 
                         <!-- The selection of the country -->
                         <div class="country flex-col profile-country-field profile-field">
-                         
-                            {{ shipping_address_form.country.label }}
-                            {{ shipping_address_form.country }}
-        
+
+                            {{ billing_address_form.country.label }}
+                            {{ billing_address_form.country }}
+
                         </div>
 
                         <!-- Address one  -->
                         <div class="address_1 flex-col profile-field">
-                            {{ shipping_address_form.address_1.label }}
-                            {{ shipping_address_form.address_1 }}
-            
+                            {{ billing_address_form.address_1.label }}
+                            {{ billing_address_form.address_1 }}
+
                         </div>
-                        
+
                         <!-- Address two optional -->
                         <div class="address_2 flex-col profile-field">
-                            {{ shipping_address_form.address_2.label }}
-                            {{ shipping_address_form.address_2 }}
-            
+                            {{ billing_address_form.address_2.label }}
+                            {{ billing_address_form.address_2 }}
+
                         </div>
                         <div class="triple-grid">
                             <div class="city flex-col">
-                                {{ shipping_address_form.city.label }}
-                                {{ shipping_address_form.city }}
-                            </div>
-            
-                            <div class="state flex-col">
-                                {{ shipping_address_form.state.label }}
-                                {{ shipping_address_form.state }}
-                            </div>
-            
-                            <div class="postcode flex-col">
-                                {{ shipping_address_form.postcode.label }}
-                                {{ shipping_address_form.postcode }}
-                            </div>
-                        </div>
-
-                       <!-- is primary shipping address-->
-                        <div class="billing-address primary-address profile-radio-buttons" id="primary-address-radio-buttons">
-
-                            
-                            <p>Is this a primary shipping address?</p>
-
-                            {{ shipping_address_form.is_primary_address }}
-                         
-                        </div>
-
-                    </div>
-            
-                   
-
-
-                    <div class="billing-address" id="billing-address-radio-buttons">
-                        <p>Is the billing address the same as the shipping address?</p>
-                        <input type="radio" name="billing-address-same" id="billing-yes" value="yes" checked aria-labelledby="billing-yes-label">
-                        <label for="billing-yes" id="billing-yes-label">Yes</label>
-                        <input type="radio" name="billing-address-same" id="billing-no" value="no" aria-labelledby="billing-no-label">
-                        <label for="billing-no" id="billing-no-label">No</label>
-                    </div>
-            
-                    <!-- Billing address -->
-                    <div class="billing-address padding-top-md d-none" id="billing-address-details" aria-hidden="true">
-                        <h4>Billing Address</h4>
-                        <hr class="dividor">
-
-                          <!-- The selection of the country -->
-                          <div class="country flex-col profile-country-field profile-field billing-field">
-                         
-                            {{ billing_address_form.country.label }}
-                            {{ billing_address_form.country }}
-        
-                        </div>
-                         <!-- Address one  -->
-                         <div class="address_1 flex-col profile-field billing-field">
-                            {{ billing_address_form.address_1.label }}
-                            {{ billing_address_form.address_1 }}
-            
-                        </div>
-                        
-                           <!-- Address one  -->
-                           <div class="address_2 flex-col profile-field billing-field">
-
-                            {{ billing_address_form.address_2.label }}
-                            {{ billing_address_form.address_2 }}
-            
-                        </div>
-                        <div class="triple-grid">
-                            <div class="city flex-col billing-field">
                                 {{ billing_address_form.city.label }}
-                                {{ shipping_address_form.city }}
+                                {{ billing_address_form.city }}
                             </div>
-            
-                            <div class="state flex-col billing-field">
+
+                            <div class="state flex-col">
                                 {{ billing_address_form.state.label }}
                                 {{ billing_address_form.state }}
                             </div>
-            
-                            <div class="postcode flex-col billing-field">
+
+                            <div class="postcode flex-col">
                                 {{ billing_address_form.postcode.label }}
                                 {{ billing_address_form.postcode }}
                             </div>
                         </div>
 
-                          <!-- is primary address-->
+                        <!-- is primary shipping address-->
+                        <div class="billing-address primary-address profile-radio-buttons"
+                            id="primary-address-radio-buttons">
+
+
+                            <p>Is this a primary billing address?</p>
+
+                            {{ billing_address_form.is_primary_address }}
+
+                        </div>
+
+                    </div>
+
+
+
+
+                    <div class="billing-address" id="billing-address-radio-buttons">
+                        <p>Is the billing address the same as the shipping address?</p>
+                        <input type="radio" name="billing_address_is_shipping" id="billing-yes" value="yes" checked
+                            aria-labelledby="billing-yes-label">
+                        <label for="billing-yes" id="billing-yes-label">Yes</label>
+                        <input type="radio" name="billing_address_is_shipping" id="billing-no" value="no"
+                            aria-labelledby="billing-no-label">
+                        <label for="billing-no" id="billing-no-label">No</label>
+                    </div>
+                    
+
+                    <!-- Shipping address -->
+                    <div class="billing-address padding-top-md d-none" id="shipping-address-container" aria-hidden="true">
+                        <h4>Shipping Address</h4>
+                        <hr class="dividor">
+
+                        <!-- The selection of the country -->
+                        <div class="country flex-col profile-country-field profile-field shipping-field">
+
+                            {{ shipping_address_form.country.label }}
+                            {{ shipping_address_form.country }}
+
+                        </div>
+                        <!-- Address one  -->
+                        <div class="address_1 flex-col profile-field shipping-field">
+                            {{ shipping_address_form.address_1.label }}
+                            {{ shipping_address_form.address_1 }}
+
+                        </div>
+
+                        <!-- Address one  -->
+                        <div class="address_2 flex-col profile-field shipping-field">
+
+                            {{ shipping_address_form.address_2.label }}
+                            {{ shipping_address_form.address_2 }}
+
+                        </div>
+                        <div class="triple-grid">
+                            <div class="city flex-col shipping-field">
+                                {{ shipping_address_form.city.label }}
+                                {{ shipping_address_form.city }}
+                            </div>
+
+                            <div class="state flex-col shipping-field">
+                                {{ shipping_address_form.state.label }}
+                                {{ shipping_address_form.state }}
+                            </div>
+
+                            <div class="postcode flex-col shipping-field">
+                                {{ shipping_address_form.postcode.label }}
+                                {{ shipping_address_form.postcode }}
+                            </div>
+                        </div>
+
+                        <!-- is primary address-->
                         <div class="billing-address primary-address" id="primary-address-radio-buttons">
                             <p>Is this a primary billing address?</p>
-                            <input type="radio" name="primary-address" id="billing-yes" value="yes" checked aria-labelledby="primary-address-label">
+                            <input type="radio" name="primary-address" id="billing-yes" value="yes" checked
+                                aria-labelledby="primary-address-label">
                             <label for="billing-yes" id="billing-yes-label">Yes</label>
-                            <input type="radio" name="primary-address" id="billing-no" value="no" aria-labelledby="billing-no-label">
+                            <input type="radio" name="primary-address" id="billing-no" value="no"
+                                aria-labelledby="billing-no-label">
                             <label for="billing-no" id="billing-no-label">No</label>
                         </div>
                     </div>
-            
+
                     <div class="buttons flex-end padding-top-md">
                         <button type="submit" class="button-md save-btn" aria-label="Save Changes">Save</button>
                     </div>
                 </form>
             </div>
-            
-    
-    </div>
+
+
+        </div>
 </section>
 
 
 
 
-{% endblock  %}
+{% endblock %}
 
 
 
@@ -245,10 +252,3 @@
 <script src="{% static 'js/pages/profile.js' %}" type="module"></script>
 
 {% endblock %}
-
-
-
-
-
-    
-

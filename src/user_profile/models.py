@@ -236,4 +236,3 @@ class ShippingAddress(BaseAddress):
         verbose_name        = "Shipping Address"
         verbose_name_plural = "Shipping Addresses"
 
-
