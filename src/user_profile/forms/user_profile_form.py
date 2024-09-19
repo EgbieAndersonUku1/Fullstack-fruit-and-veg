@@ -20,10 +20,6 @@ class UserProfileForm(forms.ModelForm):
         fields = "__all__"
 
 
-
-
-
-
 class BillingAddressForm(forms.ModelForm):
     
     class Meta:
@@ -35,7 +31,17 @@ class BillingAddressForm(forms.ModelForm):
 
 
 class ShippingAddressForm(forms.ModelForm):
+    
+    # These shipping address fields are set to not required (required=False) because they are hidden from view
+    # when the form is displayed alongside the billing form. This configuration ensures that the form 
+    # can still be submitted even if these fields are left empty when only the billing form is completed.
+    address_1          = forms.CharField(required=False)
+    address_2          = forms.CharField(required=False)
+    city               = forms.CharField(required=False)
+    state              = forms.CharField(required=False)
+    postcode           = forms.CharField(required=False)
   
     class Meta:
         model = ShippingAddress
         fields = ["country", "address_1", "city", "state", "postcode"]
+

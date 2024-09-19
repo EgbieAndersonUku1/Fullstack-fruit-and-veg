@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from django.contrib import messages
 
 # Create your views here.
 from .forms.user_profile_form import UserProfileForm, BillingAddressForm, ShippingAddressForm
@@ -34,9 +35,9 @@ def user_profile(request):
                 shipping_address = shipping_address_form.save(commit=False)
                 shipping_address.user_profile = user_profile
                 shipping_address.save()
-                should_redirect = True
             
         if should_redirect:
+            messages.success(request, "You have successfully updated your profile page")
             return redirect("account")
         
     context = {

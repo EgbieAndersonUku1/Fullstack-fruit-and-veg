@@ -49,7 +49,6 @@ class AddressFormTests(TestCase):
       
         if billing_form.is_valid() and shipping_form.is_valid():
            
-            profile = None  
             billing_address  = billing_form.save(commit=False)
             shipping_address = shipping_form.save(commit=False)
             
@@ -58,7 +57,6 @@ class AddressFormTests(TestCase):
             self.assertIsNotNone(shipping_address, "Shipping address should not be None")
             
         else:
-            # Detailed error messages to assist debugging when forms are not valid
             print("Forms are not valid:")
             print("Billing Form Errors:", billing_form.errors)
             print("Billing Form Cleaned Data:", billing_form.cleaned_data if billing_form.is_valid() else "N/A")
