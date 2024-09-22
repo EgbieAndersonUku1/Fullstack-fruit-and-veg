@@ -23,7 +23,6 @@ class BaseAddress(models.Model):
     city               = models.CharField(max_length=50, blank=False, null=False)
     state              = models.CharField(max_length=50, blank=False, null=False)
     postcode           = models.CharField(max_length=10, blank=False, null=False)
-    is_primary_address = models.BooleanField(default=False)
     modified           = models.DateTimeField(auto_now=True, null=True, blank=True, editable=False)
     date_created       = models.DateTimeField(auto_now_add=True, null=True, blank=True, editable=False)
 

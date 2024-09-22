@@ -31,6 +31,11 @@ class UserProfileViewsTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user_profile/user_profile.html')  
     
+    def test_user_profile_view_post(self):
+       """To write"""
+        
+       pass
+    
   
         
         
