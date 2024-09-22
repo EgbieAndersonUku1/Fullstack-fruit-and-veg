@@ -24,7 +24,7 @@ class ShippingAddressAdminModel(BaseAddressAdmin):
 
 
 class BillingAddressAdminModel(BaseAddressAdmin):
-    pass
+    list_display =  ["id", "country", "address_1", "city", "postcode", "user_profile", "primary_address"]
 
 
 
