@@ -3320,3 +3320,122 @@ legend {
     100% {bottom: -100%}
     
 }
+
+
+
+
+.save-btn {
+   
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-transform: uppercase;
+    background: #1c7920;
+    font-weight: bold;
+}
+
+.address-link {
+    font-size: 0.8rem;
+    text-transform: lowercase;
+    color: #3737d2;
+}
+
+.address-link:hover {
+    text-decoration: underline;
+}
+
+
+
+
+
+
+.triple-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    margin-top: 10px;
+    column-gap: 3px;
+
+
+    /* 
+       Adjusted grid alignment to ensure uniform height across items 
+       in cases where nested Flexbox containers (e.g., .center class) 
+       interfere with the default stretch behaviour of grid items. 
+       
+       Context:
+       The .center class, is used extensively throughout the application. It
+       applies `align-items: center;` to any div or element it is attached to, and because of this it
+       can prevent grid items from stretching to the height of the tallest item. 
+       
+       Instead of modifying the .center class and risking unintended side effects across the application, 
+       `align-items: stretch;` was added specifically to grid containers 
+       to maintain consistent height behaviour.
+
+       Purpose:
+       This approach ensures that grid items will always match the height of 
+       the tallest item within their respective rows, preserving a uniform 
+       layout without altering the behaviour of the .center class globally.
+
+       Change Location:
+       This fix is applied only to specific grid elements where the issue is observed. 
+    */
+    align-items: stretch; 
+}
+
+.profile-container input {
+    font-size: var(--font-size-normal);
+    border: 2px solid rgb(217, 217, 247);
+    
+}
+
+.billing-address {
+    border: 1px solid lavender;
+    margin-top: 30px;
+    padding: 10px;
+}
+
+
+.d-none {
+    display: none;
+}
+
+.save-btn {
+   
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-transform: uppercase;
+    background: #1c7920;
+    font-weight: bold;
+}
+
+.address-link {
+    font-size: 0.8rem;
+    text-transform: lowercase;
+    color: #3737d2;
+}
+
+.address-link:hover {
+    text-decoration: underline;
+}
+
+.address-card {
+    padding: 10px;
+}
+
+.address-card:hover {
+    background: white;
+    transform: scale(1.02);
+    color: darkgreen;
+    /* transition: 1s linear; */
+}
+
+
+.showcase {
+    border: 3px solid lavender;
+    background: ghostwhite;
+    text-transform: capitalize;
+}
+
+.address-container {
+    width: 80%;
+    margin: auto;
+}

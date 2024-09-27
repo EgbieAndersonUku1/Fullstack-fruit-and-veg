@@ -1,8 +1,11 @@
+import json
 from django.shortcuts import redirect, render
 from django.contrib import messages
+from django.http import JsonResponse
 
 # Create your views here.
 from .forms.user_profile_form import UserProfileForm, BillingAddressForm, ShippingAddressForm, PrimaryAddress
+from .models import BillingAddress, ShippingAddress
 
 
 def user_profile(request):
@@ -43,7 +46,7 @@ def user_profile(request):
             
             if should_redirect:
                 messages.success(request, "You have successfully updated your profile page")
-                return redirect("account")
+                return redirect("user_profile")
         
     context = {
         "user_profile_form": user_profile_form,
@@ -52,3 +55,50 @@ def user_profile(request):
     }
     
     return render(request, "user_profile/user_profile.html", context=context)
+
+
+
+
+def manage_address(request):
+        
+    profile            = request.user.profile
+    billing_addresses  = BillingAddress.objects.filter(user_profile=profile).all()
+    shipping_addresses = ShippingAddress.objects.filter(user_profile=profile).all()
+    primary_address    = billing_addresses.filter(primary_address=True).first()  
+  
+    context = {
+        "billing_addresses": billing_addresses,
+        "shipping_addresses": shipping_addresses,
+        "primary_address": primary_address,
+    }
+    return render(request, "profile/manage_address.html", context)
+
+
+
+def delete_address(request):
+    if request.method == "POST":
+        try:
+            data               = json.loads(request.body.decode('utf-8'))
+            is_billing_address = data.get("is_billing_address")
+            address_id         = data.get("address_id")
+        except json.JSONDecodeError:
+            return JsonResponse({"SUCCESS": False, "message": "Invalid request"}, status=400)
+
+        user_profile = request.user.profile
+
+        if is_billing_address:
+            deleted_count, _ = BillingAddress.objects.filter(user_profile=user_profile, id=address_id).delete()
+        else:
+            deleted_count, _ = ShippingAddress.objects.filter(user_profile=user_profile, id=address_id).delete()
+
+        if deleted_count > 0:
+            return JsonResponse({"SUCCESS": True, "message": "Address deleted successfully"}, status=200)
+
+        return JsonResponse({"SUCCESS": False, "message": "Address not found"}, status=404)
+
+    return JsonResponse({"SUCCESS": False, "message": "Method Not Allowed"}, status=405)
+
+
+def mark_as_primary_address(request, id):
+    is_shipping_address = request.POST.get("is_shipping_address")
+    pass

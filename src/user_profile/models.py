@@ -227,7 +227,25 @@ class BillingAddress(BaseAddress):
         if save:
             self.save()
 
-
+    @classmethod
+    def get_primary_address(cls, user):
+        """
+        Takes a user model and returns the primary address belong to that user
+        
+        :Params
+            - User (model): The user model belong to the user
+        
+        :Returns
+            - Returns the shipping address or none 
+            
+        Example Usage:
+           >>> user = User.get_by_email(email="some_email@example")
+           >>> primary_address = UserProfile.get_primary_address(user=user)
+           >>> 
+        """
+        return cls.objects.filter(user_profile=user.profile, primary_address=True).first()
+    
+    
 class ShippingAddress(BaseAddress):
     user_profile       = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="shipping_addresses",  blank=True, null=True)
 

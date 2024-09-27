@@ -5,6 +5,9 @@
 {% block body %}
 
 <section id="account" aria-labelledby="account-heading">
+    <div class="messages">
+        {% include "partials/messages.html" %}
+    </div>
     <div class="content-container">
 
         {% include "partials/logo_link.html" %}
@@ -31,7 +34,7 @@
 
                 <div class="sidebar-link">
                     <img src="{% static 'img/icons/address-book.svg' %}" alt="image" class="profile-img">
-                    <a href="" class="edit-profile text-capitalize">Manage address </a>
+                    <a href="{% url 'manage_addresses' %}" class="edit-profile text-capitalize">Manage address </a>
                 </div>
 
                 <div class="sidebar-link">
