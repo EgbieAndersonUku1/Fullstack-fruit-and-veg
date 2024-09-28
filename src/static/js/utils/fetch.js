@@ -1,14 +1,17 @@
-async function fetchData({url, csrfToken, body}) {
+async function fetchData({url, csrfToken, body, method="POST"}) {
+    
     
     if (typeof body != "object") {
         throw new Error(`The body must be an object not type ${typeof body}`)
     }
+
+ 
     try {
         const response = await fetch(url, {
-            method: "POST",
+            method: method,
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRFToken": csrfToken
+                "X-CSRFToken": csrfToken,
             },
             body: JSON.stringify(body)
         });

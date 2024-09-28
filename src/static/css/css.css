@@ -3418,14 +3418,14 @@ legend {
 }
 
 .address-card {
-    padding: 10px;
+    padding: 7px;
 }
 
 .address-card:hover {
-    background: white;
-    transform: scale(1.02);
-    color: darkgreen;
-    /* transition: 1s linear; */
+  
+  transform: scale(1.001);
+    
+
 }
 
 
@@ -3433,9 +3433,14 @@ legend {
     border: 3px solid lavender;
     background: ghostwhite;
     text-transform: capitalize;
+    margin-bottom: 4px;
 }
 
 .address-container {
-    width: 80%;
+    width: 85%;
     margin: auto;
+}
+
+.address {
+    background: white;
 }

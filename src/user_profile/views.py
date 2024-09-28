@@ -60,7 +60,7 @@ def user_profile(request):
 
 
 def manage_address(request):
-        
+    
     profile            = request.user.profile
     billing_addresses  = BillingAddress.objects.filter(user_profile=profile).all()
     shipping_addresses = ShippingAddress.objects.filter(user_profile=profile).all()
@@ -76,11 +76,17 @@ def manage_address(request):
 
 
 def delete_address(request):
+  
     if request.method == "POST":
         try:
-            data               = json.loads(request.body.decode('utf-8'))
+            data = json.loads(request.body.decode('utf-8'))
+            
+            if not data.get("_method") == "DELETE":
+                raise ValueError("This is not a delete request")
+            
             is_billing_address = data.get("is_billing_address")
             address_id         = data.get("address_id")
+            
         except json.JSONDecodeError:
             return JsonResponse({"SUCCESS": False, "message": "Invalid request"}, status=400)
 
@@ -91,7 +97,7 @@ def delete_address(request):
         else:
             deleted_count, _ = ShippingAddress.objects.filter(user_profile=user_profile, id=address_id).delete()
 
-        if deleted_count > 0:
+        if deleted_count >= 0:
             return JsonResponse({"SUCCESS": True, "message": "Address deleted successfully"}, status=200)
 
         return JsonResponse({"SUCCESS": False, "message": "Address not found"}, status=404)

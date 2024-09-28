@@ -63,90 +63,107 @@
 
             <div class="main">
 
-                <h4 class="highlight text-capitalize padding-bottom-sm">Primary Address</h4>
-                <div class="primary_address padding-bottom-md padding-top-md showcase center address-card">
+                {% if billing_addresses %}
+                    <h4 class="highlight text-capitalize padding-bottom-sm">Primary Address</h4>
+                    <div class="address padding-bottom-md padding-top-md showcase center">
 
-                    {% if primary_address %}
-                        <div class="address">
+                        {% if primary_address %}
+                            <div class="primary_address">
 
-                            <p class="address">{{ primary_address.address_1 }}</p>
-                            {% if primary_address.address_2 %}
-                                  <p class="address">Marylebone</p>
-                            {% endif %}
-
-                            <p class="city">{{ primary_address.city }}</p>
-                            <p class="postcode">{{ primary_address.post_code }} </p>
-                        </div>
-
-                    {% endif %}
-
-                </div>
-
-                <p class=" text-capitalize padding-top-md padding-bottom-sm bold"> billing Addresses</p>
-
-                <div class="triple-grid center">
-
-                    {% comment %} Add the loop here {% endcomment %}
-
-                    {% for billing_address in billing_addresses %}
-                        <div class="padding-bottom-md padding-top-md padding-bottom-sm showcase margin-bottom-sm address-card">
-
-                            <div class="address">
-
-                                <p class="address">{{ billing_address.address_1 }}</p>
+                                <p class="address_1">{{ primary_address.address_1 }}</p>
                                 {% if primary_address.address_2 %}
-                                      <p class="address">{{ billing_address.address_2 }}</p>
+                                    <p class="address_2">Marylebone</p>
                                 {% endif %}
-    
-                                <p class="city">{{ billing_address.city }}</p>
-                                <p class="postcode">{{ billing_address.post_code }} </p>
 
-                                <a href="{% url 'mark_as_primary' %}" class="address-link text-lower mark-as-primary">mark as primary</a>
-                                <a href="#" class="address-link text-capitalize delete-address">delete</a>
-                                <input type="hidden" name="billing_address" value="true">
+                                <p class="city">{{ primary_address.city }}</p>
+                                <p class="postcode">{{ primary_address.post_code }} </p>
                             </div>
-                        </div>
-                    {% endfor %}
 
-              
-              
+                        {% endif %}
 
-                </div>
+                    </div>
 
+                    <p class=" text-capitalize padding-top-md padding-bottom-sm bold"> billing Addresses</p>
 
-                {% if shipping_addresses %}
+                    <div class="triple-grid center" id="billing-addresses">
 
-                    <p class=" text-capitalize padding-top-md padding-bottom-sm bold"> Shipping Addresses</p>
+        
+                        {% for billing_address in billing_addresses %}
+                            <div class="padding-bottom-md padding-top-md padding-bottom-sm showcase margin-bottom-sm" id={{ billing_address.id }}>
 
-                    <div class="triple-grid center">
+                                <div class="address address-card">
 
-                        
-                        {% for shipping_address in shipping_addresses %}
-                            <div class="padding-bottom-md padding-top-md padding-bottom-sm showcase margin-bottom-sm address-card">
-
-                                <div class="address">
-
-                                    <p class="address">{{ shipping_address.address_1 }}</p>
-                                    {% if shipping_address.address_2 %}
-                                        <p class="address">{{ shipping_address.address_2 }}</p>
+                                    <p class="address">{{ billing_address.address_1 }}</p>
+                                    {% if primary_address.address_2 %}
+                                        <p class="address">{{ billing_address.address_2 }}</p>
                                     {% endif %}
         
-                                    <p class="city">{{ primary_address.city }}</p>
-                                    <p class="postcode">{{ primary_address.post_code }} </p>
-                                </div>
+                                    <p class="city">{{ billing_address.city }}</p>
+                                    <p class="postcode">{{ billing_address.post_code }} </p>
 
-                                <a href="{% url 'delete_address' shipping_address.id %}" class="address-link text-capitalize">delete</a>
-                                <input type="hidden" name="shipping_address" value="true">
+                                    <a href="{% url 'mark_as_primary' billing_address.id %}" class="address-link text-lower mark-as-primary">mark as primary</a>
+                                    <a href="#" class="address-link text-capitalize delete-address" id={{ billing_address.id }}>delete</a>
+                                    <input type="hidden" name="billing_address" value="true">
+                                </div>
                             </div>
                         {% endfor %}
 
                     </div>
-                {% endif %}
-            </div>
 
+
+                    {% if shipping_addresses %}
+
+                        <p class=" text-capitalize padding-top-md padding-bottom-sm bold"> Shipping Addresses</p>
+
+                        <div class="triple-grid center">
+
+                            
+                            {% for shipping_address in shipping_addresses %}
+                                <div class="padding-bottom-md padding-top-md padding-bottom-sm showcase margin-bottom-sm">
+
+                                    <div class="address address-card" id={{ shipping_address.id }}>
+
+                                        <p class="address">{{ shipping_address.address_1 }}</p>
+                                        {% if shipping_address.address_2 %}
+                                            <p class="address">{{ shipping_address.address_2 }}</p>
+                                        {% endif %}
+            
+                                        <p class="city">{{ primary_address.city }}</p>
+                                        <p class="postcode">{{ primary_address.post_code }} </p>
+                                            
+                                        <a href="{% url 'delete_address' %}" class="address-link text-capitalize">delete</a>
+                                        <input type="hidden" name="shipping_address" value="true">
+                                    </div>
+
+                                </div>
+                            {% endfor %}
+
+                        </div>
+                    {% endif %}
+                </div>
+            {% else %}
+                <div class="address padding-bottom-md padding-top-md showcase center">
+
+              
+                    <div class="address">
+                        <p> You have no active address </p>
+                        <p> Add addresses and then come back here </p>
+                    </div>
+
+                </div>
+
+            {% endif %}
 
         </div>
 </section>
 
         
 {% endblock %}
+
+{% block script %}
+    <script>
+        window.csrfToken = '{{ csrf_token }}'; // Set as a global variable so it can be accessed
+    </script>
+    <script src="{% static 'js/pages/manage-address.js' %}" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.all.min.js"></script>
+{% endblock  %}
