@@ -67,21 +67,16 @@ def manage_billing_addresses(request):
     
     profile            = request.user.profile
     billing_addresses  = BillingAddress.objects.filter(user_profile=profile)
-    shipping_addresses = ShippingAddress.objects.filter(user_profile=profile)
     primary_address    = billing_addresses.filter(primary_address=True).first()  
   
     billing_address_minus_primary_address = billing_addresses.exclude(primary_address=True)
     context = {
         "billing_addresses": billing_address_minus_primary_address.all(),
-        "shipping_addresses": shipping_addresses.all(),
         "primary_address": primary_address,
-        "REMAINING_SHIPPING_COUNT": shipping_addresses.count(),
         "REMAINING_BILLING_COUNT": billing_address_minus_primary_address.count(), 
     }
     
-    print(context)
     return render(request, "profile/manage_billing_addresses.html", context)
-
 
 
 def manage_shippng_addresses(request):
@@ -93,7 +88,6 @@ def manage_shippng_addresses(request):
         "REMAINING_SHIPPING_COUNT": shipping_addresses.count(),
     }
     
-    print(context)
     return render(request, "profile/manage_shipping_addresses.html", context)
 
     
