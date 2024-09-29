@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Manage Address {% endblock %}
+
+
+{% block body %}
+
+<section id="account" aria-labelledby="account-heading">
+    <div class="messages">
+        {% include "partials/messages.html" %}
+    </div>
+
+    <div class="address-container">
+        <div class="logo center">
+            <a href="{% url 'home' %}">
+                <img src="{% static '/img/display/jpg/logo.png' %}" alt="The logo" class="account-logo-img">
+            </a>
+
+        </div>
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'account' %}">Account</a></li>
+            <li><a href="{% url 'user_profile' %}">Profile</a></li>
+            <li>Manage my address</li>
+
+        </ul>
+        <h1 id="account-heading" class="padding-top-md lighten">My Account</h1>
+        <p class="account-info">Manage my shipping addresses</p>
+        <hr class="dividor">
+
+        <div class="profile-container">
+
+            {% include "partials/profile_sidebar.html" %}
+
+            <div class="main">
+
+
+                {% if shipping_addresses %}
+
+                    <p class=" text-capitalize padding-top-md padding-bottom-sm bold" id="shipping-address-title" > Shipping Addresses</p>
+
+                    <div class="triple-grid center" id="shipping_addresses">
+
+                        {% for shipping_address in shipping_addresses %}
+                            <div class="padding-bottom-md padding-top-md padding-bottom-sm showcase margin-bottom-sm" id={{ shipping_address.id }}>
+
+                                <div class="address address-card">
+
+                                    <p class="address">{{ shipping_address.address_1 }}</p>
+                                    {% if shipping_address.address_2 %}
+                                        <p class="address">{{ shipping_address.address_2 }}</p>
+                                    {% endif %}
+
+                                    <p class="city">{{ primary_address.city }}</p>
+                                    <p class="postcode">{{ primary_address.post_code }} </p>
+
+                                    <a href="{% url 'delete_address' %}" class="address-link text-capitalize" id={{ shipping_address.id }}>delete</a>
+                                    <input type="hidden" name="shipping_address" value="true">
+                                </div>
+
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                {% endif %}
+
+
+                {% if REMAINING_SHIPPING_COUNT == 0 %}
+                    <div class="address padding-bottom-md padding-top-md showcase center empty-address-message">
+                        <div class="address">
+                            <p>You have no active shipping address</p>
+                            <p>Add addresses and then come back here</p>
+                        </div>
+                    </div> 
+                {% endif %}
+
+          </div>
+         
+         
+
+
+
+        </div>
+</section>
+
+
+{% endblock %}
+
+{% block script %}
+<script>
+    window.csrfToken = '{{ csrf_token }}'; // Set as a global variable so it can be accessed
+</script>
+<script src="{% static 'js/pages/manage-address.js' %}" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.all.min.js"></script>
+{% endblock %}

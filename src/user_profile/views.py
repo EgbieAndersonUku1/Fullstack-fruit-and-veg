@@ -4,7 +4,11 @@ from django.contrib import messages
 from django.http import JsonResponse
 
 # Create your views here.
-from .forms.user_profile_form import UserProfileForm, BillingAddressForm, ShippingAddressForm, PrimaryAddress
+from .forms.user_profile_form import (UserProfileForm, 
+                                      BillingAddressForm, 
+                                      ShippingAddressForm,
+                                      PrimaryAddress
+                                      )
 from .models import BillingAddress, ShippingAddress
 
 
@@ -59,22 +63,40 @@ def user_profile(request):
 
 
 
-def manage_address(request):
+def manage_billing_addresses(request):
     
     profile            = request.user.profile
-    billing_addresses  = BillingAddress.objects.filter(user_profile=profile).all()
-    shipping_addresses = ShippingAddress.objects.filter(user_profile=profile).all()
+    billing_addresses  = BillingAddress.objects.filter(user_profile=profile)
+    shipping_addresses = ShippingAddress.objects.filter(user_profile=profile)
     primary_address    = billing_addresses.filter(primary_address=True).first()  
   
+    billing_address_minus_primary_address = billing_addresses.exclude(primary_address=True)
     context = {
-        "billing_addresses": billing_addresses,
-        "shipping_addresses": shipping_addresses,
+        "billing_addresses": billing_address_minus_primary_address.all(),
+        "shipping_addresses": shipping_addresses.all(),
         "primary_address": primary_address,
+        "REMAINING_SHIPPING_COUNT": shipping_addresses.count(),
+        "REMAINING_BILLING_COUNT": billing_address_minus_primary_address.count(), 
     }
-    return render(request, "profile/manage_address.html", context)
+    
+    print(context)
+    return render(request, "profile/manage_billing_addresses.html", context)
 
 
 
+def manage_shippng_addresses(request):
+    profile            = request.user.profile
+    shipping_addresses = ShippingAddress.objects.filter(user_profile=profile) 
+  
+    context = {
+        "shipping_addresses": shipping_addresses.all(),
+        "REMAINING_SHIPPING_COUNT": shipping_addresses.count(),
+    }
+    
+    print(context)
+    return render(request, "profile/manage_shipping_addresses.html", context)
+
+    
 def delete_address(request):
   
     if request.method == "POST":
@@ -88,21 +110,30 @@ def delete_address(request):
             address_id         = data.get("address_id")
             
         except json.JSONDecodeError:
-            return JsonResponse({"SUCCESS": False, "message": "Invalid request"}, status=400)
+            return JsonResponse({"SUCCESS": False, "MESSAGE": "Invalid request"}, status=400)
 
         user_profile = request.user.profile
 
         if is_billing_address:
             deleted_count, _ = BillingAddress.objects.filter(user_profile=user_profile, id=address_id).delete()
+          
         else:
             deleted_count, _ = ShippingAddress.objects.filter(user_profile=user_profile, id=address_id).delete()
+            
 
         if deleted_count >= 0:
-            return JsonResponse({"SUCCESS": True, "message": "Address deleted successfully"}, status=200)
+            remaining_shipping_count = ShippingAddress.objects.filter(user_profile=user_profile).count()
+            remaining_billing_count  = BillingAddress.objects.filter(user_profile=user_profile).count()
+            
+            return JsonResponse({"SUCCESS": True, 
+                                  "MESSAGE": "Address deleted successfully",
+                                  "REMAINING_SHIPPING_COUNT": remaining_shipping_count,
+                                  "REMAINING_BILLING_COUNT": remaining_billing_count,
+                                  }, status=200)
 
-        return JsonResponse({"SUCCESS": False, "message": "Address not found"}, status=404)
+        return JsonResponse({"SUCCESS": False, "MESSAGE": "Address not found"}, status=404)
 
-    return JsonResponse({"SUCCESS": False, "message": "Method Not Allowed"}, status=405)
+    return JsonResponse({"SUCCESS": False, "MESSAGE": "Method Not Allowed"}, status=405)
 
 
 def mark_as_primary_address(request, id):

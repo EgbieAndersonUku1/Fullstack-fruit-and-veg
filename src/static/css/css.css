@@ -3181,8 +3181,11 @@ legend {
 }
 
 .sidebar-link:hover {
-   transform: scale(1.01);
+   transform: scale(1.001);
+   text-decoration: underline;
+   color: blue;
 }
+
 
 .profile__username {
     background: var(--light-gray);

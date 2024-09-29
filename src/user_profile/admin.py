@@ -25,6 +25,7 @@ class ShippingAddressAdminModel(BaseAddressAdmin):
 
 class BillingAddressAdminModel(BaseAddressAdmin):
     list_display =  ["id", "country", "address_1", "city", "postcode", "user_profile", "primary_address"]
+    list_filter  = ["city", "user_profile", "primary_address"]
 
 
 

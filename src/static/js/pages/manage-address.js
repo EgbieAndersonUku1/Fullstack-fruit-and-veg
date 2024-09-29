@@ -1,18 +1,25 @@
 import fetchData from "../utils/fetch.js";
 import AlertUtils from "../utils/alerts.js";
+import { validateElement } from "../errors/customErrors.js";
 
 
-const BillingAddressesContainerElement = document.getElementById("billing-addresses");
+
+const billingAddressesContainerElement = document.getElementById("billing-addresses");
+const shippingAddressContainerElement  = document.getElementById("shipping_addresses");
+const primaryAddressTitleElement       = document.getElementById("primary-address-title");
+const emptyAddressMessageElement       = document.querySelector(".empty-address-message");
+
 const addressCardsElements             = document.querySelectorAll(".address-card");
+const primaryAddressElement            = document.getElementById("primary-address");
 
 const CSRF_TOKEN = window.csrfToken;
+
+
 
 
 addressCardsElements?.forEach((cardElement) => {
     cardElement?.addEventListener("click", handleLinkClick);
 })
-
-
 
 
 
@@ -27,7 +34,7 @@ function handleLinkClick(e) {
 
 
     if (elementValue.toLowerCase() === MARK_AS_PRIMARY.toLowerCase()) {
-        // do something to be added here
+        // do something to be added here later
         return;
     } 
 
@@ -35,15 +42,6 @@ function handleLinkClick(e) {
 
   
 }
-
-
-/**
- *  Pusedocode - note to self delete afterwards
- * 1.  The user clicks the delete button
- * 2.  The function calls the addEventLister which be done by eventdelegation
- * 3.  The function calls the backend and deletes it from the model
- * 4.  If the delete is succesful the JS then removes the address DIV
- */
 
 
 async function handleAddressDeletion(id, billingAddressType) {
@@ -55,17 +53,18 @@ async function handleAddressDeletion(id, billingAddressType) {
                 }
    
     try {
+
         const response = await fetchData({url:url,
             csrfToken:CSRF_TOKEN, 
             body:body, 
             });
 
-        console.log(response)
         if (response.SUCCESS) {
             const addressDiv = document.getElementById(id);
     
             if (addressDiv) {
                 addressDiv.remove()
+                handleAddressDisplay(response);
                 AlertUtils.showAlert({
                             title: "Deletion successful",
                             text: "Successfully deleted address",
@@ -74,7 +73,7 @@ async function handleAddressDeletion(id, billingAddressType) {
                         })
 
             } else {
-                console.error('Error deleting address:', response.message);
+                console.error('Error deleting address:', response.MESSAGE);
                 AlertUtils.showAlert({
                     title: "Deletion unsuccessful",
                     text: "Failed to delete address. Please try again",
@@ -97,4 +96,63 @@ async function handleAddressDeletion(id, billingAddressType) {
 }
 
 
+function handleAddressDisplay(response) {
+ 
+    if (!response) {
+        return;
+    };
 
+    if (response.REMAINING_SHIPPING_COUNT === 0 && response.REMAINING_BILLING_COUNT === 0) {
+       hideAllAddressElements();
+       handleEmptyAddressMessage();
+    } else if (response.REMAINING_SHIPPING_COUNT > 0 && response.REMAINING_BILLING_COUNT === 0 ) {
+        hideBillingAddressElements()
+    } else if (response.REMAINING_SHIPPING_COUNT === 0 && response.REMAINING_BILLING_COUNT > 0  ){
+        hideShippingAddressElements();
+    } 
+ 
+      
+
+}
+
+
+function handleEmptyAddressMessage(show = true) {
+    validateElement(emptyAddressMessageElement, "The empty address element couldn't be found", true);
+    if (show) {
+        emptyAddressMessageElement.classList.remove("d-none");
+    } else {
+        emptyAddressMessageElement.classList.add("d-none");   
+    }
+   
+}
+
+
+function hideBillingAddressElements() {
+    billingAddressesContainerElement?.classList.add("d-none");   
+    const billingAddressTitleElement = document.getElementById("billing-address-title")
+    billingAddressTitleElement?.classList.add("d-none");
+    // console.log(billingAddressTitle)
+};
+
+
+
+function hideShippingAddressElements() {
+    shippingAddressContainerElement?.classList.add("d-none");
+    const shippingAddressTitleElement = document.getElementById("shipping-address-title");
+    shippingAddressTitleElement?.classList.add("d-none");
+    // console.log(shippingAddressTitleElement);
+}
+
+
+function hideAllAddressElements() {
+    billingAddressesContainerElement?.classList.add("d-none")
+    shippingAddressContainerElement?.classList.add("d-none");
+
+    const billingAddressTitle = document.getElementById("billing-address-title")
+    const shippingAddressTitle = document.getElementById("shipping-address-title");
+
+    billingAddressTitle?.classList.add("d-none");
+    primaryAddressTitleElement?.classList.add("d-none");
+    shippingAddressTitle?.classList.add("d-none");
+    primaryAddressElement.classList?.add("d-none");
+}

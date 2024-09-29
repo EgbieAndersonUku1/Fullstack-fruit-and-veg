@@ -1,0 +1,40 @@
+{% load static %}
+
+<div class="sidebar">
+
+    <div class="sidebar-link">
+        <img src="{% static '/img/icons/closed-lock-with-key.svg' %}" alt="image"
+            class="profile-img">
+        <a href="" class="edit-profile text-capitalize">Login and authentication </a>
+    </div>
+
+    <div class="sidebar-link">
+        <img src="{% static '/img/icons/address-book.svg' %}" alt="image" class="profile-img">
+        <a href="{% url 'user_profile' %}" class="edit-profile text-capitalize">Add address </a>
+    </div>
+
+    <div class="sidebar-link">
+        <img src="{% static '/img/icons/address-book.svg' %}" alt="image" class="profile-img">
+        <a href="{% url 'manage_addresses' %}" class="edit-profile text-capitalize">Manage billing address </a>
+    </div>
+
+    <div class="sidebar-link">
+        <img src="{% static '/img/icons/address-book.svg' %}" alt="image" class="profile-img">
+        <a href="{% url 'manage_shippng_addresses' %}" class="edit-profile text-capitalize">Mangage Shipping address </a>
+    </div>
+
+    <div class="sidebar-link">
+        <img src="{% static '/img/icons/card-payment.svg' %}" alt="image" class="profile-img">
+        <a href="" class="edit-profile text-capitalize">Payment options </a>
+    </div>
+
+    <div class="sidebar-link">
+        <img src="{% static '/img/icons/admission-tickets.svg' %}" alt="image" class="profile-img">
+        <a href="" class="edit-profile text-capitalize">Wishlist </a>
+    </div>
+
+    <div class="sidebar-link">
+        <img src="{% static '/img/icons/shopping-bags.svg' %}" alt="image" class="profile-img">
+        <a href="" class="edit-profile text-capitalize">Gift card balance </a>
+    </div>
+</div>
