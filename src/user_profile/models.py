@@ -19,7 +19,6 @@ User = get_user_model()
 class BaseAddress(models.Model):
     country            = models.CharField(max_length=40, choices=COUNTRIES_CHOICES, default=COUNTRIES_CHOICES[0])
     address_1          = models.CharField(verbose_name="Address One", max_length=200, blank=False, null=False)
-    address_2          = models.CharField(verbose_name="Address Two (Optional)", max_length=200, blank=True, null=True)
     city               = models.CharField(max_length=50, blank=False, null=False)
     state              = models.CharField(max_length=50, blank=False, null=False)
     postcode           = models.CharField(max_length=10, blank=False, null=False)
@@ -227,7 +226,25 @@ class BillingAddress(BaseAddress):
         if save:
             self.save()
 
-
+    @classmethod
+    def get_primary_address(cls, user):
+        """
+        Takes a user model and returns the primary address belong to that user
+        
+        :Params
+            - User (model): The user model belong to the user
+        
+        :Returns
+            - Returns the shipping address or none 
+            
+        Example Usage:
+           >>> user = User.get_by_email(email="some_email@example")
+           >>> primary_address = UserProfile.get_primary_address(user=user)
+           >>> 
+        """
+        return cls.objects.filter(user_profile=user.profile, primary_address=True).first()
+    
+    
 class ShippingAddress(BaseAddress):
     user_profile       = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="shipping_addresses",  blank=True, null=True)
 

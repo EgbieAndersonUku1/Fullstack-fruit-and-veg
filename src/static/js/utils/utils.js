@@ -162,18 +162,16 @@ function disableEmptySelectOptions(selectElement) {
 
 
 
+export {generateSessionKey,
+        saveToLocalStorage,
+        getItemFromLocalStorage,
+        removeItemFromLocalStorage,
+        redirectToNewPage,
+        getFormattedCurrentDate,
+        getAllCheckBoxElementsValue,
+        getCurrentUrl,
+        getCurrentPage,
+        capitalize,
+        disableEmptySelectOptions,
 
-export {
-    generateSessionKey,
-    saveToLocalStorage,
-    getItemFromLocalStorage,
-    removeItemFromLocalStorage,
-    redirectToNewPage,
-    getFormattedCurrentDate,
-    getAllCheckBoxElementsValue,
-    getCurrentUrl,
-    getCurrentPage,
-    capitalize,
-    disableEmptySelectOptions,
-    
 };

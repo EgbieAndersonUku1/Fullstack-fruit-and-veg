@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Manage Address {% endblock %}
+
+
+{% block body %}
+
+<section id="account" aria-labelledby="account-heading">
+    <div class="messages">
+        {% include "partials/messages.html" %}
+    </div>
+
+    <div class="address-container">
+        <div class="logo center">
+            <a href="{% url 'home' %}">
+                <img src="{% static '/img/display/jpg/logo.png' %}" alt="The logo" class="account-logo-img">
+            </a>
+
+        </div>
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'account' %}">Account</a></li>
+            <li><a href="{% url 'user_profile' %}">Profile</a></li>
+            <li>Manage my address</li>
+
+        </ul>
+        <h1 id="account-heading" class="padding-top-md lighten">My Account</h1>
+        <p class="account-info">Manage my billing addresses</p>
+        <hr class="dividor">
+
+        <div class="profile-container">
+
+            {% include "partials/profile_sidebar.html" %}
+
+            <div class="main">
+
+                <!-- primary address-->
+                {% if primary_address %}
+                    <h4 class="highlight text-capitalize padding-bottom-sm" id="primary-address-title">Primary Address</h4>
+                    <div class="address padding-bottom-md padding-top-md showcase center" id="primary-address">
+                        <div class="primary_address">
+                            <p class="address_1">{{ primary_address.address_1 }}</p>
+                            
+                            <p class="city">{{ primary_address.city }}</p>
+                            <p class="postcode">{{ primary_address.post_code }} </p>
+                        </div>
+                    </div>
+                {% endif %}
+
+
+                {% if billing_addresses %}
+                    {% comment %} <p class=" text-capitalize padding-top-md padding-bottom-sm bold" id="billing-address-title" > Billing Addresses</p> {% endcomment %}
+                    <div class="triple-grid center" id="billing-addresses">
+
+                        {% for billing_address in billing_addresses %}
+
+                            <div class="padding-bottom-md padding-top-md padding-bottom-sm showcase margin-bottom-sm" id={{ billing_address.id }}>
+
+                                <div class="address address-card" id="billing-address-{{ billing_address.id }}">
+
+                                    <p class="address_1">{{ billing_address.address_1 }}</p>
+                                    <p class="city">{{ billing_address.city }}</p>
+                                    <p class="postcode">{{ billing_address.postcode }} </p>
+
+                                    <a href="{% url 'mark_as_primary' %}" class="address-link text-lower mark-as-primary" id="mark_as_primary-{{ billing_address.id }}">mark as primary</a>
+                                    <a href="{% url 'mark_as_primary' %}" class="address-link text-capitalize delete-address" id="delete-billing-address-{{ billing_address.id }}">delete</a>
+
+                                    <input type="hidden" name="billing_address" value="true">
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+
+                {% if REMAINING_BILLING_COUNT == 0  and not primary_address %}
+                    <div class="address padding-bottom-md padding-top-md showcase center empty-address-message">
+                        <div class="address">
+                            <p>You have no active billing address</p>
+                            <p>Add addresses and then come back here</p>
+                        </div>
+                    </div> 
+                {% endif %}
+
+          </div>
+         
+        
+        </div>
+</section>
+
+
+{% endblock %}
+
+{% block script %}
+<script>
+    window.csrfToken = '{{ csrf_token }}'; // Set as a global variable so it can be accessed
+</script>
+<script src="{% static 'js/pages/manage-address.js' %}" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.all.min.js"></script>
+{% endblock %}

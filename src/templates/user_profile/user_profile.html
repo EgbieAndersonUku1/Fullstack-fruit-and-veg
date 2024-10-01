@@ -5,6 +5,9 @@
 {% block body %}
 
 <section id="account" aria-labelledby="account-heading">
+    <div class="messages">
+        {% include "partials/messages.html" %}
+    </div>
     <div class="content-container">
 
         {% include "partials/logo_link.html" %}
@@ -12,7 +15,8 @@
         <ul class="breadcrumb">
             <li><a href="{% url 'home' %}">Home</a></li>
             <li><a href="{% url 'account' %}">Account</a></li>
-            <li>My profile</li>
+            <li><a href="{% url 'user_profile' %}"> My Profile</a></li>
+          
         </ul>
 
         <h1 id="account-heading" class="padding-top-md lighten">My Account</h1>
@@ -21,34 +25,7 @@
 
         <div class="profile-container">
 
-
-            <div class="sidebar">
-
-                <div class="sidebar-link">
-                    <img src="{% static 'img/icons/closed-lock-with-key.svg' %}" alt="image" class="profile-img">
-                    <a href="" class="edit-profile text-capitalize">Login and authentication </a>
-                </div>
-
-                <div class="sidebar-link">
-                    <img src="{% static 'img/icons/address-book.svg' %}" alt="image" class="profile-img">
-                    <a href="" class="edit-profile text-capitalize">Manage address </a>
-                </div>
-
-                <div class="sidebar-link">
-                    <img src="{% static 'img/icons/card-payment.svg' %}" alt="image" class="profile-img">
-                    <a href="" class="edit-profile text-capitalize">Payment options </a>
-                </div>
-
-                <div class="sidebar-link">
-                    <img src="{% static 'img/icons/admission-tickets.svg' %}" alt="image" class="profile-img">
-                    <a href="" class="edit-profile text-capitalize">Wishlist </a>
-                </div>
-
-                <div class="sidebar-link">
-                    <img src="{% static 'img/icons/shopping-bags.svg' %}" alt="image" class="profile-img">
-                    <a href="" class="edit-profile text-capitalize">Gift card balance </a>
-                </div>
-            </div>
+            {% include "partials/profile_sidebar.html" %}
 
             <div class="main">
                 <h2>Edit Profile</h2>
@@ -124,12 +101,6 @@
 
                         </div>
 
-                        <!-- Address two optional -->
-                        <div class="address_2 flex-col profile-field">
-                            {{ billing_address_form.address_2.label }}
-                            {{ billing_address_form.address_2 }}
-
-                        </div>
                         <div class="triple-grid">
                             <div class="city flex-col">
                                 {{ billing_address_form.city.label }}

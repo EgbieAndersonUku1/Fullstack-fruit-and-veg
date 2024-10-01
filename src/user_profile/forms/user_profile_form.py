@@ -24,7 +24,7 @@ class BillingAddressForm(forms.ModelForm):
     
     class Meta:
         model = BillingAddress
-        fields = ["country", "address_1", "address_2", "city", "state", "postcode"]
+        fields = ["country", "address_1", "city", "state", "postcode"]
     
     is_primary_address = forms.ChoiceField(choices=PrimaryAddress.CHOICES, widget=forms.RadioSelect, initial=PrimaryAddress.YES)
 
@@ -36,12 +36,11 @@ class ShippingAddressForm(forms.ModelForm):
     # when the form is displayed alongside the billing form. This configuration ensures that the form 
     # can still be submitted even if these fields are left empty when only the billing form is completed.
     address_1          = forms.CharField(required=False)
-    address_2          = forms.CharField(required=False)
     city               = forms.CharField(required=False)
     state              = forms.CharField(required=False)
     postcode           = forms.CharField(required=False)
   
     class Meta:
         model = ShippingAddress
-        fields = ["country", "address_1", "address_2", "city", "state", "postcode"]
+        fields = ["country", "address_1", "city", "state", "postcode"]
 
