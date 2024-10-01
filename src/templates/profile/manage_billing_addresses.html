@@ -45,7 +45,7 @@
                             {% if primary_address.address_2 %}
                                 <p class="address_2">{{ primary_address.address_2 }}</p>
                             {% endif %}
-
+                        
                             <p class="city">{{ primary_address.city }}</p>
                             <p class="postcode">{{ primary_address.post_code }} </p>
                         </div>
@@ -71,9 +71,8 @@
                                     <p class="city">{{ billing_address.city }}</p>
                                     <p class="postcode">{{ billing_address.post_code }} </p>
 
-                                    <a href="{% url 'mark_as_primary' billing_address.id %}"
-                                        class="address-link text-lower mark-as-primary">mark as primary</a>
-                                    <a href="#" class="address-link text-capitalize delete-address" id={{ billing_address.id }}>delete</a>
+                                    <a href="{% url 'mark_as_primary' %}" class="address-link text-lower mark-as-primary">mark as primary</a>
+                                    <a href="{% url 'mark_as_primary' %}" class="address-link text-capitalize delete-address" id={{ billing_address.id }}>delete</a>
 
                                     <input type="hidden" name="billing_address" value="true">
                                 </div>

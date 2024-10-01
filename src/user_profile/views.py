@@ -2,8 +2,9 @@ import json
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 
-# Create your views here.
+
 from .forms.user_profile_form import (UserProfileForm, 
                                       BillingAddressForm, 
                                       ShippingAddressForm,
@@ -11,6 +12,7 @@ from .forms.user_profile_form import (UserProfileForm,
                                       )
 from .models import BillingAddress, ShippingAddress
 
+# Create your views here.
 
 def user_profile(request):
    
@@ -90,46 +92,91 @@ def manage_shippng_addresses(request):
     
     return render(request, "profile/manage_shipping_addresses.html", context)
 
-    
+
+
+@require_POST
 def delete_address(request):
-  
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body.decode('utf-8'))
-            
-            if not data.get("_method") == "DELETE":
-                raise ValueError("This is not a delete request")
-            
-            is_billing_address = data.get("is_billing_address")
-            address_id         = data.get("address_id")
-            
-        except json.JSONDecodeError:
-            return JsonResponse({"SUCCESS": False, "MESSAGE": "Invalid request"}, status=400)
+    """
+    Deletes a specified address (billing or shipping) for the user's profile.
 
-        user_profile = request.user.profile
+    Args:
+        request: The HTTP request object containing the address details in the body.
 
-        if is_billing_address:
-            deleted_count, _ = BillingAddress.objects.filter(user_profile=user_profile, id=address_id).delete()
-          
-        else:
-            deleted_count, _ = ShippingAddress.objects.filter(user_profile=user_profile, id=address_id).delete()
-            
+    Returns:
+        JsonResponse: A response indicating success or failure, with an appropriate message and remaining address counts.
+    """
+    try:
+        # Decode the JSON request body
+        data = json.loads(request.body.decode('utf-8'))
 
-        if deleted_count >= 0:
-            remaining_shipping_count = ShippingAddress.objects.filter(user_profile=user_profile).count()
-            remaining_billing_count  = BillingAddress.objects.filter(user_profile=user_profile).count()
-            
-            return JsonResponse({"SUCCESS": True, 
-                                  "MESSAGE": "Address deleted successfully",
-                                  "REMAINING_SHIPPING_COUNT": remaining_shipping_count,
-                                  "REMAINING_BILLING_COUNT": remaining_billing_count,
-                                  }, status=200)
+        if not data.get("_method") == "DELETE":
+            raise ValueError("This is not a delete request")
+        
+        is_billing_address = data.get("is_billing_address")
+        address_id = data.get("address_id")
 
-        return JsonResponse({"SUCCESS": False, "MESSAGE": "Address not found"}, status=404)
+    except json.JSONDecodeError:
+        return JsonResponse({"SUCCESS": False, "MESSAGE": "Invalid request format"}, status=400)
 
-    return JsonResponse({"SUCCESS": False, "MESSAGE": "Method Not Allowed"}, status=405)
+    user_profile = request.user.profile
+
+    # Delete the address based on the address type
+    if is_billing_address:
+        deleted_count, _ = BillingAddress.objects.filter(user_profile=user_profile, id=address_id).delete()
+    else:
+        deleted_count, _ = ShippingAddress.objects.filter(user_profile=user_profile, id=address_id).delete()
+
+    if deleted_count > 0:
+        remaining_shipping_count = ShippingAddress.objects.filter(user_profile=user_profile).count()
+        remaining_billing_count = BillingAddress.objects.filter(user_profile=user_profile).count()
+
+        return JsonResponse({
+            "SUCCESS": True, 
+            "MESSAGE": "Address deleted successfully",
+            "REMAINING_SHIPPING_COUNT": remaining_shipping_count,
+            "REMAINING_BILLING_COUNT": remaining_billing_count,
+        }, status=200)
+
+    return JsonResponse({"SUCCESS": False, "MESSAGE": "Address not found"}, status=404)
 
 
-def mark_as_primary_address(request, id):
-    is_shipping_address = request.POST.get("is_shipping_address")
-    pass
+
+@require_POST
+def mark_as_primary_address(request):
+    """
+    Marks a specified billing address as the primary address for the user's profile.
+
+    Args:
+        request: The HTTP request object containing the address_id in the body.
+
+    Returns:
+        JsonResponse: A response indicating success or failure, with an appropriate message.
+    """
+    try:
+      
+        data       = json.loads(request.body.decode("utf-8"))
+        address_id = data.get("address_id")
+
+    except json.JSONDecodeError:
+        return JsonResponse({"SUCCESS": False, "MESSAGE": "Invalid request format"}, status=400)
+    
+    user_profile    = request.user.profile
+    billing_address = BillingAddress.objects.filter(user_profile=user_profile, id=address_id).first()
+    
+    if billing_address:
+       
+        billing_address.mark_as_primary()
+        return JsonResponse({
+            "SUCCESS": True, 
+            "MESSAGE": "Address successfully marked as primary address",
+            "DATA" : {
+                "Address" : {
+                            "Address_1": billing_address.address_1,
+                            "Address_2": billing_address.address_2,
+                            "City": billing_address.city,
+                            "postcode": billing_address.postcode
+                          }
+                        }
+        }, status=200)
+
+    return JsonResponse({"SUCCESS": False, "MESSAGE": "Address not found"}, status=404)

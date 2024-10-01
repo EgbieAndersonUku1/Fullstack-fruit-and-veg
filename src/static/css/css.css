@@ -3447,3 +3447,7 @@ legend {
 .address {
     background: white;
 }
+
+#primary-address {
+    border: 3px solid hsl(11deg 100% 52.2% / 20%);
+}
