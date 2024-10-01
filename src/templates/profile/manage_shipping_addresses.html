@@ -48,14 +48,11 @@
                                 <div class="address address-card">
 
                                     <p class="address">{{ shipping_address.address_1 }}</p>
-                                    {% if shipping_address.address_2 %}
-                                        <p class="address">{{ shipping_address.address_2 }}</p>
-                                    {% endif %}
 
-                                    <p class="city">{{ primary_address.city }}</p>
-                                    <p class="postcode">{{ primary_address.post_code }} </p>
+                                    <p class="city">{{ shipping_address.city }}</p>
+                                    <p class="postcode">{{ shipping_address.postcode }} </p>
 
-                                    <a href="{% url 'delete_address' %}" class="address-link text-capitalize" id={{ shipping_address.id }}>delete</a>
+                                    <a href="{% url 'delete_address' %}" class="address-link text-capitalize" id="delete-shipping-address-{{ shipping_address.id }}">delete</a>
                                     <input type="hidden" name="shipping_address" value="true">
                                 </div>
 

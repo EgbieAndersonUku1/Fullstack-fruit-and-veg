@@ -42,10 +42,6 @@
                         <div class="primary_address">
                             <p class="address_1">{{ primary_address.address_1 }}</p>
                             
-                            {% if primary_address.address_2 %}
-                                <p class="address_2">{{ primary_address.address_2 }}</p>
-                            {% endif %}
-                        
                             <p class="city">{{ primary_address.city }}</p>
                             <p class="postcode">{{ primary_address.post_code }} </p>
                         </div>
@@ -61,18 +57,14 @@
 
                             <div class="padding-bottom-md padding-top-md padding-bottom-sm showcase margin-bottom-sm" id={{ billing_address.id }}>
 
-                                <div class="address address-card">
+                                <div class="address address-card" id="billing-address-{{ billing_address.id }}">
 
-                                    <p class="address">{{ billing_address.address_1 }}</p>
-                                    {% if billing_address.address_2 %}
-                                        <p class="address">{{ billing_address.address_2 }}</p>
-                                    {% endif %}
-
+                                    <p class="address_1">{{ billing_address.address_1 }}</p>
                                     <p class="city">{{ billing_address.city }}</p>
-                                    <p class="postcode">{{ billing_address.post_code }} </p>
+                                    <p class="postcode">{{ billing_address.postcode }} </p>
 
-                                    <a href="{% url 'mark_as_primary' %}" class="address-link text-lower mark-as-primary">mark as primary</a>
-                                    <a href="{% url 'mark_as_primary' %}" class="address-link text-capitalize delete-address" id={{ billing_address.id }}>delete</a>
+                                    <a href="{% url 'mark_as_primary' %}" class="address-link text-lower mark-as-primary" id="mark_as_primary-{{ billing_address.id }}">mark as primary</a>
+                                    <a href="{% url 'mark_as_primary' %}" class="address-link text-capitalize delete-address" id="delete-billing-address-{{ billing_address.id }}">delete</a>
 
                                     <input type="hidden" name="billing_address" value="true">
                                 </div>
@@ -95,10 +87,7 @@
 
           </div>
          
-         
-
-
-
+        
         </div>
 </section>
 

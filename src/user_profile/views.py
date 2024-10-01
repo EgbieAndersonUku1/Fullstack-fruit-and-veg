@@ -160,8 +160,10 @@ def mark_as_primary_address(request):
     except json.JSONDecodeError:
         return JsonResponse({"SUCCESS": False, "MESSAGE": "Invalid request format"}, status=400)
     
-    user_profile    = request.user.profile
-    billing_address = BillingAddress.objects.filter(user_profile=user_profile, id=address_id).first()
+    user_profile             = request.user.profile
+    billing_address_obj      = BillingAddress.objects.filter(user_profile=user_profile)
+    previous_primary_address = billing_address_obj.filter(primary_address=True).first()
+    billing_address          = billing_address_obj.filter(id=address_id).first()
     
     if billing_address:
        
@@ -170,13 +172,23 @@ def mark_as_primary_address(request):
             "SUCCESS": True, 
             "MESSAGE": "Address successfully marked as primary address",
             "DATA" : {
-                "Address" : {
+                "NewPrimaryAddress" : {
+                            "id": billing_address.id,
                             "Address_1": billing_address.address_1,
-                            "Address_2": billing_address.address_2,
                             "City": billing_address.city,
-                            "postcode": billing_address.postcode
-                          }
-                        }
+                            "postcode": billing_address.postcode,
+                            "primary_address": True,
+                          },
+                
+                "BillingAddress": {
+                            "id": previous_primary_address.id,
+                            "Address_1": previous_primary_address.address_1,
+                            "City": previous_primary_address.city,
+                            "postcode": previous_primary_address.postcode,
+                            "primary_address": False,
+                        },
+                
+                    }
         }, status=200)
 
     return JsonResponse({"SUCCESS": False, "MESSAGE": "Address not found"}, status=404)

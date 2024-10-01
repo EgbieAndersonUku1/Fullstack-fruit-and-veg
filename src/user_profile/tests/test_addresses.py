@@ -13,7 +13,6 @@ class BillingAddressTests(TestCase):
         self.COUNTRIES_CHOICES  = parse_country_file("data/countries.txt")
         self.RANDOM_COUNTRY     = self.COUNTRIES_CHOICES[0]
         self.ADDRESS_1          = "121 Random address"
-        self.ADDRESS_2          = "Random street name"
         self.CITY               = "London"
         self.POSTCODE           = "E9, 145"
         self.user_profile       = set_up_user_profile()
@@ -21,7 +20,6 @@ class BillingAddressTests(TestCase):
         
         self.billing_address = BillingAddress.objects.create(country=self.RANDOM_COUNTRY,
                                                              address_1=self.ADDRESS_1,
-                                                             address_2=self.ADDRESS_2,
                                                              city=self.CITY,
                                                              postcode=self.POSTCODE,
                                                              user_profile=self.user_profile, 
@@ -41,7 +39,6 @@ class BillingAddressTests(TestCase):
         
         self.assertEqual(str(billing_address.country), str(self.RANDOM_COUNTRY))
         self.assertEqual(billing_address.address_1, self.ADDRESS_1)
-        self.assertEqual(billing_address.address_2, self.ADDRESS_2)
         self.assertEqual(billing_address.city, self.CITY)
         self.assertEqual(billing_address.postcode, self.POSTCODE)
         self.assertEqual(billing_address.user_profile, self.user_profile)
@@ -101,28 +98,28 @@ class BillingAddressTests(TestCase):
         
         # Create a billing address for each user profile
         self.billing_address_1 = BillingAddress.objects.create(
-            country=self.RANDOM_COUNTRY, address_1=self.ADDRESS_1, address_2=self.ADDRESS_2,
+            country=self.RANDOM_COUNTRY, address_1=self.ADDRESS_1,
             city=self.CITY, postcode=self.POSTCODE, user_profile=user_profile_1)
         
         self.billing_address_2 = BillingAddress.objects.create(
-            country=self.RANDOM_COUNTRY, address_1=self.ADDRESS_1, address_2=self.ADDRESS_2,
+            country=self.RANDOM_COUNTRY, address_1=self.ADDRESS_1, 
             city=self.CITY, postcode=self.POSTCODE, user_profile=user_profile_2)
         
         self.billing_address_3 = BillingAddress.objects.create(
-            country=self.RANDOM_COUNTRY, address_1=self.ADDRESS_1, address_2=self.ADDRESS_2,
+            country=self.RANDOM_COUNTRY, address_1=self.ADDRESS_1, 
             city=self.CITY, postcode=self.POSTCODE, user_profile=user_profile_3)
     
         # Create three more billing addresses for user_profile_1 and mark them all as primary addresses
         BillingAddress.objects.create(
-            country=self.RANDOM_COUNTRY, address_1="121A Thor rules", address_2="Crossway groves",
+            country=self.RANDOM_COUNTRY, address_1="121A Thor rules",
             city="London", postcode="E5 u1", user_profile=user_profile_1, primary_address=True)
         
         BillingAddress.objects.create(
-            country=self.RANDOM_COUNTRY, address_1="131 Black widow rules", address_2="Crossway groves",
+            country=self.RANDOM_COUNTRY, address_1="131 Black widow rules",
             city="London", postcode="E5 u2", user_profile=user_profile_1, primary_address=True)
         
         BillingAddress.objects.create(
-            country=self.RANDOM_COUNTRY, address_1="131 Stranger Things rules", address_2="Crossway groves", 
+            country=self.RANDOM_COUNTRY, address_1="131 Stranger Things rules",  
             city="London", postcode="E5 u3", user_profile=user_profile_1, primary_address=True)
         
         # Verify that only the last billing address is marked as primary, and the previous ones are unmarked
@@ -155,7 +152,6 @@ class BillingAddressTests(TestCase):
         BillingAddress.objects.create(
             country=self.RANDOM_COUNTRY,
             address_1=self.ADDRESS_1,
-            address_2=self.ADDRESS_2,
             city=CITY,
             postcode=self.POSTCODE,
             user_profile=user_profile
@@ -182,7 +178,6 @@ class ShippngAddressTests(TestCase):
         self.COUNTRIES_CHOICES  = parse_country_file("data/countries.txt")
         self.RANDOM_COUNTRY     = self.COUNTRIES_CHOICES[0]
         self.ADDRESS_1          = "121 Random address"
-        self.ADDRESS_2          = "Random street name"
         self.CITY               = "London"
         self.POSTCODE           = "E9, 145"
         self.user_profile       = set_up_user_profile()
@@ -190,7 +185,6 @@ class ShippngAddressTests(TestCase):
         
         self.shipping_address = ShippingAddress.objects.create(country=self.RANDOM_COUNTRY,
                                                              address_1=self.ADDRESS_1,
-                                                             address_2=self.ADDRESS_2,
                                                              city=self.CITY,
                                                              postcode=self.POSTCODE,
                                                              user_profile=self.user_profile, 
@@ -210,7 +204,6 @@ class ShippngAddressTests(TestCase):
         
         self.assertEqual(str(shipping_address.country), str(self.RANDOM_COUNTRY))
         self.assertEqual(shipping_address.address_1, self.ADDRESS_1)
-        self.assertEqual(shipping_address.address_2, self.ADDRESS_2)
         self.assertEqual(shipping_address.city, self.CITY)
         self.assertEqual(shipping_address.postcode, self.POSTCODE)
         self.assertEqual(shipping_address.user_profile, self.user_profile)

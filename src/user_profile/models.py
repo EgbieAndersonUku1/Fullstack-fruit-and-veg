@@ -19,7 +19,6 @@ User = get_user_model()
 class BaseAddress(models.Model):
     country            = models.CharField(max_length=40, choices=COUNTRIES_CHOICES, default=COUNTRIES_CHOICES[0])
     address_1          = models.CharField(verbose_name="Address One", max_length=200, blank=False, null=False)
-    address_2          = models.CharField(verbose_name="Address Two (Optional)", max_length=200, blank=True, null=True)
     city               = models.CharField(max_length=50, blank=False, null=False)
     state              = models.CharField(max_length=50, blank=False, null=False)
     postcode           = models.CharField(max_length=10, blank=False, null=False)
