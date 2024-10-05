@@ -39,9 +39,7 @@ def register(request):
     
     return redirect('home')
     
-
-
-
+    
 def user_login(request):
     """
     Handles user login by validating credentials and managing user feedback based on account status.
@@ -251,3 +249,13 @@ def verify_email_token(request, username, token):
 
 
 
+def forgotten_password(request):
+    return render(request, "forgott")
+
+
+def reset_password(request):
+    pass
+
+
+def reset_password(request, username, token):
+    pass
