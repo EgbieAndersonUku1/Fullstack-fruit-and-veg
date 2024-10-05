@@ -5,10 +5,14 @@ from django.shortcuts import render, redirect
 
 from .utils.password_validator import PasswordStrengthChecker
 from .views_helper import validate_helper
-
+from utils.generator import generate_forgotten_password_url
 from .forms.register_form import RegisterForm
+from .forms.passwords.forgotten_password import ForgottenPasswordForm
 from .views_helper import send_verification_email
-from .utils.send_emails_types import send_registration_email, resend_expired_verification_email
+from .utils.send_emails_types import (send_registration_email, 
+                                      resend_expired_verification_email, 
+                                      send_forgotten_password_verification_email
+                                      )
 
 
 
@@ -210,16 +214,17 @@ def verify_email_token(request, username, token):
     - HttpResponseRedirect: Redirects to the home page with appropriate messages.
     """
     
-    user = User.get_by_username(username)
+    user        = User.get_by_username(username)
+    VERIFICATION_KEY = "email_verification"
    
     if not user:
         messages.error(request, "The user associated with this code doesn't exist.")
         return redirect("home")
     
-    is_valid, status = user.is_verification_code_valid(token)
+    is_valid, status = user.is_verification_code_valid(token, default_key=VERIFICATION_KEY)
     
     # Check if the user is already logged in
-    if request.user.is_authenticated and not user.verification_data:
+    if request.user.is_authenticated and not user.verification_data.get(VERIFICATION_KEY):
         messages.info(request, "You have already confirmed your email.")
         return redirect("home")
     
@@ -242,7 +247,7 @@ def verify_email_token(request, username, token):
     # Token is valid, mark email as verified
     if is_valid:
         user.mark_email_as_verified(save=False) # don't save yet
-        user.clear_verification_data()
+        user.clear_verification_data(default_key=VERIFICATION_KEY)
     
         messages.success(request, "You have successfully confirmed your email. You can now log in.")
         return redirect("home")
@@ -250,7 +255,44 @@ def verify_email_token(request, username, token):
 
 
 def forgotten_password(request):
-    return render(request, "forgott")
+    MESSAGE = "If your email exist a new verification link will be sent to your registered email address"
+    VERIFICATION_KEY = "forgotten_password_verification_code"
+    if request.method == "POST":
+        form = ForgottenPasswordForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            user = User.get_by_email(email)
+            if user:
+                resp = user.is_token_request_allowed()
+                print(resp)
+                if not resp:
+                    user.clear_verification_data(default_key=VERIFICATION_KEY)
+                    messages.info(request, "Please wait ten minutes before generating a new token")
+                else:
+                    subject = "Click the verification link to change your password"
+                    HOUR_IN_SECS = 3600
+                    send_verification_email(request, 
+                                            user=user, 
+                                            subject=subject, 
+                                            follow_up_message=MESSAGE, 
+                                            send_func=send_forgotten_password_verification_email,
+                                            generate_verification_url_func=generate_forgotten_password_url,
+                                            verification_key=VERIFICATION_KEY,
+                                            expiry_date=HOUR_IN_SECS,
+                                            )
+            else:
+                messages.success(request, MESSAGE)
+            return redirect("forgotten_password")
+       
+          
+                
+    else:
+           form = ForgottenPasswordForm()
+           
+    context = {
+        "form": form,
+    }
+    return render(request, "passwords/forgotten_password.html", context=context)
 
 
 def reset_password(request):

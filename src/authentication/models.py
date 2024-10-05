@@ -75,18 +75,19 @@ class CustomBaseUser(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """Custom user model extending AbstractBaseUser and PermissionsMixin."""
 
-    username          = models.CharField(_("username"), max_length=20, unique=True)
-    email             = models.EmailField(_("email"), max_length=40, unique=True)
-    is_active         = models.BooleanField(_("is active"), default=True)
-    is_staff          = models.BooleanField(_("is staff"), default=False)
-    is_superuser      = models.BooleanField(_("is superuser"), default=False)
-    is_admin          = models.BooleanField(_("is admin"), default=False)
-    is_email_verified = models.BooleanField(_("is email verified"), default=False)
-    is_banned         = models.BooleanField(_("is banned"), default=False) 
-    is_temp_ban       = models.BooleanField(_("is_temp_ban"), default=False)
-    last_login        = models.DateTimeField(_("last login"), auto_now=True) 
-    date_created      = models.DateTimeField(_("date created"), auto_now_add=True)
-    verification_data = models.JSONField(default=dict, blank=True, null=False)
+    username                 = models.CharField(_("username"), max_length=20, unique=True)
+    email                    = models.EmailField(_("email"), max_length=40, unique=True)
+    is_active                = models.BooleanField(_("is active"), default=True)
+    is_staff                 = models.BooleanField(_("is staff"), default=False)
+    is_superuser             = models.BooleanField(_("is superuser"), default=False)
+    is_admin                 = models.BooleanField(_("is admin"), default=False)
+    is_email_verified        = models.BooleanField(_("is email verified"), default=False)
+    is_banned                = models.BooleanField(_("is banned"), default=False) 
+    is_temp_ban              = models.BooleanField(_("is_temp_ban"), default=False)
+    last_login               = models.DateTimeField(_("last login"), auto_now=True) 
+    date_created             = models.DateTimeField(_("date created"), auto_now_add=True)
+    verification_data        = models.JSONField(default=dict, blank=True, null=False)
+    last_token_generated_on  = models.DateTimeField(null=True, blank=True)
   
     objects = CustomBaseUser()
 
@@ -120,6 +121,21 @@ class User(AbstractBaseUser, PermissionsMixin):
             str: The email address of the user.
         """
         return self.email
+
+    def is_token_request_allowed(self):
+        """
+        Check if sufficient time has passed since the last token was generated.
+        """
+        
+        TEN_MINUTES_IN_SECS = 600
+        current_date = make_aware(datetime.now())
+        
+        if self.last_token_generated_on:
+            time_since_last_token = (current_date - self.last_token_generated_on).total_seconds()
+            return time_since_last_token >= TEN_MINUTES_IN_SECS
+        
+        self.last_token_generated_on = current_date
+        return False
 
     @classmethod
     def get_by_email(cls, email:str) -> Optional["User"]:
@@ -173,7 +189,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         except cls.DoesNotExist:
             return None
     
-    def set_verification_code(self, code: str, expiry_minutes: int, save:bool=True) -> None:
+    def set_verification_code(self, code: str, expiry_minutes: int, save: bool = True, default_key: str = "verification_code") -> None:
         """
         Set the verification code and its expiration time in the user's verification data.
 
@@ -186,6 +202,8 @@ class User(AbstractBaseUser, PermissionsMixin):
             expiry_minutes (int): The number of minutes after which the verification code expires.
             save (bool, optional): Whether to save the instance after setting the verification code.
                                 Defaults to `True`. Set to `False` to defer saving.
+            default_key (str, optional): The key under which to store the verification data.
+                                        Defaults to `"verification_code"`.
 
         Returns:
             None
@@ -199,29 +217,37 @@ class User(AbstractBaseUser, PermissionsMixin):
         Note:
             This method does not perform any validation on the verification code or the expiration time.
             It directly updates the `verification_data` field and saves the instance if `save=True`.
+            Different keys (e.g., `"verify_forgotten_password"`) can be used to handle different
+            types of verifications.
         """
+        
         current_date = datetime.now()
-        self.verification_data = {
+
+        self.verification_data[default_key.lower()] = {
             "verification_code": code,
             "date_sent": current_date.isoformat(),
             "expiry_date": (current_date + timedelta(minutes=expiry_minutes)).isoformat()
         }
-
+        self.last_token_generated_on = make_aware(datetime.now())
         if save:
             self.save()
-    
-    def clear_verification_data(self, save:bool=True) -> None:
-        """
-        Clear the user's verification data and optionally save the updated instance.
 
-        This method sets the `verification_data` field to an empty dictionary (`{}`).
-        By default, it saves the instance to the database, but you can prevent an immediate
-        save by setting the `save` parameter to `False`. This is useful when you want to 
-        perform multiple operations on the user instance and save all changes at once.
+    
+    def clear_verification_data(self, save: bool = True, default_key: str = "verification_code") -> None:
+        """
+        Clear the specified verification data from the user's account.
+
+        This method removes the verification information stored under a specific key in the 
+        `verification_data` JSONField (default is `"verification_code"`). By default, the 
+        instance is saved to the database after the key is deleted, but you can defer saving 
+        by setting the `save` parameter to `False`. This is useful when performing multiple 
+        updates on the user instance and saving all changes at once.
 
         Args:
-            save (bool): Whether to save the instance after clearing the verification data. 
+            save (bool): Whether to save the instance after clearing the specified verification data. 
                         Defaults to `True`. Set to `False` to defer saving.
+            default_key (str, optional): The key to clear from the `verification_data`. 
+                                        Defaults to `"verification_code"`.
 
         Example:
             user = User.objects.get(email='user@example.com')
@@ -230,49 +256,80 @@ class User(AbstractBaseUser, PermissionsMixin):
             user.save()  # Save all changes at once
 
         Note:
-            This method does not perform any additional checks or validations.
-            It directly updates the `verification_data` field and saves the instance if `save=True`.
+            - This method does not raise an error if the specified key does not exist.
+            - It directly updates the `verification_data` field and saves the instance if `save=True`.
         """
-        self.verification_data = {}
+        
+        try:
+            del self.verification_data[default_key]
+        except KeyError:
+            pass
+        else:
+            if save:
+                self.save()
 
-        if save:
-            self.save()
-
-    def is_verification_code_valid(self, verification_code: str) -> tuple[bool, str]:
+    def is_verification_code_valid(self, verification_code: str, default_key: str = "verification_code") -> tuple[bool, str]:
         """
-        Checks if the verification code is valid and if it has expired.
+        Validates the given verification code and checks if it has expired.
+
+        This method verifies whether the provided `verification_code` matches the code stored in 
+        the user's `verification_data` (under the specified `default_key`) and checks if the 
+        code has expired based on its expiration date.
 
         Args:
-            verification_code (str): The verification code to check.
+            verification_code (str): The verification code to validate.
+            default_key (str, optional): The key in the `verification_data` where the verification 
+                                        code is stored. Defaults to `"verification_code"`.
 
         Returns:
-            tuple: A tuple where the first element is a boolean indicating
-                if the code is valid, and the second element is a string
-                indicating the status:
-                - 'EXPIRED' if the code has expired,
-                - None if the code is invalid or the verification data is missing.
+            tuple: A tuple where the first element is a boolean indicating if the code is valid, 
+                and the second element is a string indicating the status:
+                - `"EXPIRED"` if the code has expired,
+                - `"INVALID_CODE"` if the code does not match or the verification data is missing,
+                - `None` if the code is valid and not expired.
+
+        Example:
+            user = User.objects.get(email='user@example.com')
+            is_valid, status = user.is_verification_code_valid(verification_code='123456')
+
+            if is_valid:
+                print("Verification successful")
+            elif status == "EXPIRED":
+                print("Verification code has expired")
+            else:
+                print("Invalid verification code")
+
+        Note:
+            - This method assumes that the `verification_data` contains the necessary keys for 
+            `"verification_code"` and `"expiry_date"`. 
+            - In case of missing or invalid data, it returns the appropriate status to indicate the issue.
         """
         HAS_EXPIRED  = "EXPIRED"
-        INVALID_CODE =  "Ivalid code"
-        if not self.verification_data:
+        INVALID_CODE = "INVALID_CODE"
+
+        verification_data = self.verification_data.get(default_key, {})
+     
+        
+        if not verification_data:
             return False, INVALID_CODE
 
-        stored_code = self.verification_data.get("verification_code")
-        
+
+        stored_code = verification_data.get("verification_code")
+
         if stored_code != verification_code:
-            return False, None
+            return False, INVALID_CODE
 
         try:
-            expiry_date = self.verification_data.get('expiry_date')
+            expiry_date = verification_data.get("expiry_date")
             expiration_datetime = datetime.fromisoformat(expiry_date)
-            
+
             if expiration_datetime < datetime.now():
                 return False, HAS_EXPIRED
             return True, None
-        
+
         except (TypeError, ValueError):
             return False, None
-        
+
     def mark_email_as_verified(self, save:bool=True):
         """
         Mark the user's email as verified and optionally save the updated instance.
@@ -508,6 +565,7 @@ class BanUser(models.Model):
         
         return False
 
+    
     
 class VerifiedUserProxy(User):
     """

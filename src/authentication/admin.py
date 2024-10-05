@@ -174,7 +174,7 @@ class AdminActiveUserProxy(BaseUserAdmin, BaseUserAdminReadonlyFields):
     get_queryset(request: HttpRequest) -> QuerySet[Any]
         Returns a queryset filtered to include only staff/admin users.
     """
-    readonly_fields  = ['username', 'last_login', 'password', 'email']
+    readonly_fields  = ['username', 'last_login', 'password', 'email', 'last_token_generated_on']
     def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
         query_set = super().get_queryset(request)
         return query_set.filter(is_active=True)
