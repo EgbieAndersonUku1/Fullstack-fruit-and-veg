@@ -128,14 +128,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         
         TEN_MINUTES_IN_SECS = 600
-        current_date = make_aware(datetime.now())
+        current_date        = make_aware(datetime.now())
         
         if self.last_token_generated_on:
             time_since_last_token = (current_date - self.last_token_generated_on).total_seconds()
             return time_since_last_token >= TEN_MINUTES_IN_SECS
-        
-        self.last_token_generated_on = current_date
-        return False
+        return True
 
     @classmethod
     def get_by_email(cls, email:str) -> Optional["User"]:

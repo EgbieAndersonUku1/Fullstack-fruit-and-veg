@@ -3453,7 +3453,7 @@ legend {
 }
 
 
-
+#new-password-form,
 #forgotten-password-form {
     
     display: grid;
@@ -3462,6 +3462,12 @@ legend {
     padding-top: var(--padding-xl);
 }
 
+#new-password-form input[type='password'] {
+    height: 40px;
+    font-size: var(--font-size-md);
+}
+
+#save-button,
 #reset-button {
     width: 100%;
     font-size: var(--font-size-normal);

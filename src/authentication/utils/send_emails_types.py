@@ -77,7 +77,7 @@ def send_forgotten_password_verification_email(subject, from_email, user, verifi
         to_email=user.email,
         username=user.username.title(),
         verification_url=verification_url,
-        email=user.email,
+        email_address=user.email,
     )
     
 

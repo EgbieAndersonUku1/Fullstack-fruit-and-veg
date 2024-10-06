@@ -8,6 +8,7 @@ from .views_helper import validate_helper
 from utils.generator import generate_forgotten_password_url
 from .forms.register_form import RegisterForm
 from .forms.passwords.forgotten_password import ForgottenPasswordForm
+from .forms.passwords.new_password import NewPasswordForm
 from .views_helper import send_verification_email
 from .utils.send_emails_types import (send_registration_email, 
                                       resend_expired_verification_email, 
@@ -255,19 +256,22 @@ def verify_email_token(request, username, token):
 
 
 def forgotten_password(request):
-    MESSAGE = "If your email exist a new verification link will be sent to your registered email address"
+    
+    MESSAGE          = "If your email exist a new verification link will be sent to your registered email address"
     VERIFICATION_KEY = "forgotten_password_verification_code"
+    
     if request.method == "POST":
         form = ForgottenPasswordForm(request.POST)
+        
         if form.is_valid():
             email = form.cleaned_data["email"]
-            user = User.get_by_email(email)
+            user  = User.get_by_email(email)
+            
             if user:
                 resp = user.is_token_request_allowed()
-                print(resp)
+
                 if not resp:
-                    user.clear_verification_data(default_key=VERIFICATION_KEY)
-                    messages.info(request, "Please wait ten minutes before generating a new token")
+                    messages.info(request, "Please wait ten minutes before requestiing a new password")
                 else:
                     subject = "Click the verification link to change your password"
                     HOUR_IN_SECS = 3600
@@ -283,16 +287,70 @@ def forgotten_password(request):
             else:
                 messages.success(request, MESSAGE)
             return redirect("forgotten_password")
-       
-          
-                
+         
     else:
-           form = ForgottenPasswordForm()
+        form = ForgottenPasswordForm()
            
     context = {
         "form": form,
     }
     return render(request, "passwords/forgotten_password.html", context=context)
+
+
+def new_password(request, username, token):
+    
+    user      = User.get_by_username(username)
+    ERROR_MSG = "There is no token associated with that username"
+    
+    if not user:
+        messages.warning(request, ERROR_MSG)
+        return redirect("home")
+   
+    VERIFICATION_KEY = "forgotten_password_verification_code"
+    is_valid, status = user.is_verification_code_valid(token, default_key=VERIFICATION_KEY)
+    
+    if not is_valid:
+        messages.error(request, "The token you entered is invalid.")
+        return redirect("home")
+    
+    if status == "EXPIRED":
+        # Token has expired, send a new one
+        messages.info(request, "The token you entered has expired. A new one has been sent to your email address.")
+  
+        subject           = "New verification link to change your password"
+        HOUR_IN_SECS      = 3600
+        follow_up_message = "Another verification token has been sent. Please check your email address."
+        
+        send_verification_email(request, 
+                                user=user, 
+                                subject=subject, 
+                                follow_up_message=follow_up_message, 
+                                send_func=send_forgotten_password_verification_email,
+                                generate_verification_url_func=generate_forgotten_password_url,
+                                verification_key=VERIFICATION_KEY,
+                                expiry_date=HOUR_IN_SECS)
+        return redirect("home")
+    
+    if request.method == "POST":
+        
+        form = NewPasswordForm(request.POST)
+
+        if form.is_valid():
+            password = form.cleaned_data["new_password"]
+            user.set_password(password)
+            user.clear_verification_data(default_key=VERIFICATION_KEY)  #  automatically saves since default it set to save
+            messages.success(request, "You have successfully changed your password. Please log in using your new password.")
+            return redirect("home") 
+    else:
+        form = NewPasswordForm()
+
+    context = {
+        "form": form,
+        "username": username,
+        "token": token,
+    }
+    return render(request, "passwords/new_password.html", context=context)
+
 
 
 def reset_password(request):

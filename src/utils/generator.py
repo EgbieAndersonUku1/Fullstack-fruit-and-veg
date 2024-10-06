@@ -38,8 +38,8 @@ def generate_forgotten_password_url(request, user):
     Returns:
         str: The complete verification URL.
     """
-    token            = user.verification_data.get("forgotten_password_verification_code").get("verification_code")
+    token            = user.verification_data.get("forgotten_password_verification_code", {}).get("verification_code")
     current_site     = request.get_host()
     protocol         = 'https' if request.is_secure() else 'http'
-    verification_url = f"{protocol}://{current_site}/authentication/verify/forgotten_password/{ user.username }/{token}/"
+    verification_url = f"{protocol}://{current_site}/authentication/new/forgotten_password/{ user.username }/{token}/"
     return verification_url
