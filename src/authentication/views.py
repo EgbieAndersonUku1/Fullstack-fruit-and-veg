@@ -215,7 +215,7 @@ def verify_email_token(request, username, token):
     - HttpResponseRedirect: Redirects to the home page with appropriate messages.
     """
     
-    user        = User.get_by_username(username)
+    user             = User.get_by_username(username)
     VERIFICATION_KEY = "email_verification"
    
     if not user:
@@ -245,7 +245,6 @@ def verify_email_token(request, username, token):
         send_verification_email(request, user, subject, follow_up_message, resend_expired_verification_email)
         return redirect("home")
     
-    # Token is valid, mark email as verified
     if is_valid:
         user.mark_email_as_verified(save=False) # don't save yet
         user.clear_verification_data(default_key=VERIFICATION_KEY)
@@ -286,7 +285,7 @@ def forgotten_password(request):
                                             )
             else:
                 messages.success(request, MESSAGE)
-            return redirect("forgotten_password")
+            return redirect("home")
          
     else:
         form = ForgottenPasswordForm()
@@ -352,10 +351,3 @@ def new_password(request, username, token):
     return render(request, "passwords/new_password.html", context=context)
 
 
-
-def reset_password(request):
-    pass
-
-
-def reset_password(request, username, token):
-    pass
