@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from ..forms.register_form import RegisterForm
+from authentication.forms.register_form import RegisterForm
 
 
 class RegisterFormTest(TestCase):
