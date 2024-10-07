@@ -60,20 +60,6 @@ class NewPasswordFormTest(TestCase):
         
         self.assertEqual(form.errors["new_password"], ["The password must contain at least eight characters"])
         
-    
-    def test_new_password_raises_validation_error_with_incorrect_length(self):
-        
-        form_data = {
-            "new_password": "P", # to short
-            "confirm_password": "Pa$$word1"
-        }
-        
-        form = NewPasswordForm(data=form_data)
-        self.assertFalse(form.is_valid())
-        self.assertIn('new_password', form.errors)
-        
-        self.assertEqual(form.errors["new_password"], ["The password must contain at least eight characters"])
-    
     def test_new_password_raises_validation_error_with_missing_numbers(self):
         
         form_data = {
@@ -100,20 +86,6 @@ class NewPasswordFormTest(TestCase):
         
         self.assertEqual(form.errors["new_password"], ["The password must contain at least one lowercase"])
     
-    def test_new_password_raises_validation_error_with_no_lowercases(self):
-        
-        form_data = {
-            "new_password": "pass2word", # no uppercases
-            "confirm_password": "Pa$$word1"
-        }
-        
-        form = NewPasswordForm(data=form_data)
-        self.assertFalse(form.is_valid())
-        self.assertIn('new_password', form.errors)
-        
-        self.assertEqual(form.errors["new_password"], ["The password must contain at least one uppercase"])
-        
-    
     def test_new_password_raises_validation_error_with_no_uppercases(self):
         
         form_data = {
@@ -126,8 +98,7 @@ class NewPasswordFormTest(TestCase):
         self.assertIn('new_password', form.errors)
         
         self.assertEqual(form.errors["new_password"], ["The password must contain at least one uppercase"])
-    
-    
+         
     def test_new_password_raises_validation_error_with_no_special_characters(self):
         
         form_data = {
@@ -141,7 +112,6 @@ class NewPasswordFormTest(TestCase):
         
         self.assertEqual(form.errors["new_password"], ["The password must contain at least one special character"])
         
-    
     def test_mismatch_password(self):
         
         form_data = {
@@ -155,4 +125,3 @@ class NewPasswordFormTest(TestCase):
           # Check if the 'non_field_errors' has the expected error
         self.assertIn("The passwords does not match", form.non_field_errors())
         
-       
