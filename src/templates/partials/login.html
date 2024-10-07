@@ -28,7 +28,7 @@
             {{ login_form.password }}
             <span id="password-description" class="sr-only">Enter your password.</span>
 
-            <a href="#" class="login-link">Forgotten password?</a>
+            <a href="{% url 'forgotten_password' %}" class="login-link">Forgotten password?</a>
             <a href="#" class="login-link" id="not-registered-link">Not registered - click here?</a>
 
             <button type="submit" class="auth-button text-capitalize" id="login-btn">login</button>

@@ -25,6 +25,8 @@ class CustomUserModelTestCase(TestCase):
             password="password", 
             email="super_user@example.com"
         )
+        
+        self.verification_data_key = "verification_code"
     
     def test_creation_count(self):
         """Test the number of objects created"""
@@ -125,16 +127,16 @@ class CustomUserModelTestCase(TestCase):
         
         # Check that verification data exists and contains the correct fields
         self.assertIsNotNone(user.verification_data)
-        self.assertIn("verification_code", user.verification_data)
-        self.assertIn("date_sent", user.verification_data)
-        self.assertIn("expiry_date", user.verification_data)
+        self.assertIn("verification_code", user.verification_data[self.verification_data_key])
+        self.assertIn("date_sent", user.verification_data[self.verification_data_key])
+        self.assertIn("expiry_date", user.verification_data[self.verification_data_key])
 
         # Verify that the verification code matches
-        self.assertEqual(user.verification_data.get("verification_code"), verification_code)
+        self.assertEqual(user.verification_data[self.verification_data_key].get("verification_code"), verification_code)
         
         # Verify date_sent and expiry_date
-        date_sent_str = user.verification_data.get("date_sent")
-        expiry_date_str = user.verification_data.get("expiry_date")
+        date_sent_str = user.verification_data[self.verification_data_key].get("date_sent")
+        expiry_date_str = user.verification_data[self.verification_data_key].get("expiry_date")
         
         # Parse the date strings back into datetime objects
         date_sent = datetime.fromisoformat(date_sent_str)
@@ -157,7 +159,7 @@ class CustomUserModelTestCase(TestCase):
         user = self.User.get_by_username("user")
      
         # check that code matches the given code
-        self.assertEqual(user.verification_data.get("verification_code"), verification_code)
+        self.assertEqual(user.verification_data[self.verification_data_key].get("verification_code"), verification_code)
     
     def test_is_verification_code_valid_returns_true_if_code_not_expired(self):
         """
@@ -168,7 +170,7 @@ class CustomUserModelTestCase(TestCase):
         verification_code = "some-random-code-that-I-made-up"
         expiry_minutes = 4
         self.user.set_verification_code(verification_code, expiry_minutes=expiry_minutes)
-        
+              
         # Retrieve the user from the db to ensure data consistency
         user = self.User.get_by_username("user")
         

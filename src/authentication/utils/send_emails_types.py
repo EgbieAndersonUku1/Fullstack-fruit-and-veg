@@ -63,6 +63,25 @@ def resend_expired_verification_email(subject, from_email, user, verification_ur
         verification_url=verification_url
     )
   
+  
+def send_forgotten_password_verification_email(subject, from_email, user, verification_url):
+    
+    email_template_html = "email_assets/forgotten-password/forgotten-password-request.html"
+    email_template_text = "email_assets/forgotten-password/forgotten-password-request.txt"
+    
+    return send_email_helper(
+        email_template_html,
+        email_template_text,
+        subject=subject,
+        from_email=from_email,
+        to_email=user.email,
+        username=user.username.title(),
+        verification_url=verification_url,
+        email_address=user.email,
+    )
+    
+
+
 
 def send_email_helper(email_template_html, email_template_text, **kwargs):
     """
@@ -90,7 +109,8 @@ def send_email_helper(email_template_html, email_template_text, **kwargs):
         text_template=email_template_text,
         context={
             "username":kwargs["username"],
-            "verification_url": kwargs["verification_url"]
+            "verification_url": kwargs["verification_url"],
+            "email_address":kwargs.get("email_address"),
         }
     )
 

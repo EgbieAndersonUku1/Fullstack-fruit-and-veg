@@ -5,10 +5,15 @@ from django.shortcuts import render, redirect
 
 from .utils.password_validator import PasswordStrengthChecker
 from .views_helper import validate_helper
-
+from utils.generator import generate_forgotten_password_url
 from .forms.register_form import RegisterForm
+from .forms.passwords.forgotten_password import ForgottenPasswordForm
+from .forms.passwords.new_password import NewPasswordForm
 from .views_helper import send_verification_email
-from .utils.send_emails_types import send_registration_email, resend_expired_verification_email
+from .utils.send_emails_types import (send_registration_email, 
+                                      resend_expired_verification_email, 
+                                      send_forgotten_password_verification_email
+                                      )
 
 
 
@@ -39,9 +44,7 @@ def register(request):
     
     return redirect('home')
     
-
-
-
+    
 def user_login(request):
     """
     Handles user login by validating credentials and managing user feedback based on account status.
@@ -212,16 +215,17 @@ def verify_email_token(request, username, token):
     - HttpResponseRedirect: Redirects to the home page with appropriate messages.
     """
     
-    user = User.get_by_username(username)
+    user             = User.get_by_username(username)
+    VERIFICATION_KEY = "email_verification"
    
     if not user:
         messages.error(request, "The user associated with this code doesn't exist.")
         return redirect("home")
     
-    is_valid, status = user.is_verification_code_valid(token)
+    is_valid, status = user.is_verification_code_valid(token, default_key=VERIFICATION_KEY)
     
     # Check if the user is already logged in
-    if request.user.is_authenticated and not user.verification_data:
+    if request.user.is_authenticated and not user.verification_data.get(VERIFICATION_KEY):
         messages.info(request, "You have already confirmed your email.")
         return redirect("home")
     
@@ -241,13 +245,109 @@ def verify_email_token(request, username, token):
         send_verification_email(request, user, subject, follow_up_message, resend_expired_verification_email)
         return redirect("home")
     
-    # Token is valid, mark email as verified
     if is_valid:
         user.mark_email_as_verified(save=False) # don't save yet
-        user.clear_verification_data()
+        user.clear_verification_data(default_key=VERIFICATION_KEY)
     
         messages.success(request, "You have successfully confirmed your email. You can now log in.")
         return redirect("home")
 
+
+
+def forgotten_password(request):
+    
+    MESSAGE          = "If your email exist a new verification link will be sent to your registered email address"
+    VERIFICATION_KEY = "forgotten_password_verification_code"
+    
+    if request.method == "POST":
+        form = ForgottenPasswordForm(request.POST)
+        
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            user  = User.get_by_email(email)
+            
+            if user:
+                resp = user.is_token_request_allowed()
+
+                if not resp:
+                    messages.info(request, "Please wait ten minutes before requestiing a new password")
+                else:
+                    subject = "Click the verification link to change your password"
+                    HOUR_IN_SECS = 3600
+                    send_verification_email(request, 
+                                            user=user, 
+                                            subject=subject, 
+                                            follow_up_message=MESSAGE, 
+                                            send_func=send_forgotten_password_verification_email,
+                                            generate_verification_url_func=generate_forgotten_password_url,
+                                            verification_key=VERIFICATION_KEY,
+                                            expiry_date=HOUR_IN_SECS,
+                                            )
+            else:
+                messages.success(request, MESSAGE)
+            return redirect("home")
+         
+    else:
+        form = ForgottenPasswordForm()
+           
+    context = {
+        "form": form,
+    }
+    return render(request, "passwords/forgotten_password.html", context=context)
+
+
+def new_password(request, username, token):
+    
+    user      = User.get_by_username(username)
+    ERROR_MSG = "There is no token associated with that username"
+    
+    if not user:
+        messages.warning(request, ERROR_MSG)
+        return redirect("home")
+   
+    VERIFICATION_KEY = "forgotten_password_verification_code"
+    is_valid, status = user.is_verification_code_valid(token, default_key=VERIFICATION_KEY)
+    
+    if not is_valid:
+        messages.error(request, "The token you entered is invalid.")
+        return redirect("home")
+    
+    if status == "EXPIRED":
+        # Token has expired, send a new one
+        messages.info(request, "The token you entered has expired. A new one has been sent to your email address.")
+  
+        subject           = "New verification link to change your password"
+        HOUR_IN_SECS      = 3600
+        follow_up_message = "Another verification token has been sent. Please check your email address."
+        
+        send_verification_email(request, 
+                                user=user, 
+                                subject=subject, 
+                                follow_up_message=follow_up_message, 
+                                send_func=send_forgotten_password_verification_email,
+                                generate_verification_url_func=generate_forgotten_password_url,
+                                verification_key=VERIFICATION_KEY,
+                                expiry_date=HOUR_IN_SECS)
+        return redirect("home")
+    
+    if request.method == "POST":
+        
+        form = NewPasswordForm(request.POST)
+
+        if form.is_valid():
+            password = form.cleaned_data["new_password"]
+            user.set_password(password)
+            user.clear_verification_data(default_key=VERIFICATION_KEY)  #  automatically saves since default it set to save
+            messages.success(request, "You have successfully changed your password. Please log in using your new password.")
+            return redirect("home") 
+    else:
+        form = NewPasswordForm()
+
+    context = {
+        "form": form,
+        "username": username,
+        "token": token,
+    }
+    return render(request, "passwords/new_password.html", context=context)
 
 

@@ -3451,3 +3451,30 @@ legend {
 #primary-address {
     border: 3px solid hsl(11deg 100% 52.2% / 20%);
 }
+
+
+#new-password-form,
+#forgotten-password-form {
+    
+    display: grid;
+    width: 40%;
+    margin: auto;
+    padding-top: var(--padding-xl);
+}
+
+#new-password-form input[type='password'] {
+    height: 40px;
+    font-size: var(--font-size-md);
+}
+
+#save-button,
+#reset-button {
+    width: 100%;
+    font-size: var(--font-size-normal);
+    margin-top: 4px;
+    background: orange;
+    color: white;
+    height: 40px;
+    border: none;
+    text-transform: capitalize;
+}
