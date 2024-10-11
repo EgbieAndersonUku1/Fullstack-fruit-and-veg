@@ -29,8 +29,9 @@
 
             <div class="main">
                 <h2>Edit Profile</h2>
-
-                <form action="{% url 'user_profile' %}" method="post" enctype="multipart/form-data">
+        
+                <img id="image-preview" style="max-width: 100%;">
+                <form action="{% url 'user_profile' %}" method="post" enctype="multipart/form-data" id="profile-form">
 
                     {% csrf_token %}
 
@@ -51,8 +52,10 @@
 
                         <div class="profile-group">
                             <div class="username_footer">
-                                <button type="button" class="edit-profile-btn" aria-label="Change Photo">Change
-                                    photo</button>
+                                {{ user_profile_form.profile_pic.label }}
+                                {{ user_profile_form.profile_pic }}
+                                <img id="image-preview" style="max-width: 100%;">
+                                
                             </div>
                         </div>
                     </div>
@@ -207,6 +210,12 @@
 
 
 {% block script %}
+
+<!-- Cropper.js CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+
+<!-- Cropper.js JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.all.min.js"></script>
 <script src="{% static 'js/pages/profile.js' %}" type="module"></script>

@@ -39,7 +39,7 @@ class UserProfile(models.Model):
     last_name          = models.CharField(max_length=40, blank=False, null=False)
     telephone          = models.CharField(max_length=12, null=True, blank=True)
     mobile             = models.CharField(max_length=12, blank=False, null=False)
-    profile_pic        = models.ImageField(verbose_name="Profile picture", null=True, blank=True, upload_to=PROFILE_PIC_PATH)
+    profile_pic        = models.ImageField(verbose_name="Add a Profile picture..", null=True, blank=True, upload_to=PROFILE_PIC_PATH)
     cover_photo        = models.ImageField(verbose_name="Cover picture", null=True, blank=True, upload_to=COVER_PHOTO_PATH)
     user               = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile", editable=False)
     date_created       = models.DateTimeField(auto_now_add=True, null=True, blank=True, editable=False)

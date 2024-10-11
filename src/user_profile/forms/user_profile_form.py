@@ -14,7 +14,7 @@ class PrimaryAddress:
     
     
 class UserProfileForm(forms.ModelForm):
-    
+    profile_image = forms.FileField(label="Change photo")
     class Meta:
         model = UserProfile
         fields = "__all__"

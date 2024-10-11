@@ -119,6 +119,7 @@ input[type="search"] {
 /* form fields */
 input,
 textarea {
+    background: white;
     font-family: "Poppins", sans-serif;
     cursor: pointer;
 }
@@ -3223,17 +3224,16 @@ legend {
 
 .profile-attributes {
     display: grid;
-    grid-template-columns: 45% 55%;
+    grid-template-columns: repeat(4, 1fr);
     grid-template-rows: auto;
-    
     column-gap: 25px;
 }
 
 
 .profile_username_img {
     position: relative;
-    height: 60px;
-    width: 60px;
+    height: 110px;
+    width: 110px;
 }
 
 .profile-group-img {
@@ -3242,7 +3242,7 @@ legend {
     width: 100%;
     transform: translateY(-9px);
     border: 1px solid gray;
-    border-radius: 50%;
+    /* border-radius: 50%; */
     padding: 2px;
     background: white;
 }

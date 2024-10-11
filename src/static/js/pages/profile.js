@@ -21,14 +21,22 @@ import { validateElement } from "../errors/customErrors.js";
 
 
 const billingAddressRadioContainer = document.getElementById("billing-address-radio-buttons");
-const shippingAddressContainer       = document.getElementById("shipping-address-container");
+const shippingAddressContainer     = document.getElementById("shipping-address-container");
 const shippingDivElements          = document.querySelectorAll(".shipping-field");
+const imageInput                   = document.getElementById("id_profile_pic");
+const imagePreview                 = document.getElementById("image-preview");
+const profileForm                  = document.getElementById("profile-form");
 
 
 billingAddressRadioContainer?.addEventListener("click", handleRadioButtonClick);
+validateElement(imageInput, "The image input field is not a valid HTML Element", true);
+validateElement(profileForm, "The profile form is not a valid HTML Element", true);
+
+imageInput?.addEventListener("change", handleImageInput);
 
 
 document.addEventListener("DOMContentLoaded", handleSetup);
+
 
 
 function handleSetup() {
@@ -128,3 +136,30 @@ function handleRadioButtonClick(e) {
 }
 
 
+
+function handleImageInput(event) {
+    const file = event.target.files[0];
+
+    if (file) {
+        let cropper;
+        const reader  = new FileReader();
+
+        reader.onload = function(e) {
+
+            imagePreview.src = e.target.result;
+
+            if (cropper) {
+                cropper.destroy();
+            }
+            cropper = new Cropper(imagePreview, {
+                aspectRatio: 1, 
+                viewMode: 2,
+            });
+
+            console.log(cropper)
+        };
+
+        reader.readAsDataURL(file);
+    };
+ 
+}

@@ -32,8 +32,7 @@ def user_profile(request):
         
         if user_profile_form.is_valid():
             user_profile = user_profile_form.save()
-            
-            
+                        
             if billing_address_form.is_valid():
                 billing_address = billing_address_form.save(commit=False)  
                 
