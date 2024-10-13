@@ -387,6 +387,10 @@ class BanUser(models.Model):
     ban_expires_on      = models.DateTimeField(null=True, blank=True)
     modified_on         = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name        = "All banned users"
+        verbose_name_plural = "All banned users"
+        
     def __str__(self):
         return f"{self.user} banned for {self.ban_reason}"
 
