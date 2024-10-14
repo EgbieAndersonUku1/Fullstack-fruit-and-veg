@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from authentication.utils.send_email import send_email
 
 
@@ -22,7 +24,7 @@ def send_registration_email(subject, from_email, user, verification_url):
     email_template_html     = "email_assets/registration/registration.html"
     email_template_text     = "email_assets/registration/registration.txt"
     
-    return send_email_helper(
+    return _send_email_helper(
         email_template_html,
         email_template_text,
         subject=subject,
@@ -53,7 +55,7 @@ def resend_expired_verification_email(subject, from_email, user, verification_ur
     email_template_html = "email_assets/registration/registration-expiry-notification.html"
     email_template_text = "email_assets/registration/registration-expiry-notification.txt"
     
-    return send_email_helper(
+    return _send_email_helper(
         email_template_html,
         email_template_text,
         subject=subject,
@@ -69,7 +71,7 @@ def send_forgotten_password_verification_email(subject, from_email, user, verifi
     email_template_html = "email_assets/forgotten-password/forgotten-password-request.html"
     email_template_text = "email_assets/forgotten-password/forgotten-password-request.txt"
     
-    return send_email_helper(
+    return _send_email_helper(
         email_template_html,
         email_template_text,
         subject=subject,
@@ -81,11 +83,29 @@ def send_forgotten_password_verification_email(subject, from_email, user, verifi
     )
     
 
-
-
-def send_email_helper(email_template_html, email_template_text, **kwargs):
+def notify_admin_of_new_testimonial(subject, user):
     """
-    Helper function to send an email with the specified templates and context.
+    Sends an email to the admin of the site to notify them that a new testimonial has been
+    created and is waiting for their approval
+    """
+    email_template_html = "email_assets/testimonial/testimonial.html"
+    email_template_text = "email_assets/testimonial/testimonial.txt"
+    
+    admin_email_address = settings.EMAIL_HOST_USER
+    
+    return _send_email_helper(email_template_html,
+                             email_template_text,
+                             subject=subject,
+                             from_email=admin_email_address,
+                             to_email=admin_email_address,
+                             username=user.username,
+                             email=user.email,
+                             )
+
+
+def _send_email_helper(email_template_html, email_template_text, **kwargs):
+    """
+    A private helper function to send an email with the specified templates and context.
 
     Parameters:
         - email_template_html (str): Path to the HTML email template.
@@ -109,7 +129,7 @@ def send_email_helper(email_template_html, email_template_text, **kwargs):
         text_template=email_template_text,
         context={
             "username":kwargs["username"],
-            "verification_url": kwargs["verification_url"],
+            "verification_url": kwargs.get("verification_url"),
             "email_address":kwargs.get("email_address"),
         }
     )

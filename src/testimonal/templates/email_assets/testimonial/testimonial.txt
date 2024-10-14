@@ -1,0 +1,20 @@
+Welcome to EUOrganics!
+
+                 
+Hi Admin,
+                   
+
+A new testimonial has been submitted by the user {{ username }} with the following email address {{ email}} and is now pending your review. 
+Please log in to the admin dashboard to evaluate and approve the testimonial for publication. 
+                        
+Thank you for overseeing this process
+                  
+                                      
+Welcome aboard, and thank you for choosing EUOrganics!
+                    
+
+Warm regards,
+                   
+
+The EUOrganics Team
+              

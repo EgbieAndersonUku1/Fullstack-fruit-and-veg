@@ -19,7 +19,7 @@ class Testimonial(models.Model):
     title            = models.CharField(max_length=20)
     user_image       = models.URLField(null=True, blank=True)
     testimonial_text = models.TextField()
-    ratings          = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)], null=False, blank=False)
+    ratings          = models.SmallIntegerField()
     company_name     = models.CharField(max_length=50)
     country          = models.CharField(max_length=40, choices=COUNTRIES_CHOICES, default=COUNTRIES_CHOICES[0])
     location         = models.CharField(max_length=40)
@@ -38,6 +38,22 @@ class Testimonial(models.Model):
     def __str__(self) -> str:
         """Returns a user friendly representation of the author and the title for the testimonal model"""
         return f'{self.author} - {self.title[:50]}'
+    
+    @classmethod
+    def get_by_user(cls, user):
+        """
+        Takes a user instance and returns the testimonial belonging to that user
+        
+        Params:
+            user (instance): The user instance belonging to the user that will be used to retreive their testimonial
+            
+        Returns:
+            Returns the testimonial object belonging to the user or returns none.
+        """
+        try:
+            cls.objects.get(user=user)
+        except cls.DoesNotExist:
+            return None
 
 
 class Tag(models.Model):

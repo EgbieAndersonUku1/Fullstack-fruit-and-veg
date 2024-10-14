@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 
 from typing import Optional
 
+
 def send_email(subject:str, 
                from_email:str, 
                to_email:str, 

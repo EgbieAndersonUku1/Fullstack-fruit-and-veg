@@ -45,6 +45,9 @@ def generate_forgotten_password_url(request, user):
     )
 
 
+
+
+
 def _generate_url(request, user, verification_key, path):
     """
     Private function to generate the verification URL for the user based on the request and verification key.

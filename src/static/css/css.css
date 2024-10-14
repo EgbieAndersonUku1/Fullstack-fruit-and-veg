@@ -3349,6 +3349,12 @@ legend {
 }
 
 
+.testimonial-link:hover {
+    text-decoration: underline;
+    color: blue;
+    cursor: pointer;
+}
+
 
 
 

@@ -1,22 +1,37 @@
-import renderStar  from "./reviews.js";
+import renderStar  from "./renderStar.js";
+import { validateElement } from "../errors/customErrors.js";
 
 import { minimumCharactersToUse } from "../components/characterCounter.js";
 import { handleFormFieldElement } from "../handlers/handleTextCharInput.js";
 
-const testimonialTextArea = document.getElementById("id_testimonial_text");
-const clearBtnElement     = document.getElementById("clear-btn");
-const createReviewForm    = document.getElementById("product-review-form");
-const messageDivElement   = document.querySelector(".messages");
+const testimonialTextArea  = document.getElementById("id_testimonial_text");
+const clearBtnElement      = document.getElementById("clear-btn");
+const testimonialForm     = document.getElementById("testimonial-form");
+const messageDivElement    = document.querySelector(".messages");
 const messagePTagElement   = document.querySelector(".messages p");
 
 
 // Event listeners
-createReviewForm.addEventListener("submit", handleCreateReviewFormSubmit);
+testimonialForm.addEventListener("submit", handleTestimonialFormSubmit);
 clearBtnElement.addEventListener("click", handleResetRatings)
 
 
 
-function getProductStarRating() {
+// Render the minimum characters to use
+minimumCharactersToUse(testimonialTextArea, {minCharClass: ".minimum-characters",
+    maxCharClass: ".maximum-characters",              
+    minCharMessage: "Minimum characters to use: ",
+    maxCharMessage: "Number of characters remaining: ",
+    minCharsLimit: 50,
+    maxCharsLimit: 1000,
+    disablePaste: true,
+});
+
+
+
+
+
+function getTestimonialStarRating() {
 
     const productRatingStars = document.querySelectorAll(".product-ratings a img");
     const reviewedReport = {
@@ -50,23 +65,25 @@ function getProductStarRating() {
 
 
 
-function handleCreateReviewFormSubmit(e) {
+function handleTestimonialFormSubmit(e) {
     e.preventDefault();
 
-    const reviewReport = getProductStarRating();
+    const reviewReport = getTestimonialStarRating();
  
     // Handle rating validation
     if (reviewReport.numOfStarsRated === 0) {
-        msg = "You must rate the product before submitting";
+        const msg = "You must rate the product before submitting";
         handleMessageDisplay(msg);
     } else {
        
-
-        // functionality will be added later here
-
-       return;
+        const starHiddenInputField = document.getElementById("starInputHiddenField");
+        validateElement(starHiddenInputField, "The input field is not a valid element field", true);
+        starHiddenInputField.value = reviewReport.numOfStarsRated;
+        // console.log(starHiddenInputField.value);
+        testimonialForm.submit();
+       return true;
      
-    }
+    };
 }
 
 
@@ -86,28 +103,6 @@ function handleResetRatings() {
     const totalNumberOfStars = 5;
     const renderEmptyStars   = true;
      renderStar(totalNumberOfStars, renderEmptyStars);
-}
-
-
-
-// Render the minimum characters to use
-minimumCharactersToUse(testimonialTextArea, {minCharClass: ".minimum-characters",
-                                                      maxCharClass: ".maximum-characters",              
-                                                      minCharMessage: "Minimum characters to use: ",
-                                                      maxCharMessage: "Number of characters remaining: ",
-                                                      minCharsLimit: 50,
-                                                      maxCharsLimit: 1000,
-                                                      disablePaste: true,
-});
-
-
-
-function handleReviewTitleField(titleSelectorID="#product-input-title", iconSelector="#review-title-icon"){
-    handleFormFieldElement(titleSelectorID, iconSelector)
-}
-
-function handleReviewDescriptionTextArea(textAreaSelectorID = "#review-description-textArea", iconSelector = "#review-description-icon") {
-    handleFormFieldElement(textAreaSelectorID, iconSelector);
 }
 
 
