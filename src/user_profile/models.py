@@ -44,7 +44,7 @@ class UserProfile(models.Model):
     user               = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile", editable=False)
     date_created       = models.DateTimeField(auto_now_add=True, null=True, blank=True, editable=False)
 
-    
+  
     def num_of_shipping_addresses(self):
         return self.shipping_addresses.count()
        

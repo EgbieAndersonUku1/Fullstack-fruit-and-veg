@@ -3257,10 +3257,12 @@ legend {
 
 .triple-grid {
     display: grid;
-    grid-template-columns: 35% 35% 30%;
+    grid-template-columns: repeat(3, 1fr);
     grid-template-rows: auto;
     margin-top: 10px;
 }
+
+
 
 .profile-container input {
     font-size: var(--font-size-normal);
@@ -3346,6 +3348,12 @@ legend {
     text-decoration: underline;
 }
 
+
+.testimonial-link:hover {
+    text-decoration: underline;
+    color: blue;
+    cursor: pointer;
+}
 
 
 

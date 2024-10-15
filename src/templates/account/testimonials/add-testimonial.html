@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title  %}Add a review{% endblock  %}
+
+
+{% block body  %}
+
+<section id="add-or-edit-review" aria-labelledby="add-or-edit-review-heading">
+    <div class="add-or-edit-review_container content-container">
+       
+        {% include "partials/logo_link.html" %}
+        {% include "partials/messages.html" %}
+
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'account' %}">My account</a></li>
+            <li><a href="{% url 'reviews' %}">Manage your review</a></li>
+            <li class="current-page">Create a review</li>
+        </ul>
+
+
+        {% if not already_created %} 
+            <h2 class="lighten padding-top-md page-title">Create a testimonial</h2>
+            <p class="account-info page-title-subtitle">Add a testimonial</p>
+            <hr class="dividor">
+        {% else %}
+            
+            <h2 class="lighten padding-top-md page-title text-capitalize">Testimonial is already created</h2>
+            <hr class="dividor">
+        {% endif %}
+
+
+        <div class="product-header product-review-header">
+            <div class="clear-btn">
+                <button id="clear-btn"> 
+                    <span>Clear ratings</span>
+                   
+                </button>
+            </div>
+        </div>
+
+        {% if not already_created %} 
+
+        <div class="product-rating">
+            <div class="header">
+                <h3>Overall rating</h3>
+            </div>
+
+            <div class="product-ratings">
+                <a href="#" id="1" data-value="1">
+                    <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled" class="star-unfilled star-rating" data-value="1">
+                </a>
+                <a href="#" id="2" data-value="2">
+                    <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled" class="star-unfilled star-rating" data-value="2">
+
+                </a>
+                <a href="#" id="3" data-value="3">
+                    <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled" class="star-unfilled star-rating" data-value="3">
+
+                </a>
+                <a href="#" id="4" data-value="4">
+                    <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled" class="star-unfilled star-rating" data-value="4">
+
+                </a>
+                <a href="#" id="5" data-value="5">
+                    <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled" class="star-unfilled star-rating" data-value="5">
+                </a>
+
+               
+            </div>
+
+        </div>
+        {% endif %}
+       
+
+        <div id="product-form">
+
+            {% if already_created %}
+                    
+                {% if not is_approved %}
+                    <p>You have already submitted a testimonial that is currently awaiting approval.</p>
+                    <p>You will be notified by email once it has been approved.</p>
+                {% else %}
+                    <p>Your testimonial has been approved by the admin.</p>
+                    <p>If you would like to make changes, <a class="highlight testimonial-link" href="#">click here</a> to edit your testimonial or visit the product review section.</p>
+                {% endif %}
+        
+            
+            {% else %}
+
+            <form method="post" action="{% url 'add-testimonial' %}" class="product-form" id="testimonial-form">
+                {% csrf_token %}
+
+                <input type="hidden" name="star-rating" value="" id="starInputHiddenField">
+
+                {{ form.title.label }}
+                {{ form.title }}
+
+                {{ form.user_image.label }}
+                {{ form.user_image }}
+
+                {{ form.company_name.label }}
+                {{ form.company_name }}
+
+                {{ form.country.label }}
+                {{ form.country }}
+
+                {{ form.location.label }}
+                {{ form.location }}
+
+                {{ form.testimonial_text.label }}
+                {{ form.testimonial_text }}
+               
+                <p class="flex-end minimum-characters">Minimum characters to use: 50</p>
+                <p class="maximum-characters flex-end">Number of characters remaining: 1000</p>
+
+                <div class="button flex-end">
+                    <button type="submit" class="product-review-btn">Submit</button>
+                </div>
+            </form>
+
+            {% endif %}
+         
+        </div>
+
+        <div class="messages">
+            <p></p>
+        </div>
+    
+    </div>
+
+</section>
+
+
+{% endblock  %}
+
+
+
+{% block script  %}
+
+    <script src="{% static 'js/modules/add-review.js' %}" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.all.min.js"></script>
+
+
+{% endblock  %}
