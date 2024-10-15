@@ -17,7 +17,7 @@ class Testimonial(models.Model):
     
     author           = models.ForeignKey(User, max_length=40, on_delete=models.CASCADE, related_name="testimonals")
     title            = models.CharField(max_length=20)
-    user_image       = models.URLField(null=True, blank=True)
+    user_image       = models.URLField(verbose_name="Profile image url", null=True, blank=True)
     testimonial_text = models.TextField()
     ratings          = models.SmallIntegerField()
     company_name     = models.CharField(max_length=50)
@@ -29,7 +29,8 @@ class Testimonial(models.Model):
     date_sent        = models.DateTimeField(auto_now_add=True)
     admin_response   = models.CharField(max_length=40, blank=True, null=True)   
     tags             = models.ManyToManyField("Tag", blank=True)
-    date_created     = models.DateTimeField(auto_now_add=True)    
+    date_created     = models.DateTimeField(auto_now_add=True) 
+    updated_on       = models.DateTimeField(auto_now=True)   
 
     class Meta:
         verbose_name        = "Testimonial"
@@ -51,7 +52,7 @@ class Testimonial(models.Model):
             Returns the testimonial object belonging to the user or returns none.
         """
         try:
-            cls.objects.get(user=user)
+            return cls.objects.get(author=user)
         except cls.DoesNotExist:
             return None
 

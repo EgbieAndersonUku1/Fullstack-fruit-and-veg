@@ -40,9 +40,10 @@ def add_testimonial(request):
            )
            
            testimonal.save()
-           messages.success(request, "You have successfully created a testimonial. We will let you know once your testimonial has approved")
+           messages.success(request, "You have successfully created a testimonial. We will let you know once your testimonial has been approved")
            
-           is_sent = notify_admin_of_new_testimonial(user=request.user, subject="A newly created testimonial has being created an awaiting your approval")
+           is_sent = notify_admin_of_new_testimonial(user=request.user, 
+                                                     subject="A newly created testimonial has being created an awaiting your approval")
            
            if is_sent:
                print("Email sent..")
@@ -60,3 +61,17 @@ def add_testimonial(request):
         "is_approved": is_approved,
     }
     return render(request, "account/testimonials/add-testimonial.html", context=context)
+
+
+def all_reviews(request):
+    context = {}
+    return render(request, "account/testimonials/review-section.html", context=context)
+
+
+def display_testimonial(request):
+    
+    testimonial = Testimonial.get_by_user(request.user)
+    context     = {
+        "testimonial": testimonial
+    }
+    return render(request, "account/testimonials/view-testimonial.html", context=context)

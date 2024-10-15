@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}My testimonial{% endblock %}
+
+{% block body %}
+<section id="view-testimonials" aria-labelledby="view-testimonial-heading">
+    <div class="view-testimonials__container content-container">
+        {% include "partials/logo_link.html" %}
+      
+        <nav aria-label="Breadcrumb">
+            <ul class="breadcrumb">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'account' %}">My account</a></li>
+                <li><a href="{% url 'all-reviews' %}">View all reviews</a></li>
+                <li aria-current="page">Testimonial</li>
+            </ul>
+        </nav>
+
+        <h2 id="view-testimonial-heading" class="lighten padding-top-md">Testimonial section</h2>
+        <p class="account-info">My testimonial</p>
+        <hr class="dividor">
+
+        {% if testimonial %}
+            <div class="title triple-grid">
+                <div class="profile-image">
+                    {% if testimonial.user_image %}
+                        <img src="{{ testimonial.user_image.url }}" alt="Profile image of testimonial author" class="testimonial-img">
+                    {% else %}
+                        <img src="{% static 'img/display/jpg/placeholder.jpg' %}" alt="Profile image of testimonial author" class="testimonial-img">
+                    {% endif %}
+                
+                </div>
+                <div class="testimonial-title">
+                    <h3 class="text-capitalize">{{ testimonial.title }} </h3>
+
+                    {% if testimonial.featured %}
+                        <p class="highlight"> Featured testimonial</p>
+                    {% endif %}
+                </div>
+                <div class="links flex-end">
+                    <a href="#" aria-label="Edit this testimonial">Edit</a>
+                    <a href="#" aria-label="Delete this testimonial">Delete</a>
+                </div>
+            </div>
+
+            <div class="attributes padding-top-md">
+                <p class="text-capitalize company-name"><span class="light-bold">Company name:</span> {{ testimonial.company_name }}</p>
+                <p class="text-capitalize location"><span class="light-bold">Location:</span> {{ testimonial.location }}</p>
+                <p class="text-capitalize rating"><span class="light-bold">Ratings:</span> {{ testimonial.ratings }}/5</p>
+                <p class="text-capitalize status"><span class="light-bold">Approval status:</span> 
+                    {% if testimonial.is_approved %}
+                        Verified
+                    {% else %} 
+                        Waiting approval by admin
+                    {% endif %}
+                </p>
+                <p class="text-capitalize date-created"><span class="light-bold">Created on:</span> {{ testimonial.date_sent }}</p>
+                <p class="text-capitalize date-approved"><span class="light-bold">Approved on:</span> 
+                    {% if testimonial.date_approved %}
+                        {{ testimonial.date_approved }}
+                    {% else %}
+                        Not yet approved
+                    {% endif %}
+                
+                </p>
+            </div>
+
+            <div class="body padding-top-md padding-bottom-md">
+                <h4 class="padding-bottom-md text-capitalize">Testimonial</h4>
+                <p>
+                    {{ testimonial.testimonial_text }}
+                </p>
+               
+            </div>
+
+            {% if testimonial.admin_response %}
+                <div class="admin-response padding-top-md padding-bottom-md">
+                    <h4 class="text-capitalize">Admin response:</h4>
+                    <p class="padding-top-sm">{{  testimonial.admin_response }}</p>
+                   
+                </div>
+            
+            {% endif %}
+
+            <hr class="dividor padding-top-md">
+            <div class="user-attributes flex-end">
+                <div class="grid">
+                    <p class="text-capitalize">{{ testimonial.author.username }}</p>
+
+                    {% if testimonial.updated_on %}
+                        <p class="text-capitalize">Lasted updated on {{ testimonial.updated_on }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        
+        {% else %}
+
+            <p>You haven't added a testimonial yet. Share your experience with us by submitting a testimonial!</p>
+            <p>You can do so by <a href="{% url 'add-testimonial' %}" class="light-red">clicking here</a></p>
+
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

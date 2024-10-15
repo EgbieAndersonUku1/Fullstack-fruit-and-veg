@@ -1183,7 +1183,7 @@ nav {
 }
 
 .light-bold {
-    font-weight: 500;
+    font-weight: 400;
 }
 
 .strike-through {
@@ -1669,7 +1669,9 @@ button:hover,
     font-weight: 400;
 }
 
-
+#view-testimonials {
+    margin-bottom: 60px;
+}
 
 #testimonals .container #carousel .carousel-cards-wrapper .card-carousel .footer {
     padding-top: 8px;
@@ -2345,6 +2347,7 @@ footer .container h4 {
 }
 
 .dividor {
+    padding-top: 0;
     width: 100%;
 }
 
@@ -3175,6 +3178,17 @@ legend {
     border-radius: 4%;
 }
 
+.testimonial-img {
+    width: 60px;
+    height: 60px;
+}
+
+
+.testimonial-ratings .star-rating {
+    width: 25px;
+    height: 25px;
+}
+
 .sidebar-link {
     background: var(--light-gray);
     margin-top: 3px;
@@ -3485,4 +3499,9 @@ legend {
     height: 40px;
     border: none;
     text-transform: capitalize;
+}
+
+.user-attributes div p {
+    font-style: italic;
+    text-align: right;
 }

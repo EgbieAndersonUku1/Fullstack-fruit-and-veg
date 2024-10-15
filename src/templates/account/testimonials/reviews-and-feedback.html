@@ -6,8 +6,8 @@
 
 {% block body  %}
 
-<section id="product-review" aria-labelledby="product-review-heading">
-    <div class="product-review__container content-container">
+<section id="testimonial" aria-labelledby="testimonial-heading">
+    <div class="testimonial__container content-container">
         {% include "partials/logo_link.html" %}
       
         <ul class="breadcrumb">
@@ -16,38 +16,38 @@
             <li>Manage your reviews</li>
         </ul>
 
-        <h2 id="product-heading" class="lighten padding-top-md">Product Reviews and Testimonals</h2>
-        <p class="account-info">Manage your reviews and feedback</p>
+        <h2 class="lighten padding-top-md heading">My Testimonial</h2>
+        {% comment %} <p class="account-info">Manage your reviews and feedback</p> {% endcomment %}
         <hr class="dividor">
 
 
         <!-- cards -->
-        <div class="product-review__options triple-grid col-gap-small">
+        <div class="testimonial-review__options triple-grid col-gap-small">
 
-            <a href="{% url 'add-testimonial' %}" aria-labelledby="leave-product-review-heading" class="card-link">
+            <a href="{% url 'add-testimonial' %}" aria-labelledby="leave-testimonial-review-heading" class="card-link">
 
                 <!-- card 1 -->
                 <div class="card-grid">
                     <div class="head">
-                        <img src="../../../static/img/icons/comments.svg" alt="comment key icon" class="account-icon">
+                        <img src="{% static 'img/icons/comments.svg' %}" alt="comment key icon" class="account-icon">
                     </div>
                     <div class="body">
-                        <p id="leave-product-review-heading" class="leave-product-review-heading">Leave a Testimonals</p>
+                        <p class="leave-review-heading">Leave a Testimonial</p>
                         <p>Please share your experience with us, whether it’s about our services or your overall experience</p>
                     </div>
                     
                 </div>
             </a>
 
-            <a href="../reviews/add-or-edit-review.html" aria-labelledby="leave-product-review-heading" class="card-link">
+            <a href="../reviews/add-or-edit-review.html" aria-labelledby="leave-review-heading" class="card-link">
 
                 <!-- card 1 -->
                 <div class="card-grid">
                     <div class="head">
-                        <img src="../../../static/img/icons/comments.svg" alt="comment key icon" class="account-icon">
+                        <img src="{% static 'img/icons/find-in-page.svg' %}" alt="comment key icon" class="account-icon">
                     </div>
                     <div class="body">
-                        <p id="leave-product-review-heading" class="leave-product-review-heading">Leave a Product Review</p>
+                        <p class="leave-review-heading">Leave a Product Review</p>
                         <p>Please share your thoughts about the product to help other customers, or provide any feedback you have for us.</p>
                     </div>
                     
@@ -55,13 +55,13 @@
             </a>
 
             <!-- card 2 -->
-            <a href="#" aria-labelledby="view-product-review-heading" class="card-link">
+            <a href="{% url 'all-reviews' %}" aria-labelledby="view-product-review-heading" class="card-link">
                 <div class="card-grid">
                     <div class="head">
-                        <img src="../../../static/img/icons/binoculars.svg" alt="A binoculars icon" class="account-icon">
+                        <img src="{% static 'img/icons/binoculars.svg' %}" alt="A binoculars icon" class="account-icon">
                     </div>
                     <div class="body">
-                        <p id="view-product-heading" class="view-product-review-heading">View all reviews</p>
+                        <p class="view-product-review-heading">View all reviews</p>
                         <p>Explore testimonal and reviews for the various products you’ve created.</p> 
                     </div>
                 </div>
