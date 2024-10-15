@@ -20,7 +20,7 @@ def add_testimonial(request):
     has_already_created_testimonial = testimonial is not None
     is_approved = testimonial['is_approved'] if testimonial else False
     
-    
+
     if request.method == "POST":
 
         form = TestimonalForm(request.POST)

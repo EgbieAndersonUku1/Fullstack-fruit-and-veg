@@ -99,8 +99,28 @@ def notify_admin_of_new_testimonial(subject, user):
                              from_email=admin_email_address,
                              to_email=admin_email_address,
                              username=user.username,
-                             email=user.email,
+                             email_address=user.email,
                              )
+
+
+
+def notify_user_of_approved_testimonial(subject, user):
+    """
+    Sends an email to the user that their testimonial has been approved
+    """
+    email_template_html = "email_assets/testimonial/testimonial_approved.html"
+    email_template_text = "email_assets/testimonial/testimonial_approved.txt"
+    
+    admin_email_address = settings.EMAIL_HOST_USER
+    
+    return _send_email_helper(email_template_html,
+                             email_template_text,
+                             subject=subject,
+                             from_email=admin_email_address,
+                             to_email=user.email,
+                             username=user.username,
+                             )
+
 
 
 def _send_email_helper(email_template_html, email_template_text, **kwargs):

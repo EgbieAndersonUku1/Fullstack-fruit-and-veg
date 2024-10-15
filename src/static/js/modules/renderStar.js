@@ -55,6 +55,7 @@ function renderStar(numOfStars, renderEmptyStars=false) {
     } else {
         stars = createRatingStars(numOfStars, numOfStars, numOfStars, true);
 
+        // Hide the clear button when the stars are empty
         if (clearBtn.style.display === "block") {
             clearBtn.style.display = "none";
         }
@@ -81,7 +82,7 @@ function createRatingStars(numOfStarsToCreate, rating, totalNumberOfStars = 5, c
     const fragment = document.createDocumentFragment();
     
     for (let i = 1; i <= totalNumberOfStars; i++) {
-        const aTag = document.createElement("a");
+        const aTag   = document.createElement("a");
         const imgTag = document.createElement("img");
 
         aTag.dataset.value   = i;
@@ -106,12 +107,6 @@ function createRatingStars(numOfStarsToCreate, rating, totalNumberOfStars = 5, c
     }
     return fragment;
 }
-
-
-
-
-
-
 
 
 export default renderStar;

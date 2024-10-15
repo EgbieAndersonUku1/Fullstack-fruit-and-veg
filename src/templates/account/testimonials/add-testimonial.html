@@ -77,14 +77,15 @@
         <div id="product-form">
 
             {% if already_created %}
-              
-            {% if not is_approved %}
-                <p>You have already submitted a testimonial, which is currently awaiting approval.</p>
-                <p>You will be notified by email once it has been approved.</p>
-            {% else %}
-                <p>You have already created a testimonial.</p>
-                <p>To make changes, <a class="highlight testimonial-link" href="#">click here</a> to edit your testimonial or visit the product review section.</p>
-            {% endif %}
+                    
+                {% if not is_approved %}
+                    <p>You have already submitted a testimonial that is currently awaiting approval.</p>
+                    <p>You will be notified by email once it has been approved.</p>
+                {% else %}
+                    <p>Your testimonial has been approved by the admin.</p>
+                    <p>If you would like to make changes, <a class="highlight testimonial-link" href="#">click here</a> to edit your testimonial or visit the product review section.</p>
+                {% endif %}
+        
             
             {% else %}
 
@@ -123,7 +124,6 @@
          
         </div>
 
-
         <div class="messages">
             <p></p>
         </div>
@@ -139,7 +139,6 @@
 
 {% block script  %}
 
-    <script src="{% static 'js/modules/add-review.js' %}" type="module"></script>
     <script src="{% static 'js/modules/add-review.js' %}" type="module"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.all.min.js"></script>
 

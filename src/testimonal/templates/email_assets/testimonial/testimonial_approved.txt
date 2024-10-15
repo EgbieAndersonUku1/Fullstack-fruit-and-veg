@@ -1,0 +1,17 @@
+Welcome to EUOrganics!
+                 
+Hi {{ username }},
+                
+
+Your testimonial has been successfully approved by the admin! You can now view it in the testimonial section. <br><br>
+
+Thank you for your patience during this process.                        
+                       
+
+Welcome aboard, and thank you for choosing EUOrganics!
+                  
+Warm regards,
+                 
+
+The EUOrganics Team
+                    
