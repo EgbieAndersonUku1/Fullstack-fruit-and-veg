@@ -81,9 +81,11 @@
                 {% if not is_approved %}
                     <p>You have already submitted a testimonial that is currently awaiting approval.</p>
                     <p>You will be notified by email once it has been approved.</p>
+                    <p>In the meantime you can view your testimonial by <a href="{% url 'display-testimonial' %}" class="lightblue">clicking here</a></p>
+                    
                 {% else %}
                     <p>Your testimonial has been approved by the admin.</p>
-                    <p>If you would like to make changes, <a class="highlight testimonial-link" href="#">click here</a> to edit your testimonial or visit the product review section.</p>
+                    <p>If you would like to make changes or view your testimonial <a href="{% url 'display-testimonial' %}" class="highlight testimonial-link" href="#">click here</a></p>
                 {% endif %}
         
             

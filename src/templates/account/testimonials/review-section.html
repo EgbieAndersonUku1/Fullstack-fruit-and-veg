@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Testimonals and reviews {% endblock %}
+
+
+{% block body  %}
+
+<section id="add-testimonials" aria-labelledby="product-review-heading">
+    <div class="add-testimonials__container content-container">
+        {% include "partials/logo_link.html" %}
+      
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'account' %}">My account</a></li>
+            <li>Manage your reviews</li>
+        </ul>
+
+        <h2 class="lighten padding-top-md">Reviews and Testimonial section</h2>
+        <p class="account-info">View all reviews and testimonals</p>
+        <hr class="dividor">
+
+
+        <!-- cards -->
+        <div class="two-column-grid col-gap-small">
+
+            <a href="{% url 'display-testimonial' %}" aria-labelledby="leave-review-heading" class="card-link">
+
+                <!-- card 1 -->
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static 'img/icons/comments.svg' %}" alt="comment key icon" class="account-icon">
+                    </div>
+                    <div class="body">
+                        <p class="leave-review-heading text-capitalize">My Testimonial</p>
+                        <p>View my testimonial</p>
+                    </div>
+                    
+                </div>
+            </a>
+
+            <a href="../reviews/add-or-edit-review.html" aria-labelledby="leave-review-heading" class="card-link">
+
+                <!-- card 1 -->
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static 'img/icons/find-in-page.svg' %}" alt="comment key icon" class="account-icon">
+                    </div>
+                    <div class="body">
+                        <p id="leave-review-heading" class="leave-review-heading text-capitalize">My product reviews</p>
+                        <p>View all product reviews</p>
+                    </div>
+                    
+                </div>
+            </a>
+
+        
+        </div>
+    </div>
+</section>
+
+
+{% endblock  %}
+
+
