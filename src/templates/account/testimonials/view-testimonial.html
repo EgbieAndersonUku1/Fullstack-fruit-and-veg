@@ -49,9 +49,9 @@
                 <p class="text-capitalize rating"><span class="light-bold">Ratings:</span> {{ testimonial.ratings }}/5</p>
                 <p class="text-capitalize status"><span class="light-bold">Approval status:</span> 
                     {% if testimonial.is_approved %}
-                        Verified
+                        <span class="font-green">Verified</span>
                     {% else %} 
-                        Waiting approval by admin
+                        <span class="highlight">Waiting approval by admin </span>
                     {% endif %}
                 </p>
                 <p class="text-capitalize date-created"><span class="light-bold">Created on:</span> {{ testimonial.date_sent }}</p>
