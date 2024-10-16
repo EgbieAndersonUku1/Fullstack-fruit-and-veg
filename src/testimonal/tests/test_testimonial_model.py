@@ -278,14 +278,13 @@ class TestimonialTests(TestCase):
         self.assertEqual(user_creation_count, EXPECTED_CREATION_COUNT, f"The count should be 6 not {user_creation_count}")
     
     def test_if_admin_can_response(self):
-        """Test if the admin can post a response without triggering pre_save."""
+        """Test if the admin can post a response in response to a given Testimonial."""
         
         # Disconnect the pre_save signal to prevent it from sending the email
         pre_save.disconnect(pre_save_testimonial, sender=Testimonial)
         
         try:
             EXPECTED_ADMIN_RESPONSE = "Thank you"
-            self.testimonial.refresh_from_db()
             self.testimonial.admin_response = EXPECTED_ADMIN_RESPONSE
             self.testimonial.save()
 
@@ -298,6 +297,28 @@ class TestimonialTests(TestCase):
             # Reconnect the signal after the test
             pre_save.connect(pre_save_testimonial, sender=Testimonial)       
     
+    def test_if_admin_can_approve_testimonial(self):
+        """Test if the admin can approval a testimonial"""
+        
+        # Disconnect the pre_save signal to prevent it from sending the email
+        pre_save.disconnect(pre_save_testimonial, sender=Testimonial)
+        
+        try:
+            
+            # first check if is_approved hasn't be approved yet
+            self.assertFalse(self.testimonial.is_approved)
+            
+            self.testimonial.is_approved = True
+            self.testimonial.save()
+
+            self.testimonial.refresh_from_db()
+
+            # Check if the is_approved was checked
+            self.assertTrue(self.testimonial.is_approved)
+        
+        finally:
+            # Reconnect the signal after the test
+            pre_save.connect(pre_save_testimonial, sender=Testimonial)       
     def tearDown(self) -> None:
         Testimonial.objects.all().delete()
         User = get_user_model()
