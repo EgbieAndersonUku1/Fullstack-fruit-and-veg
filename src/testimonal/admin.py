@@ -11,10 +11,15 @@ from .models import Testimonial, UnapprovedTestimonial, ApprovedTestimonial
 
 class BaseTestimonial(admin.ModelAdmin):
     ordering           = ['-date_created']
-    list_display       = ["author", "title", "ratings", "country", "location", "is_approved", "date_sent", "date_approved"]
+    list_display       = ["author", "title", "ratings", "country", "is_approved", "date_sent", "date_approved", "has_admin_responded"]
     list_display_links = ["author", "title"]
     list_filter        = ["is_approved", "ratings", "country"]
-    readonly_fields    = ["date_approved"]
+    readonly_fields    = ["date_approved", "ratings", "company_name", 
+                          "testimonial_text", "title", "date_sent", 
+                          "date_created", "location", "country", "user_image",
+                          "author",
+                          "has_admin_responded",
+                          ]
     list_per_page = 25
     
     fieldsets = [
@@ -37,7 +42,7 @@ class BaseTestimonial(admin.ModelAdmin):
         
         ("Additional info", {
             "classes": ["wide", "collaspe"],
-            "fields": ["featured", "admin_response",  "tags"]
+            "fields": ["featured", "admin_response", "has_admin_responded", "tags"]
         })
     ]
     
@@ -49,7 +54,7 @@ class BaseTestimonial(admin.ModelAdmin):
 class TestimonialAdmin(BaseTestimonial):
    
     search_fields   = ["ratings", "is_approved", "country"]
-    readonly_fields = ["date_sent", "date_created"]
+    # readonly_fields = ["date_sent", "date_created"]
     
    
 

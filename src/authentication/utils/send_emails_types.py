@@ -123,6 +123,25 @@ def notify_user_of_approved_testimonial(subject, user):
 
 
 
+def notify_user_of_admin_response(subject, user):
+    """
+    Sends an email to the user notifying them that admin has responded
+    """
+    email_template_html = "email_assets/testimonial/testimonial_admin_response.html"
+    email_template_text = "email_assets/testimonial/testimonial_admin_response.txt"
+    
+    admin_email_address = settings.EMAIL_HOST_USER
+    
+    return _send_email_helper(email_template_html,
+                             email_template_text,
+                             subject=subject,
+                             from_email=admin_email_address,
+                             to_email=user.email,
+                             username=user.username,
+                             )
+
+
+
 def _send_email_helper(email_template_html, email_template_text, **kwargs):
     """
     A private helper function to send an email with the specified templates and context.
