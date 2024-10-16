@@ -1,0 +1,17 @@
+EU Organics Online Store
+          
+Welcome to EUOrganics!
+                    
+
+Hi {{ username }},
+                    
+
+You have received a response from the admin regarding your testimonial. Please log in to your account to view it.
+ 
+
+
+Welcome aboard, and thank you for choosing EUOrganics!
+Warm regards,
+                    
+The EUOrganics Team
+                 

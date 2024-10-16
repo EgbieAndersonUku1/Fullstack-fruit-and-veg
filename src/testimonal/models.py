@@ -28,6 +28,7 @@ class Testimonial(models.Model):
     featured         = models.BooleanField(default=False)
     date_sent        = models.DateTimeField(auto_now_add=True)
     admin_response   = models.CharField(max_length=40, blank=True, null=True)   
+    has_admin_responded  = models.BooleanField(default=False)
     tags             = models.ManyToManyField("Tag", blank=True)
     date_created     = models.DateTimeField(auto_now_add=True) 
     updated_on       = models.DateTimeField(auto_now=True)   
