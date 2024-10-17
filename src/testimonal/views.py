@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
-from .models import Testimonial
-from .forms.testimonial.testimonial_form import TestimonalForm
+from .models import Testimonial, TestimonialMessages
+from .forms.testimonial.testimonial_form import TestimonialForm
 from  authentication.utils.send_emails_types import notify_admin_of_new_testimonial
 # Create your views here.
 
@@ -23,7 +23,7 @@ def add_testimonial(request):
 
     if request.method == "POST":
 
-        form = TestimonalForm(request.POST)
+        form = TestimonialForm(request.POST)
         
         if form.is_valid():
            ratings = int(request.POST.get("star-rating"))
@@ -53,12 +53,13 @@ def add_testimonial(request):
            return redirect("add-testimonial")
        
     else:
-        form = TestimonalForm()
+        form = TestimonialForm()
         
     context = {
         "form": form,
         "already_created": has_already_created_testimonial,
         "is_approved": is_approved,
+        "is_editing": False,
     }
     return render(request, "account/testimonials/add-testimonial.html", context=context)
 
@@ -75,3 +76,39 @@ def display_testimonial(request):
         "testimonial": testimonial
     }
     return render(request, "account/testimonials/view-testimonial.html", context=context)
+
+
+def edit_testimonial(request, username, id):
+    
+    # Ensure the testimonial belongs to the logged-in user
+    if request.user.username.lower() != username.lower():
+        messages.error(request, TestimonialMessages.ERROR_EDITING_OTHER_TESTIMONIAL)
+        return redirect("display_testimonial")
+    
+
+    testimonial = Testimonial.get_by_user_and_id(user=request.user, testimonial_id=id)
+    
+    if not testimonial:
+        messages.error(request, TestimonialMessages.ERROR_TESTIMONIAL_NOT_FOUND)
+        return redirect("display_testimonial")
+    
+    form = TestimonialForm(instance=testimonial)
+    
+    if request.method == "POST":
+        form = TestimonialForm(request.POST, instance=testimonial)
+        if form.is_valid():
+            form.save(reset_fields=True)
+            messages.success(request, TestimonialMessages.SUCCESS_TESTIMONIAL_UPDATED)
+            return redirect("display_testimonial")
+    
+    context = {
+        "form": form,
+        "is_editing": True,
+        "testimonial": testimonial,
+        "already_created": False,
+        "username": username,
+        "is_approved": False,
+        "id": id,
+    }
+    return render(request, "account/testimonials/add-testimonial.html", context=context)
+

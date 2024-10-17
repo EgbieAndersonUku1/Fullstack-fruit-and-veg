@@ -16,7 +16,7 @@ class Testimonial(models.Model):
     """The testimonal class"""
     
     author           = models.ForeignKey(User, max_length=40, on_delete=models.CASCADE, related_name="testimonals")
-    title            = models.CharField(max_length=20)
+    title            = models.CharField(max_length=40)
     user_image       = models.URLField(verbose_name="Profile image url", null=True, blank=True)
     testimonial_text = models.TextField()
     ratings          = models.SmallIntegerField()
@@ -57,6 +57,23 @@ class Testimonial(models.Model):
         except cls.DoesNotExist:
             return None
 
+    @classmethod
+    def get_by_user_and_id(cls, user, testimonial_id):
+        """
+        Retrieves a testimonial by the given user and testimonial ID.
+        
+        Params:
+            user (User instance): The user instance to retrieve the testimonial for.
+            testimonial_id (int): The ID of the testimonial.
+
+        Returns:
+            Testimonial instance: The testimonial object or None if not found.
+        """
+        return cls.objects.filter(author=user, id=testimonial_id).first()
+    
+    
+
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=50)
@@ -82,3 +99,9 @@ class ApprovedTestimonial(Testimonial):
         verbose_name = "Approved Testimonial"
         verbose_name_plural = "Approved Testimonials"
 
+
+
+class TestimonialMessages:
+    ERROR_EDITING_OTHER_TESTIMONIAL = "You cannot edit someone else's testimonial."
+    ERROR_TESTIMONIAL_NOT_FOUND     = "The testimonial was not found."
+    SUCCESS_TESTIMONIAL_UPDATED     = "Testimonial updated successfully!"

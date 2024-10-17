@@ -319,6 +319,7 @@ class TestimonialTests(TestCase):
         finally:
             # Reconnect the signal after the test
             pre_save.connect(pre_save_testimonial, sender=Testimonial)       
+            
     def tearDown(self) -> None:
         Testimonial.objects.all().delete()
         User = get_user_model()

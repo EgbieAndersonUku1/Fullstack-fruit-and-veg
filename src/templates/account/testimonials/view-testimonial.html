@@ -31,19 +31,20 @@
                 
                 </div>
                 <div class="testimonial-title">
-                    <h3 class="text-capitalize">{{ testimonial.title }} </h3>
-
+                   
                     {% if testimonial.featured %}
                         <p class="highlight"> Featured testimonial</p>
                     {% endif %}
                 </div>
                 <div class="links flex-end">
-                    <a href="#" aria-label="Edit this testimonial">Edit</a>
+                    <a href="{% url 'edit-testimonial' testimonial.author.username testimonial.id %}" aria-label="Edit this testimonial">Edit</a>
                     <a href="#" aria-label="Delete this testimonial">Delete</a>
                 </div>
             </div>
 
             <div class="attributes padding-top-md">
+                <h3 class="text-capitalize center padding-bottom-md">{{ testimonial.title }} </h3>
+
                 <p class="text-capitalize company-name"><span class="light-bold">Company name:</span> {{ testimonial.company_name }}</p>
                 <p class="text-capitalize location"><span class="light-bold">Location:</span> {{ testimonial.location }}</p>
                 <p class="text-capitalize rating"><span class="light-bold">Ratings:</span> {{ testimonial.ratings }}/5</p>

@@ -16,13 +16,24 @@
             <li><a href="{% url 'home' %}">Home</a></li>
             <li><a href="{% url 'account' %}">My account</a></li>
             <li><a href="{% url 'reviews' %}">Manage your review</a></li>
-            <li class="current-page">Create a review</li>
+
+            {% if is_editing %}
+                <li class="current-page">Edit a testimonial</li>
+            {% else %}
+                <li class="current-page">Create a new testimonial</li>
+            {% endif %}
         </ul>
 
 
         {% if not already_created %} 
-            <h2 class="lighten padding-top-md page-title">Create a testimonial</h2>
-            <p class="account-info page-title-subtitle">Add a testimonial</p>
+
+            {% if is_editing %}
+                <h2 class="lighten padding-top-md page-title">Edit testimonial</h2>
+                <p class="account-info page-title-subtitle">You can now edit your testimonial</p>
+            {% else %}
+                 <h2 class="lighten padding-top-md page-title">Create a testimonial</h2>
+                 <p class="account-info page-title-subtitle">Add a testimonial</p>
+            {% endif %}
             <hr class="dividor">
         {% else %}
             
@@ -40,7 +51,7 @@
             </div>
         </div>
 
-        {% if not already_created %} 
+        {% if not already_created  %} 
 
         <div class="product-rating">
             <div class="header">
@@ -81,17 +92,22 @@
                 {% if not is_approved %}
                     <p>You have already submitted a testimonial that is currently awaiting approval.</p>
                     <p>You will be notified by email once it has been approved.</p>
-                    <p>In the meantime you can view your testimonial by <a href="{% url 'display-testimonial' %}" class="lightblue">clicking here</a></p>
+                    <p>In the meantime you can view your testimonial by <a href="{% url 'display_testimonial' %}" class="lightblue">clicking here</a></p>
                     
                 {% else %}
                     <p>Your testimonial has been approved by the admin.</p>
-                    <p>If you would like to make changes or view your testimonial <a href="{% url 'display-testimonial' %}" class="highlight testimonial-link" href="#">click here</a></p>
+                    <p>If you would like to make changes or view your testimonial <a href="{% url 'display_testimonial' %}" class="highlight testimonial-link" href="#">click here</a></p>
                 {% endif %}
         
             
             {% else %}
 
-            <form method="post" action="{% url 'add-testimonial' %}" class="product-form" id="testimonial-form">
+
+            {% if is_editing %}
+                <form method="post" action="{% url 'edit-testimonial' username id %}" class="product-form" id="testimonial-form">
+            {% else %}
+                <form method="post" action="{% url 'add-testimonial' %}" class="product-form" id="testimonial-form">
+            {% endif %}
                 {% csrf_token %}
 
                 <input type="hidden" name="star-rating" value="" id="starInputHiddenField">
@@ -118,7 +134,12 @@
                 <p class="maximum-characters flex-end">Number of characters remaining: 1000</p>
 
                 <div class="button flex-end">
-                    <button type="submit" class="product-review-btn">Submit</button>
+
+                    {% if is_editing %}
+                        <button type="submit" class="product-review-btn">Edit</button>
+                    {% else %}
+                         <button type="submit" class="product-review-btn">Submit</button>
+                    {% endif %}
                 </div>
             </form>
 
