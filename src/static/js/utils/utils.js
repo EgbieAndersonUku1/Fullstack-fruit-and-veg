@@ -1,4 +1,6 @@
 
+ import { validateElement } from "../errors/customErrors";
+
 function getRandomCharacter(character) {
     return character.charAt(Math.floor((Math.random() * character.length)));
 }
@@ -162,6 +164,7 @@ function disableEmptySelectOptions(selectElement) {
 
 
 
+
 export {generateSessionKey,
         saveToLocalStorage,
         getItemFromLocalStorage,
@@ -173,5 +176,6 @@ export {generateSessionKey,
         getCurrentPage,
         capitalize,
         disableEmptySelectOptions,
+        showSpinner,
 
 };

@@ -2,18 +2,19 @@ import renderStar  from "./renderStar.js";
 import { validateElement } from "../errors/customErrors.js";
 
 import { minimumCharactersToUse } from "../components/characterCounter.js";
-import { handleFormFieldElement } from "../handlers/handleTextCharInput.js";
 
 const testimonialTextArea  = document.getElementById("id_testimonial_text");
 const clearBtnElement      = document.getElementById("clear-btn");
-const testimonialForm     = document.getElementById("testimonial-form");
+const testimonialForm      = document.getElementById("testimonial-form");
 const messageDivElement    = document.querySelector(".messages");
 const messagePTagElement   = document.querySelector(".messages p");
 
 
+
 // Event listeners
-testimonialForm.addEventListener("submit", handleTestimonialFormSubmit);
-clearBtnElement.addEventListener("click", handleResetRatings)
+testimonialForm?.addEventListener("submit", handleTestimonialFormSubmit);
+clearBtnElement?.addEventListener("click", handleResetRatings)
+
 
 
 
@@ -103,7 +104,10 @@ function handleResetRatings() {
     const totalNumberOfStars = 5;
     const renderEmptyStars   = true;
      renderStar(totalNumberOfStars, renderEmptyStars);
-}
+};
+
+
+
 
 
 

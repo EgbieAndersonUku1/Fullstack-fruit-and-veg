@@ -78,6 +78,17 @@ def display_testimonial(request):
     return render(request, "account/testimonials/view-testimonial.html", context=context)
 
 
+def delete_testimonial(request, id):
+    
+    testimonial = Testimonial.get_by_user_and_id(request.user, id)
+    if testimonial:
+        testimonial.delete()
+        messages.success(request, "Your testimonial was successfully deleted")
+    else:
+         messages.error(request, "Something went wrong and your testimonial wasn't deleted")
+    return redirect("reviews")
+
+
 def edit_testimonial(request, username, id):
     
     # Ensure the testimonial belongs to the logged-in user
@@ -85,7 +96,6 @@ def edit_testimonial(request, username, id):
         messages.error(request, TestimonialMessages.ERROR_EDITING_OTHER_TESTIMONIAL)
         return redirect("display_testimonial")
     
-
     testimonial = Testimonial.get_by_user_and_id(user=request.user, testimonial_id=id)
     
     if not testimonial:
