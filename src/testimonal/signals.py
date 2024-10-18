@@ -12,7 +12,6 @@ def pre_save_testimonial(sender, instance, *args, **kwargs):
     
     if instance:
         
-        # Only send it once
         if instance.is_approved and instance.date_approved is None:
             instance.date_approved = timezone.now() 
             subject = "Your testimonial has been approved"

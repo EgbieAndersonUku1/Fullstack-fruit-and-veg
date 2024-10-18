@@ -31,19 +31,20 @@
                 
                 </div>
                 <div class="testimonial-title">
-                    <h3 class="text-capitalize">{{ testimonial.title }} </h3>
-
+                   
                     {% if testimonial.featured %}
                         <p class="highlight"> Featured testimonial</p>
                     {% endif %}
                 </div>
                 <div class="links flex-end">
-                    <a href="#" aria-label="Edit this testimonial">Edit</a>
-                    <a href="#" aria-label="Delete this testimonial">Delete</a>
+                    <a href="{% url 'edit-testimonial' testimonial.author.username testimonial.id %}" aria-label="Edit this testimonial">Edit</a>
+                    <a href="#" aria-label="Delete this testimonial" id="delete-testimonial-link">Delete</a>
                 </div>
             </div>
 
             <div class="attributes padding-top-md">
+                <h3 class="text-capitalize center padding-bottom-md">{{ testimonial.title }} </h3>
+
                 <p class="text-capitalize company-name"><span class="light-bold">Company name:</span> {{ testimonial.company_name }}</p>
                 <p class="text-capitalize location"><span class="light-bold">Location:</span> {{ testimonial.location }}</p>
                 <p class="text-capitalize rating"><span class="light-bold">Ratings:</span> {{ testimonial.ratings }}/5</p>
@@ -92,6 +93,46 @@
                     {% endif %}
                 </div>
             </div>
+
+
+            <div class="moodle-alert d-none" id="moodle-alert">
+                {% include "partials/logo_link.html" %}
+                <div class="head">
+                    <h3 class="text-capitalize highlight">Delete Testimonial (ID: #{{ testimonial.id }})</h3>
+        
+                    <hr class="dividor">
+                    <p class="padding-bottom-md">Are you sure you want to delete the selected Testimonial? 
+                        This action will permanently delete all related attributes, including admin approval status, title, ratings, and other associated fields.
+                    </p>
+                     
+                </div>
+        
+                <div class="body padding-top-md">
+                    <div class="info">
+                        <h3>Testimonial</h3>
+                        <p class="padding-left-lg">1. Testimonial: <span class="font-green testimionial-info"> {{ testimonial.author }}</span> - 
+                            <span class="font-green testimionial-info">{{ testimonial.title }}</span> 
+                          
+                    </div>
+        
+                    <div class="info">
+                        <h2>Summary</h2>
+                        <div class="box two-column-grid">
+                            <p>Number of testimonials to delete</p>
+                            <p>1</p>
+                        </div>
+                        <hr class="dividor">
+                        <div class="buttons">
+                          
+                            <a href="{% url 'delete_testimonial' testimonial.id %}" class="link-button confirm-delete"><button type="button" class="testimonial-button">Yes, I'm sure</button></a>
+                            <a href="#" class="link-button cancel-delete"><button type="button" class="testimonial-button">No, take me back</button></a>
+                           
+                        </div>
+                    </div>
+        
+                </div>
+              
+            </div>
         
         {% else %}
 
@@ -100,5 +141,14 @@
 
         {% endif %}
     </div>
+    <div class="spinner"></div>
+
+
+   
+
 </section>
 {% endblock %}
+
+{% block script %}
+<script src="{% static 'js/modules/delete-review.js' %}" type="module"></script>
+{% endblock  %}

@@ -11,8 +11,8 @@ from .models import Testimonial, UnapprovedTestimonial, ApprovedTestimonial
 
 class BaseTestimonial(admin.ModelAdmin):
     ordering           = ['-date_created']
-    list_display       = ["author", "title", "ratings", "country", "is_approved", "date_sent", "date_approved", "has_admin_responded"]
-    list_display_links = ["author", "title"]
+    list_display       = ["author", "ratings", "country", "is_approved", "date_sent", "date_approved", "has_admin_responded"]
+    list_display_links = ["author"]
     list_filter        = ["is_approved", "ratings", "country"]
     readonly_fields    = ["date_approved", "ratings", "company_name", 
                           "testimonial_text", "title", "date_sent", 
@@ -60,11 +60,20 @@ class TestimonialAdmin(BaseTestimonial):
 
 class UnapprovedTestimonialAdmin(BaseTestimonial):
     search_fields   = ["ratings", "country"]
-    readonly_fields = ["date_approved", "is_approved"]
-    
+    readonly_fields    = ["date_approved", "ratings", "company_name", 
+                          "testimonial_text", "title", "date_sent", 
+                          "date_created", "location", "country", "user_image",
+                          "author",
+                          "has_admin_responded",
+                          "is_approved",
+                          ]
     def get_queryset(self, request: HttpRequest) -> QuerySet:
         query_set = super().get_queryset(request)
         return query_set.filter(is_approved=False)
+    
+    def save_model(self, request, obj, form, change):
+        print("Saving testimonial in admin...") 
+        super().save_model(request, obj, form, change) 
      
             
 class ApprovedTestimonialAdmin(BaseTestimonial):

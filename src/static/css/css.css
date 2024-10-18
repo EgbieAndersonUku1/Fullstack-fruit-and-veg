@@ -30,6 +30,7 @@
     --pale-green:  #d6f5dc;
     --dodger-blue: #1E90FF;
     --secondary-color: #FF4500;
+    --redish-color:#dc3545;
     --dark-red: #820f0f;
     --light-gray: #8080801c;
 
@@ -282,6 +283,9 @@ table tr td a:nth-child(even):hover {
     padding: var(--padding-xl);
 }
 
+.padding-left-lg {
+    padding-left: var(--padding-lg);
+}
 
 .padding-top-md {
     padding-top: var(--padding-md);
@@ -3505,3 +3509,94 @@ legend {
     font-style: italic;
     text-align: right;
 }
+
+
+.moodle-alert {
+
+    cursor: pointer;
+    z-index: 1000000;
+    background: white;
+
+    /* postion */
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    right: 40px;
+    bottom: 50%;
+    left: 50px;
+ 
+    /* sizes */
+    width: 95%;
+    height: 80%;
+
+    border: 4px solid lavender; 
+    border-radius: 1%;
+    background: white;
+    padding: 20px;
+    
+    border-top: 4px solid red;
+    box-shadow: var(--box-shadow3);
+}
+
+.moodle-alert .head p{
+    width: 70%;
+}
+
+.moodle-alert .body {
+    display: grid;
+    grid-template-columns: 75% 25%;
+    grid-template-rows: auto;
+}
+
+.moodle-alert .body .buttons .button {
+   width: 100%;
+}
+
+.testimonial-button {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--redish-color);
+    color: white;
+    border: none;
+    font-size: var(--font-size-normal);
+
+}
+
+.testimonial-button:last-child {
+    margin-top: 4px;
+}
+
+.testimionial-info:hover {
+    color: #007bff;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+
+.spinner {
+    display: none;
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+
+    /* position */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    right: 50%;
+    bottom: 50%;
+    z-index: 100000000000;
+
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
