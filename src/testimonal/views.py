@@ -29,7 +29,7 @@ def add_testimonial(request):
            
            testimonal = Testimonial(
                author=request.user,
-               title=form.cleaned_data["title"],
+               job_title=form.cleaned_data["job_title"],
                user_image=form.cleaned_data["user_image"],
                testimonial_text=form.cleaned_data["testimonial_text"],
                ratings=ratings,

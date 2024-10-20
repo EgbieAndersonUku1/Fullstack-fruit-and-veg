@@ -27,9 +27,7 @@
             <div class="title triple-grid">
                 <div class="profile-image">
                     {% if testimonial.user_image %}
-                        <img src="{{ testimonial.user_image.url }}" alt="Profile image of testimonial author" class="testimonial-img">
-                    {% else %}
-                        <img src="{% static 'img/display/jpg/placeholder.jpg' %}" alt="Profile image of testimonial author" class="testimonial-img">
+                        <img src="{{ testimonial.user_image }}" alt="Profile image of testimonial author" class="testimonial-img">
                     {% endif %}
                 
                 </div>
@@ -45,7 +43,7 @@
                 </div>
             </div>
 
-            <h3 class="text-capitalize center padding-bottom-md">{{ testimonial.title }} </h3>
+            <h3 class="text-capitalize center padding-bottom-md">{{ testimonial.job_title }} </h3>
 
             <p class="underline light-bold text-capitalize">Ratings:</p>
 
@@ -139,7 +137,7 @@
                     <div class="info">
                         <h3>Testimonial</h3>
                         <p class="padding-left-lg">1. Testimonial: <span class="font-green testimionial-info"> {{ testimonial.author }}</span> - 
-                            <span class="font-green testimionial-info">{{ testimonial.title }}</span> 
+                            <span class="font-green testimionial-info">{{ testimonial.job_title }}</span> 
                           
                     </div>
         

@@ -15,7 +15,7 @@ class BaseTestimonial(admin.ModelAdmin):
     list_display_links = ["author"]
     list_filter        = ["is_approved", "ratings", "country"]
     readonly_fields    = ["date_approved", "ratings", "company_name", 
-                          "testimonial_text", "title", "date_sent", 
+                          "testimonial_text", "job_title", "date_sent", 
                           "date_created", "location", "country", "user_image",
                           "author",
                           "has_admin_responded",
@@ -24,7 +24,7 @@ class BaseTestimonial(admin.ModelAdmin):
     
     fieldsets = [
         (None, {
-            "fields": ["author", "title", "user_image", "company_name", "testimonial_text"],
+            "fields": ["author", "job_title", "user_image", "company_name", "testimonial_text"],
         }),
         
         ('Location Info', {
@@ -61,7 +61,7 @@ class TestimonialAdmin(BaseTestimonial):
 class UnapprovedTestimonialAdmin(BaseTestimonial):
     search_fields   = ["ratings", "country"]
     readonly_fields    = ["date_approved", "ratings", "company_name", 
-                          "testimonial_text", "title", "date_sent", 
+                          "testimonial_text", "job_title", "date_sent", 
                           "date_created", "location", "country", "user_image",
                           "author",
                           "has_admin_responded",

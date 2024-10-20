@@ -62,16 +62,19 @@ function renderStar(numOfStars, renderEmptyStars=false) {
 
 
 /**
- * This function is responsible for creating rating stars. Based on the flag the function
- * can create a series of empty stars or non-empty stars
+ * Creates a series of star elements (filled or unfilled) based on the provided rating.
+ * The function generates a fragment containing anchor (`<a>`) elements with embedded 
+ * images (`<img>`) representing stars. You can control the total number of stars, 
+ * the number of filled stars, and whether empty stars should be rendered.
+ *
+ * @param {number} numOfStarsToCreate - The number of filled stars to create.
+ * @param {number} rating - The rating number associated with each filled star (e.g., 1 for one star, 2 for two stars).
+ * @param {number} [totalNumberOfStars=5] - The total number of stars to create (default is 5).
+ * @param {boolean} [createEmptyStars=false] - A flag indicating whether to create empty stars (default is false).
  * 
- * @param {*} numOfStarsToCreate The number of stars to create
- * @param {*} rating The rating number for each coloured star e.g a single star has rating of 1, two stars = 2, three star = 3, n stars = n
- * @param {*} totalNumberOfStars The total number of stars to create the default is 5
- * @param {*} createEmptyStars A flag to decide whether to create an empty star or a non-empty star. The default is set to false which means
- *                              it doesn't creates an empty star
- * @returns 
- *     
+ * @returns {DocumentFragment} A fragment containing the star elements (`<a>` with `<img>` for each star).
+ * 
+ * @throws {Error} Throws an error if any of the input parameters (`numOfStarsToCreate`, `rating`, or `totalNumberOfStars`) are not numbers.
  */
 function createRatingStars(numOfStarsToCreate, rating, totalNumberOfStars = 5, createEmptyStars=false) {
     const fragment = document.createDocumentFragment();
@@ -84,10 +87,8 @@ function createRatingStars(numOfStarsToCreate, rating, totalNumberOfStars = 5, c
         const aTag   = createElement("a");
         const imgTag = createElement("img");
 
-        aTag.dataset.value   = i;
-        imgTag.dataset.value = i;
-        aTag.id              = rating;
-        aTag.href            = "#";
+        aTag.id   = rating;
+        aTag.href = "#";
 
         if (i <= numOfStarsToCreate && (!createEmptyStars)) {
             imgTag.src = filledStarsSrc;
