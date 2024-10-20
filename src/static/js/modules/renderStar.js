@@ -23,9 +23,8 @@ function handleStarClick(e) {
     if (e.target.tagName === 'A' || e.target.tagName === 'IMG') {
         e.preventDefault();
         
-        if (clearBtn.style.display !== "block") {
-            clearBtn.style.display = "block";
-        }
+        toggleClearBtn();
+      
   
         const star = e.target.closest('a');
         renderStar(parseInt(star.dataset.value));
@@ -54,12 +53,8 @@ function renderStar(numOfStars, renderEmptyStars=false) {
         stars = createRatingStars(numOfStars, numOfStars);
     } else {
         stars = createRatingStars(numOfStars, numOfStars, numOfStars, true);
-
-        // Hide the clear button when the stars are empty
-        if (clearBtn.style.display === "block") {
-            clearBtn.style.display = "none";
-        }
-     
+        toggleClearBtn(false);
+       
     }
     ratingDiv.appendChild(stars);
 }
@@ -74,16 +69,20 @@ function renderStar(numOfStars, renderEmptyStars=false) {
  * @param {*} rating The rating number for each coloured star e.g a single star has rating of 1, two stars = 2, three star = 3, n stars = n
  * @param {*} totalNumberOfStars The total number of stars to create the default is 5
  * @param {*} createEmptyStars A flag to decide whether to create an empty star or a non-empty star. The default is set to false which means
- *                              it creates an empty star
+ *                              it doesn't creates an empty star
  * @returns 
  *     
  */
 function createRatingStars(numOfStarsToCreate, rating, totalNumberOfStars = 5, createEmptyStars=false) {
     const fragment = document.createDocumentFragment();
+
+    if (typeof numOfStarsToCreate !== "number" || (typeof rating  !== "number") || (typeof totalNumberOfStars !== "number")) {
+        throw new Error("One or more of the parameters entered is not a number");
+    }
     
     for (let i = 1; i <= totalNumberOfStars; i++) {
-        const aTag   = document.createElement("a");
-        const imgTag = document.createElement("img");
+        const aTag   = createElement("a");
+        const imgTag = createElement("img");
 
         aTag.dataset.value   = i;
         imgTag.dataset.value = i;
@@ -94,11 +93,13 @@ function createRatingStars(numOfStarsToCreate, rating, totalNumberOfStars = 5, c
             imgTag.src = filledStarsSrc;
             imgTag.alt = "star-filled";
             imgTag.classList.add("star-filled", "star-rating");
+          
            
         } else {
             imgTag.src = unfilledStarsSrc;
             imgTag.alt = "star-unfilled";
             imgTag.classList.add("star-unfilled", "star-rating");
+         
          
         }
 
@@ -109,4 +110,18 @@ function createRatingStars(numOfStarsToCreate, rating, totalNumberOfStars = 5, c
 }
 
 
-export default renderStar;
+function createElement(elementTagToCreate) {
+    return document.createElement(elementTagToCreate);
+}
+
+
+function toggleClearBtn(show=true) {
+     clearBtn.style.display = show ? "block" : "none"
+   
+}
+
+export {
+    renderStar,
+    createRatingStars,
+}
+

@@ -1,4 +1,4 @@
-import renderStar  from "./renderStar.js";
+import { renderStar } from "./renderStar.js";
 import { validateElement } from "../errors/customErrors.js";
 
 import { minimumCharactersToUse } from "../components/characterCounter.js";
