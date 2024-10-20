@@ -1,8 +1,9 @@
 from django.db import models
-
 from django.utils.translation import gettext_lazy as _
-
 from django.contrib.auth import get_user_model
+from django.db.models import QuerySet
+
+
 
 User = get_user_model()
 
@@ -16,8 +17,8 @@ class Testimonial(models.Model):
     """The testimonal class"""
     
     author               = models.ForeignKey(User, max_length=40, on_delete=models.CASCADE, related_name="testimonals")
-    title                = models.CharField(max_length=40)
-    user_image           = models.URLField(verbose_name="User image url", null=True, blank=True)
+    job_title            = models.CharField(max_length=20, null=True)
+    user_image           = models.URLField(verbose_name="User image url (optional)", null=True, blank=True)
     testimonial_text     = models.TextField()
     ratings              = models.SmallIntegerField()
     company_name         = models.CharField(max_length=50)
@@ -39,8 +40,15 @@ class Testimonial(models.Model):
         
     def __str__(self) -> str:
         """Returns a user friendly representation of the author and the title for the testimonal model"""
-        return f'{self.author} - {self.title[:50]}'
+        return f'{self.author} - {self.job_title[:50]}'
     
+    @property
+    def author_name(self):
+        """
+        Returns the username of the author 
+        """
+        return self.author.username.title()
+      
     @classmethod
     def get_by_user(cls, user):
         """
@@ -70,6 +78,16 @@ class Testimonial(models.Model):
             Testimonial instance: The testimonial object or None if not found.
         """
         return cls.objects.filter(author=user, id=testimonial_id).first()
+    
+    @classmethod
+    def get_approved_testimonials(cls) -> QuerySet['Testimonial']:
+        """
+        Returns all testimonials that have been approved by the admin.
+        
+        Returns:
+            A QuerySet of approved testimonials (empty if none found).
+        """
+        return cls.objects.filter(is_approved=True)
     
 
 class Tag(models.Model):

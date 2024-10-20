@@ -63,7 +63,7 @@ def create_new_testimonial(author, title:str="Testimonial test",  **kwargs:any) 
      
      testimonial = Testimonial.objects.create(
          author=author,
-         title=title,
+         job_title=title,
          user_image=user_image,
          testimonial_text=testimonial_text,
          ratings=ratings,
@@ -124,8 +124,8 @@ class TestimonialTests(TestCase):
         TESTIMONIAL_TEXT = "This is a testimonial text"
         RATINGS          = 5
         COMPANY_NAME     = "test company name"
-        COUNTRY          = "Test country"
-        LOCATION         = "Test location"
+        COUNTRY          = "test country"
+        LOCATION         = "test location"
         
         self.assertIsNotNone(self.testimonial)
         self.assertEqual(self.testimonial.author, self.testimonial_user)
@@ -138,7 +138,7 @@ class TestimonialTests(TestCase):
         
     def test__str__representation(self):
         """Test if it returns the correct representation of the testimonial string"""
-        EXPECTED_STR = f"{self.testimonial.author} - {self.testimonial.title[:50]}"
+        EXPECTED_STR = f"{self.testimonial.author} - {self.testimonial.job_title[:50]}"
         self.assertEqual(str(self.testimonial), EXPECTED_STR)
     
     def test_date_created(self):
@@ -159,12 +159,12 @@ class TestimonialTests(TestCase):
         
         testimonial = Testimonial(
             author=new_user,
-            title="",  # Title is empty
+            job_title="",  # Title is empty
             user_image="valid_image.jpg",
             testimonial_text="Valid testimonial text",
             ratings="5",
-            country="Valid country",
-            location="Valid location"
+            country="valid country",
+            location="valid location"
         )
         
         with self.assertRaises(ValidationError):
@@ -176,12 +176,12 @@ class TestimonialTests(TestCase):
         
         testimonial = Testimonial(
             author=new_user,
-            title="Valid title",
+            job_title="valid title",
             user_image="valid_image.jpg",
             testimonial_text="",  # Testimonial text is empty
             ratings="5",
-            country="Valid country",
-            location="Valid location"
+            country="valid country",
+            location="valid location"
         )
         
         with self.assertRaises(ValidationError):
@@ -193,7 +193,7 @@ class TestimonialTests(TestCase):
         
         testimonial = Testimonial(
             author=new_user,
-            title="Valid title",
+            job_title="Valid title",
             user_image="valid_image.jpg",
             testimonial_text="some random text to test",  
             ratings="", # rating is missing
@@ -210,7 +210,7 @@ class TestimonialTests(TestCase):
         
         testimonial = Testimonial(
             author=new_user,
-            title="Valid title",
+            job_title="Valid title",
             user_image="valid_image.jpg",
             testimonial_text="some random text to test",  
             ratings="5", 
@@ -227,7 +227,7 @@ class TestimonialTests(TestCase):
         
         testimonial = Testimonial(
             author=new_user,
-            title="Valid title",
+            job_title="Valid title",
             user_image="valid_image.jpg",
             testimonial_text="some random text to test",  
             ratings="5", 

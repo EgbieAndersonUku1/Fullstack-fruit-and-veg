@@ -47,15 +47,20 @@ setupEventListeners();
 
 
 // initialization of classes
-const carousel = new CarouselSlider();
+const testimonialCarousel = new CarouselSlider();
 
 
 // start the carousel
-carousel.setCardsContainer(); 
-carousel.setPrevButton();
-carousel.setNextButton();
-carousel.setCardSelector();
-carousel.init();
+try {
+    testimonialCarousel.setCardsContainer(); 
+    testimonialCarousel.setPrevButton();
+    testimonialCarousel.setNextButton();
+    testimonialCarousel.setCardSelector();
+    testimonialCarousel.init();
+} catch (error) {
+    console.warn(`The carousel for the testimonial wasn't found - ${error}`);
+}
+
 
 // carousel 2 for the juice
 const carousel2 = new CarouselSlider();
