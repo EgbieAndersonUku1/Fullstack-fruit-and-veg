@@ -51,10 +51,9 @@ def _convert_instance_fields_to_lowercase(instance: Testimonial) -> None:
         A Testimonial instance containing the fields to be modified.
     
     :returns:
-        Returns None: The instance with title, company_name, country, and location fields are modified in place.
+        Returns None: The instance with title, company_name and location fields are modified in place.
     """
     instance.title         = instance.title.lower()
-    instance.company_name  = instance.company_name.lower()
     instance.country       = instance.country.lower()
     instance.location      = instance.location.lower()
   
