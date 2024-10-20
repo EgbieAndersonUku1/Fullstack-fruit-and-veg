@@ -1,6 +1,4 @@
 
- import { validateElement } from "../errors/customErrors";
-
 function getRandomCharacter(character) {
     return character.charAt(Math.floor((Math.random() * character.length)));
 }
@@ -176,6 +174,6 @@ export {generateSessionKey,
         getCurrentPage,
         capitalize,
         disableEmptySelectOptions,
-        showSpinner,
+      
 
 };

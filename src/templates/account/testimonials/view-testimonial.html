@@ -4,8 +4,11 @@
 
 {% block body %}
 <section id="view-testimonials" aria-labelledby="view-testimonial-heading">
+
     <div class="view-testimonials__container content-container">
+
         {% include "partials/logo_link.html" %}
+        {% include "partials/messages.html" %}
       
         <nav aria-label="Breadcrumb">
             <ul class="breadcrumb">
@@ -42,12 +45,37 @@
                 </div>
             </div>
 
-            <div class="attributes padding-top-md">
-                <h3 class="text-capitalize center padding-bottom-md">{{ testimonial.title }} </h3>
+            <h3 class="text-capitalize center padding-bottom-md">{{ testimonial.title }} </h3>
 
+            <p class="underline light-bold text-capitalize">Ratings:</p>
+
+                <div class="testimonial-ratings" id="ratings-{{ testimonial.ratings }}">
+                 
+                    <a href="#" id="1" data-value="1">
+                        <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled" class="star-unfilled star-rating" data-value="1">
+                    </a>
+                    <a href="#" id="2" data-value="2">
+                        <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled" class="star-unfilled star-rating" data-value="2">
+    
+                    </a>
+                    <a href="#" id="3" data-value="3">
+                        <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled" class="star-unfilled star-rating" data-value="3">
+    
+                    </a>
+                    <a href="#" id="4" data-value="4">
+                        <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled" class="star-unfilled star-rating" data-value="4">
+    
+                    </a>
+                    <a href="#" id="5" data-value="5">
+                        <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled" class="star-unfilled star-rating" data-value="5">
+                    </a>
+                </div>
+
+            <div class="attributes padding-top-md">
+              
                 <p class="text-capitalize company-name"><span class="light-bold">Company name:</span> {{ testimonial.company_name }}</p>
                 <p class="text-capitalize location"><span class="light-bold">Location:</span> {{ testimonial.location }}</p>
-                <p class="text-capitalize rating"><span class="light-bold">Ratings:</span> {{ testimonial.ratings }}/5</p>
+                
                 <p class="text-capitalize status"><span class="light-bold">Approval status:</span> 
                     {% if testimonial.is_approved %}
                         <span class="font-green">Verified</span>
@@ -117,7 +145,7 @@
         
                     <div class="info">
                         <h2>Summary</h2>
-                        <div class="box two-column-grid">
+                        <div class="box two-column-grid margin-bottom-lg">
                             <p>Number of testimonials to delete</p>
                             <p>1</p>
                         </div>

@@ -12,6 +12,9 @@ def pre_save_testimonial(sender, instance, *args, **kwargs):
     
     if instance:
         
+        if not instance.pk or instance.pk:
+           _convert_instance_fields_to_lowercase(instance)
+        
         if instance.is_approved and instance.date_approved is None:
             instance.date_approved = timezone.now() 
             subject = "Your testimonial has been approved"
@@ -40,8 +43,20 @@ def _send_notification_to_user(send_email_func, instance, subject):
         print(f"Something went wrong with sending notification to user: {instance.author}. Error - {e}")
 
 
+def _convert_instance_fields_to_lowercase(instance: Testimonial) -> None:
+    """
+    Converts specific fields of a Testimonial instance to lowercase.
 
-
-
+    :param instance: 
+        A Testimonial instance containing the fields to be modified.
+    
+    :returns:
+        Returns None: The instance with title, company_name, country, and location fields are modified in place.
+    """
+    instance.title         = instance.title.lower()
+    instance.company_name  = instance.company_name.lower()
+    instance.country       = instance.country.lower()
+    instance.location      = instance.location.lower()
+  
 
 

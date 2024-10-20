@@ -18,9 +18,8 @@ def add_testimonial(request):
     testimonial = Testimonial.objects.filter(author=request.user).values('is_approved').first()
 
     has_already_created_testimonial = testimonial is not None
-    is_approved = testimonial['is_approved'] if testimonial else False
+    is_approved                     = testimonial['is_approved'] if testimonial else False
     
-
     if request.method == "POST":
 
         form = TestimonialForm(request.POST)

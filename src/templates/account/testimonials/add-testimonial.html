@@ -51,7 +51,7 @@
             </div>
         </div>
 
-        {% if not already_created  %} 
+        {% if not already_created and not is_editing  %} 
 
         <div class="product-rating">
             <div class="header">
@@ -126,6 +126,12 @@
 
                 {{ form.location.label }}
                 {{ form.location }}
+                 
+
+                {% if is_editing %}
+                    {{ form.ratings.label }}
+                    {{ form.ratings }}
+                {% endif %}
 
                 {{ form.testimonial_text.label }}
                 {{ form.testimonial_text }}
@@ -136,9 +142,9 @@
                 <div class="button flex-end">
 
                     {% if is_editing %}
-                        <button type="submit" class="product-review-btn">Edit</button>
+                        <button type="submit" class="testimonial-btn green-bg button-md">Update</button>
                     {% else %}
-                         <button type="submit" class="product-review-btn">Submit</button>
+                         <button type="submit" class="testimonial-btn dodger-blue-bg button-md">Submit</button>
                     {% endif %}
                 </div>
             </form>
@@ -162,7 +168,9 @@
 
 {% block script  %}
 
-    <script src="{% static 'js/modules/add-review.js' %}" type="module"></script>
+    {% if not is_editing %}
+        <script src="{% static 'js/modules/add-review.js' %}" type="module"></script>
+    {% endif %}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.all.min.js"></script>
 
 

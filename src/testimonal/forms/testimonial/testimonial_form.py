@@ -3,9 +3,10 @@ from testimonal.models import Testimonial
 
 
 class TestimonialForm(forms.ModelForm):
+    ratings = forms.IntegerField(min_value=1, max_value=5, required=False)
     class Meta:
         model = Testimonial
-        exclude = ["author", "ratings", "is_approved", 
+        exclude = ["author", "is_approved", 
                    "date_approved", "featured", "date_sent",
                    "admin_resports", "tags", "date_created"
                    ]
