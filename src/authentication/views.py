@@ -1,6 +1,9 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
 
-from django.contrib.auth import get_user_model, authenticate, login, logout 
+from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from .utils.password_validator import PasswordStrengthChecker
@@ -16,10 +19,9 @@ from .utils.send_emails_types import (send_registration_email,
                                       )
 
 
-
 # Create your views here.
-
 User = get_user_model()
+
 
 def register(request):
   
@@ -102,6 +104,8 @@ def user_login(request):
     )
 
 
+
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def user_logout(request):
     """
     Logouts the user out and clears the session from the browser.
