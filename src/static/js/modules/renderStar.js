@@ -87,8 +87,12 @@ function createRatingStars(numOfStarsToCreate, rating, totalNumberOfStars = 5, c
         const aTag   = createElement("a");
         const imgTag = createElement("img");
 
-        aTag.id   = rating;
-        aTag.href = "#";
+        aTag.id              = rating;
+        aTag.href            = "#";
+        aTag.dataset.value   = i;
+        imgTag.dataset.value = i;
+
+
 
         if (i <= numOfStarsToCreate && (!createEmptyStars)) {
             imgTag.src = filledStarsSrc;

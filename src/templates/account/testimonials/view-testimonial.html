@@ -49,24 +49,7 @@
 
                 <div class="testimonial-ratings" id="ratings-{{ testimonial.ratings }}">
                  
-                    <a href="#" id="1" data-value="1">
-                        <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled" class="star-unfilled star-rating" data-value="1">
-                    </a>
-                    <a href="#" id="2" data-value="2">
-                        <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled" class="star-unfilled star-rating" data-value="2">
-    
-                    </a>
-                    <a href="#" id="3" data-value="3">
-                        <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled" class="star-unfilled star-rating" data-value="3">
-    
-                    </a>
-                    <a href="#" id="4" data-value="4">
-                        <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled" class="star-unfilled star-rating" data-value="4">
-    
-                    </a>
-                    <a href="#" id="5" data-value="5">
-                        <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled" class="star-unfilled star-rating" data-value="5">
-                    </a>
+                     <!-- Dynamically generated -->
                 </div>
 
             <div class="attributes padding-top-md">
@@ -81,7 +64,7 @@
                         <span class="highlight">Waiting approval by admin </span>
                     {% endif %}
                 </p>
-                <p class="text-capitalize date-created"><span class="light-bold">Created on:</span> {{ testimonial.date_sent }}</p>
+                <p class="text-capitalize date-created"><span class="light-bold">Created on:</span>{{ testimonial.date_sent }}</p>
                 <p class="text-capitalize date-approved"><span class="light-bold">Approved on:</span> 
                     {% if testimonial.date_approved %}
                         {{ testimonial.date_approved }}
@@ -112,7 +95,7 @@
             <hr class="dividor padding-top-md">
             <div class="user-attributes flex-end">
                 <div class="grid">
-                    <p class="text-capitalize">{{ testimonial.author.username }}</p>
+                    <p class="text-capitalize">@{{ testimonial.author.username }}</p>
 
                     {% if testimonial.updated_on %}
                         <p class="text-capitalize">Lasted updated on {{ testimonial.updated_on }}</p>
@@ -136,7 +119,7 @@
                 <div class="body padding-top-md">
                     <div class="info">
                         <h3>Testimonial</h3>
-                        <p class="padding-left-lg">1. Testimonial: <span class="font-green testimionial-info"> {{ testimonial.author }}</span> - 
+                        <p class="padding-left-lg">1. Testimonial: <span class="font-green testimionial-info">{{ testimonial.author }}</span> - 
                             <span class="font-green testimionial-info">{{ testimonial.job_title }}</span> 
                           
                     </div>
