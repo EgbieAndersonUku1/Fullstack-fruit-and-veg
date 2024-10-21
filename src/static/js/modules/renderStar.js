@@ -92,8 +92,6 @@ function createRatingStars(numOfStarsToCreate, rating, totalNumberOfStars = 5, c
         aTag.dataset.value   = i;
         imgTag.dataset.value = i;
 
-
-
         if (i <= numOfStarsToCreate && (!createEmptyStars)) {
             imgTag.src = filledStarsSrc;
             imgTag.alt = "star-filled";

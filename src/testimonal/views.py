@@ -37,7 +37,7 @@ def add_testimonial(request):
                country=form.cleaned_data["country"],
                location=form.cleaned_data["location"],
            )
-           
+        
            testimonal.save()
            messages.success(request, "You have successfully created a testimonial. We will let you know once your testimonial has been approved")
            
