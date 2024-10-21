@@ -129,21 +129,24 @@ EMAIL_HOST_PASSWORD = getenv('EMAIL_HOST_PASSWORD')
 # Determine database configuration based on the USE_LOCAL_DB environment variable
 # If USE_LOCAL_DB is set to True, use local database settings
 # Otherwise, use the production database settings
+USE_LOCAL_DB = getenv("USE_LOCAL_DB")
 
-if getenv("USE_LOCAL_DB"):
-    DB_NAME = getenv("DB_LOCAL_NAME")
-    DB_USER = getenv("DB_LOCAL_USER")
+
+if USE_LOCAL_DB == "True":
+    print("Using local postgres db")
+    DB_NAME     = getenv("DB_LOCAL_NAME")
+    DB_USER     = getenv("DB_LOCAL_USER")
     DB_PASSWORD = getenv("DB_LOCAL_PASSWORD")
-    DB_HOST = getenv("DB_LOCAL_HOST")
-    DB_PORT = getenv("DB_LOCAL_PORT", "5432")
-    print("Using local db")
+    DB_HOST     = getenv("DB_LOCAL_HOST")
+    DB_PORT     = getenv("DB_LOCAL_PORT", "5432")
 else:
-    DB_NAME = getenv("DB_NAME")
-    DB_USER = getenv("DB_USER")
+    print("Using external postgres db")
+    DB_NAME     = getenv("DB_NAME")
+    DB_USER     = getenv("DB_USER")
     DB_PASSWORD = getenv("DB_PASSWORD")
-    DB_HOST = getenv("DB_HOST")
-    DB_PORT = getenv("DB_PORT")
-    print("Using external db")
+    DB_HOST     = getenv("DB_HOST")
+    DB_PORT     = getenv("DB_PORT")
+   
    
 
 

@@ -193,6 +193,17 @@ async function processRegistrationform(formData) {
 }
 
 
+/**
+ * Retrieves the value of the specified query parameter from the current URL.
+ * 
+ * @param {string} params - The name of the query parameter to extract.
+ * @returns {string|null} - The value of the query parameter, or null if it does not exist.
+ */
+function getQueryParams(params) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(params);
+}
+
 
 /**
  * Handles the submission of the login form by processing and validating the form data.
@@ -220,7 +231,10 @@ async function handleLoginFormSubmit(e) {
 
     if (resp) {
         console.log("You have registed...");
-        window.location.href = "/account/";
+        const nextUrl = getQueryParams("next");
+
+        window.location.href = nextUrl ? nextUrl : "/account/";
+       
       
     }
       

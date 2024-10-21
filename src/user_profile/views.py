@@ -1,4 +1,7 @@
 import json
+
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.http import JsonResponse
@@ -14,6 +17,7 @@ from .models import BillingAddress, ShippingAddress
 
 # Create your views here.
 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def user_profile(request):
    
     user_profile_form     = UserProfileForm(instance=request.user.profile)
@@ -63,8 +67,7 @@ def user_profile(request):
     return render(request, "user_profile/user_profile.html", context=context)
 
 
-
-
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def manage_billing_addresses(request):
     
     profile            = request.user.profile
@@ -81,6 +84,7 @@ def manage_billing_addresses(request):
     return render(request, "profile/manage_billing_addresses.html", context)
 
 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def manage_shippng_addresses(request):
     profile            = request.user.profile
     shipping_addresses = ShippingAddress.objects.filter(user_profile=profile) 
@@ -95,6 +99,7 @@ def manage_shippng_addresses(request):
 
 
 @require_POST
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def delete_address(request):
     """
     Deletes a specified address (billing or shipping) for the user's profile.
@@ -142,6 +147,7 @@ def delete_address(request):
 
 
 @require_POST
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def mark_as_primary_address(request):
     """
     Marks a specified billing address as the primary address for the user's profile.

@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
 
 from .models import Testimonial, TestimonialMessages
 from .forms.testimonial.testimonial_form import TestimonialForm
@@ -7,10 +9,12 @@ from  authentication.utils.send_emails_types import notify_admin_of_new_testimon
 # Create your views here.
 
 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def reviews_section(request):
     return render(request, "account/testimonials/reviews-and-feedback.html")
 
 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def add_testimonial(request):
     
     # Retrieve only the 'is_approved' field for the testimonial created by the current user, if it exists.
@@ -63,11 +67,13 @@ def add_testimonial(request):
     return render(request, "account/testimonials/add-testimonial.html", context=context)
 
 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def all_reviews(request):
     context = {}
     return render(request, "account/testimonials/review-section.html", context=context)
 
 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def display_testimonial(request):
     
     testimonial = Testimonial.get_by_user(request.user)
@@ -77,6 +83,7 @@ def display_testimonial(request):
     return render(request, "account/testimonials/view-testimonial.html", context=context)
 
 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def delete_testimonial(request, id):
     
     testimonial = Testimonial.get_by_user_and_id(request.user, id)
@@ -88,6 +95,7 @@ def delete_testimonial(request, id):
     return redirect("reviews")
 
 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def edit_testimonial(request, username, id):
     
     # Ensure the testimonial belongs to the logged-in user
