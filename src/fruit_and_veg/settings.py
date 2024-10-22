@@ -58,8 +58,10 @@ INSTALLED_APPS = [
     # my apps
     "home.apps.HomeConfig",
     "account.apps.AccountConfig",
+    
     "authentication.apps.AuthenticationConfig",
     "user_profile.apps.UserProfileConfig",
+    "subscription.apps.SubscriptionConfig",
     "testimonal.apps.TestimonalConfig",
                        
     # third party django apps
