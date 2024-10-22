@@ -91,6 +91,6 @@ class UnsubscribedNewsletterSubscription(NewsletterSubscription):
 
 class SubscribedNewsletterSubscription(NewsletterSubscription):
     class Meta:
-        proxy              = True
+        proxy               = True
         verbose_name        = "Subscribed Newsletter Subscription"
         verbose_name_plural = "Subscribed Newsletter Subscriptions"

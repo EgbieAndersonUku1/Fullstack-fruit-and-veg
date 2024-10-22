@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from .utils.password_validator import PasswordStrengthChecker
-from .views_helper import validate_helper
+from utils.post_json_validator import validate_json_and_respond
 from utils.generator import generate_forgotten_password_url
 from .forms.register_form import RegisterForm
 from .forms.passwords.forgotten_password import ForgottenPasswordForm
@@ -76,6 +76,7 @@ def user_login(request):
         Returns:
             bool: True if the user is authenticated and active, otherwise False.
         """
+        
         email    = data.get("email")
         password = data.get("password")
         user     = authenticate(request, email=email, password=password)
@@ -96,7 +97,7 @@ def user_login(request):
         return False, error_msg
 
     
-    return validate_helper(request,
+    return validate_json_and_respond(request,
                             field_name,
                             follow_up_message='Credentials are valid.',
                             validation_func=validate_user_login,
@@ -144,7 +145,7 @@ def validate_password(request):
         checker = PasswordStrengthChecker(password)  
         return checker.is_strong_password(), error_msg
 
-    return validate_helper(request, field_name, follow_up_message='Password is valid', 
+    return validate_json_and_respond(request, field_name, follow_up_message='Password is valid', 
                            validation_func=password_strength_checker)
 
 
@@ -172,7 +173,7 @@ def validate_email(request):
     def is_email_unique(email):
         return not User.objects.filter(email=email).exists(), error_msg
     
-    return validate_helper(request, field_name, follow_up_message='Email is valid', 
+    return validate_json_and_respond(request, field_name, follow_up_message='Email is valid', 
                            validation_func=is_email_unique
                            )
 
@@ -201,7 +202,7 @@ def validate_username(request):
     def is_username_unique(username):
         return not User.objects.filter(username=username).exists(), error_msg
     
-    return validate_helper(request, field_name, follow_up_message='Username is valid',  
+    return validate_json_and_respond(request, field_name, follow_up_message='Username is valid',  
                           validation_func=is_username_unique)
 
 

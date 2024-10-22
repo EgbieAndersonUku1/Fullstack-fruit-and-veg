@@ -24,6 +24,8 @@ class UnsubscribedNewsletterSubscriptionAdmin(BaseNewsletterAdmin):
 
 
 class SubscribedNewsletterSubscriptionAdmin(BaseNewsletterAdmin):
+    list_filter = ["frequency"]
+    
     def get_queryset(self, request):
         """
         Override the default queryset to show only subscribed users.
