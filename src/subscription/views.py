@@ -1,6 +1,3 @@
-import json
-
-
 from django.contrib import messages
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
@@ -10,8 +7,11 @@ from django.conf import settings
 from django.db import IntegrityError
 
 from utils.post_json_validator import validate_json_and_respond
-from utils.validator import validate_email
+from utils.validator import validate_email_address
+from .utils.sessions import set_session
+
 from .models import NewsletterSubscription
+from utils.generator import generate_token
 
 
 # Create your views here.
@@ -25,26 +25,27 @@ def subscribe_user(request):
     
     def subscribe(data:dict):
         
-        
-        email     = data.get("email", "")
-        is_valid  = False
-        error_msg = None
-        
+        email                = data.get("email", "")
+        is_valid, error_msg  = False, None
+              
         if not email:
             error_msg = "The email field cannot be empty"
             return is_valid, error_msg
         
-        if not validate_email(email):
+        if not validate_email_address(email):
              error_msg = "The email has an invalid format"
              return is_valid, error_msg
             
         user  = request.user
+        
         try:
             NewsletterSubscription.objects.create(user=user, email=email)
-        except IntegrityError:
-            error_msg = "There is a user that has been subscribed using that email"
+            set_session(request, session_name="email", email=email)
+                     
+        except IntegrityError as e:
+            error_msg = f"There is a user by that email"
         else:
-            is_valid = True
+            is_valid  = True
             error_msg = ""
         return is_valid, error_msg
     

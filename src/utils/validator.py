@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 
 
 
-def validate_email(email):
+def validate_email_address(email):
     """
     Takes an email and validate if the email has the right
     format. If the email has an incorrect format returns False

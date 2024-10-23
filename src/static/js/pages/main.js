@@ -1,6 +1,6 @@
 
 import { addCardEventListeners, addImageRotationListeners } from "../handlers/itemCardInteractions.js";
-import { handleSubscribeForm, setupEventListeners } from "../handlers/subscribeFormHandler.js";
+import { handleSubscribeForm} from "../handlers/subscribeFormHandler.js";
 
 
 import { closeAddToCartMsg as handleAddToCartCloseMsg, closeWishlistMessage as handleCloseWishlistMsg} from "../messages/messages.js";
@@ -38,12 +38,7 @@ const sauceCards                   = document.querySelectorAll("#carousel6 .caro
 const dairyProductsCards           = document.querySelectorAll("#carousel7 .carousel-cards-wrapper .card-carousel");
 const grainProductCards            = document.querySelectorAll("#carousel8 .carousel-cards-wrapper .card-carousel");
 
-// This SECRET KEY will be stored her for now, later it will be stored in .env file and used to create JWT_TOKEN
-const SECRET_KEY = "SessionKey$-`jrj]n~h~}XFRCY,`%kv*tX);AS+U_&jwr;FJy'iZHTq~o;%&r>x)h>[+\"<E=G+`%bAa\"y'N\"ct-])Ry\"^}au";
 
-
-// setup eventlistListener
-setupEventListeners();
 
 
 // initialization of classes
@@ -137,7 +132,7 @@ addToItemCloseIcon.addEventListener("click", handleAddToCartCloseMsg)
 
 
 // subscribe form event iistener
-subscribeForm.addEventListener("submit", async (event) => {await handleSubscribeForm(event, subscribeForm, SECRET_KEY);});
+subscribeForm?.addEventListener("submit", (event) => {handleSubscribeForm(event, subscribeForm)});
   
 // runs the countdown
 dealCountDown();

@@ -97,6 +97,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'testimonal.context_processor.get_approved_testimonials',
+                'subscription.context_processor.get_subscription_session',
             ],
         },
     },

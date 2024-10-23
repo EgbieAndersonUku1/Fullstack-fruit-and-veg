@@ -41,20 +41,22 @@ def validate_json_and_respond(request, field_name, follow_up_message, validation
 
         response = validate_json_and_respond(request, "email", "Email validated successfully", validate_email)
      """
-    if request.method != 'POST':
-        return create_json_response(False, "Invalid request method", 405)
+  
+    if request.method == 'POST':
+        try:
+            # Parse JSON body
+            data = json.loads(request.body.decode('utf-8'))
+            resp = data.get(field_name)
 
-    try:
-        data = json.loads(request.body.decode('utf-8'))
-        resp = data.get(field_name)
+            if not resp:
+                return create_json_response(False, f"{field_name.title()} is required", 422)
 
-        if not resp:
-            return create_json_response(False, f"{field_name.title()} is required", 422)
+            is_valid, error_msg = validation_func(resp)
+            message = follow_up_message if is_valid else (error_msg or 'There was a problem with your request. Please review and submit again.')
 
-        is_valid, error_msg = validation_func(resp)
-        message             = follow_up_message if is_valid else (error_msg or 'Invalid input. Please review and try again.')
+            return create_json_response(is_valid, message, status=200)
 
-        return create_json_response(is_valid, message, 200 if is_valid else 422)
-
-    except json.JSONDecodeError:
-        return create_json_response(False, "Invalid JSON", 400)
+        except json.JSONDecodeError:
+            return create_json_response(False, message="Invalid JSON", status=400)
+         
+    return create_json_response(False, message="Invalid request method", status=405)
