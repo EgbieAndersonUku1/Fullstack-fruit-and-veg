@@ -1,22 +1,38 @@
 
+{% if request.user.is_authenticated %}
 <section class="subscribe" aria-labelledby="subscribe-title">
-    <div class="container">
-        <div class="subscribe__information">
-            <h2 id="subscribe-title">Join Our Newsletter, Get 30% Off</h2>
-            <p>Get the latest information on events, sales, offers, and promotions</p>
-        </div>
+    <div class="container center">
 
-        <div class="subscribe__form">
-            <form action="/" method="post" id="subscribe-form" class="subscribe-form"
-                aria-labelledby="subscribe-title">
-                <fieldset>
-                    <legend class="visually-hidden">Subscribe to our newsletter</legend>
-                    <label for="email" class="visually-hidden">Email address</label>
-                    <input type="email" name="email" id="email" required placeholder="Email..."
-                        class="subscribe__form__input-field">
-                    <button type="submit" class="subscribe-btn button-sm">Subscribe</button>
-                </fieldset>
-            </form>
+        {% if subscription_session %}
+        <div class="subscribe__information">
+           
+            <h1>Hi, {{ request.user.username | title }}!</h1>
+            <p>We're thrilled to have you with us! By subscribing to our newsletter, you'll be the first to know about exclusive events, amazing sales, and special promotions tailored just for you.</p>
+            <p>Plus, enjoy an instant <strong>30% off</strong> your next purchase as a warm welcome gift. Don't miss out on the latest updates and offers—subscribe today!</p>
+            <p>Thank you for being a valued member of our community!</p>
         </div>
+        {% else %}
+
+            <div class="subscribe__form subscribe__information">
+                <h2 id="subscribe-title" class="padding-bottom-sm">Join Our Newsletter and Enjoy 30% Off!</h2>
+                <form action="/" method="post" id="subscribe-form" class="subscribe-form"
+                    aria-labelledby="subscribe-title">
+                    {% csrf_token %}
+
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+                    
+                    <fieldset>
+                        <legend class="visually-hidden">Subscribe to our newsletter</legend>
+                        <label for="email" class="visually-hidden">Email address</label>
+                        <input type="email" name="email" id="email" required placeholder="Email..."
+                            class="subscribe__form__input-field">
+                        <button type="submit" class="subscribe-btn button-sm">Subscribe</button>
+                    </fieldset>
+                </form>
+            </div>
+         {% endif %}
     </div>
 </section>
+
+{% endif %}

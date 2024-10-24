@@ -1,84 +1,107 @@
-import { 
-    centerSubscribeText, 
-    displaySubscribedMessage, 
-    removeSubscriptionForm }  from "../builders/subscribeElements.js";
-
+import fetchData from "../utils/fetch.js";
 import AlertUtils from "../utils/alerts.js";
-
-import { JWT } from "../services/jwtToken.js";
-
-    
-import { getItemFromLocalStorage as getJWtToken,
-    saveToLocalStorage      as setJWtToken
-   } from "../utils/utils.js";
+import { validateElement } from "../errors/customErrors.js";
 
 
-async function handleSubscribeForm(e, subscribeForm, secret_key) {
+const csrfTokenFieldElement         = document.querySelector("input[name='csrfmiddlewaretoken']");
+const subscribeFormContainerElement = document.querySelector(".subscribe__form");
+
+
+validateElement(csrfTokenFieldElement, "csrfTokenFieldElement - This is not a valid HTML element", true);
+
+
+const CSRF_TOKEN = csrfTokenFieldElement.value;
+
+
+async function handleSubscribeForm(e, subscribeForm) {
     e.preventDefault();
     
     const form         = new FormData(subscribeForm);
     const emailAddress = form.get("email");
 
-    // Not built yet but a fetch method will be here that will subscribe to the backend
-    // by passing in the email address
+    try {
+        const response = await fetchData({
+            url: "subscription/subscribe/",
+            csrfToken: CSRF_TOKEN,
+            body:{ subscription: {email: emailAddress} },
     
-    // Example fetch call (commented out until implemented):
-    // const response = await fetch('backend-endpoint', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         'Authorization': `Bearer ${secret_key}`
-    //     },
-    //     body: JSON.stringify({ email: emailAddress })
-    // });
+        });
 
-  
-    AlertUtils.showAlert({
-        title: "Subscription Successful!",
-        text: "Thank you for subscribing to our site. Stay tuned for updates!",
-        icon: "success",
-        confirmButtonText: "Great!!"
+        handleResponse(response);
+        createSubscriptionSuccessMessage();
 
-    })
-
-    const jwt       = new JWT();
-    const milliseconds = 1000;
-    const payload   = {
-        email: emailAddress,
-        role: "subcribed",
-        lat:  Math.floor(Date.now() / milliseconds),  // Current UNIX timestamp
-        exp: 2145916800                               // Expires on January 1, 2038 (UNIX timestamp)
-
+    } catch (error) {
+        console.log(error);
+        handleErrorResponse();
     }
-    const JWT_TOKEN = await jwt.createJWTToken(payload, secret_key);
-    
-    if (JWT_TOKEN) {
-        setJWtToken("subscribed", JWT_TOKEN);
-        centerSubscribeText();
-        removeSubscriptionForm();
-        displaySubscribedMessage();
-    }
-
-
+   
 }
 
 
+async function handleResponse(response) {
+    
+    if (typeof response != "object") {
+        throw new Error(`The response object must be an object, not type <${typeof response}>`);
+    }
 
-function setupEventListeners() {
-    document.addEventListener("DOMContentLoaded", () => {
-        const token = getJWtToken("subscribed");
-        if (token) {
-            removeSubscriptionForm();
-            displaySubscribedMessage();
-            centerSubscribeText();
-        }
+    // Check keys in the response object
+    if (!("IS_VALID" in response) || !("message" in response)) {
+        throw new Error("One or more keys is missing in the response object. Expected keys `isValid` and `message`.");
+    }
+
+    const isValid = response.IS_VALID;
+
+    const title             = isValid ? "Subscription Successful!" : "Subscription Unsuccessful";
+    const icon              = isValid ? "success" : "warning";
+    const confirmButtonText = isValid ? "Great!!" : "Ok";
+
+    AlertUtils.showAlert({
+        title: title,
+        text: response.message,
+        icon: icon,
+        confirmButtonText: confirmButtonText,
     });
+}
 
+  
+
+function handleErrorResponse() {
+    AlertUtils.showAlert({
+        title: "Subscription Unsuccessful!",
+        text: "Something went wrong, please try again later",
+        icon: "error",
+        confirmButtonText: "Sorry!!"
+
+    })
+}
+
+function clearSubscriptionContainer() {
+    subscribeFormContainerElement.innerHTML = "";
+}
+
+function createParagraph(textContent) {
+    const pElement = document.createElement("p");
+    pElement.textContent = textContent;
+    return pElement;
+}
+
+function createSubscriptionSuccessMessage() {
+    clearSubscriptionContainer();
+
+    const welcomeMessage = "We're thrilled to have you with us! By subscribing to our newsletter, you'll be the first to know about exclusive events, amazing sales, and special promotions tailored just for you.";
+    const offerMessage = "Plus, enjoy an instant 30% off your next purchase as a warm welcome gift. Don't miss out on the latest updates and offers—subscribe today!";
+    const thankYouMessage = "Thank you for being a valued member of our community";
+
+    const messages = [welcomeMessage, offerMessage, thankYouMessage];
+
+    messages.forEach(message => {
+        subscribeFormContainerElement.appendChild(createParagraph(message));
+    });
 }
 
 
 
 export  {
-    handleSubscribeForm,
-    setupEventListeners 
+    handleSubscribeForm
+  
 }

@@ -1,0 +1,60 @@
+from django.contrib import messages
+from django.shortcuts import render
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
+
+from django.db import IntegrityError
+
+from utils.post_json_validator import validate_json_and_respond
+from utils.validator import validate_email_address
+from .utils.sessions import set_session
+
+from .models import NewsletterSubscription
+from utils.generator import generate_token
+
+
+# Create your views here.
+User = get_user_model()
+
+
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name="next")
+def subscribe_user(request):
+    
+    field_name = "subscription"
+    
+    def subscribe(data:dict):
+        
+        email                = data.get("email", "")
+        is_valid, error_msg  = False, None
+              
+        if not email:
+            error_msg = "The email field cannot be empty"
+            return is_valid, error_msg
+        
+        if not validate_email_address(email):
+             error_msg = "The email has an invalid format"
+             return is_valid, error_msg
+            
+        user  = request.user
+        
+        subscription = NewsletterSubscription.objects.filter(user=user, email=email.lower()).exists()
+        
+        if not subscription:
+            NewsletterSubscription.objects.create(user=user, email=email)
+            set_session(request, session_name="email", email=email)
+            is_valid, error_msg = True, ''
+        else: 
+             error_msg = f"There is a user by that email"
+    
+        return is_valid, error_msg
+            
+    return validate_json_and_respond(request=request, 
+                                     field_name=field_name,
+                                     follow_up_message="Successfully subscribed",
+                                     validation_func=subscribe
+                                     )
+        
+        
+        
+

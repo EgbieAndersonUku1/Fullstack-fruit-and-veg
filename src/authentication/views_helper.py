@@ -6,29 +6,6 @@ from django.contrib import messages
 from utils.generator import generate_token, generate_verification_url
 
 
-def validate_helper(request, field_name, follow_up_message, validation_func):
-    if request.method == 'POST':
-        try:
-            # Parse JSON body
-            data = json.loads(request.body.decode('utf-8'))
-            resp = data.get(field_name)
-
-            if not resp:
-                return JsonResponse({"IS_VALID": False, "message": f"{field_name.title()} is required"}, status=400)
-
-            is_valid, error_msg = validation_func(resp)
-            
-            return JsonResponse({
-                "IS_VALID": is_valid,
-                "message": follow_up_message if is_valid else (error_msg or 'There was a problem with your request. Please review and submit again.'),
-            }, status=200)
-
-        except json.JSONDecodeError:
-            return JsonResponse({"IS_VALID": False, "message": "Invalid JSON"}, status=400)
-
-    return JsonResponse({"IS_VALID": False, "message": "Invalid request method"}, status=405)
-
-
 def send_verification_email(request, user, subject, follow_up_message, send_func, generate_verification_url_func=None, **kwargs):
     """
     Sends a verification email using the provided sending function.
@@ -71,7 +48,6 @@ def send_verification_email(request, user, subject, follow_up_message, send_func
         verification_url = generate_verification_url_func(request, user)
       
     try:
-       
         email_sent = send_func(
             subject=subject,
             from_email=settings.EMAIL_HOST_USER,

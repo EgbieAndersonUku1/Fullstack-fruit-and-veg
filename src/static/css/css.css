@@ -1705,6 +1705,7 @@ button:hover,
 /* The latest section update */
 #lastest-updates {
     margin-top: 72px;
+    margin-bottom: 70px;
 }
 
 #lastest-updates>div:nth-child(1)>hr:nth-child(2) {
@@ -1782,11 +1783,20 @@ button:hover,
 .subscribe__form__input-field {
     font-size: var(--font-size-normal);
     font-family: "Poppins", sans-serif;
-    width: 60%;
+    width: 40%;
+}
+
+.subscribe__information {
+    width: 70%;
+    margin: auto;
+}
+
+.subscribe__information p + p {
+    padding-top: var(--padding-sm);
 }
 
 .subscribe__information p:first-child {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: bold;
 }
 
@@ -1815,7 +1825,7 @@ button:hover,
     width: var(--global-width-md);
     margin: auto;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
 }
 
 
@@ -1890,6 +1900,8 @@ footer {
     background-color: #6B8E23;
     color: #FFFFFF;
     font-weight: 700;
+  
+
 
 }
 
@@ -2583,7 +2595,7 @@ footer .container h4 {
 .authentication {
     border: 1px solid rgb(3, 3, 56);
     background: white;
-    height: 660px;
+    height: 95%;
     margin: auto;
     width: 80%;
 
