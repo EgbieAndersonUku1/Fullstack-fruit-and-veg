@@ -15,6 +15,14 @@ class NewsletterSubscription(models.Model):
             models.Index(fields=['user'])  # Index user only, email is already unique
         ]
         
+    FREQUENCY_MAPPING = {
+        "d": "Daily",
+        "w": "Weekly",
+        "bw": "Bi-weekly",
+        "m": "Monthly",
+        "q": "Quarterly",
+    }
+    
     class Frequency:
         DAILY     = "d"
         WEEKLY    = "w"
@@ -29,15 +37,51 @@ class NewsletterSubscription(models.Model):
             (QUARTERLY, "Quarterly")
         ]
         
-    user           = models.ForeignKey(User, on_delete=models.CASCADE, related_name="newsletter_subscriptions")
-    email          = models.EmailField(max_length=255, unique=True)
-    subscribed_on  = models.DateTimeField(auto_now_add=True)
-    modified_on    = models.DateTimeField(auto_now=True)
-    unsubscribed   = models.BooleanField(default=False) 
-    frequency      = models.CharField(choices=Frequency.CHOICES, max_length=2, default=Frequency.MONTHLY)
+    user                     = models.ForeignKey(User, on_delete=models.CASCADE, related_name="newsletter_subscriptions")
+    email                    = models.EmailField(max_length=255, unique=True)
+    subscribed_on            = models.DateTimeField(auto_now_add=True)
+    modified_on              = models.DateTimeField(auto_now=True)
+    unsubscribed             = models.BooleanField(default=False) 
+    frequency                = models.CharField(choices=Frequency.CHOICES, max_length=2, default=Frequency.MONTHLY)
+    unsubscribed_on          = models.DateTimeField(blank=True, null=True)
+    reason_for_unsubscribing = models.CharField(max_length=255, blank=True, null=True)
     
     def __str__(self) -> str:
         return self.email 
+    
+    @property
+    def date_unsubscribed(self):
+        """
+        Returns the date the user unsubscribed, to be used in the admin interface.
+        
+        If the user has unsubscribed, this will display the 'unsubscribed_on' date.
+        If not, it will display 'N/A' to indicate no unsubscription has occurred.
+        
+        Returns:
+            str: 'N/A' if the user has not unsubscribed, otherwise the date they unsubscribed.
+        """
+        return "N/A" if self.unsubscribed_on is None else self.unsubscribed_on
+
+    @property
+    def get_frequency(self):
+        """
+        Returns a human-readable frequency name.
+
+        The database stores the frequency as single letters to save space.
+        This method translates the stored frequency code into a descriptive 
+        string format when accessed.
+
+        Frequency mapping:
+            'd'  -> "Daily"
+            'w'  -> "Weekly"
+            'bw' -> "Bi-weekly"
+            'm'  -> "Monthly"
+            'q'  -> "Quarterly"
+
+        Example:
+            If the frequency is stored as 'd', this method returns "Daily".
+        """
+        return self.FREQUENCY_MAPPING.get(self.frequency, "Unknown")
     
     @classmethod
     def get_by_user(cls, user: "User"): 
@@ -110,7 +154,6 @@ class UnsubscribedNewsletterSubscription(NewsletterSubscription):
         proxy              = True
         verbose_name        = "Unsubscribed Newsletter Subscription"
         verbose_name_plural = "Unsubscribed Newsletter Subscriptions"
-
 
 
 class SubscribedNewsletterSubscription(NewsletterSubscription):

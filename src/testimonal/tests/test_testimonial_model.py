@@ -124,7 +124,7 @@ class TestimonialTests(TestCase):
         TESTIMONIAL_TEXT = "This is a testimonial text"
         RATINGS          = 5
         COMPANY_NAME     = "test company name"
-        COUNTRY          = "test country"
+        COUNTRY          = "Test country"
         LOCATION         = "test location"
         
         self.assertIsNotNone(self.testimonial)

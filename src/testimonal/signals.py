@@ -3,7 +3,7 @@ from django.db.models.signals import pre_save
 from django.utils import timezone
 
 from .models import Testimonial
-from authentication.utils.send_emails_types import notify_user_of_approved_testimonial, notify_user_of_admin_response
+from utils.send_emails_types import notify_user_of_approved_testimonial, notify_user_of_admin_response
 
 
 @receiver(pre_save, sender=Testimonial)

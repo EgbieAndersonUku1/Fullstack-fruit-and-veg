@@ -28,8 +28,6 @@ async function handleSubscribeForm(e, subscribeForm) {
         });
 
         const success = await handleResponse(response);
-
-        console.log(success);
         if (success) {
             createSubscriptionSuccessMessage();
         };

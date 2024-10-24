@@ -5,9 +5,20 @@ from .models import NewsletterSubscription, UnsubscribedNewsletterSubscription, 
 # Register your models here.
 
 class BaseNewsletterAdmin(admin.ModelAdmin):
-    list_display       = ["id", "user", "email", "subscribed_on", "unsubscribed", "frequency", "modified_on"]
+    list_display       = ["id", "user", "email", "subscribed_on", "unsubscribed", "frequency", "date_unsubscribed"]
     list_display_links = ["id", "user"]
     list_per_page      = 40
+    readonly_fields    = ["subscribed_on", "modified_on"]
+    fieldsets = [
+        (None, {"fields": ["user", "email", "frequency", "subscribed_on", "modified_on"]}),
+         ("Unsubscribe", {"fields": ["unsubscribed", "reason_for_unsubscribing", "unsubscribed_on"]}),
+        
+    ]
+
+    def date_unsubscribed(self, obj):
+        return obj.date_unsubscribed
+    
+    date_unsubscribed.short_description = "Date unsubscribed"
       
       
 class NewsletterSubscriptionAdmin(BaseNewsletterAdmin):

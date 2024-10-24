@@ -1,0 +1,22 @@
+
+
+Hello, Admin,
+
+We’re excited to inform you that a new user has just subscribed to our platform! 🎉
+
+Here are the details of the new subscriber:
+
+Name:  {{ username }}  
+Email:  {{ email }} 
+Subscription Date: {{ subscription_date }}   
+Frequency: {{ frequency }} 
+
+We’re thrilled to have another member joining us on this journey and look forward to providing them with an exceptional experience.
+
+If you have any questions or need further details, please let me know.
+
+
+Best regards,  
+EUOrganics
+
+
