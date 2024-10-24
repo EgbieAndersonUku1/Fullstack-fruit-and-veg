@@ -55,13 +55,33 @@ class NewsletterSubscription(models.Model):
             NewsletterSubscription: The subscription instance associated with the user.
             None: If no subscription is found for the user.
         """
-        if not isinstance(user, User):
-            raise TypeError(f"Expected an instance of User, got {type(user).__name__}")
-
+        cls._is_user_instance_valid(user)
+        
         try:
             return cls.objects.get(user=user)
         except cls.DoesNotExist:
             return None
+    
+    @classmethod
+    def get_by_user_and_email(cls, user: "User", email:str): 
+        """
+        Takes a user instance and email and returns the subscription associated with that user.
+        Returns None if no subscription is associated with the account.
+
+        Raises:
+            TypeError: If the provided user is not an instance of the User model.
+
+        Args:
+            user (User): The user instance used to retrieve the subscription.
+            email (Str): The email used to retreive the subscription
+
+        Returns:
+            NewsletterSubscription: The subscription instance associated with the user.
+            None: If no subscription is found for the user.
+        """
+
+        cls._is_user_instance_valid(user)
+        return cls.objects.filter(user=user, email=email.lower()).first()
     
     def unsubscribe(self):
         """
@@ -80,7 +100,11 @@ class NewsletterSubscription(models.Model):
             self.unsubscribed  = False
             self.save()
 
-
+    def _is_user_instance_valid(cls, user):
+        if not isinstance(user, User):
+            raise TypeError(f"Expected an instance of User, got {type(user).__name__}")
+        
+        
 class UnsubscribedNewsletterSubscription(NewsletterSubscription):
     class Meta:
         proxy              = True

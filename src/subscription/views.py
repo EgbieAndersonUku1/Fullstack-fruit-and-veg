@@ -38,17 +38,17 @@ def subscribe_user(request):
             
         user  = request.user
         
-        try:
+        subscription = NewsletterSubscription.objects.filter(user=user, email=email.lower()).exists()
+        
+        if not subscription:
             NewsletterSubscription.objects.create(user=user, email=email)
             set_session(request, session_name="email", email=email)
-                     
-        except IntegrityError as e:
-            error_msg = f"There is a user by that email"
-        else:
-            is_valid  = True
-            error_msg = ""
-        return is_valid, error_msg
+            is_valid, error_msg = True, ''
+        else: 
+             error_msg = f"There is a user by that email"
     
+        return is_valid, error_msg
+            
     return validate_json_and_respond(request=request, 
                                      field_name=field_name,
                                      follow_up_message="Successfully subscribed",
