@@ -13,7 +13,7 @@ from .forms.register_form import RegisterForm
 from .forms.passwords.forgotten_password import ForgottenPasswordForm
 from .forms.passwords.new_password import NewPasswordForm
 from .views_helper import send_verification_email
-from .utils.send_emails_types import (send_registration_email, 
+from utils.send_emails_types import (send_registration_email, 
                                       resend_expired_verification_email, 
                                       send_forgotten_password_verification_email
                                       )

@@ -1,6 +1,6 @@
 from django.conf import settings
 
-from authentication.utils.send_email import send_email
+from utils.send_email import send_email
 
 
 def send_registration_email(subject, from_email, user, verification_url):
@@ -142,6 +142,34 @@ def notify_user_of_admin_response(subject, user):
 
 
 
+
+def notify_admin_of_new_subscriber(subject, user):
+    """
+    Sends an email to the admin of the site to notify them that a new subscriber 
+    """
+    email_template_html = "email_assets/notify_admin_new_subscriber.html"
+    email_template_text = "email_assets/notify_admin_new_subscriber.txt"
+    
+    admin_email_address = settings.EMAIL_HOST_USER
+    
+    return _send_email_helper(email_template_html,
+                             email_template_text,
+                             subject=subject,
+                             from_email=admin_email_address,
+                             to_email=admin_email_address,
+                             new_subscriber=user,
+                             )
+
+
+def notify_admin_of_unsubscribed_user(subject, user):
+    """
+    Sends an email to the admin of the site to notify them that a new someone
+    has unsubscribed  
+    """
+    # todo
+    pass
+
+
 def _send_email_helper(email_template_html, email_template_text, **kwargs):
     """
     A private helper function to send an email with the specified templates and context.
@@ -167,11 +195,11 @@ def _send_email_helper(email_template_html, email_template_text, **kwargs):
         email_template=email_template_html,
         text_template=email_template_text,
         context={
-            "username":kwargs["username"],
+            "username":kwargs.get("username"),
             "verification_url": kwargs.get("verification_url"),
             "email_address":kwargs.get("email_address"),
+            "new_subscriber": kwargs.get("new_subscriber"),
         }
     )
 
-    
     

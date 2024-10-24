@@ -1,0 +1,14 @@
+Hello, Admin,
+
+We wanted to let you know that a user has recently unsubscribed from our platform
+
+
+Here are the details of the unsubscribed user:
+
+Name:  {{ username }}  
+Email:  {{ email }} 
+Unsubscribed date: {{ unsubscribed_date }}   
+Reason for unsubscribing: {{ reason_for_unsubscribing }} 
+
+Best regards,  
+EUOrganics

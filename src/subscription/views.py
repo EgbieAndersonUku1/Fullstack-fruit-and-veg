@@ -12,6 +12,7 @@ from .utils.sessions import set_session
 
 from .models import NewsletterSubscription
 from utils.generator import generate_token
+from utils.send_emails_types import notify_admin_of_new_subscriber
 
 
 # Create your views here.
@@ -39,11 +40,15 @@ def subscribe_user(request):
         user  = request.user
                 
         try:
-            NewsletterSubscription.objects.create(user=user, email=email)
+            new_subscriber = NewsletterSubscription.objects.create(user=user, email=email)
             set_session(request, session_name="email", email=email)
             is_valid, error_msg = True, ''
+            
+            subject = "Subject: New Subscriber Alert! 🎉"
+            notify_admin_of_new_subscriber(subject, user=new_subscriber)
+            
         except IntegrityError: 
-             error_msg = f"There is a user by that email"
+             error_msg = "There is a user by that email"
     
         return is_valid, error_msg
             

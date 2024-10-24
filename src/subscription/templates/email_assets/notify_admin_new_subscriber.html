@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Subscriber </title>
+</head>
+<body style="min-height: 90vh; max-height: 100vh; overflow: auto; margin: 0; padding: 0;">
+
+    <main>
+        <section id="registration" style="background: ghostwhite;">
+            <div class="container" style="background: white; width: 70%; margin: auto; padding: 16px; border: 2px solid lavender;">
+                
+                <!-- Include the image using the URL from GitHub Pages -->
+                <div class="logo" style="position: relative; height: 200px; width: 200px; margin: auto;">
+                    <img src="https://raw.githubusercontent.com/EgbieAndersonUku1/euorganics-email-assets/main/email_assets/images/registration/logo.png" alt="Logo" class="img-logo" style="height: 100%; width: 100%;">
+                </div>
+
+                <h1 class="center" style="text-align: center; font-family: fantasy; font-size: 32px; color: rgb(6, 64, 6);">
+                    EU Organics Online Store
+                </h1>
+
+                <div class="content">
+                    <p style="font-family: Arial, sans-serif; font-size: 24px; width: 90%; text-align: left; padding-top: 8px;">
+                        Hello Admin,
+                    </p>
+
+                    <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; text-align: left; padding-top: 8px; padding-bottom: 32px;">
+                        We’re excited to inform you that a new user has just subscribed to our platform! 🎉
+                    </p>
+
+
+                    <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; font-weight: bold; padding: 16px; background-color: #f0f0f0; border-radius: 5px;">
+                        Name:  {{  new_subscriber.user.username | title }}  
+                     
+                    </p>
+                    <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; font-weight: bold; padding: 16px; background-color: #f0f0f0; border-radius: 5px;;">
+                        Email:  {{  new_subscriber.user.email | lower }} 
+                       
+                    </p>
+                    <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; font-weight: bold; padding: 16px; background-color: #f0f0f0; border-radius: 5px;;">
+                        Subscription Date: {{  new_subscriber.subscribed_on }}   
+                        
+                    </p>
+                    <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; font-weight: bold; padding: 16px; background-color: #f0f0f0; border-radius: 5px;">
+                        Subscription Frequency: {{  new_subscriber.get_frequency | title }} 
+                    </p>
+                    <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; text-align: left; padding-top: 8px; padding-bottom: 32px; margin-bottom: 40px;">
+                        We’re thrilled to have another member joining us on this journey and look forward to providing them with an exceptional experience.
+                    </p>
+
+
+                    <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; text-align: left; padding-top: 32px; padding-bottom: 32px;">
+                        If you have any questions or need further details, please let me know.
+                    </p>
+
+
+                    <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; text-align: left; padding-top: 8px; font-weight: bolder;">
+                        Warm regards,
+                    </p>
+                    <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; text-align: left; font-weight: bolder;">
+                        The EUOrganics Team
+                    </p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+</body>
+</html>
