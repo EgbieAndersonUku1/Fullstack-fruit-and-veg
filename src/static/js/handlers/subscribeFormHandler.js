@@ -27,8 +27,13 @@ async function handleSubscribeForm(e, subscribeForm) {
     
         });
 
-        handleResponse(response);
-        createSubscriptionSuccessMessage();
+        const success = await handleResponse(response);
+
+        console.log(success);
+        if (success) {
+            createSubscriptionSuccessMessage();
+        };
+       
 
     } catch (error) {
         console.log(error);
@@ -61,6 +66,7 @@ async function handleResponse(response) {
         icon: icon,
         confirmButtonText: confirmButtonText,
     });
+    return isValid;
 }
 
   
@@ -75,15 +81,18 @@ function handleErrorResponse() {
     })
 }
 
+
 function clearSubscriptionContainer() {
     subscribeFormContainerElement.innerHTML = "";
 }
+
 
 function createParagraph(textContent) {
     const pElement = document.createElement("p");
     pElement.textContent = textContent;
     return pElement;
 }
+
 
 function createSubscriptionSuccessMessage() {
     clearSubscriptionContainer();
