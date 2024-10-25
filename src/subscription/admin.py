@@ -1,4 +1,9 @@
+from typing import Any
 from django.contrib import admin
+from django.forms import ModelForm
+from django.http import HttpRequest
+from django.utils import timezone
+
 
 from .models import NewsletterSubscription, UnsubscribedNewsletterSubscription, SubscribedNewsletterSubscription
 
@@ -18,6 +23,11 @@ class BaseNewsletterAdmin(admin.ModelAdmin):
     def date_unsubscribed(self, obj):
         return obj.date_unsubscribed
     
+    def save_model(self, request: HttpRequest, obj: Any, form: ModelForm, change: bool) -> None:
+        if obj.unsubscribed and not obj.unsubscribed_on:
+            obj.unsubscribed_on = timezone.now()
+        super().save_model(request, obj, form, change)
+        
     date_unsubscribed.short_description = "Date unsubscribed"
       
       
