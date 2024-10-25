@@ -22,7 +22,7 @@ def get_subscription_session(request) -> dict:
             subscribed    = not is_subscribed
        
     except Exception as e:
-         print(f"Error fetching subscription model object: {e}")
+       print(f"Error fetching subscription model object: {e}")
       
     
     else:

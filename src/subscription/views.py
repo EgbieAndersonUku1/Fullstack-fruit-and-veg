@@ -10,7 +10,7 @@ from utils.post_json_validator import validate_json_and_respond
 from utils.validator import validate_email_address
 from .utils.sessions import set_session
 
-from .models import NewsletterSubscription
+from .models import NewsletterSubscription, NewsletterSubscriptionHistory
 from utils.generator import generate_token
 from utils.send_emails_types import notify_admin_of_new_subscriber
 
@@ -41,6 +41,14 @@ def subscribe_user(request):
                 
         try:
             new_subscriber = NewsletterSubscription.objects.create(user=user, email=email)
+            
+            # log the subscription action
+            NewsletterSubscriptionHistory.objects.create(title="General Newsletter",
+                                                          user=user,
+                                                          email=email,
+                                                          action="subscribe",
+                                                          frequency=new_subscriber.frequency,
+                                                         )
             set_session(request, session_name="email", email=email)
             is_valid, error_msg = True, ''
             
@@ -59,5 +67,5 @@ def subscribe_user(request):
                                      )
         
         
-        
-
+def manage_subscription(request):
+    return render(request, "account/subscription/manage_newsletter_subscription.html")

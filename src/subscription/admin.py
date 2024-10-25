@@ -5,13 +5,17 @@ from django.http import HttpRequest
 from django.utils import timezone
 
 
-from .models import NewsletterSubscription, UnsubscribedNewsletterSubscription, SubscribedNewsletterSubscription
+from .models import (NewsletterSubscription,
+                     UnsubscribedNewsletterSubscription, 
+                     SubscribedNewsletterSubscription,
+                     NewsletterSubscriptionHistory
+                     )
 
 # Register your models here.
 
 class BaseNewsletterAdmin(admin.ModelAdmin):
-    list_display       = ["id", "user", "email", "subscribed_on", "unsubscribed", "frequency", "date_unsubscribed"]
-    list_display_links = ["id", "user"]
+    list_display       = ["title", "user", "email", "subscribed_on", "unsubscribed", "frequency", "date_unsubscribed"]
+    list_display_links = ["title", "user"]
     list_per_page      = 40
     readonly_fields    = ["subscribed_on", "modified_on"]
     fieldsets = [
@@ -50,7 +54,14 @@ class SubscribedNewsletterSubscriptionAdmin(BaseNewsletterAdmin):
         return qs.filter(unsubscribed=False)
 
 
+class NewsletterSubscriptionHistoryAdmin(admin.ModelAdmin):
+    list_display        = ["id", "email", "action", "timestamp", "frequency"]
+    list_display_links  = ["id", "email"]
+    list_per_page       = 40
+    readonly_fields     = ["timestamp", "reason_for_unsubscribing"]
 
+
+admin.site.register(NewsletterSubscriptionHistory, NewsletterSubscriptionHistoryAdmin)
 admin.site.register(NewsletterSubscription, NewsletterSubscriptionAdmin)
 admin.site.register(UnsubscribedNewsletterSubscription, UnsubscribedNewsletterSubscriptionAdmin)
 admin.site.register(SubscribedNewsletterSubscription, SubscribedNewsletterSubscriptionAdmin)

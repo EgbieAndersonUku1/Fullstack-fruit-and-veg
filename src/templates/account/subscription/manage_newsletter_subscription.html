@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}Manage subscriptions overview{% endblock  %}
+
+
+{% block body  %}
+
+
+<section id="manage-subscriptions" aria-labelledby="manage-subscription-heading">
+
+    <div class="manage_subscriptions__container content-container">
+
+        {% include "partials/logo_link.html" %}
+        {% include "partials/messages.html" %}
+      
+        <nav aria-label="Breadcrumb">
+            <ul class="breadcrumb">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'account' %}">My account</a></li>
+                <li aria-current="page">Subscriptions</li>
+            </ul>
+        </nav>
+
+        <h2 id="view-subscription-heading" class="lighten padding-top-md">Subscriptions section</h2>
+        <p class="account-info">Subscriptions overview</p>
+        <hr class="dividor">
+
+
+    </div>
+    <div class="spinner"></div>
+
+    <!-- Determines if a person is subscribed already -->
+    <div class="subscription-status flex-end" id="subscription-status">
+        <a href="#"><button type="button" class="padding-sm green-bg">Subscribed</button></a>
+    </div>
+
+    <!-- The subscription tabs -->
+    <div class="tabs" id="subscription-tabs">
+        <div class="tab">
+            <h4 class="lighten active text-capitalize tab-headers">Subscription overview</h4>
+        </div>
+
+        <div class="tab">
+            <h4 class="lighten text-capitalize tab-headers">Subscription history</h4>
+        </div>
+
+        <div class="tab">
+            <h4 class="lighten text-capitalize tab-headers">Notification</h4>
+        </div>
+    </div>
+    <hr class="dividor subscription-dividor">
+
+    
+
+    <div id="subscription-overview">
+
+        <p>Welcome Message: "Hello,  Customer Name to go here! Here’s an overview of your newsletter preferences</p>
+
+        <h4 class="padding-bottom-md padding-top-md lighten">Current subscriptions</h4>
+        <p>You are current subscribed to the EU Organics newsletter</p>
+        
+    </div>
+
+
+
+    <div id="subscription-history">
+        <h4 class="lighten active text-capitalize tab-headers">Your Subscription History & Activity</h4>
+
+        <p>Timeline</p>
+        <table id="subscription-table">
+
+            <thead>
+                <tr>
+                    <th>Subscription name</th>
+                    <th>Start date</th>
+                    <th>End date</th>
+                    <th>Frequency</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                 
+                </tr>
+            </thead>
+
+            <tr>
+               <td>Subscription name</td>
+               <td>12 October 2023</td>
+               <td>12 October 2024</td>
+               <td>Monnthly</td>
+               <td>Active</td>
+               <td>
+                <a href="#">Unsubscribe</a>
+               </td>
+            </tr>
+            <tr>
+                <td>Subscription name</td>
+                <td>12 October 2023</td>
+                <td>12 October 2024</td>
+                <td>Monnthly</td>
+                <td>Active</td>
+                <td>
+                    <a href="#">Unsubscribe</a>
+                </td>
+             </tr>
+             <tr>
+                <td>Subscription name</td>
+                <td>12 October 2023</td>
+                <td>12 October 2024</td>
+                <td>Monnthly</td>
+                <td>Active</td>
+                <td>
+                    <a href="#">Unsubscribe</a>
+                </td>
+             </tr>
+            
+          
+
+          
+
+        </table>
+    </div>
+
+
+    <!--The notification alerts -->
+    <div id="notification-alerts">
+
+        <h4 class="padding-bottom-md padding-top-md lighten">Manage Your Alerts & Notifications</h4>
+        <div class="frequency">
+
+            <form action="">
+
+                <label for="frequency">Frequency</label>
+                <select name="frequency" id="frequency">
+                    <option value="daily">Weekly</option>
+                    <option value="Weekly">Weekly</option>
+                    <option value="bi-weekly">Bi-Weekly</option>
+                    <option value="monnthly">Monthly</option>
+                    <option value="quarterly">Quartely</option>
+                </select>
+            </form>
+
+        </div>
+
+        <div class="notification-preference">
+            <p>Notification preference</p>
+
+            <ul class="padding-left-lg">
+                <li class="">Email</li>
+            </ul>
+        </div>
+
+    </div>
+   
+
+</section>
+
+
+{% endblock  %}

@@ -3622,3 +3622,56 @@ legend {
       transform: rotate(360deg);
     }
   }
+
+
+#subscription-table thead tr {
+    background: rgb(145, 142, 142);
+    color: white;
+}
+
+
+
+  #subscription-tabs {
+    
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+
+    margin-top: var(--padding-lg);
+    cursor: pointer;
+    
+  }
+
+
+  #subscription-tabs > div:hover {
+    
+    color: #1c7920;
+
+  }
+
+
+  .subscription-dividor {
+    width: 70%;
+  }
+
+
+  #subscription-tabs .tab .tab-header:hover {
+    color: #1c7920;
+  }
+
+
+
+
+  .notification-preference ul li {
+    list-style-type: circle;
+  }
+
+
+#subscription-status,
+#subscription-tabs, 
+#notification-alerts,
+#subscription-overview,
+#subscription-history {
+    width: 70%;
+    margin: auto;
+}
