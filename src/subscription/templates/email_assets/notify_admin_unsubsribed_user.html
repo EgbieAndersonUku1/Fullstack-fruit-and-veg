@@ -31,24 +31,28 @@
 
 
                     <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; font-weight: bold; padding: 16px; background-color: #f0f0f0; border-radius: 5px;">
-                        Name:  {{ username }}  
+                        Name:  {{ unsubscriber.user.username | title }}  
                      
                     </p>
                     <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; font-weight: bold; padding: 16px; background-color: #f0f0f0; border-radius: 5px;;">
-                        Email:  {{ email }} 
+                        Email:  {{ unsubscriber.user.email }} 
                        
                     </p>
                     <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; font-weight: bold; padding: 16px; background-color: #f0f0f0; border-radius: 5px;;">
                         Unsubscribe Date: {{ unsubscribe_date }}   
                         
                     </p>
-                    <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; font-weight: bold; padding: 16px; background-color: #f0f0f0; border-radius: 5px;">
-                        Reason for Unsubscribing:: {{ reason_for_unsubscribing }} 
-                    </p>
-                    <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; text-align: left; padding-top: 8px; padding-bottom: 32px; margin-bottom: 40px;">
-                    
-                    </p>
 
+                    {% if unsubscriber.reason_for_unsubscribing %}
+                        <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; font-weight: bold; padding: 16px; background-color: #f0f0f0; border-radius: 5px;">
+                            Reason for Unsubscribing:: {{ reason_for_unsubscribing.reason_for_unsubscribing }} 
+                        </p>
+                    {% else %}
+                        <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; font-weight: bold; padding: 16px; background-color: #f0f0f0; border-radius: 5px;">
+                            No reason given
+                        </p>
+                    {% endif %}
+                   
 
                     <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; text-align: left; padding-top: 8px; font-weight: bolder;">
                         Warm regards,
