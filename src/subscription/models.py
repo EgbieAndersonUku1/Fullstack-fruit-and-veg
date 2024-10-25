@@ -133,7 +133,7 @@ class NewsletterSubscription(models.Model):
         """
         if not self.unsubscribed:
             self.unsubscribed      = True
-            self.date_unsubscribed = timezone.now()
+            self.unsubscribed_on   = timezone.now()
             self.save()
     
     def subscribe(self):
