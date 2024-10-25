@@ -161,13 +161,23 @@ def notify_admin_of_new_subscriber(subject, user):
                              )
 
 
-def notify_admin_of_unsubscribed_user(subject, user):
+def notify_admin_of_user_unsubscription(subject, user):
     """
-    Sends an email to the admin of the site to notify them that a new someone
+    Sends an email to the admin of the site to notify them that someone
     has unsubscribed  
     """
-    # todo
-    pass
+    email_template_html = "email_assets/notify_admin_unsubsribed_user.html"
+    email_template_text = "email_assets/notify_admin_unsubsribed_user.txt"
+    
+    admin_email_address = settings.EMAIL_HOST_USER
+    
+    return _send_email_helper(email_template_html,
+                             email_template_text,
+                             subject=subject,
+                             from_email=admin_email_address,
+                             to_email=admin_email_address,
+                             unsubscriber=user,
+                             )
 
 
 def _send_email_helper(email_template_html, email_template_text, **kwargs):
@@ -199,6 +209,7 @@ def _send_email_helper(email_template_html, email_template_text, **kwargs):
             "verification_url": kwargs.get("verification_url"),
             "email_address":kwargs.get("email_address"),
             "new_subscriber": kwargs.get("new_subscriber"),
+            "unsubscriber": kwargs.get("unsubscriber"),
         }
     )
 

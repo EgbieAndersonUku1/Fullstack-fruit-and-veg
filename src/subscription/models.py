@@ -132,7 +132,8 @@ class NewsletterSubscription(models.Model):
         Mark the user as unsubscribed.
         """
         if not self.unsubscribed:
-            self.unsubscribed = True
+            self.unsubscribed      = True
+            self.unsubscribed_on   = timezone.now()
             self.save()
     
     def subscribe(self):
