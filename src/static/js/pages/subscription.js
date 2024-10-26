@@ -15,6 +15,7 @@ const notificationAlert        = document.getElementById("notification-alerts");
 
 
 document.addEventListener("DOMContentLoaded", setUp);
+subscriptionTabContainer.addEventListener("click", handleSubscriptionTabs);
 
 
 function setUp() {
@@ -31,10 +32,8 @@ function setUp() {
 
 
 function hideAllTabSection() {
-    tabSections.forEach((tabSection) => {
-        hideTabSection(tabSection);
-        removeActiveFromTabs();  
-    })
+    removeActiveFromTabs();  
+    tabSections.forEach((tabSection) => hideTabSection(tabSection))
 };
 
 
@@ -50,8 +49,7 @@ function hideTabSection(tab) {
 
 function addActiveStatusToHeaderTab(header) {
     if (header && !header.classList.contains("active")) {
-        header.classList.add("active");
-        header.classList.add("highlight");
+        header.classList.add("active", "highlight");
     };
 };
 
@@ -61,9 +59,8 @@ function removeActiveFromTabs() {
     if (headers) {
         headers.forEach((header) => {
     
-           if (header && header.classList.contains("active")) {
-                header.classList.remove("active");
-                header.classList.remove("highlight");
+           if ( header.classList.contains("active")) {
+                header.classList.remove("active", "highlight");
            };
         });
     };
@@ -71,51 +68,39 @@ function removeActiveFromTabs() {
 
 
 
-subscriptionTabContainer.addEventListener("click", (e) => {
+function handleSubscriptionTabs(e) {
     e.preventDefault();
 
-    const SUBSCRIPTION_OVERVIEW = "subscription overview";
-    const SUBSCRIPTION_HISTORY  = "subscription history";
-    const NOTIFICATION          = "notifications"
+    const tabs = {
+        OVERVIEW: "subscription overview",
+        HISTORY: "subscription history",
+        NOTIFICATION: "notifications"
+    };
 
-    if (e.target.nodeName == "H4") {
-
+    if (e.target.nodeName === "H4") {
         const innerText = e.target.innerText.toLowerCase();
-
         removeActiveFromTabs();
-       
-        if (innerText === SUBSCRIPTION_OVERVIEW) {
 
-            showTabSection(subscriptionOverview);
-            hideTabSection(subscriptionHistory);
-            hideTabSection(notificationAlert);
-
-            const firstTab = headers[0];
-            addActiveStatusToHeaderTab(firstTab);
-
-
-        } else if (innerText === SUBSCRIPTION_HISTORY) {
-
-            showTabSection(subscriptionHistory);
-            hideTabSection(subscriptionOverview);
-            hideTabSection(notificationAlert);
-
-            const secondTab = headers[1];
-            addActiveStatusToHeaderTab(secondTab);
-
-        } else if (innerText === NOTIFICATION) {
-
-            showTabSection(notificationAlert);
-            hideTabSection(subscriptionOverview);
-            hideTabSection(subscriptionHistory);
-
-            const thirdTab = headers[2]
-            addActiveStatusToHeaderTab(thirdTab);
-
-        }  
+        switch (innerText) {
+            case tabs.OVERVIEW:
+                toggleTabVisibility(subscriptionOverview, [subscriptionHistory, notificationAlert], headers[0]);
+                break;
+            case tabs.HISTORY:
+                toggleTabVisibility(subscriptionHistory, [subscriptionOverview, notificationAlert], headers[1]);
+                break;
+            case tabs.NOTIFICATION:
+                toggleTabVisibility(notificationAlert, [subscriptionOverview, subscriptionHistory], headers[2]);
+                break;
+        }
     }
-   
-});
+};
 
+
+
+function toggleTabVisibility(showTab, hideTabs, header) {
+    hideTabs.forEach(hideTabSection);
+    showTabSection(showTab);
+    addActiveStatusToHeaderTab(header);
+}
 
 
