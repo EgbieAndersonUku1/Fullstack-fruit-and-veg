@@ -292,6 +292,10 @@ table tr td a:nth-child(even):hover {
     padding-top: var(--padding-md);
 }
 
+.padding-top-lg {
+    padding-top: var(--padding-lg);
+}
+
 .padding-bottom-md {
     padding-bottom: var(--padding-md);
 }
@@ -3675,3 +3679,5 @@ legend {
     width: 70%;
     margin: auto;
 }
+
+

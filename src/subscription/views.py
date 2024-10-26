@@ -43,7 +43,7 @@ def subscribe_user(request):
             new_subscriber = NewsletterSubscription.objects.create(user=user, email=email)
             
             # log the subscription action
-            NewsletterSubscriptionHistory.objects.create(title="General Newsletter",
+            NewsletterSubscriptionHistory.objects.create(title=new_subscriber.title,
                                                           user=user,
                                                           email=email,
                                                           action="subscribe",

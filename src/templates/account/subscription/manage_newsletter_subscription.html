@@ -1,10 +1,9 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Manage subscriptions overview{% endblock  %}
 
-
 {% block body  %}
-
 
 <section id="manage-subscriptions" aria-labelledby="manage-subscription-heading">
 
@@ -34,25 +33,25 @@
         <a href="#"><button type="button" class="padding-sm green-bg">Subscribed</button></a>
     </div>
 
+
     <!-- The subscription tabs -->
-    <div class="tabs" id="subscription-tabs">
+    <div class="tabs" id="subscription-tabs" class="padding-top-lg">
         <div class="tab">
-            <h4 class="lighten active text-capitalize tab-headers">Subscription overview</h4>
+            <h4 class="lighten highlight active text-capitalize" data-tabData="subscription-overview">Subscription overview</h4>
         </div>
 
         <div class="tab">
-            <h4 class="lighten text-capitalize tab-headers">Subscription history</h4>
+            <h4 class="lighten text-capitalize tab-headers" data-tabData="subscription-history">Subscription history</h4>
         </div>
 
         <div class="tab">
-            <h4 class="lighten text-capitalize tab-headers">Notification</h4>
+            <h4 class="lighten text-capitalize tab-headers" data-tabData="notfications">Notifications</h4>
         </div>
     </div>
     <hr class="dividor subscription-dividor">
 
     
-
-    <div id="subscription-overview">
+    <div id="subscription-overview" class="d-none tab-section">
 
         <p>Welcome Message: "Hello,  Customer Name to go here! Here’s an overview of your newsletter preferences</p>
 
@@ -63,7 +62,7 @@
 
 
 
-    <div id="subscription-history">
+    <div id="subscription-history" class="d-none tab-section">
         <h4 class="lighten active text-capitalize tab-headers">Your Subscription History & Activity</h4>
 
         <p>Timeline</p>
@@ -112,16 +111,12 @@
                 </td>
              </tr>
             
-          
-
-          
-
         </table>
     </div>
 
 
     <!--The notification alerts -->
-    <div id="notification-alerts">
+    <div id="notification-alerts" class="d-none tab-section">
 
         <h4 class="padding-bottom-md padding-top-md lighten">Manage Your Alerts & Notifications</h4>
         <div class="frequency">
@@ -155,3 +150,9 @@
 
 
 {% endblock  %}
+
+{% block script %}
+    <script src="{% static '/js/pages/subscription.js'  %}" type="module"></script>
+{% endblock script %}
+
+
