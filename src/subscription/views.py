@@ -92,7 +92,7 @@ def update_newsletter_frequency(request):
        if frequency_update:
            
            try:
-                with transaction.atomic():
+               with transaction.atomic():
                     frequency_update      = frequency_update.lower()
                     original_subscription = NewsletterSubscription.objects.get(user=request.user)
                     original_frequency    = original_subscription.frequency
@@ -107,7 +107,7 @@ def update_newsletter_frequency(request):
                                 email=original_subscription.email,
                                 action="subscribed",
                                 frequency=frequency_update,
-                    )
+                            )
            except NewsletterSubscription.DoesNotExist:
                 return is_valid, error_msg
             
