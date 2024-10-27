@@ -3592,7 +3592,7 @@ legend {
     margin-top: 4px;
 }
 
-.testimionial-info:hover {
+.moodle-alert-text-info:hover {
     color: #007bff;
     text-decoration: underline;
     cursor: pointer;
@@ -3681,3 +3681,9 @@ legend {
 }
 
 
+#frequency-btn {
+    height: 30px;
+    font-size: var(--font-size-normal);
+    text-transform: capitalize;
+    padding: 2px;
+}

@@ -1,10 +1,12 @@
+import json
+from django.http import JsonResponse
 from django.contrib import messages
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 
 from utils.post_json_validator import validate_json_and_respond
 from utils.validator import validate_email_address
@@ -13,6 +15,7 @@ from .utils.sessions import set_session
 from .models import NewsletterSubscription, NewsletterSubscriptionHistory
 from utils.generator import generate_token
 from utils.send_emails_types import notify_admin_of_new_subscriber
+from utils.post_json_validator import validate_json_and_respond
 
 
 # Create your views here.
@@ -40,24 +43,27 @@ def subscribe_user(request):
         user  = request.user
                 
         try:
-            new_subscriber = NewsletterSubscription.objects.create(user=user, email=email)
+            with transaction.atomic():
+                new_subscriber = NewsletterSubscription.objects.create(user=user, email=email)
             
-            # log the subscription action
-            NewsletterSubscriptionHistory.objects.create(title=new_subscriber.title,
-                                                          user=user,
-                                                          email=email,
-                                                          action="subscribe",
-                                                          frequency=new_subscriber.frequency,
-                                                         )
-            set_session(request, session_name="email", email=email)
-            is_valid, error_msg = True, ''
-            
-            subject = "Subject: New Subscriber Alert! 🎉"
-            notify_admin_of_new_subscriber(subject, user=new_subscriber)
+                # log the subscription action
+                NewsletterSubscriptionHistory.objects.create(title="User subscribed to newsletter",
+                                                            user=user,
+                                                            email=email,
+                                                            action="subscribe",
+                                                            frequency=new_subscriber.frequency,
+                                                            )
+                
+                
+                set_session(request, session_name="email", email=email)
+                is_valid, error_msg = True, ''
+                
+                subject = "Subject: New Subscriber Alert! 🎉"
+                notify_admin_of_new_subscriber(subject, user=new_subscriber)
             
         except IntegrityError: 
-             error_msg = "There is a user by that email"
-    
+             error_msg = "There is a user by that email."
+             
         return is_valid, error_msg
             
     return validate_json_and_respond(request=request, 
@@ -66,6 +72,53 @@ def subscribe_user(request):
                                      validation_func=subscribe
                                      )
         
-        
+
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name="next")
 def manage_subscription(request):
     return render(request, "account/subscription/manage_newsletter_subscription.html")
+
+
+
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name="next")
+def update_newsletter_frequency(request):
+   
+   field_name = "frequency"
+   
+   def update_newsletter(data):
+       is_valid  = False
+       error_msg = ""
+       frequency_update = data.get("frequency", "")
+       
+       if frequency_update:
+           
+           try:
+               frequency_update      = frequency_update.lower()
+               original_subscription = NewsletterSubscription.objects.get(user=request.user)
+               original_frequency    = original_subscription.frequency
+               
+               if original_frequency.lower() != frequency_update:
+                    original_subscription.frequency = frequency_update
+                    original_subscription.save()  
+                    
+                    NewsletterSubscriptionHistory.objects.create(
+                        title="User updated frequency field",
+                        user=request.user,
+                        email=original_subscription.email,
+                        action="subscribed",
+                        frequency=frequency_update,
+                    )
+           except NewsletterSubscription.DoesNotExist:
+                return is_valid, error_msg
+            
+           is_valid = True
+           return is_valid, error_msg
+       
+       error_msg = "Something went wrong and the field couldn't be updated"
+       return is_valid, error_msg
+      
+   return validate_json_and_respond(request, 
+                                    field_name, 
+                                    follow_up_message="Successfully updated your newsletter",
+                                    validation_func=update_newsletter
+                                    )
+   

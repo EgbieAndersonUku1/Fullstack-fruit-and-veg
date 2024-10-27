@@ -26,7 +26,7 @@ class NewsletterSubscription(models.Model):
     class Frequency:
         DAILY     = "d"
         WEEKLY    = "w"
-        BI_WEEKLY = "BW"
+        BI_WEEKLY = "bw"
         MONTHLY   = "m"
         QUARTERLY = "q"
         CHOICES = [

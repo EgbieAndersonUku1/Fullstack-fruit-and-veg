@@ -121,16 +121,22 @@
         <h4 class="padding-bottom-md padding-top-md lighten">Manage Your Alerts & Notifications</h4>
         <div class="frequency">
 
-            <form action="">
+            <form action="{% url 'update_frequency' %}" method="post" id="frequency-update-form">
+
+                {% csrf_token %}
+
+                <input type="hidden" name="csrfTokenMiddleware" value="{{ csrf_token }}">
 
                 <label for="frequency">Frequency</label>
                 <select name="frequency" id="frequency">
-                    <option value="daily">Weekly</option>
-                    <option value="Weekly">Weekly</option>
-                    <option value="bi-weekly">Bi-Weekly</option>
-                    <option value="monnthly">Monthly</option>
-                    <option value="quarterly">Quartely</option>
+                    <option value="d">Daily</option>
+                    <option value="w">Weekly</option>
+                    <option value="bw">Bi-Weekly</option>
+                    <option value="mo">Monthly</option>
+                    <option value="q">Quarterly</option>
                 </select>
+
+                <button type="submit" class="button-sm green-bg" id="frequency-btn">Save</button>
             </form>
 
         </div>
@@ -145,7 +151,6 @@
 
     </div>
    
-
 </section>
 
 
@@ -153,6 +158,8 @@
 
 {% block script %}
     <script src="{% static '/js/pages/subscription.js'  %}" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.all.min.js"></script>
+
 {% endblock script %}
 
 
