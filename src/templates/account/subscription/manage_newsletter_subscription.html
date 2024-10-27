@@ -58,7 +58,7 @@
     
     <div id="subscription-overview" class="d-none tab-section">
 
-        <p>Welcome Message: "Hello,  Customer Name to go here! Here’s an overview of your newsletter preferences</p>
+        <p><span class="bold"> Hello, {{ request.user.username | title }}! </span> Here’s an overview of your newsletter preferences</p>
 
         <h4 class="padding-bottom-md padding-top-md lighten">Current subscriptions</h4>
         <p>You are current subscribed to the EU Organics newsletter</p>

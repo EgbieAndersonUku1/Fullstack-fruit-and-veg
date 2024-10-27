@@ -87,6 +87,7 @@ def manage_subscription(request):
     context = {
         "is_subscribed": not subscription.unsubscribed,
         "page_obj": page_obj,
+        
     }
     
     return render(request, "account/subscription/manage_newsletter_subscription.html", context=context)
