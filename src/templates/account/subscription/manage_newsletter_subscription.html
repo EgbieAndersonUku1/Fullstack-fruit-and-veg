@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Manage subscriptions overview{% endblock  %}
+
+{% block body  %}
+
+<section id="manage-subscriptions" aria-labelledby="manage-subscription-heading">
+
+    <div class="manage_subscriptions__container content-container">
+
+        {% include "partials/logo_link.html" %}
+        {% include "partials/messages.html" %}
+      
+        <nav aria-label="Breadcrumb">
+            <ul class="breadcrumb">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'account' %}">My account</a></li>
+                <li aria-current="page">Subscriptions</li>
+            </ul>
+        </nav>
+
+        <h2 id="view-subscription-heading" class="lighten padding-top-md">Subscriptions section</h2>
+        <p class="account-info">Subscriptions overview</p>
+        <hr class="dividor">
+
+
+    </div>
+    <div class="spinner"></div>
+
+    <!-- Determines if a person is subscribed already -->
+    <div class="subscription-status flex-end" id="subscription-status">
+        {% if is_subscribed %}
+            <a href="#"><button type="button" class="padding-sm dark-red-bg">unsubscribe</button></a>
+        {% else %}
+             <a href="#"><button type="button" class="padding-sm green-bg">subscribe</button></a>
+        {% endif %}
+    </div>
+
+
+    <!-- The subscription tabs -->
+    <div class="tabs" id="subscription-tabs" class="padding-top-lg">
+        <div class="tab">
+            <h4 class="lighten highlight active text-capitalize" data-tabData="subscription-overview">Subscription overview</h4>
+        </div>
+
+        <div class="tab">
+            <h4 class="lighten text-capitalize tab-headers" data-tabData="subscription-history">Subscription history</h4>
+        </div>
+
+        <div class="tab">
+            <h4 class="lighten text-capitalize tab-headers" data-tabData="notfications">Notifications</h4>
+        </div>
+    </div>
+    <hr class="dividor subscription-dividor">
+
+    
+    <div id="subscription-overview" class="d-none tab-section">
+
+        <p><span class="bold"> Hello, {{ request.user.username | title }}! </span> Here’s an overview of your newsletter preferences</p>
+
+        <h4 class="padding-bottom-md padding-top-md lighten">Current subscriptions</h4>
+        <p>You are current subscribed to the EU Organics newsletter</p>
+        
+    </div>
+
+
+
+    <div id="subscription-history" class="d-none tab-section">
+        <h4 class="lighten active text-capitalize tab-headers">Your Subscription History & Activity</h4>
+
+        <table id="subscription-table" class="padding-top-md">
+
+            <thead>
+                <tr>
+                    <th>Subscription activity</th>
+                    <th>Start date</th>
+                    <th>End date</th>
+                    <th>Frequency</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                 
+                </tr>
+            </thead>
+
+            {% for subscription in page_obj %}
+                <tr>
+                    <td>{{ subscription.title | title }}</td>
+                    <td>{{ subscription.timestamp }}</td>
+
+                    {% if not subscription.unsubscribed_on %}
+                        <td>Ongoing</td>
+                    {% else %}
+                        {{ subscription.unsubscribed_on }}
+                    {% endif %}
+                    <td>{{ subscription.frequency | format_frequency }}</td>
+
+                    {% if subscription.action == 'subscribed' %}
+                        <td>Active</td>
+                     {% else %}
+                        <td>Not Active</td>
+                     {% endif %}
+                    <td>
+                       {{ subscription.action | title }}
+                    </td>
+                </tr>
+            {% endfor %}
+           
+            
+            
+        </table>
+
+        {% if page_obj %}
+   
+
+  
+
+    <!-- Pagination links -->
+            <div class="pagination flex">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% else %}
+            <p>No subscriptions found.</p>
+        {% endif %}
+    </div>
+
+
+    <!--The notification alerts -->
+    <div id="notification-alerts" class="d-none tab-section">
+
+        <h4 class="padding-bottom-md padding-top-md lighten">Manage Your Alerts & Notifications</h4>
+        <div class="frequency">
+
+            <form action="{% url 'update_frequency' %}" method="post" id="frequency-update-form">
+
+                {% csrf_token %}
+
+                <input type="hidden" name="csrfTokenMiddleware" value="{{ csrf_token }}">
+
+                <label for="frequency">Frequency</label>
+                <select name="frequency" id="frequency">
+                    <option value="d">Daily</option>
+                    <option value="w">Weekly</option>
+                    <option value="bw">Bi-Weekly</option>
+                    <option value="m">Monthly</option>
+                    <option value="q">Quarterly</option>
+                </select>
+
+                <button type="submit" class="button-sm green-bg" id="frequency-btn">Save</button>
+            </form>
+
+        </div>
+
+        <div class="notification-preference">
+            <p>Notification preference</p>
+
+            <ul class="padding-left-lg">
+                <li class="">Email</li>
+            </ul>
+        </div>
+
+    </div>
+   
+</section>
+
+
+{% endblock  %}
+
+{% block script %}
+    <script src="{% static '/js/pages/subscription.js'  %}" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.all.min.js"></script>
+
+{% endblock script %}
+
+

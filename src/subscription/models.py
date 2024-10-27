@@ -26,7 +26,7 @@ class NewsletterSubscription(models.Model):
     class Frequency:
         DAILY     = "d"
         WEEKLY    = "w"
-        BI_WEEKLY = "BW"
+        BI_WEEKLY = "bw"
         MONTHLY   = "m"
         QUARTERLY = "q"
         CHOICES = [
@@ -36,7 +36,8 @@ class NewsletterSubscription(models.Model):
             (MONTHLY, "Monthly"), 
             (QUARTERLY, "Quarterly")
         ]
-        
+    
+    title                    = models.CharField(max_length=255, default="General Newsletter") 
     user                     = models.ForeignKey(User, on_delete=models.CASCADE, related_name="newsletter_subscriptions")
     email                    = models.EmailField(max_length=255, unique=True)
     subscribed_on            = models.DateTimeField(auto_now_add=True)
@@ -47,8 +48,8 @@ class NewsletterSubscription(models.Model):
     reason_for_unsubscribing = models.CharField(max_length=255, blank=True, null=True)
     
     def __str__(self) -> str:
-        return self.email 
-    
+        return f"{self.title} - {self.email}"
+     
     @property
     def date_unsubscribed(self):
         """
@@ -149,7 +150,25 @@ class NewsletterSubscription(models.Model):
         if not isinstance(user, User):
             raise TypeError(f"Expected an instance of User, got {type(user).__name__}")
         
+
+class NewsletterSubscriptionHistory(models.Model):
+    title                    = models.CharField(max_length=255) 
+    user                     = models.ForeignKey(User, on_delete=models.CASCADE, related_name="subscription_history")
+    email                    = models.EmailField(max_length=255)
+    action                   = models.CharField(max_length=50)  # e.g., 'subscribed' or 'unsubscribed'
+    timestamp                = models.DateTimeField(auto_now_add=True)
+    unsubscribed_on          = models.DateTimeField(blank=True, null=True)
+    frequency                = models.CharField(max_length=2, choices=NewsletterSubscription.Frequency.CHOICES, null=True, blank=True)
+    reason_for_unsubscribing = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        verbose_name         = "Newsletter Subscription History"
+        verbose_name_plural  = "Newsletter Subscription Histories"
         
+    def __str__(self) -> str:
+        return f"{self.email} - {self.action} on {self.timestamp}"
+
+
 class UnsubscribedNewsletterSubscription(NewsletterSubscription):
     class Meta:
         proxy              = True
