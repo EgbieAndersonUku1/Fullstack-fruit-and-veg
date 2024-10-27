@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load custom_filters %}
 
 {% block title %}Manage subscriptions overview{% endblock  %}
 
@@ -30,7 +31,11 @@
 
     <!-- Determines if a person is subscribed already -->
     <div class="subscription-status flex-end" id="subscription-status">
-        <a href="#"><button type="button" class="padding-sm green-bg">Subscribed</button></a>
+        {% if is_subscribed %}
+            <a href="#"><button type="button" class="padding-sm dark-red-bg">unsubscribe</button></a>
+        {% else %}
+             <a href="#"><button type="button" class="padding-sm green-bg">subscribe</button></a>
+        {% endif %}
     </div>
 
 
@@ -65,12 +70,11 @@
     <div id="subscription-history" class="d-none tab-section">
         <h4 class="lighten active text-capitalize tab-headers">Your Subscription History & Activity</h4>
 
-        <p>Timeline</p>
-        <table id="subscription-table">
+        <table id="subscription-table" class="padding-top-md">
 
             <thead>
                 <tr>
-                    <th>Subscription name</th>
+                    <th>Subscription activity</th>
                     <th>Start date</th>
                     <th>End date</th>
                     <th>Frequency</th>
@@ -80,38 +84,59 @@
                 </tr>
             </thead>
 
-            <tr>
-               <td>Subscription name</td>
-               <td>12 October 2023</td>
-               <td>12 October 2024</td>
-               <td>Monnthly</td>
-               <td>Active</td>
-               <td>
-                <a href="#">Unsubscribe</a>
-               </td>
-            </tr>
-            <tr>
-                <td>Subscription name</td>
-                <td>12 October 2023</td>
-                <td>12 October 2024</td>
-                <td>Monnthly</td>
-                <td>Active</td>
-                <td>
-                    <a href="#">Unsubscribe</a>
-                </td>
-             </tr>
-             <tr>
-                <td>Subscription name</td>
-                <td>12 October 2023</td>
-                <td>12 October 2024</td>
-                <td>Monnthly</td>
-                <td>Active</td>
-                <td>
-                    <a href="#">Unsubscribe</a>
-                </td>
-             </tr>
+            {% for subscription in page_obj %}
+                <tr>
+                    <td>{{ subscription.title | title }}</td>
+                    <td>{{ subscription.timestamp }}</td>
+
+                    {% if not subscription.unsubscribed_on %}
+                        <td>Ongoing</td>
+                    {% else %}
+                        {{ subscription.unsubscribed_on }}
+                    {% endif %}
+                    <td>{{ subscription.frequency | format_frequency }}</td>
+
+                    {% if subscription.action == 'subscribed' %}
+                        <td>Active</td>
+                     {% else %}
+                        <td>Not Active</td>
+                     {% endif %}
+                    <td>
+                       {{ subscription.action | title }}
+                    </td>
+                </tr>
+            {% endfor %}
+           
+            
             
         </table>
+
+        {% if page_obj %}
+   
+
+  
+
+    <!-- Pagination links -->
+            <div class="pagination flex">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% else %}
+            <p>No subscriptions found.</p>
+        {% endif %}
     </div>
 
 

@@ -157,6 +157,7 @@ class NewsletterSubscriptionHistory(models.Model):
     email                    = models.EmailField(max_length=255)
     action                   = models.CharField(max_length=50)  # e.g., 'subscribed' or 'unsubscribed'
     timestamp                = models.DateTimeField(auto_now_add=True)
+    unsubscribed_on          = models.DateTimeField(blank=True, null=True)
     frequency                = models.CharField(max_length=2, choices=NewsletterSubscription.Frequency.CHOICES, null=True, blank=True)
     reason_for_unsubscribing = models.CharField(max_length=255, blank=True, null=True)
 

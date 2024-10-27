@@ -59,6 +59,7 @@ class NewsletterSubscriptionHistoryAdmin(admin.ModelAdmin):
     list_display_links  = ["id", "title", "email"]
     list_per_page       = 40
     readonly_fields     = ["timestamp", "reason_for_unsubscribing", "email", "frequency", "action", "user"]
+    list_filter         = ["user", "frequency", "user__username"]
 
 
 admin.site.register(NewsletterSubscriptionHistory, NewsletterSubscriptionHistoryAdmin)

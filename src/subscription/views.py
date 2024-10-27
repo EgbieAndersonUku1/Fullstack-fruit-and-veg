@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-
+from django.core.paginator import Paginator
 from django.db import IntegrityError, transaction
 
 from utils.post_json_validator import validate_json_and_respond
@@ -75,7 +75,21 @@ def subscribe_user(request):
 
 @login_required(login_url=settings.LOGIN_URL, redirect_field_name="next")
 def manage_subscription(request):
-    return render(request, "account/subscription/manage_newsletter_subscription.html")
+    
+    subscription         = NewsletterSubscription.objects.filter(user=request.user).first()
+    RESULT_PER_PAGE      = 25
+    history              = subscription.user.subscription_history.all()
+    subscription_history = history or []
+    paginator            = Paginator(subscription_history, RESULT_PER_PAGE) 
+    page_number          = request.GET.get("page", 1)
+    page_obj             = paginator.get_page(page_number)
+    
+    context = {
+        "is_subscribed": not subscription.unsubscribed,
+        "page_obj": page_obj,
+    }
+    
+    return render(request, "account/subscription/manage_newsletter_subscription.html", context=context)
 
 
 
@@ -84,7 +98,7 @@ def update_newsletter_frequency(request):
    
    field_name = "frequency"
    
-   def update_newsletter(data):
+   def update_frequency(data):
        is_valid  = False
        error_msg = ""
        frequency_update = data.get("frequency", "")
@@ -120,6 +134,15 @@ def update_newsletter_frequency(request):
    return validate_json_and_respond(request, 
                                     field_name, 
                                     follow_up_message="Successfully updated your newsletter",
-                                    validation_func=update_newsletter
+                                    validation_func=update_frequency
                                     )
    
+   
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name="next")
+def re_subscribe(request):
+    pass
+   
+   
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name="next")
+def unsubscribe(request):
+    pass
