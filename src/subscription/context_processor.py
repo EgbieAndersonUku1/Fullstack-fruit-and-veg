@@ -9,7 +9,10 @@ def get_subscription_session(request) -> dict:
     
     Returns a dictionary containing the user's subscription session.
     """
-    subscription_session = None
+    subscription_session  = None
+    has_subscribed_before = False
+    subscribed            = None
+    
     try:
         
         # get only unsubscribed field and nothing else
@@ -18,8 +21,9 @@ def get_subscription_session(request) -> dict:
         if  subscription is None:
             subscribed = False
         else:
-            is_subscribed =  subscription["unsubscribed"]
-            subscribed    = not is_subscribed
+            is_subscribed         =  subscription["unsubscribed"]
+            subscribed            = not is_subscribed
+            has_subscribed_before = True
        
     except Exception as e:
        print(f"Error fetching subscription model object: {e}")
@@ -32,7 +36,9 @@ def get_subscription_session(request) -> dict:
                 subscription_session = get_session(request, session_name="email") 
     
     return {
-        "subscription_session": subscription_session
+        "subscription_session": subscription_session,
+        "has_subscribed_before": has_subscribed_before,
+        "is_subscribed": subscribed,
     }
 
 

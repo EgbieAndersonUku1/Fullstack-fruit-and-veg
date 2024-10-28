@@ -32,9 +32,9 @@
     <!-- Determines if a person is subscribed already -->
     <div class="subscription-status flex-end" id="subscription-status">
         {% if is_subscribed %}
-            <a href="#"><button type="button" class="padding-sm dark-red-bg">unsubscribe</button></a>
+            <a href="#"><button type="button" class="padding-sm dark-red-bg" id="unsubscribe-btn">unsubscribe</button></a>
         {% else %}
-             <a href="#"><button type="button" class="padding-sm green-bg">subscribe</button></a>
+             <a href="#"><button type="button" class="padding-sm green-bg" id="subscribed-btn">subscribe</button></a>
         {% endif %}
     </div>
 
@@ -58,10 +58,14 @@
     
     <div id="subscription-overview" class="d-none tab-section">
 
-        <p><span class="bold"> Hello, {{ request.user.username | title }}! </span> Here’s an overview of your newsletter preferences</p>
+        {% if is_subscribed %}
+            <p><span class="bold"> Hello, {{ request.user.username | title }}! </span> Here’s an overview of your newsletter preferences</p>
+            <h4 class="padding-bottom-md padding-top-md lighten">Current subscriptions</h4>
+            <p>You are current subscribed to the EU Organics newsletter</p>
+        {% else %}
+            <p>Subscribe to see your active subscriptions</p>
 
-        <h4 class="padding-bottom-md padding-top-md lighten">Current subscriptions</h4>
-        <p>You are current subscribed to the EU Organics newsletter</p>
+        {% endif %}
         
     </div>
 
@@ -93,8 +97,9 @@
                         {% if not subscription.unsubscribed_on %}
                             <td>Ongoing</td>
                         {% else %}
-                            {{ subscription.unsubscribed_on }}
+                             <td> {{ subscription.unsubscribed_on }} </td>
                         {% endif %}
+
                         <td>{{ subscription.frequency | format_frequency }}</td>
 
                         {% if subscription.action == 'subscribed' %}
@@ -102,6 +107,7 @@
                         {% else %}
                             <td>Not Active</td>
                         {% endif %}
+
                         <td>
                         {{ subscription.action | title }}
                         </td>
@@ -110,17 +116,12 @@
             {% else %}
                 <p> Nothing to see </p>
             {% endif %}
-            
-            
-            
+                        
         </table>
 
         {% if page_obj %}
    
-
-  
-
-    <!-- Pagination links -->
+             <!-- Pagination links -->
             <div class="pagination flex">
                 <span class="step-links">
                     {% if page_obj.has_previous %}
@@ -148,38 +149,71 @@
     <div id="notification-alerts" class="d-none tab-section">
 
         <h4 class="padding-bottom-md padding-top-md lighten">Manage Your Alerts & Notifications</h4>
-        <div class="frequency">
 
-            <form action="{% url 'update_frequency' %}" method="post" id="frequency-update-form">
+        {% if is_subscribed %}
+            <div class="frequency">
 
-                {% csrf_token %}
+                <form action="{% url 'update_frequency' %}" method="post" id="frequency-update-form">
 
-                <input type="hidden" name="csrfTokenMiddleware" value="{{ csrf_token }}">
+                    {% csrf_token %}
 
-                <label for="frequency">Frequency</label>
-                <select name="frequency" id="frequency">
-                    <option value="d">Daily</option>
-                    <option value="w">Weekly</option>
-                    <option value="bw">Bi-Weekly</option>
-                    <option value="m">Monthly</option>
-                    <option value="q">Quarterly</option>
-                </select>
+                    <input type="hidden" name="csrfTokenMiddleware" value="{{ csrf_token }}">
 
-                <button type="submit" class="button-sm green-bg" id="frequency-btn">Save</button>
-            </form>
+                    <label for="frequency">Frequency</label>
+                  
+                        {% with subscription=page_obj.object_list.0 %} <!-- Use the first object  -->
+                            <select name="frequency" id="frequency">
+                                <option value="d" {% if subscription.frequency == 'd' %}selected{% endif %}>Daily</option>
+                                <option value="w" {% if subscription.frequency == 'w' %}selected{% endif %}>Weekly</option>
+                                <option value="bw" {% if subscription.frequency == 'bw' %}selected{% endif %}>Bi-Weekly</option>
+                                <option value="m" {% if subscription.frequency == 'm' %}selected{% endif %}>Monthly</option>
+                                <option value="q" {% if subscription.frequency == 'q' %}selected{% endif %}>Quarterly</option>
+                            </select>
+                        {% endwith %}
+                
 
-        </div>
+                    <button type="submit" class="button-sm green-bg" id="frequency-btn">Save</button>
+                </form>
 
-        <div class="notification-preference">
-            <p>Notification preference</p>
+            </div>
 
-            <ul class="padding-left-lg">
-                <li class="">Email</li>
-            </ul>
-        </div>
+            <div class="notification-preference">
+                <p>Notification preference</p>
+
+                <ul class="padding-left-lg">
+                    <li class="">Email</li>
+                </ul>
+            </div>
+        {% else %} 
+            <p>Subscribe to view your notification options</p>
+        {% endif %}
 
     </div>
-   
+    <div class="spinner"></div>
+    <div class="feedback-form">
+
+        <h3 class="center padding-bottom-md">We Value Your Feedback</h3>
+        <p class="padding-bottom-sm">Hi, <span class="bold">{{ request.user.username | title }}</span>. We’re sorry to see you go!</p>
+        <p class="padding-bottom-md">Your insights are important to us. Please take a moment to fill out this feedback form to help us improve.</p>
+        
+        {% include "partials/form_errors.html" %}
+        <form action="{% url 'unsubscribe' %}" method="post" id="newsletter-form">
+            
+            {% csrf_token %}
+
+            {{ form.reason_for_unsubscribing }}
+            <p class="flex-end minimum-characters">Minimum characters: 50</p>
+            <p class="maximum-characters flex-end">Characters remaining: 255</p>
+    
+            <div class="buttons flex-end">
+                <button type="button" class="feedback-btn dark-red-bg button-sm cancel-btn">Cancel</button>
+                <button type="submit" class="feedback-btn dodger-blue-bg button-sm submit-btn">Submit</button>
+            </div>
+          
+        </form>
+         
+    </div>
+    
 </section>
 
 

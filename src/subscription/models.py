@@ -45,7 +45,7 @@ class NewsletterSubscription(models.Model):
     unsubscribed             = models.BooleanField(default=False) 
     frequency                = models.CharField(choices=Frequency.CHOICES, max_length=2, default=Frequency.MONTHLY)
     unsubscribed_on          = models.DateTimeField(blank=True, null=True)
-    reason_for_unsubscribing = models.CharField(max_length=255, blank=True, null=True)
+    reason_for_unsubscribing = models.TextField(blank=True, null=True)
     
     def __str__(self) -> str:
         return f"{self.title} - {self.email}"
@@ -146,7 +146,7 @@ class NewsletterSubscription(models.Model):
             self.unsubscribed  = False
             self.save()
 
-    def _is_user_instance_valid(cls, user):
+    def _is_user_instance_valid(user):
         if not isinstance(user, User):
             raise TypeError(f"Expected an instance of User, got {type(user).__name__}")
         
@@ -181,3 +181,9 @@ class SubscribedNewsletterSubscription(NewsletterSubscription):
         proxy               = True
         verbose_name        = "Subscribed Subscription"
         verbose_name_plural = "Subscribed Subscriptions"
+        
+
+
+class SubscriptionMessage:
+    UNSUBSCRIBED = "Successfully unsubscribed the user."
+    ERROR        = "Something went wrong, and the user couldn't be unsubscribed. Please try again later."

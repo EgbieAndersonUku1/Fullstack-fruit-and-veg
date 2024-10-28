@@ -14,7 +14,7 @@ export default async function handleResponse(response) {
 
     const isValid = response.IS_VALID;
 
-    const title             = isValid ? "Subscription Successful!" : "Subscription Unsuccessful";
+    const title             = isValid ? "Successful!" : "Unsuccessful";
     const icon              = isValid ? "success" : "warning";
     const confirmButtonText = isValid ? "Great!!" : "Ok";
 
