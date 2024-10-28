@@ -78,8 +78,8 @@ def manage_subscription(request):
     
     subscription         = NewsletterSubscription.objects.filter(user=request.user).first()
     RESULT_PER_PAGE      = 25
-    history              = subscription.user.subscription_history.all()
-    subscription_history = history or []
+    latest_history       = subscription.user.subscription_history.order_by("-timestamp").all()
+    subscription_history = latest_history or []
     paginator            = Paginator(subscription_history, RESULT_PER_PAGE) 
     page_number          = request.GET.get("page", 1)
     page_obj             = paginator.get_page(page_number)

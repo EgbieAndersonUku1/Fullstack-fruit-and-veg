@@ -72,41 +72,45 @@
 
         <table id="subscription-table" class="padding-top-md">
 
-            <thead>
-                <tr>
-                    <th>Subscription activity</th>
-                    <th>Start date</th>
-                    <th>End date</th>
-                    <th>Frequency</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                 
-                </tr>
-            </thead>
+            {% if page_obj and page_obj.object_list %}
+                <thead>
+                    <tr>
+                        <th>Subscription activity</th>
+                        <th>Start date</th>
+                        <th>End date</th>
+                        <th>Frequency</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    
+                    </tr>
+                </thead>
 
-            {% for subscription in page_obj %}
-                <tr>
-                    <td>{{ subscription.title | title }}</td>
-                    <td>{{ subscription.timestamp }}</td>
+                {% for subscription in page_obj %}
+                    <tr>
+                        <td>{{ subscription.title | title }}</td>
+                        <td>{{ subscription.timestamp }}</td>
 
-                    {% if not subscription.unsubscribed_on %}
-                        <td>Ongoing</td>
-                    {% else %}
-                        {{ subscription.unsubscribed_on }}
-                    {% endif %}
-                    <td>{{ subscription.frequency | format_frequency }}</td>
+                        {% if not subscription.unsubscribed_on %}
+                            <td>Ongoing</td>
+                        {% else %}
+                            {{ subscription.unsubscribed_on }}
+                        {% endif %}
+                        <td>{{ subscription.frequency | format_frequency }}</td>
 
-                    {% if subscription.action == 'subscribed' %}
-                        <td>Active</td>
-                     {% else %}
-                        <td>Not Active</td>
-                     {% endif %}
-                    <td>
-                       {{ subscription.action | title }}
-                    </td>
-                </tr>
-            {% endfor %}
-           
+                        {% if subscription.action == 'subscribed' %}
+                            <td>Active</td>
+                        {% else %}
+                            <td>Not Active</td>
+                        {% endif %}
+                        <td>
+                        {{ subscription.action | title }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <p> Nothing to see </p>
+            {% endif %}
+            
             
             
         </table>

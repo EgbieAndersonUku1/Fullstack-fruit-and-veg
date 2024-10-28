@@ -17,8 +17,7 @@ const csrfTokenField           = document.querySelector("input[name='csrfTokenMi
     validateElement(element, "The html is not a valid element", true);
 });
 
-const CSRF_TOKEN = csrfTokenField.value;
-
+const CSRF_TOKEN   = csrfTokenField.value;
 
 document.addEventListener("DOMContentLoaded", setUp);
 
@@ -112,6 +111,7 @@ function toggleTabVisibility(showTab, hideTabs, header) {
 };
 
 
+
 async function handleFormSubmit(event) {
 
     event.preventDefault();
@@ -131,6 +131,7 @@ async function handleFormSubmit(event) {
 
     const success = await handleResponse(response);
     if (success) {
+       PAGE_REFRESH = true;
        console.log("Successful");
     };
 
