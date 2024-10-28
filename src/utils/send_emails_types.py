@@ -170,7 +170,6 @@ def notify_admin_of_user_unsubscription(subject, user):
     email_template_text = "email_assets/notify_admin_unsubsribed_user.txt"
     
     admin_email_address = settings.EMAIL_HOST_USER
-    
     return _send_email_helper(email_template_html,
                              email_template_text,
                              subject=subject,

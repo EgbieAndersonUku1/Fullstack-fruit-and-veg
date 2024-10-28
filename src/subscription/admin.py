@@ -1,10 +1,5 @@
 from typing import Any
 from django.contrib import admin
-from django.forms import ModelForm
-from django.http import HttpRequest
-from django.utils import timezone
-
-
 from .models import (NewsletterSubscription,
                      UnsubscribedNewsletterSubscription, 
                      SubscribedNewsletterSubscription,

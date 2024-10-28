@@ -1252,6 +1252,12 @@ nav {
 
 }
 
+.button-sm {
+    color: white;
+    cursor: pointer;
+    width: 20%;
+}
+
 .shop-btn {
     margin-top: 10px;
     height: 40px;
@@ -3686,4 +3692,36 @@ legend {
     font-size: var(--font-size-normal);
     text-transform: capitalize;
     padding: 2px;
+}
+
+
+.feedback-form {
+    border: 2px solid lavender;
+    cursor: pointer;
+    background: white;
+    width: 50%;
+   
+    position: fixed;
+    top: -100%;
+    right: 0;
+    left: 0;
+  
+    padding: 20px;
+    margin: auto;
+    border-radius: 3%;
+
+    transition: top 0.8s ease;
+    overflow: hidden
+}
+
+.feedback-btn {
+    padding: 4px;
+}
+
+.feedback-form.show {
+    top: 0;
+}
+
+#id_reason_for_unsubscribing {
+    font-size: var(--font-size-normal);
 }

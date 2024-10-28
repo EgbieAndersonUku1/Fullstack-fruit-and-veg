@@ -14,13 +14,14 @@
  * validateElement(myElement, "Invalid element!", true); // Throws error if myElement is not valid
  */
 function validateElement(element, errorMsg, shouldThrow=false) {
+    const msg = `${element} -- ${errorMsg}`;
     if (!(element instanceof HTMLElement) && !shouldThrow) {
-        console.warn(errorMsg);
+        console.warn(msg);
         return false;
     }
 
     if (!(element instanceof HTMLElement) && shouldThrow) {
-        throw new Error(errorMsg);
+        throw new Error(msg);
     }
 
     return true;

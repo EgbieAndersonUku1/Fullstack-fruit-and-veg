@@ -1,7 +1,6 @@
-import json
-from django.http import JsonResponse
+
 from django.contrib import messages
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
@@ -12,7 +11,8 @@ from utils.post_json_validator import validate_json_and_respond
 from utils.validator import validate_email_address
 from .utils.sessions import set_session
 
-from .models import NewsletterSubscription, NewsletterSubscriptionHistory
+from .models import NewsletterSubscription, NewsletterSubscriptionHistory, SubscriptionMessage
+from .form import SubscriptionFeedBackForm
 from utils.generator import generate_token
 from utils.send_emails_types import notify_admin_of_new_subscriber
 from utils.post_json_validator import validate_json_and_respond
@@ -76,6 +76,7 @@ def subscribe_user(request):
 @login_required(login_url=settings.LOGIN_URL, redirect_field_name="next")
 def manage_subscription(request):
     
+    subscription_form    = SubscriptionFeedBackForm()
     subscription         = NewsletterSubscription.objects.filter(user=request.user).first()
     RESULT_PER_PAGE      = 25
     latest_history       = subscription.user.subscription_history.order_by("-timestamp").all()
@@ -87,11 +88,9 @@ def manage_subscription(request):
     context = {
         "is_subscribed": not subscription.unsubscribed,
         "page_obj": page_obj,
-        
+        "form": subscription_form,
     }
-    
     return render(request, "account/subscription/manage_newsletter_subscription.html", context=context)
-
 
 
 @login_required(login_url=settings.LOGIN_URL, redirect_field_name="next")
@@ -146,4 +145,19 @@ def re_subscribe(request):
    
 @login_required(login_url=settings.LOGIN_URL, redirect_field_name="next")
 def unsubscribe(request):
-    pass
+    
+    form  = SubscriptionFeedBackForm()
+    
+    if request.method == "POST":
+        form = SubscriptionFeedBackForm(request.POST)
+        if form.is_valid():
+            
+            subscriber                          = NewsletterSubscription.get_by_user(user=request.user)
+            subscriber.reason_for_unsubscribing = form.cleaned_data["reason_for_unsubscribing"]
+            subscriber.unsubscribe()
+            messages.success(request, SubscriptionMessage.UNSUBSCRIBED)
+    else:
+          messages.error(request, SubscriptionMessage.ERROR)
+    
+    return redirect("manage_subscription")
+    
