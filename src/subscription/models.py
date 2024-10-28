@@ -162,8 +162,8 @@ class NewsletterSubscriptionHistory(models.Model):
     reason_for_unsubscribing = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
-        verbose_name         = "Newsletter Subscription History"
-        verbose_name_plural  = "Newsletter Subscription Histories"
+        verbose_name         = "Subscription History"
+        verbose_name_plural  = "Subscription Histories"
         
     def __str__(self) -> str:
         return f"{self.email} - {self.action} on {self.timestamp}"
@@ -172,12 +172,12 @@ class NewsletterSubscriptionHistory(models.Model):
 class UnsubscribedNewsletterSubscription(NewsletterSubscription):
     class Meta:
         proxy              = True
-        verbose_name        = "Unsubscribed Newsletter Subscription"
-        verbose_name_plural = "Unsubscribed Newsletter Subscriptions"
+        verbose_name        = "Unsubscribed Subscription"
+        verbose_name_plural = "Unsubscribed Subscriptions"
 
 
 class SubscribedNewsletterSubscription(NewsletterSubscription):
     class Meta:
         proxy               = True
-        verbose_name        = "Subscribed Newsletter Subscription"
-        verbose_name_plural = "Subscribed Newsletter Subscriptions"
+        verbose_name        = "Subscribed Subscription"
+        verbose_name_plural = "Subscribed Subscriptions"
