@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.db import IntegrityError, transaction
+from django.utils import timezone
 
 from utils.post_json_validator import validate_json_and_respond
 from utils.validator import validate_email_address
@@ -13,8 +14,7 @@ from .utils.sessions import set_session
 
 from .models import NewsletterSubscription, NewsletterSubscriptionHistory, SubscriptionMessage
 from .form import SubscriptionFeedBackForm
-from utils.generator import generate_token
-from utils.send_emails_types import notify_admin_of_new_subscriber
+from utils.send_emails_types import notify_admin_of_user_unsubscription, notify_admin_of_new_subscriber
 from utils.post_json_validator import validate_json_and_respond
 
 
@@ -146,6 +146,18 @@ def re_subscribe(request):
     subscriber = NewsletterSubscription.get_by_user(user=request.user)
     if subscriber:
         subscriber.subscribe()
+        NewsletterSubscriptionHistory.objects.create(title="User has re-subscribed",
+                                                         user=subscriber.user,
+                                                         email=subscriber.email,
+                                                         action="re-subscribed",
+                                                         unsubscribed_on=timezone.now(),
+                                                         start_date=subscriber.subscribed_on,
+                                                         frequency=subscriber.frequency,
+                                                         )
+            
+        # notify admin that user has unsubscribed
+        subject = "Subject: Subscriber Alert! 🎉"
+        notify_admin_of_new_subscriber(subject, user=subscriber)
         messages.success(request, SubscriptionMessage.SUBSCRIBED)
     else:
         messages.error(request, SubscriptionMessage.ERROR_SUBSCRIBING)
@@ -166,6 +178,19 @@ def unsubscribe(request):
             subscriber                          = NewsletterSubscription.get_by_user(user=request.user)
             subscriber.reason_for_unsubscribing = form.cleaned_data["reason_for_unsubscribing"]
             subscriber.unsubscribe()
+            
+            NewsletterSubscriptionHistory.objects.create(title="User has unsubscribed",
+                                                         user=subscriber.user,
+                                                         email=subscriber.email,
+                                                         action="unsubscribed",
+                                                         unsubscribed_on=timezone.now(),
+                                                         start_date=subscriber.subscribed_on,
+                                                         frequency=subscriber.frequency,
+                                                         )
+            
+            # notify admin that user has unsubscribed
+            subject = "Alert a user has unsubscribed"
+            notify_admin_of_user_unsubscription(subject, user=subscriber)
             messages.success(request, SubscriptionMessage.UNSUBSCRIBED)
     else:
           messages.error(request, SubscriptionMessage.ERROR_UNSUBSCRIBING)
