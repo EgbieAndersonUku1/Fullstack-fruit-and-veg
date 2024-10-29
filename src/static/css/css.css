@@ -312,6 +312,7 @@ table tr td a:nth-child(even):hover {
 }
 
 
+
 /* font color */
 .font-gray {
     color: black;
@@ -3724,4 +3725,10 @@ legend {
 
 #id_reason_for_unsubscribing {
     font-size: var(--font-size-normal);
+}
+
+
+#subscription-table tr.yellow-bg {
+    background: yellow;
+    color: black;
 }

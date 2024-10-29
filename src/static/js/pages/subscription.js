@@ -3,6 +3,7 @@ import fetchData from "../utils/fetch.js";
 import handleResponse from "../handlers/handleResponse.js";
 import { minimumCharactersToUse } from "../components/characterCounter.js";
 import showSpinner from "../utils/spinner.js";
+import handleTableInteractions from "../utils/tableInteractions.js";
 
 const headers                  = document.querySelectorAll("#subscription-tabs .tab > h4");
 const tabSections              = document.querySelectorAll(".tab-section");
@@ -18,7 +19,7 @@ const feedbackForm             = document.getElementById("newsletter-form");
 const unsubscribeBtn           = document.getElementById("unsubscribe-btn");
 const cancelBtn                = document.querySelector(".cancel-btn");
 const spinner                  = document.querySelector(".spinner");
-
+const subscriptionTable        = document.getElementById("subscription-table");
 
 // check if the global elements are valid before proceeding
 [subscriptionTabContainer, 
@@ -29,6 +30,7 @@ const spinner                  = document.querySelector(".spinner");
     feedBackFormContainer,
     cancelBtn,
     feedbackForm,
+    subscriptionTable,
     csrfTokenField].forEach((element) => {
     validateElement(element, "The html is not a valid element");
 });
@@ -43,6 +45,12 @@ cancelBtn?.addEventListener("click", handleCancelButtonClick);
 
 subscriptionTabContainer?.addEventListener("click", handleSubscriptionTabs);
 frequencyForm?.addEventListener("submit", handleFormSubmit);
+
+
+// Add a delegation event listener to the table
+subscriptionTable.addEventListener("click", handleTableInteractions);
+
+
 
 
 
