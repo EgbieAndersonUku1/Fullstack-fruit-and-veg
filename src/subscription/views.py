@@ -150,7 +150,6 @@ def re_subscribe(request):
                                                          user=subscriber.user,
                                                          email=subscriber.email,
                                                          action="re-subscribed",
-                                                         unsubscribed_on=timezone.now(),
                                                          start_date=subscriber.subscribed_on,
                                                          frequency=subscriber.frequency,
                                                          )
