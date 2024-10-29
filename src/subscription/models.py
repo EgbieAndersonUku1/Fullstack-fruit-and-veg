@@ -146,6 +146,7 @@ class NewsletterSubscription(models.Model):
             self.unsubscribed  = False
             self.save()
 
+    @staticmethod
     def _is_user_instance_valid(user):
         if not isinstance(user, User):
             raise TypeError(f"Expected an instance of User, got {type(user).__name__}")
@@ -157,16 +158,18 @@ class NewsletterSubscriptionHistory(models.Model):
     email                    = models.EmailField(max_length=255)
     action                   = models.CharField(max_length=50)  # e.g., 'subscribed' or 'unsubscribed'
     timestamp                = models.DateTimeField(auto_now_add=True)
+    start_date               = models.DateTimeField(blank=True, null=True)
     unsubscribed_on          = models.DateTimeField(blank=True, null=True)
     frequency                = models.CharField(max_length=2, choices=NewsletterSubscription.Frequency.CHOICES, null=True, blank=True)
     reason_for_unsubscribing = models.CharField(max_length=255, blank=True, null=True)
-
+    modified_on              = models.DateTimeField(auto_now=True)
+    
     class Meta:
         verbose_name         = "Subscription History"
         verbose_name_plural  = "Subscription Histories"
         
     def __str__(self) -> str:
-        return f"{self.email} - {self.action} on {self.timestamp}"
+        return f"{self.email} - {self.action} on {self.start_date}"
 
 
 class UnsubscribedNewsletterSubscription(NewsletterSubscription):
@@ -185,5 +188,7 @@ class SubscribedNewsletterSubscription(NewsletterSubscription):
 
 
 class SubscriptionMessage:
-    UNSUBSCRIBED = "Successfully unsubscribed the user."
-    ERROR        = "Something went wrong, and the user couldn't be unsubscribed. Please try again later."
+    UNSUBSCRIBED        = "Successfully unsubscribed the user."
+    ERROR_UNSUBSCRIBING = "Something went wrong, and the user couldn't be unsubscribed. Please try again later."
+    ERROR_SUBSCRIBING   = "Something went wrong, and the user couldn't be unsubscribed. Please try again later."
+    SUBSCRIBED          = "Successfully subscribed the user."

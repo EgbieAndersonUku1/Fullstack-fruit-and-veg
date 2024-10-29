@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.db import IntegrityError, transaction
+from django.utils import timezone
 
 from utils.post_json_validator import validate_json_and_respond
 from utils.validator import validate_email_address
@@ -13,8 +14,7 @@ from .utils.sessions import set_session
 
 from .models import NewsletterSubscription, NewsletterSubscriptionHistory, SubscriptionMessage
 from .form import SubscriptionFeedBackForm
-from utils.generator import generate_token
-from utils.send_emails_types import notify_admin_of_new_subscriber
+from utils.send_emails_types import notify_admin_of_user_unsubscription, notify_admin_of_new_subscriber
 from utils.post_json_validator import validate_json_and_respond
 
 
@@ -51,6 +51,7 @@ def subscribe_user(request):
                                                             user=user,
                                                             email=email,
                                                             action="subscribed",
+                                                            start_date=new_subscriber.subscribed_on,
                                                             frequency=new_subscriber.frequency,
                                                             )
                 
@@ -79,14 +80,14 @@ def manage_subscription(request):
     subscription_form    = SubscriptionFeedBackForm()
     subscription         = NewsletterSubscription.objects.filter(user=request.user).first()
     RESULT_PER_PAGE      = 25
-    latest_history       = subscription.user.subscription_history.order_by("-timestamp").all()
+    latest_history       = subscription.user.subscription_history.order_by("-timestamp").all() if subscription else None
     subscription_history = latest_history or []
     paginator            = Paginator(subscription_history, RESULT_PER_PAGE) 
     page_number          = request.GET.get("page", 1)
     page_obj             = paginator.get_page(page_number)
     
     context = {
-        "is_subscribed": not subscription.unsubscribed,
+        "is_subscribed": not subscription.unsubscribed if subscription is not None else False,
         "page_obj": page_obj,
         "form": subscription_form,
     }
@@ -118,6 +119,7 @@ def update_newsletter_frequency(request):
                             NewsletterSubscriptionHistory.objects.create(
                                 title="User updated frequency field",
                                 user=request.user,
+                                start_date=original_subscription.subscribed_on,
                                 email=original_subscription.email,
                                 action="subscribed",
                                 frequency=frequency_update,
@@ -140,7 +142,28 @@ def update_newsletter_frequency(request):
    
 @login_required(login_url=settings.LOGIN_URL, redirect_field_name="next")
 def re_subscribe(request):
-    pass
+  
+    subscriber = NewsletterSubscription.get_by_user(user=request.user)
+    if subscriber:
+        subscriber.subscribe()
+        NewsletterSubscriptionHistory.objects.create(title="User has re-subscribed",
+                                                         user=subscriber.user,
+                                                         email=subscriber.email,
+                                                         action="re-subscribed",
+                                                         unsubscribed_on=timezone.now(),
+                                                         start_date=subscriber.subscribed_on,
+                                                         frequency=subscriber.frequency,
+                                                         )
+            
+        # notify admin that user has unsubscribed
+        subject = "Subject: Subscriber Alert! 🎉"
+        notify_admin_of_new_subscriber(subject, user=subscriber)
+        messages.success(request, SubscriptionMessage.SUBSCRIBED)
+    else:
+        messages.error(request, SubscriptionMessage.ERROR_SUBSCRIBING)
+    return redirect("manage_subscription")
+        
+   
    
    
 @login_required(login_url=settings.LOGIN_URL, redirect_field_name="next")
@@ -155,9 +178,22 @@ def unsubscribe(request):
             subscriber                          = NewsletterSubscription.get_by_user(user=request.user)
             subscriber.reason_for_unsubscribing = form.cleaned_data["reason_for_unsubscribing"]
             subscriber.unsubscribe()
+            
+            NewsletterSubscriptionHistory.objects.create(title="User has unsubscribed",
+                                                         user=subscriber.user,
+                                                         email=subscriber.email,
+                                                         action="unsubscribed",
+                                                         unsubscribed_on=timezone.now(),
+                                                         start_date=subscriber.subscribed_on,
+                                                         frequency=subscriber.frequency,
+                                                         )
+            
+            # notify admin that user has unsubscribed
+            subject = "Alert a user has unsubscribed"
+            notify_admin_of_user_unsubscription(subject, user=subscriber)
             messages.success(request, SubscriptionMessage.UNSUBSCRIBED)
     else:
-          messages.error(request, SubscriptionMessage.ERROR)
+          messages.error(request, SubscriptionMessage.ERROR_UNSUBSCRIBING)
     
     return redirect("manage_subscription")
     
