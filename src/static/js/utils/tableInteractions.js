@@ -44,6 +44,12 @@ import { validateElement } from "../errors/customErrors.js";
  * After refreshing the HTML page, clicking on any cell will highlight that 
  * entire row, and clicking the header of the table will delete the corresponding 
  * column.
+ * 
+ * /**
+ * Note: The changes made by this function are not permanent. Once the page is refreshed,
+ * any modifications will be reverted. The primary purpose of this function is to allow 
+ * users to highlight rows or delete columns, enabling them to focus on specific rows 
+ * or compare columns more effectively without altering the original table.
  */
 export default function handleTableInteractions(e) {
 
