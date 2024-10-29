@@ -102,7 +102,7 @@
 
                         <td>{{ subscription.frequency | format_frequency }}</td>
 
-                        {% if subscription.action == 'subscribed' %}
+                        {% if subscription.action == 'subscribed' or 're-subscribe' %}
                             <td>Active</td>
                         {% else %}
                             <td>Not Active</td>
