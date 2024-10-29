@@ -50,7 +50,7 @@ class SubscribedNewsletterSubscriptionAdmin(BaseNewsletterAdmin):
 
 
 class NewsletterSubscriptionHistoryAdmin(admin.ModelAdmin):
-    list_display        = ["id", "title", "email", "action", "timestamp", "frequency"]
+    list_display        = ["id", "title", "email", "action", "start_date", "frequency"]
     list_display_links  = ["id", "title", "email"]
     list_per_page       = 40
     readonly_fields     = ["timestamp", "reason_for_unsubscribing", "email", "frequency", "action", "user"]
