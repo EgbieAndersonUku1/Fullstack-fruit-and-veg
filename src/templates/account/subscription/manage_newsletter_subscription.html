@@ -90,7 +90,8 @@
                 </thead>
 
                 {% for subscription in page_obj %}
-                    <tr>
+                 
+                    <tr data-id="{{ subscription.id }}">
                         <td>{{ subscription.title | title }}</td>
                         <td>{{ subscription.start_date }}</td>
 
@@ -213,6 +214,10 @@
           
         </form>
          
+    </div>
+
+    <div id="merge_fields">
+        <p>Merge highlighted table rows</p>
     </div>
     
 </section>

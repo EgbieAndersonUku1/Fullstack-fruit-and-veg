@@ -96,6 +96,7 @@ function deleteColumn(th) {
     const columnIndex = th.cellIndex;
     const table       = th.closest("table");
   
+  
     for (let row of table.rows) {
         if (row.cells.length > columnIndex) {
             row.deleteCell(columnIndex);

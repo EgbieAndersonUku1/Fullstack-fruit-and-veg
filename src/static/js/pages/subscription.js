@@ -20,6 +20,10 @@ const unsubscribeBtn           = document.getElementById("unsubscribe-btn");
 const cancelBtn                = document.querySelector(".cancel-btn");
 const spinner                  = document.querySelector(".spinner");
 const subscriptionTable        = document.getElementById("subscription-table");
+const mergeRows                = document.getElementById("merge_fields");
+
+const  addedRowIds = new Set();
+
 
 // check if the global elements are valid before proceeding
 [subscriptionTabContainer, 
@@ -31,6 +35,7 @@ const subscriptionTable        = document.getElementById("subscription-table");
     cancelBtn,
     feedbackForm,
     subscriptionTable,
+    mergeRows,
     csrfTokenField].forEach((element) => {
     validateElement(element, "The html is not a valid element");
 });
@@ -40,6 +45,7 @@ const CSRF_TOKEN   = csrfTokenField?.value;
 
 document.addEventListener("DOMContentLoaded", setUp);
 document.addEventListener(feedbackForm, handleFeedbackForm);
+mergeRows.addEventListener("click", handleMergeHighlightedRowsClick);
 unsubscribeBtn?.addEventListener("click", handleUnsubscribeBtnClick);
 cancelBtn?.addEventListener("click", handleCancelButtonClick);
 
@@ -216,3 +222,64 @@ function toggleSubscribeBtnState(disable=true) {
 function toggleFeedBackContainer(show=true) {
     show ? feedBackFormContainer.classList.add("show") : feedBackFormContainer.classList.remove("show");
 };
+
+
+
+
+/**
+ * Merges highlighted rows in the subscription table.
+ * When the "Merge highlighted table rows" button is clicked, this function 
+ * keeps only rows with the specified highlight class and hides all others.
+ * 
+ * @param {Event} e - The event triggered by the merge button click.
+ */
+function handleMergeHighlightedRowsClick(e) {
+  
+    const BACKGROUND_COLOR_CLASS = "yellow-bg";
+
+    const subscriptionCopyTable  = subscriptionTable.cloneNode(true);
+    const tbody                  = subscriptionTable.querySelector("tbody");
+    const fragment               = document.createDocumentFragment();
+    let   highlightedRowFound    = false;
+    
+    for (let row of subscriptionCopyTable.rows) {
+
+            if (row.classList.contains(BACKGROUND_COLOR_CLASS)) {
+                highlightedRowFound = true;
+                
+                if (highlightedRowFound) {
+
+                    const rowId = row.getAttribute('data-id'); 
+
+                    if (!addedRowIds.has(rowId)) {
+                        fragment.appendChild(row);
+                        addedRowIds.add(rowId);
+                    }
+                                     
+                };
+              
+            } ; 
+    }
+
+
+    if (highlightedRowFound) {
+        clearTableBody(tbody);
+        subscriptionTable.appendChild(fragment);     
+        
+    };
+}
+
+
+
+/**
+ * Clears all rows from a given table's tbody element.
+ * 
+ * @param {HTMLElement} tbody - The HTML table body to clear.
+ */
+function clearTableBody(tbody) {
+    validateElement(tbody, "The provided element is not a valid HTML element", true);
+    tbody.innerHTML = "";
+}
+
+
+
