@@ -3740,7 +3740,7 @@ legend {
     right: 0;
     border: 3px solid lavender;
     padding: 20px;
-    border-radius: 10%;
+    border-radius: 2%;
     background: white;
     text-transform: capitalize;
     cursor: pointer;
