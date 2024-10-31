@@ -22,8 +22,6 @@ const spinner                  = document.querySelector(".spinner");
 const subscriptionTable        = document.getElementById("subscription-table");
 const mergeRowsButton                = document.getElementById("merge_fields");
 
-const  addedRowIds = new Set();
-// console.log(addedRowIds);
 
 // check if the global elements are valid before proceeding
 [subscriptionTabContainer, 
@@ -245,13 +243,8 @@ function handleMergeHighlightedRowsClick(e) {
             if (!highlightedRowFound) {
                 highlightedRowFound = true;
             }
-        
-         
             const rowCopy = row.cloneNode(true);
             fragment.appendChild(rowCopy);
-            
-               
-              
             }; 
     }
 
