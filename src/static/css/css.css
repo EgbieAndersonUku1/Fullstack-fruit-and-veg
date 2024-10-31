@@ -3732,3 +3732,17 @@ legend {
     background: yellow;
     color: black;
 }
+
+
+#merge_fields {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    border: 3px solid lavender;
+    padding: 20px;
+    border-radius: 10%;
+    background: white;
+    text-transform: capitalize;
+    cursor: pointer;
+    border-left-color: var(--dark-red);
+}
