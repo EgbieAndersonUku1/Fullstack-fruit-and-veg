@@ -1,31 +1,9 @@
 from django.test import TestCase
-from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-
 from subscription.models import NewsletterSubscription
-
-User = get_user_model()
-
-
-def create_test_user(username="test_username", email="test_subscription@example.com", password="password!") -> "User":
-    """
-    Creates a test user that will be used for testing.
-    
-    :Params:
-        username (str): The username that will be created for the user
-        email    (str): The email address that will be created  for the suer
-        password (str): The password that will be created for the suer
-    
-    :Returns
-        - Returns an instance of the User model
-    """
-    user = User.objects.create(username=username, 
-                               email=email,
-                               )
-    user.set_password(password)
-    return user
+from .test_helper import create_test_user
 
 
 class NewsletterSubscriptionTest(TestCase):
@@ -33,7 +11,7 @@ class NewsletterSubscriptionTest(TestCase):
     def setUp(self):
         self.title = "Test subscription title"
         self.email = "test_subscription@example.com"
-        self.user = create_test_user()
+        self.user  = create_test_user()
         self.newsletter_subscription = NewsletterSubscription.objects.create(
             title=self.title,
             user=self.user,
@@ -74,11 +52,27 @@ class NewsletterSubscriptionTest(TestCase):
         self.newsletter_subscription.refresh_from_db()
         self.assertFalse(self.newsletter_subscription.unsubscribed)
     
-    def test_user_is_automatically_subscribed_on_creation(self):
+    def test_unsubscribed_date_field_is_empty_on_creation(self):
         """Test that the unsubscribed field date is empty when created"""
         self.newsletter_subscription.refresh_from_db()
         self.assertIsNone(self.newsletter_subscription.unsubscribed_on)
-    
+        
+    def test_unsubscribed_date_field_can_be_set(self):
+        """Test that the unsubscribed field date is empty when created"""
+        self.newsletter_subscription.refresh_from_db()
+        self.assertIsNone(self.newsletter_subscription.unsubscribed_on)
+        
+        self.newsletter_subscription.unsubscribed_on = timezone.now()
+        self.newsletter_subscription.save()
+        
+        self.newsletter_subscription.refresh_from_db()
+        self.assertIsNotNone(self.newsletter_subscription.unsubscribed_on)
+        
+        current_date_time_now = timezone.now()
+        
+        # check if the datetime is less than new created time
+        self.assertLessEqual(self.newsletter_subscription.unsubscribed_on, current_date_time_now)
+        
     def test_if_default_title_is_set_upon_creation(self):
         """Test if the default title is set upon creation"""
 
@@ -96,7 +90,23 @@ class NewsletterSubscriptionTest(TestCase):
         """Test that field reason for unsubscribing is created as a blank field when created"""
         self.newsletter_subscription.refresh_from_db()
         self.assertIsNone(self.newsletter_subscription.reason_for_unsubscribing)
+    
+    def test_reason_for_unsubscribing_field_can_be_set(self):
+        """Test if the reason for unsubscribing field can be set"""
         
+        # test if the field is none first
+        self.newsletter_subscription.refresh_from_db()
+        
+        self.assertIsNone(self.newsletter_subscription.reason_for_unsubscribing)
+        
+        REASON_FOR_UNSUBSCRIBING = "Test unsubscribing reason here"
+        self.newsletter_subscription.reason_for_unsubscribing = REASON_FOR_UNSUBSCRIBING
+        self.newsletter_subscription.save()
+        
+        self.newsletter_subscription.refresh_from_db()
+        self.assertIsNotNone(self.newsletter_subscription.reason_for_unsubscribing)
+        self.assertEqual(self.newsletter_subscription.reason_for_unsubscribing, REASON_FOR_UNSUBSCRIBING)    
+    
     def test_frequency_defaults_to_monthly(self):
         """Test that frequency field has a default setting of monthly"""
         self.newsletter_subscription.refresh_from_db()
@@ -104,7 +114,7 @@ class NewsletterSubscriptionTest(TestCase):
     
     def test_frequency_can_be_updated_to_all_possible_values(self):
         """Test that the frequency field can be updated to each possible value"""
-        self.newsletter_subscription.refresh_from_db()
+     
         frequencies = [
             NewsletterSubscription.Frequency.DAILY,
             NewsletterSubscription.Frequency.WEEKLY,
@@ -131,7 +141,19 @@ class NewsletterSubscriptionTest(TestCase):
         with self.assertRaises(ValidationError):
             self.newsletter_subscription.full_clean()  # this will triggers the model field validation
             self.newsletter_subscription.save()
+    
+    def test_email_field_length_does_not_exceed_maximum_length(self):
+        """Test that email field does not exceed the expected length limit"""
         
+        long_email  = "t" * 355  # max_length=255 on the db
+        long_email  =  f"{long_email}@example.com"
+        self.newsletter_subscription.email = long_email
+
+        # Attempt to save and expect a ValidationError due to length
+        with self.assertRaises(ValidationError):
+            self.newsletter_subscription.full_clean()  # this will triggers the model field validation
+            self.newsletter_subscription.save()
+            
     def test_subscription_deleted_when_user_is_deleted(self):
         """Test that deleting a user also deletes their newsletter subscriptions"""
         
@@ -144,8 +166,8 @@ class NewsletterSubscriptionTest(TestCase):
         # Check that the subscription was deleted as well
         self.assertEqual(NewsletterSubscription.objects.count(), 0)
     
-    
-    
+   
+
         
         
 
