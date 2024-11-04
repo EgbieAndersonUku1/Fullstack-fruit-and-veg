@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "account.apps.AccountConfig",
     
     "authentication.apps.AuthenticationConfig",
+    "blog.apps.BlogConfig",
     "user_profile.apps.UserProfileConfig",
     "subscription.apps.SubscriptionConfig",
     "testimonal.apps.TestimonalConfig",

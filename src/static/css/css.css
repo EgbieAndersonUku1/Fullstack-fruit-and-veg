@@ -3746,3 +3746,76 @@ legend {
     cursor: pointer;
     border-left-color: var(--dark-red);
 }
+
+
+/* The blog section */
+.blog-subscribe{
+    text-align: center;
+    width: 60%;
+    margin: auto;
+}
+
+.sub-text {
+    line-height: 2;
+    width: 60%;
+    margin: auto;
+}
+
+.featured-blog {
+    width: 80%;
+    margin: auto;
+    margin-top: 64px;
+    margin-bottom: 64px;
+
+    display: grid;
+    grid-template-columns: 40% 60%;
+    grid-template-rows: auto;
+}
+
+.post-content {
+    background: white;
+    border: 2px solid lavender;
+    position: relative;
+    left: 40px;
+    z-index: 10000;
+    height: auto;
+    padding: 20px;
+    border-radius: 2%;
+    box-shadow: var(--box-shadow);
+   
+}
+
+
+.image {
+    position: relative;
+    height: 300px;
+    width: 100%;
+    margin: auto;
+}
+
+
+.feature-img {
+    height: 100%;
+    width: 100%;
+    border-radius: 2%;
+
+}
+
+
+.read-more-btn {
+    padding: var(--padding-sm);
+}
+
+.category-tag {
+    border-radius: 4%;
+    margin-bottom: var(--padding-md);
+    text-transform: capitalize;
+    opacity: 0.8;
+    
+}
+
+.title {
+    font-size: 2.5rem;
+    color: gray;
+    font-weight: 500;
+}

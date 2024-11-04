@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Blog {% endblock title %}
+
+
+{% block body %}
+
+    {% include "partials/logo_link.html" %}
+
+    <section id="blog">
+
+
+        <div class="header">
+            <h1 class="center title">EUOrganics Blog</h1>
+            <p class="sub-text center padding-bottom-md padding-top-md">Welcome to EuOrganics blog, Here, we dive deep into the world of organic living, 
+                sustainable farming, and healthy eating across Europe. EUOrganics Blog is your go-to source for expert insights, trends, and tips on
+                 embracing a lifestyle that’s good for you and the planet. Whether you're an eco-conscious foodie, a budding organic gardener, 
+                 or simply interested in learning more about where your food comes from, you’ll find something to inspire you here.
+                </p>
+        </div>
+
+        <div class="blog-subscribe padding-top-md">
+            <form action="/" method="post" id="subscribe-form" class="subscribe-form" aria-labelledby="subscribe-title">
+                    {% csrf_token %}
+
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+                    <fieldset>
+                        <legend class="visually-hidden">Subscribe to our newsletter</legend>
+                        <label for="email" class="visually-hidden">Email address</label>
+                        <input type="email" name="email" id="email" required placeholder="Email..."
+                            class="subscribe__form__input-field">
+                        <button type="submit" class="subscribe-btn button-sm">Subscribe</button>
+                    </fieldset>
+                </form>
+        </div>
+
+        <div class="featured-blog">
+            <div class="post-content">
+                <button type="button" class="button-md green-bg category-tag">Category tag name here</button>
+                <button type="button" class="button-md dark-red-bg category-tag">Featured Blog</button>
+                <h2 class=""> Featured Blog Name</h2>
+                <p class="padding-bottom-md">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo provident veritatis hic aperiam, voluptatem, eum error vero adipisci impedit quae tenetur blanditiis quas odio mollitia, itaque rem! Ab, ipsum odio.</p>
+                <button type="button" class="button-md dark-red-bg read-more-btn">Read more &rarr;</button>
+            </div>
+
+            <div class="image">
+                <img src="{% static '/img/display/jpg/banner1.jpg' %}" alt="banner1" srcset="" class="feature-img">
+            </div>
+        </div>
+
+        <div class="top-blogs">
+
+        </div>
+
+        <div class="new-blogs">
+
+        </div>
+
+    </section>
+
+
+
+{% endblock body %}
+
+
+
+
