@@ -3762,13 +3762,13 @@ legend {
 }
 
 .featured-blog {
-    width: 80%;
+    width: 84%;
     margin: auto;
     margin-top: 200px;
     margin-bottom: 64px;
 
     display: grid;
-    grid-template-columns: 40% 60%;
+    grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto;
 }
 
