@@ -6,7 +6,10 @@
 
 {% block body %}
 
+  
     {% include "partials/logo_link.html" %}
+  
+
 
     <section id="blog">
 
@@ -38,7 +41,7 @@
 
         <div class="featured-blog">
             <div class="post-content">
-                <button type="button" class="button-md green-bg category-tag">Category tag name here</button>
+                <button type="button" class="button-md green-bg category-tag">Category name here</button>
                 <button type="button" class="button-md dark-red-bg category-tag">Featured Blog</button>
                 <h2 class=""> Featured Blog Name</h2>
                 <p class="padding-bottom-md">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo provident veritatis hic aperiam, voluptatem, eum error vero adipisci impedit quae tenetur blanditiis quas odio mollitia, itaque rem! Ab, ipsum odio.</p>
@@ -49,21 +52,261 @@
                 <img src="{% static '/img/display/jpg/banner1.jpg' %}" alt="banner1" srcset="" class="feature-img">
             </div>
         </div>
+        
+        <div class="top-blogs blog-cards">
+            <h1>Top blogs</h1>
+            <hr class="dividor">
 
-        <div class="top-blogs">
+            <div class="cards">
+                
+                  <!-- card -->
+                  <div class="card">
 
+                    <div class="card-head">
+                        <img src="{% static '/img/display/jpg/banner1.jpg' %}" alt="post covver image" class="card-head-img">
+                    </div>
+
+                    <div class="card-body">
+                        <h3 class="text-capitalize">Title of the post to go here</h3>
+                    </div>
+
+                    <div class="card-footer">
+                     
+                        <div class="card-author-img">
+                            <img src="{% static '/img/display/jpg/person.png' %}" alt="author image" class="card-icon">
+                        </div>
+
+                        <div class="card-footer-details">
+                           <p>Author name</p>
+                           <p>Tue 5 November 2024</p>
+                           <button type="button" class="button-md green-bg tag">Category name here</button>
+                        </div>     
+                       
+                    </div>
+
+                </div>
+                <!-- end of card -->
+
+
+                  <!-- card -->
+                  <div class="card">
+
+                    <div class="card-head">
+                        <img src="{% static '/img/display/jpg/banner2.jpg' %}" alt="post covver image" class="card-head-img">
+                    </div>
+
+                    <div class="card-body">
+                        <h3>Title of the post to go here</h3>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="card-author-img">
+                            <img src="../../static/img/display/jpg/person.png" alt="author image" class="card-icon">
+                        </div>
+
+                        <div class="card-footer-details">
+                           <p>Author name</p>
+                           <p>Tue 5 November 2024</p>
+                           <button type="button" class="button-md green-bg tag">Category name here</button>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- end of card -->
+
+                  <!-- card -->
+                  <div class="card">
+
+                    <div class="card-head">
+                        <img src="{% static '/img/display/jpg/banner3.jpg' %}" alt="post covver image" class="card-head-img">
+                    </div>
+
+                    <div class="card-body">
+                        <h3>Title of the post to go here</h3>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="card-author-img">
+                            <img src="{% static '/img/display/jpg/person.png' %}" alt="author image" class="card-icon">
+                        </div>
+
+                        <div class="card-footer-details">
+                           <p>Author name</p>
+                           <p>Tue 5 November 2024</p>
+                           <button type="button" class="button-md green-bg tag">Category name here</button>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- end of card -->
+
+                  <!-- card -->
+                  <div class="card">
+
+                    <div class="card-head">
+                        <img src="{% static '/img/display/jpg/banner4.jpg' %}" alt="post covver image" class="card-head-img">
+                    </div>
+
+                    <div class="card-body">
+                        <h3>Title of the post to go here</h3>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="card-author-img">
+                            <img src="{% static '/img/display/jpg/person.png' %}" alt="author image" class="card-icon">
+                        </div>
+
+                        <div class="card-footer-details">
+                           <p>Author name</p>
+                           <p>Tue 5 November 2024</p>
+                           <button type="button" class="button-md green-bg tag">Category name here</button>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- end of card -->
+            </div>
+
+            <div class="view-more-btn center">
+                <button type="button" class="button-sm dodger-blue-bg view-more-btn" id="view-more-btn">View more  &rarr;</button>
+            </div>
         </div>
 
-        <div class="new-blogs">
+        <div class="new-blogs blog-cards">
+            <h1>New blogs</h1>
+            <hr class="dividor">
+            <div class="cards">
+                
+        
+                <!-- card -->
+                <div class="card">
 
+                  <div class="card-head">
+                      <img src="{% static '/img/display/jpg/banner1.jpg' %}" alt="post covver image" class="card-head-img">
+                  </div>
+
+                  <div class="card-body">
+                      <h3 class="text-capitalize">Title of the post to go here</h3>
+                  </div>
+
+                  <div class="card-footer">
+                   
+                      <div class="card-author-img">
+                        <img src="{% static '/img/display/jpg/person.png' %}" alt="author image" class="card-icon">
+                      </div>
+
+                      <div class="card-footer-details">
+                         <p>Author name</p>
+                         <p>Tue 5 November 2024</p>
+                         <button type="button" class="button-md green-bg tag">Category name here</button>
+                      </div>     
+                     
+                  </div>
+
+              </div>
+              <!-- end of card -->
+
+
+                <!-- card -->
+                <div class="card">
+
+                  <div class="card-head">
+                      <img src="{% static '/img/display/jpg/banner2.jpg' %}" alt="post covver image" class="card-head-img">
+                  </div>
+
+                  <div class="card-body">
+                      <h3>Title of the post to go here</h3>
+                  </div>
+
+                  <div class="card-footer">
+                      <div class="card-author-img">
+                        <img src="{% static '/img/display/jpg/person.png' %}" alt="author image" class="card-icon">
+                      </div>
+
+                      <div class="card-footer-details">
+                         <p>Author name</p>
+                         <p>Tue 5 November 2024</p>
+                         <button type="button" class="button-md green-bg tag">Category name here</button>
+                      </div>
+                  </div>
+
+              </div>
+              <!-- end of card -->
+
+                <!-- card -->
+                <div class="card">
+
+                  <div class="card-head">
+                      <img src="{% static '/img/display/jpg/banner3.jpg' %}" alt="post covver image" class="card-head-img">
+                  </div>
+
+                  <div class="card-body">
+                      <h3>Title of the post to go here</h3>
+                  </div>
+
+                  <div class="card-footer">
+                      <div class="card-author-img">
+                        <img src="{% static '/img/display/jpg/person.png' %}" alt="author image" class="card-icon">
+                      </div>
+
+                      <div class="card-footer-details">
+                         <p>Author name</p>
+                         <p>Tue 5 November 2024</p>
+                         <button type="button" class="button-md green-bg tag">Category name here</button>
+                      </div>
+                  </div>
+
+              </div>
+              <!-- end of card -->
+
+                <!-- card -->
+                <div class="card">
+
+                  <div class="card-head">
+                      
+                      <img src="{% static '/img/display/jpg/banner4.jpg' %}" alt="post covver image" class="card-head-img">
+                  </div>
+
+                  <div class="card-body">
+                      <h3>Title of the post to go here</h3>
+                  </div>
+
+                  <div class="card-footer">
+                      <div class="card-author-img">
+                        <img src="{% static '/img/display/jpg/person.png' %}" alt="author image" class="card-icon">
+                      </div>
+
+                      <div class="card-footer-details">
+                         <p>Author name</p>
+                         <p>Tue 5 November 2024</p>
+                         <button type="button" class="button-md green-bg tag">Category name here</button>
+                      </div>
+                  </div>
+
+              </div>
+              <!-- end of card -->
+          </div>
+
+          <div class="view-more-btn new-blog-btn-container center">
+              <button type="button" class="button-sm dodger-blue-bg view-more-btn">View more  &rarr;</button>
+          </div>
         </div>
 
     </section>
 
+     <!-- login -->
+     {% include "partials/login.html" %}
+
+     <!-- register -->
+     {% include "partials/register.html" %}
 
 
 {% endblock body %}
 
 
 
+{% block script %}
+    <script src="{% static 'js/modules/auth.js' %}" type="module"></script>
+  
+{% endblock %}
 
