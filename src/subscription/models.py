@@ -61,7 +61,7 @@ class NewsletterSubscription(models.Model):
         Returns:
             str: 'N/A' if the user has not unsubscribed, otherwise the date they unsubscribed.
         """
-        return "N/A" if self.unsubscribed_on is None else self.unsubscribed_on
+        return "N/A" if self.unsubscribed_on is None else self.unsubscribed_on.strftime('%Y-%m-%d')
 
     @property
     def get_frequency(self):
