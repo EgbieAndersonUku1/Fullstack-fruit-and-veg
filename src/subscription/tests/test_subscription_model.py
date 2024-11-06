@@ -160,7 +160,6 @@ class NewsletterSubscriptionTest(TestCase):
         # Verify the subscription exists initially
         self.assertEqual(NewsletterSubscription.objects.count(), 1)
         
-        # Delete the user
         self.user.delete()
         
         # Check that the subscription was deleted as well
