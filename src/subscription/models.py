@@ -40,12 +40,13 @@ class NewsletterSubscription(models.Model):
     title                    = models.CharField(max_length=255, default="General Newsletter") 
     user                     = models.ForeignKey(User, on_delete=models.CASCADE, related_name="newsletter_subscriptions")
     email                    = models.EmailField(max_length=255, unique=True)
-    subscribed_on            = models.DateTimeField(auto_now_add=True)
+    subscribed_on            = models.DateTimeField(blank=True, null=True)
     modified_on              = models.DateTimeField(auto_now=True)
-    unsubscribed             = models.BooleanField(default=False) 
+    unsubscribed             = models.BooleanField(blank=True, null=True) 
     frequency                = models.CharField(choices=Frequency.CHOICES, max_length=2, default=Frequency.MONTHLY)
     unsubscribed_on          = models.DateTimeField(blank=True, null=True)
     reason_for_unsubscribing = models.TextField(blank=True, null=True)
+    created_at               = models.DateTimeField(auto_now_add=True)
     
     def __str__(self) -> str:
         return f"{self.title} - {self.email}"
