@@ -53,6 +53,7 @@ def subscribe_user(request):
                                                             action="subscribed",
                                                             start_date=new_subscriber.subscribed_on,
                                                             frequency=new_subscriber.frequency,
+                                                            subscribed_on=timezone.now(),
                                                             )
                 
                 

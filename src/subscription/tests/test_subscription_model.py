@@ -15,7 +15,8 @@ class NewsletterSubscriptionTest(TestCase):
         self.newsletter_subscription = NewsletterSubscription.objects.create(
             title=self.title,
             user=self.user,
-            email=self.email
+            email=self.email,
+            subscribed_on=timezone.now(),
         )
     
     def test_creation_count(self):
