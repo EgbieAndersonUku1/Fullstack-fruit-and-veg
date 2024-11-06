@@ -1,0 +1,456 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Blog - details{% endblock title %}
+
+
+{% block body %}
+
+
+<section id="blog-details">
+    <div class="container">
+        <div class="main">
+
+            <div class="page-header">
+                <a href="{% url 'blog_home' %}" class="go-back-link">&leftarrow; back</a>
+                <h1 class="text-upper">Blog</h1>
+            </div>
+
+            <div class="blog-title padding-top-lg padding-bottom-md">
+                <h1 class="center padding-bottom-md">Some title to go here</h1>
+                <div class="post-meta center">
+
+                    <span class="post-author"> <span><img src="{% static 'img/icons/person-add.svg' %}" alt="clock icon" class="blog-icon"></span>  By Egbie</span>
+                    <span class="post-date"> <span><img src="{% static 'img/icons/clock.svg' %}" alt="clock icon" class="blog-icon"></span>  Nov 06, 2024</span>
+                    <span class="post-views"> <span><img src="{% static 'img/icons/people-outline.svg' %}" alt="clock icon" class="blog-icon"></span>  100+ views</span>
+                    <span class="post-bookmarks"> <span><img src="{% static 'img/icons/bookmark-save.svg' %}" alt="clock icon" class="blog-icon"></span>Bookmark save</span>
+
+                </div>
+            </div>
+
+            <div class="blog-main-image-container padding-top-lg">
+                <img src="{% static '/img/display/jpg/banner1.jpg' %}" alt="Blog main image" class="blog-main-img">
+            </div>
+
+            <div class="blog-text padding-bottom-md">
+                <p class="padding-bottom-md">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laboriosam
+                    mollitia deleniti culpa accusamus. Dolorem voluptas totam fugiat dolorum officia animi iste
+                    provident. Natus similique veniam voluptates possimus sed pariatur ratione.</p>
+                <p class="padding-bottom-md">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum culpa
+                    incidunt velit, cum ipsum dolor, voluptate iure suscipit impedit eum eveniet totam natus odit
+                    quisquam, nisi deleniti recusandae eaque accusantium.</p>
+                <p class="padding-bottom-md">Lorem ipsum dolor sit amet consectetur adipisicing elit. At quae minus sunt
+                    veritatis quaerat? Accusantium minima mollitia magni molestiae eaque quisquam natus animi iusto
+                    consectetur praesentium, quasi, quis similique doloremque.</p>
+                <p class="padding-bottom-md">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero iste
+                    placeat eum distinctio nulla ratione eveniet incidunt dolorum ab! Iure rem voluptatum sunt est
+                    vitae. Ipsam, sapiente! Facere, tenetur autem!</p>
+                <p class="padding-bottom-md">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero iste
+                    placeat eum distinctio nulla ratione eveniet incidunt dolorum ab! Iure rem voluptatum sunt est
+                    vitae. Ipsam, sapiente! Facere, tenetur autem!</p>
+                <p class="padding-bottom-md">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero iste
+                    placeat eum distinctio nulla ratione eveniet incidunt dolorum ab! Iure rem voluptatum sunt est
+                    vitae. Ipsam, sapiente! Facere, tenetur autem!</p>
+                <p class="padding-bottom-md">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero iste
+                    placeat eum distinctio nulla ratione eveniet incidunt dolorum ab! Iure rem voluptatum sunt est
+                    vitae. Ipsam, sapiente! Facere, tenetur autem!</p>
+
+            </div>
+
+            <div class="blog-tags">
+                <a href="#"><div class="blog-tag">tag content here</div></a>
+                <a href="#"><div class="blog-tag">tag content here</div></a>
+                <a href="#"><div class="blog-tag">tag content here</div></a>
+                <a href="#"><div class="blog-tag">tag content here</div></a>
+                <a href="#"><div class="blog-tag">tag content here</div></a>
+                <a href="#"><div class="blog-tag">tag content here</div></a>
+                <a href="#"><div class="blog-tag">tag content here</div></a>
+                <a href="#"><div class="blog-tag">tag content here</div></a>
+            </div>
+
+            <div class="blog-interactions padding-top-lg">
+
+                <div class="user-actions two-column-grid">
+                    <a href="#" class="likes">❤️ 10 Likes</a>
+                    <a href="#" class="comments">💬 5 Comments</a>
+                </div>
+
+            </div>
+
+            <hr class="dividor">
+
+            <div class="comments">
+                <h1 class="padding-bottom-md padding-top-md">Comments</h1>
+
+                <div class="author-comment">
+                    <div class="card-author-img flex-row">
+
+                        <img src="{% static '/img/display/jpg/person.png' %}" alt="author image" class="comment-icon">
+
+                        <div class="author-img-attributes">
+                            <p>Author name</p>
+                            <p>Tue 5 November 2024</p>
+                        </div>
+                    </div>
+
+                    <p class="comment">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
+                        numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
+                        molestias quibusdam natus alias adipisci!
+                    </p>
+                </div>
+
+                <div class="reply padding-top-md">
+                    <p class="light-bold text-capitalize padding-bottom-md">Reply</p>
+                    <div class="card-author-img reply-author">
+                        <img src="{% static 'img/display/jpg/person-9.png' %}" alt="author image" class="comment-icon">
+
+
+                        <div class="author-img-attributes">
+                            <p>Author name</p>
+                            <p>Tue 5 November 2024</p>
+                        </div>
+                    </div>
+
+
+                    <p class="comment reply-comment">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
+                        numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
+                        molestias quibusdam natus alias adipisci!
+                    </p>
+                </div>
+                <div class="reply padding-top-md">
+                    <p class="light-bold text-capitalize padding-bottom-md">Reply</p>
+                    <div class="card-author-img reply-author">
+
+                        <img src="{% static 'img/display/jpg/person-9.png' %}" alt="author image" class="comment-icon">
+
+                        <div class="author-img-attributes">
+                            <p>Author name</p>
+                            <p>Tue 5 November 2024</p>
+                        </div>
+                    </div>
+
+
+                    <p class="comment reply-comment">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
+                        numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
+                        molestias quibusdam natus alias adipisci!
+                    </p>
+                </div>
+                <div class="reply padding-top-md">
+                    <p class="light-bold text-capitalize padding-bottom-md">Reply</p>
+                    <div class="card-author-img reply-author">
+                        
+                        <img src="{% static 'img/display/jpg/person-9.png' %}" alt="author image" class="comment-icon">
+                        <div class="author-img-attributes">
+                            <p>Author name</p>
+                            <p>Tue 5 November 2024</p>
+                        </div>
+                    </div>
+
+
+                    <p class="comment reply-comment">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
+                        numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
+                        molestias quibusdam natus alias adipisci!
+                    </p>
+                </div>
+
+                <div class="author-comment">
+                    <div class="card-author-img flex-row">
+
+                        <img src="{% static '/img/display/jpg/person.png' %}" alt="author image" class="comment-icon">
+
+                        <div class="author-img-attributes">
+                            <p>Author name</p>
+                            <p>Tue 5 November 2024</p>
+                        </div>
+                    </div>
+
+                    <p class="comment">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
+                        numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
+                        molestias quibusdam natus alias adipisci!
+                    </p>
+                </div>
+            </div>
+
+            <hr class="dividor">
+            <h3 class="text-capitalize light-bold">Leave a new comment to this post</h3>
+            <p class="padding-bottom-md">Please note your email address won't be published</p>
+
+            <div class="comment-form">
+                <form action="" method="post" id="comment-form">
+                    <textarea name="comment-form" id="comment-form" rows="10" cols="10"
+                        placeholder="Add a comment.."></textarea>
+
+                    <div class="form-group triple-grid">
+                        <input type="text" name="name" id="author-name" required placeholder="Name..">
+                        <input type="text" name="email" id="email" required placeholder="Email...">
+                        <input type="text" name="website" id="website" placeholder="Website optional..">
+                    </div>
+
+                    <div class="button flex-end">
+                        <button type="submit" class="text-capitalize button-md comment-btn dark-green-bg">Post
+                            Comment</button>
+                    </div>
+                </form>
+            </div>
+
+
+
+        </div>
+
+        <!-- The side bar -->
+        <div class="sidebar">
+
+
+            <div class="most-recent">
+                <h2 class="center">Most Recent</h2>
+
+
+                <div class="recent-post">
+                    <div class="recent-post-container">
+                        <img src="{% static '/img/display/jpg/banner1.jpg' %}" alt="recent image pic"
+                            class="recent-post-image">
+                    </div>
+
+                    <div class="recent-post-content">
+                        <h4 class="light-bold">Some title to go here</h4>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.....</p>
+                        <a href="#" class="view-recent-link">View more &rAarr;</a>
+
+                    </div>
+
+                </div>
+
+                <div class="recent-post">
+                    <div class="recent-post-container">
+                        <img src="{% static '/img/display/jpg/banner2.jpg' %}" alt="recent image pic"
+                            class="recent-post-image">
+                    </div>
+
+                    <div class="recent-post-content">
+                        <h4 class="light-bold">Some title to go here</h4>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.....</p>
+                        <a href="#" class="view-recent-link">View more &rAarr;</a>
+
+                    </div>
+
+                </div>
+
+                <div class="recent-post">
+                    <div class="recent-post-container">
+                        <img src="{% static '/img/display/jpg/banner3.jpg' %}" alt="recent image pic"
+                        class="recent-post-image">
+                    </div>
+
+                    <div class="recent-post-content">
+                        <h4 class="light-bold">Some title to go here</h4>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.....</p>
+                        <a href="#" class="view-recent-link">View more &rAarr;</a>
+
+                    </div>
+
+                </div>
+
+                <div class="recent-post">
+                    <div class="recent-post-container">
+                        <img src="{% static '/img/display/jpg/banner4.jpg' %}" alt="recent image pic"
+                        class="recent-post-image">
+                    </div>
+
+                    <div class="recent-post-content">
+                        <h4 class="light-bold">Some title to go here</h4>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.....</p>
+                        <a href="#" class="view-recent-link">View more &rAarr;</a>
+
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+            <div class="related-blogs">
+                <h2 class="light-bold center text-capitalize">Related blogs</h2>
+                <div class="cards">
+                    <!-- card -->
+                    <div class="card">
+
+                        <div class="card-head">
+                            <img src="{% static '/img/display/jpg/banner1.jpg' %}" alt="post covver image"
+                                class="card-head-img">
+                        </div>
+
+                        <div class="card-body">
+                            <h3>Title of the post to go here</h3>
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="card-author-img">
+                                <img src="{% static '/img/display/jpg/banner1.jpg' %}" alt="author image"
+                                    class="card-icon">
+                            </div>
+
+                            <div class="card-footer-details">
+                                <p>Author name</p>
+                                <p>Tue 5 November 2024</p>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- end of card -->
+
+                    <div class="card">
+
+                        <div class="card-head">
+                            <img src="{% static '/img/display/jpg/banner1.jpg' %}" alt="post covver image"
+                                class="card-head-img">
+                        </div>
+
+                        <div class="card-body">
+                            <h3>Title of the post to go here</h3>
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="card-author-img">
+                                <img src=".{% static '/img/display/jpg/banner1.jpg' %}" alt="author image"
+                                    class="card-icon">
+                            </div>
+
+                            <div class="card-footer-details">
+                                <p>Author name</p>
+                                <p>Tue 5 November 2024</p>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- end of card -->
+
+                    <div class="card">
+
+                        <div class="card-head">
+                            <img src="{% static '/img/display/jpg/banner1.jpg' %}" alt="post covver image"
+                                class="card-head-img">
+                        </div>
+
+                        <div class="card-body">
+                            <h3>Title of the post to go here</h3>
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="card-author-img">
+                                <img src="{% static '/img/display/jpg/banner1.jpg' %}" alt="author image"
+                                    class="card-icon">
+                            </div>
+
+                            <div class="card-footer-details">
+                                <p>Author name</p>
+                                <p>Tue 5 November 2024</p>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- end of card -->
+
+                </div>
+            </div>
+
+
+            <div class="top-category">
+
+                <h2 class="center padding-bottom-sm">Top categories</h2>
+                <div class="cards">
+                    <div class="card">
+                        <div class="head">
+                            <h4>Some title will go here</h4>
+                        </div>
+
+                        <div class="body">
+                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error nihil alias quos vero
+                                accusantium rerum, sapiente molestiae ducimus voluptas laudantium excepturi, laboriosam
+                                dicta. Perferendis dolorem magnam inventore, fuga dicta laborum!</p>
+                        </div>
+
+                        <div class="footer">
+                            <a href="#" class="view-recent-link">View more &rAarr;</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cards">
+                    <div class="card">
+                        <div class="head">
+                            <h4>Some title will go here</h4>
+                        </div>
+
+                        <div class="body">
+                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error nihil alias quos vero
+                                accusantium rerum, sapiente molestiae ducimus voluptas laudantium excepturi, laboriosam
+                                dicta. Perferendis dolorem magnam inventore, fuga dicta laborum!</p>
+                        </div>
+
+                        <div class="footer">
+                            <a href="#" class="view-recent-link">View more &rAarr;</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cards">
+                    <div class="card">
+                        <div class="head">
+                            <h4>Some title will go here</h4>
+                        </div>
+
+                        <div class="body">
+                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error nihil alias quos vero
+                                accusantium rerum, sapiente molestiae ducimus voluptas laudantium excepturi, laboriosam
+                                dicta. Perferendis dolorem magnam inventore, fuga dicta laborum!</p>
+                        </div>
+
+                        <div class="footer">
+                            <a href="#" class="view-recent-link">View more &rAarr;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="top-blog-tags">
+
+                <h3 class="center text-capitalize">Top blog tags</h3>
+                <div class="blog-tags">
+                    <a href="#"><div class="blog-tag">tag content here</div></a>
+                    <a href="#"><div class="blog-tag">tag content here</div></a>
+                    <a href="#"><div class="blog-tag">tag content here</div></a>
+                    <a href="#"><div class="blog-tag">tag content here</div></a>
+                    <a href="#"><div class="blog-tag">tag content here</div></a>
+                    <a href="#"><div class="blog-tag">tag content here</div></a>
+                 
+    
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+</section>
+
+  <!-- login -->
+  {% include "partials/login.html" %}
+
+  <!-- register -->
+  {% include "partials/register.html" %}
+
+{% endblock body %}
+
+{% block script %}
+    <script src="{% static 'js/modules/auth.js' %}" type="module"></script>
+{% endblock %}
