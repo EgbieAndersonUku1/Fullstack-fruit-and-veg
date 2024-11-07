@@ -259,6 +259,9 @@ table tr:nth-child(odd) {
 }
 
 
+.cke_5 {
+    width: 100%;
+}
 
 table tr td a:nth-child(even):hover {
     color: green;
@@ -4183,6 +4186,26 @@ legend {
 
 .post-meta span:hover {
     font-size: var(--font-size-sm);
+    text-decoration: underline;
+}
+
+
+#post-form input[type='text'],
+#post-form select,
+#post-form input[type='file'] {
+    width: 100%;
+    margin-bottom: 3px;
+    height: 30px;
+    font-size: var(--font-size-sm);
+}
+
+small.help-text {
+    color: #6c757d; 
+    font-size: 0.875em; 
+    cursor: pointer;
+}
+
+small.help-text:hover {
     text-decoration: underline;
 }
 

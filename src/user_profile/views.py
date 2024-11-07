@@ -15,6 +15,7 @@ from .forms.user_profile_form import (UserProfileForm,
                                       )
 from .models import BillingAddress, ShippingAddress
 
+
 # Create your views here.
 
 @login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
