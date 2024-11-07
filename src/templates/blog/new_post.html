@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+
+{% block title %}{% endblock title %}
+
+
+
+{% block body %}
+
+
+<section id="new-post" aria-labelledby="blog-heading">
+    <div class="blog__container content-container">
+        {% include "partials/logo_link.html" %}
+      
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'account' %}">My account</a></li>
+            <li><a href="{% url 'blog_section' %}">Manage blog section</a></li>
+            <li>Create new post</li>
+        </ul>
+
+        <h2 class="lighten padding-top-md">New Post</h2>
+        <p class="account-info">Create new blog post</p>
+        <hr class="dividor">
+
+        <div class="new_post">
+            <form action="" method="post" id="post-form">
+                {% csrf_token %}
+
+                {{ form.media }}
+
+
+                <div class="form-field">
+                    {{ form.title.label}}
+                    {{ form.title }}
+    
+                </div>
+               
+                <div class="form-field">
+                    {{ form.cover_pic.label}}
+                    {{ form.cover_pic }}
+    
+                </div>
+
+                <div class="form-field">
+                    {{ form.new_category.label }} 
+                    {{ form.new_category }}
+                    {% if form.new_category.help_text %}
+                        <small class="help-text">{{ form.new_category.help_text }}</small>
+                    {% endif %}
+                </div>
+
+                
+                <div class="form-field">
+                    {{ form.new_category_name.label }} 
+                    {{ form.new_category_name }}
+                </div>
+
+                <div class="form-field">
+                    {{ form.status.label }}
+                    {{ form.status  }}
+                </div>
+
+               <div class="form-field">
+                    {{ form.post.label }}
+                    {{ form.post | safe }}
+               </div>
+
+               <div class="button flex-end padding-bottom-md">
+                    <button type="submit" class="text-capitalize button-sm comment-btn dark-green-bg">Save</button>
+
+               </div>
+            </form>
+        </div>
+
+    </div>
+
+
+{% endblock body %}
+
+
+
+
+

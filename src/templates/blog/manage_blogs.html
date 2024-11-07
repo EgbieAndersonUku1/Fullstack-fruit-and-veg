@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Manage blogs{% endblock title %}
+
+
+{% block body %}
+
+
+<section id="blog-section" aria-labelledby="blog-heading">
+    <div class="blog__container content-container">
+        {% include "partials/logo_link.html" %}
+      
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'account' %}">My account</a></li>
+            <li><a href="#">Manage blog section</a></li>
+        </ul>
+
+        <h2 class="lighten padding-top-md">Manage Blog Section</h2>
+        <p class="account-info">Manage blog and post</p>
+        <hr class="dividor">
+
+
+        <!-- cards -->
+        <div class="triple-grid col-gap-small">
+
+            <a href="{% url 'new_post' %}" aria-labelledby="create-new-post-heading" class="card-link">
+
+                <!-- card 1 -->
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static 'img/icons/comments.svg' %}" alt="comment key icon" class="account-icon">
+                    </div>
+                    <div class="body">
+                        <p class="create-new-post-heading text-capitalize">New post</p>
+                        <p>Quickly create a new blog post.</p>
+                    </div>
+                    
+                </div>
+            </a>
+
+
+            <a href="#" aria-labelledby="view-post-heading" class="card-link">
+
+                <!-- card 1 -->
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static 'img/icons/person-add.svg' %}" alt="comment key icon" class="account-icon">
+                    </div>
+                    <div class="body">
+                        <p id="view-post-heading" class="view-post-heading text-capitalize">Manage posts</p>
+                        <p>View, edit, or delete existing posts.</p>
+                    </div>
+                    
+                </div>
+            </a>
+
+        
+            <a href="#" aria-labelledby="view-post-heading" class="card-link">
+
+                <!-- card 1 -->
+                <div class="card-grid">
+                    <div class="head">
+                        <img src="{% static 'img/icons/find-in-page.svg' %}" alt="comment key icon" class="account-icon">
+                    </div>
+                    <div class="body">
+                        <p id="view-post-heading" class="view-post-heading text-capitalize">Manage Comments</p>
+                        <p>Moderate user comments: approve, delete, or mark as spam.</p>
+                    </div>
+                    
+                </div>
+            </a>
+
+        
+        </div>
+    </div>
+
+
+{% endblock body %}
+
+
+
+
+
