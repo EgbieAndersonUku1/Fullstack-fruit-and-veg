@@ -19,10 +19,14 @@
                 <h1 class="center padding-bottom-md">Some title to go here</h1>
                 <div class="post-meta center">
 
-                    <span class="post-author"> <span><img src="{% static 'img/icons/person-add.svg' %}" alt="clock icon" class="blog-icon"></span>  By Egbie</span>
-                    <span class="post-date"> <span><img src="{% static 'img/icons/clock.svg' %}" alt="clock icon" class="blog-icon"></span>  Nov 06, 2024</span>
-                    <span class="post-views"> <span><img src="{% static 'img/icons/people-outline.svg' %}" alt="clock icon" class="blog-icon"></span>  100+ views</span>
-                    <span class="post-bookmarks"> <span><img src="{% static 'img/icons/bookmark-save.svg' %}" alt="clock icon" class="blog-icon"></span>Bookmark save</span>
+                    <span class="post-author"> <span><img src="{% static 'img/icons/person-add.svg' %}" alt="clock icon"
+                                class="blog-icon"></span> By Egbie</span>
+                    <span class="post-date"> <span><img src="{% static 'img/icons/clock.svg' %}" alt="clock icon"
+                                class="blog-icon"></span> Nov 06, 2024</span>
+                    <span class="post-views"> <span><img src="{% static 'img/icons/people-outline.svg' %}"
+                                alt="clock icon" class="blog-icon"></span> 100+ views</span>
+                    <span class="post-bookmarks"> <span><img src="{% static 'img/icons/bookmark-save.svg' %}"
+                                alt="clock icon" class="blog-icon"></span>Bookmark save</span>
 
                 </div>
             </div>
@@ -57,14 +61,30 @@
             </div>
 
             <div class="blog-tags">
-                <a href="#"><div class="blog-tag">tag content here</div></a>
-                <a href="#"><div class="blog-tag">tag content here</div></a>
-                <a href="#"><div class="blog-tag">tag content here</div></a>
-                <a href="#"><div class="blog-tag">tag content here</div></a>
-                <a href="#"><div class="blog-tag">tag content here</div></a>
-                <a href="#"><div class="blog-tag">tag content here</div></a>
-                <a href="#"><div class="blog-tag">tag content here</div></a>
-                <a href="#"><div class="blog-tag">tag content here</div></a>
+                <a href="#">
+                    <div class="blog-tag">tag content here</div>
+                </a>
+                <a href="#">
+                    <div class="blog-tag">tag content here</div>
+                </a>
+                <a href="#">
+                    <div class="blog-tag">tag content here</div>
+                </a>
+                <a href="#">
+                    <div class="blog-tag">tag content here</div>
+                </a>
+                <a href="#">
+                    <div class="blog-tag">tag content here</div>
+                </a>
+                <a href="#">
+                    <div class="blog-tag">tag content here</div>
+                </a>
+                <a href="#">
+                    <div class="blog-tag">tag content here</div>
+                </a>
+                <a href="#">
+                    <div class="blog-tag">tag content here</div>
+                </a>
             </div>
 
             <div class="blog-interactions padding-top-lg">
@@ -78,7 +98,7 @@
 
             <hr class="dividor">
 
-            <div class="comments">
+            <div id="comments-section">
                 <h1 class="padding-bottom-md padding-top-md">Comments</h1>
 
                 <div class="author-comment">
@@ -87,20 +107,30 @@
                         <img src="{% static '/img/display/jpg/person.png' %}" alt="author image" class="comment-icon">
 
                         <div class="author-img-attributes">
-                            <p>Author name</p>
+                            <p>Author name <span class="bold">OP</span> </p>
                             <p>Tue 5 November 2024</p>
                         </div>
                     </div>
 
-                    <p class="comment">
+                    <p class="comment" id="1">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
                         numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
                         molestias quibusdam natus alias adipisci!
                     </p>
+
+                    <div class="reply-link-div">
+                        <a class="light-bold text-capitalize padding-bottom-md reply-comment-link"
+                            data-reply-box-id="reply-1">Reply</a>
+                    </div>
+
+                    <!-- link the comment id number with reply id (e.g comment id 1 is link with the reply id box = reply-1 for the js)-->
+                    <div class="reply-form" id="reply-1">
+                        <!-- generate dynamically -->
+                    </div>
                 </div>
 
                 <div class="reply padding-top-md">
-                    <p class="light-bold text-capitalize padding-bottom-md">Reply</p>
+
                     <div class="card-author-img reply-author">
                         <img src="{% static 'img/display/jpg/person-9.png' %}" alt="author image" class="comment-icon">
 
@@ -110,7 +140,6 @@
                             <p>Tue 5 November 2024</p>
                         </div>
                     </div>
-
 
                     <p class="comment reply-comment">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
@@ -118,18 +147,18 @@
                         molestias quibusdam natus alias adipisci!
                     </p>
                 </div>
-                <div class="reply padding-top-md">
-                    <p class="light-bold text-capitalize padding-bottom-md">Reply</p>
-                    <div class="card-author-img reply-author">
 
+                <div class="reply padding-top-md">
+
+                    <div class="card-author-img reply-author">
                         <img src="{% static 'img/display/jpg/person-9.png' %}" alt="author image" class="comment-icon">
 
+
                         <div class="author-img-attributes">
-                            <p>Author name</p>
+                            <p>Author name <span class="bold">OP</span> </p>
                             <p>Tue 5 November 2024</p>
                         </div>
                     </div>
-
 
                     <p class="comment reply-comment">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
@@ -137,17 +166,18 @@
                         molestias quibusdam natus alias adipisci!
                     </p>
                 </div>
+
                 <div class="reply padding-top-md">
-                    <p class="light-bold text-capitalize padding-bottom-md">Reply</p>
+
                     <div class="card-author-img reply-author">
-                        
                         <img src="{% static 'img/display/jpg/person-9.png' %}" alt="author image" class="comment-icon">
+
+
                         <div class="author-img-attributes">
                             <p>Author name</p>
                             <p>Tue 5 November 2024</p>
                         </div>
                     </div>
-
 
                     <p class="comment reply-comment">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
@@ -167,12 +197,53 @@
                         </div>
                     </div>
 
-                    <p class="comment">
+                    <p class="comment" id="2">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
                         numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
                         molestias quibusdam natus alias adipisci!
                     </p>
+
+                    <div class="reply-link-div">
+                        <a class="light-bold text-capitalize padding-bottom-md reply-comment-link"
+                            data-reply-box-id="reply-2">Reply</a>
+                    </div>
+
+                    <!-- link the comment id number with reply id (e.g comment id 1 is link with the reply id box = reply-1 for the js)-->
+                    <div class="reply-form" id="reply-2">
+                        <!-- generate dynamically -->
+                    </div>
                 </div>
+
+                <div class="author-comment">
+                    <div class="card-author-img flex-row">
+
+                        <img src="{% static '/img/display/jpg/person.png' %}" alt="author image" class="comment-icon">
+
+                        <div class="author-img-attributes">
+                            <p>Author name <span class="bold">OP</span> </p>
+                            <p>Tue 5 November 2024</p>
+                        </div>
+                    </div>
+
+                    <p class="comment" id="3">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
+                        numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
+                        molestias quibusdam natus alias adipisci!
+                    </p>
+
+                    <div class="reply-link-div">
+                        <a class="light-bold text-capitalize padding-bottom-md reply-comment-link"
+                            data-reply-box-id="reply-3">Reply</a>
+                    </div>
+
+                    <!-- link the comment id number with reply id (e.g comment id 1 is link with the reply id box = reply-1 for the js)-->
+                    <div class="reply-form" id="reply-3">
+                        <!-- generate dynamically -->
+                    </div>
+                </div>
+
+
+
             </div>
 
             <hr class="dividor">
@@ -181,17 +252,17 @@
 
             <div class="comment-form">
                 <form action="" method="post" id="comment-form">
-                    <textarea name="comment-form" id="comment-form" rows="10" cols="10"
+                    <textarea name="comment-form" id="comment-form-area" rows="10" cols="10"
                         placeholder="Add a comment.."></textarea>
 
                     <div class="form-group triple-grid">
                         <input type="text" name="name" id="author-name" required placeholder="Name..">
-                        <input type="text" name="email" id="email" required placeholder="Email...">
+                        <input type="email" name="email" id="email" required placeholder="Email...">
                         <input type="text" name="website" id="website" placeholder="Website optional..">
                     </div>
 
                     <div class="button flex-end">
-                        <button type="submit" class="text-capitalize button-md comment-btn dark-green-bg">Post
+                        <button type="submit" class="text-capitalize button-sm comment-btn dark-green-bg">Post
                             Comment</button>
                     </div>
                 </form>
@@ -242,7 +313,7 @@
                 <div class="recent-post">
                     <div class="recent-post-container">
                         <img src="{% static '/img/display/jpg/banner3.jpg' %}" alt="recent image pic"
-                        class="recent-post-image">
+                            class="recent-post-image">
                     </div>
 
                     <div class="recent-post-content">
@@ -257,7 +328,7 @@
                 <div class="recent-post">
                     <div class="recent-post-container">
                         <img src="{% static '/img/display/jpg/banner4.jpg' %}" alt="recent image pic"
-                        class="recent-post-image">
+                            class="recent-post-image">
                     </div>
 
                     <div class="recent-post-content">
@@ -317,7 +388,7 @@
 
                         <div class="card-footer">
                             <div class="card-author-img">
-                                <img src=".{% static '/img/display/jpg/banner1.jpg' %}" alt="author image"
+                                <img src="{% static '/img/display/jpg/banner1.jpg' %}" alt="author image"
                                     class="card-icon">
                             </div>
 
@@ -425,32 +496,46 @@
 
                 <h3 class="center text-capitalize">Top blog tags</h3>
                 <div class="blog-tags">
-                    <a href="#"><div class="blog-tag">tag content here</div></a>
-                    <a href="#"><div class="blog-tag">tag content here</div></a>
-                    <a href="#"><div class="blog-tag">tag content here</div></a>
-                    <a href="#"><div class="blog-tag">tag content here</div></a>
-                    <a href="#"><div class="blog-tag">tag content here</div></a>
-                    <a href="#"><div class="blog-tag">tag content here</div></a>
-                 
-    
+                    <a href="#">
+                        <div class="blog-tag">tag content here</div>
+                    </a>
+                    <a href="#">
+                        <div class="blog-tag">tag content here</div>
+                    </a>
+                    <a href="#">
+                        <div class="blog-tag">tag content here</div>
+                    </a>
+                    <a href="#">
+                        <div class="blog-tag">tag content here</div>
+                    </a>
+                    <a href="#">
+                        <div class="blog-tag">tag content here</div>
+                    </a>
+                    <a href="#">
+                        <div class="blog-tag">tag content here</div>
+                    </a>
+
+
                 </div>
             </div>
         </div>
 
     </div>
 
-
+    <div class="small-spinner"></div>
 
 </section>
 
-  <!-- login -->
-  {% include "partials/login.html" %}
+<!-- login -->
+{% include "partials/login.html" %}
 
-  <!-- register -->
-  {% include "partials/register.html" %}
+<!-- register -->
+{% include "partials/register.html" %}
 
 {% endblock body %}
 
 {% block script %}
-    <script src="{% static 'js/modules/auth.js' %}" type="module"></script>
+<script src="{% static 'js/modules/auth.js' %}" type="module"></script>
+<script src="{% static 'js/pages/blog.js' %}" type="module"></script>
+
 {% endblock %}

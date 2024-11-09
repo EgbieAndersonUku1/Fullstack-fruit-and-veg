@@ -3629,6 +3629,26 @@ legend {
 
   }
   
+  .small-spinner {
+    display: none;
+    width: 30px;
+    height: 30px;
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+
+    /* position */
+    position: fixed;
+    top: 50%;
+    left: 39%;
+    right: 50%;
+    bottom: 50%;
+    z-index: 100000000000;
+  }
+
+
+ 
   @keyframes spin {
     0% {
       transform: rotate(0deg);
@@ -4024,8 +4044,24 @@ legend {
     margin-top: 1rem;
 }
 
+.reply-form {
+    display: none;
+   
+    border: 1px solid lavender;
+    padding: 20px;
+    
+    
+}
+
+
+.reply-link-div,
 .reply-comment {
     text-align: right;
+    cursor: pointer;
+}
+
+.reply-comment-link:hover {
+    text-decoration: underline;
 }
 
 .author-img-attributes {
@@ -4070,7 +4106,8 @@ legend {
 .comment-btn {
     font-size: var(--font-size-normal);
     margin-top: var(--padding-sm);
-    padding: var(--padding-sm);
+    padding: 1px;
+
 }
 
 .recent-post {
