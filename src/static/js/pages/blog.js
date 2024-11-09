@@ -10,10 +10,9 @@ commentSection?.addEventListener("click", handleComment);
 
 
 function handleComment(e) {
-    // console.log("I am here")
+   
     const replyLinkDiv = e.target.closest(".author-comment .reply-link-div");
-    // console.log(replyLinkDiv)
-    
+     
     if (replyLinkDiv) {
         handleReplyLinkClick(e); 
     };
@@ -41,7 +40,7 @@ function handleReplyLinkClick(e) {
         if (!replyForm) {
             throw new Error(`Expected a reply form but received <${replyForm}>`)
         }
-        clearResetFormDiv(replyFormDiv);
+        clearDiv(replyFormDiv);
         replyFormDiv.appendChild(replyForm);
              
         const show = replyFormDiv.style.display === "" ? true : false;
@@ -52,6 +51,9 @@ function handleReplyLinkClick(e) {
 }
 
 function toggleReplyForm(replyForm, replyLink, show = true) {
+
+    const NUM_OF_SECS_TO_DISPLAY = 1000;
+
     if (replyForm) {
         spinner.style.display = "block";
         setTimeout(() => {
@@ -60,7 +62,7 @@ function toggleReplyForm(replyForm, replyLink, show = true) {
 
             toggleReplyLinkText(replyLink, show);
 
-        }, 1000);
+        }, NUM_OF_SECS_TO_DISPLAY);
     };
 };
 
@@ -71,8 +73,8 @@ function toggleReplyLinkText(replyLink, showClosMsg=true) {
 }
 
 
-function clearResetFormDiv(resetFormDiv) {
-    resetFormDiv.innerHTML = ""
+function clearDiv(divToClear) {
+    divToClear.innerHTML = ""
 }
 
 
