@@ -17,6 +17,7 @@ from os import getenv
 import logging
 
 # Enables the `.env` file to be loaded
+# load_dotenv()
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -133,13 +134,14 @@ EMAIL_HOST_PASSWORD = getenv('EMAIL_HOST_PASSWORD')
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
+
 # Determine database configuration based on the USE_LOCAL_DB environment variable
 # If USE_LOCAL_DB is set to True, use local database settings
 # Otherwise, use the production database settings
-USE_LOCAL_DB = True
+USE_LOCAL_DB = getenv("LOCAL_DB", "").strip().title() in ["True", "1"] 
 
 
-if USE_LOCAL_DB :
+if USE_LOCAL_DB:
     print("Using local postgres db")
     DB_NAME     = getenv("DB_LOCAL_NAME")
     DB_USER     = getenv("DB_LOCAL_USER")
@@ -155,8 +157,6 @@ else:
     DB_PORT     = getenv("DB_PORT")
    
    
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
