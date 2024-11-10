@@ -89,9 +89,25 @@
 
             <div class="blog-interactions padding-top-lg">
 
-                <div class="user-actions two-column-grid">
-                    <a href="#" class="likes">❤️ 10 Likes</a>
-                    <a href="#" class="comments">💬 5 Comments</a>
+                <div class="user-actions triple-grid">
+                    <a href="#" class="reactions num-of-likes"><img src="{% static '/img/icons/red-heart.svg' %}" alt="red heart icon" class="blog-icon" > 0 likes</a>
+                    <a href="#" class="reactions thumbs-up"><img src="{% static '/img/icons/thumbs-up.svg' %}" alt="thumb icon" class="blog-icon thumb-up-icon" > like</a>
+                    <a href="#" class="reactions num-of-comments"><img src="{% static '/img/icons/comments.svg' %}" alt="comment icon" class="blog-icon">10 Comments</a>
+                </div>
+
+                <div class=" user-actions user-reactions-choices">
+             
+                    <a href="#" class="reactions like" title="like"><img src="{% static '/img/icons/thumbs-up.svg' %}" alt="like icon" class="reaction-icon like-icon" title="like" data-emoji="likeIcon"> </a>
+                    <a href="#" class="reactions love" title="love"><img src="{% static '/img/icons/red-heart.svg' %}" alt="red heart icon" class="reaction-icon love-icon" title="love" data-emoji="loveIcon"></a>
+                    <a href="#" class="reactions insight" title="insight"><img src="{% static '/img/icons/light-bulb.svg' %}" alt="like icon" class="reaction-icon insight-icon" title="insight" data-emoji="insightIcon"></a>
+                    <a href="#" class="reactions celebrate" title="celebrate"><img src="{% static '/img/icons/clapping-hands-default.svg' %}" alt="comment icon" class="reaction-icon celebrate-icon" title="celebrate" data-emoji="celebrateIcon"></a>
+                    <a href="#" class="reactions funny" title="funny"><img src="{% static '/img/icons/face-with-tears-of-joy.svg' %}" alt="comment icon" class="reaction-icon funny-icon" title="funny" data-emoji="funnyIcon"></a>
+                    <a href="#" class="reactions sparkles" title="funny"><img src="{% static '/img/icons/sparkles.svg' %}" alt="comment icon" class="reaction-icon sparkles-icon" title="sparkles" data-emoji="sparklesIcon"></a>
+                    <a href="#" class="reactions hundred" title="funny"><img src="{% static '/img/icons/hundred-points.svg' %}" alt="comment icon" class="reaction-icon hundred-icon" title="100" data-emoji="hundredIcon"></a>
+
+                </div>
+                <div class="reaction-emoji-name" id="reaction-emoji-name">
+                    <p class="text-capitalize"></p>
                 </div>
 
             </div>

@@ -3773,10 +3773,16 @@ legend {
 
 
 /* The blog section */
+#blog {
+    margin-bottom: 128px;
+}
+
+
 .blog-subscribe{
     text-align: center;
     width: 60%;
     margin: auto;
+  
 }
 
 .sub-text {
@@ -3791,6 +3797,7 @@ legend {
     margin-top: 200px;
     margin-bottom: 64px;
 
+    /* grid elements */
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto;
@@ -3798,15 +3805,18 @@ legend {
 
 .post-content {
     background: white;
+    border-radius: 2%;
     border: 2px solid lavender;
+    box-shadow: var(--box-shadow);
+    padding: 20px;
+  
+    /* position elements */
     position: relative;
     left: 40px;
     z-index: 10000;
-    height: auto;
-    padding: 20px;
-    border-radius: 2%;
-    box-shadow: var(--box-shadow);
-   
+
+    /* sizes */
+    height: auto; 
 }
 
 
@@ -3835,7 +3845,6 @@ legend {
     margin-bottom: var(--padding-md);
     text-transform: capitalize;
     opacity: 0.8;
-    
 }
 
 
@@ -3853,16 +3862,25 @@ legend {
 }
 
 
+/* The blog cards */
+.blog-cards {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 
+    width: 80%;
+    margin: auto;
+    margin-top: 100px;
+    cursor: pointer;
+    z-index: 10000;
+}
 
 .blog-cards .cards  {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: auto;
     column-gap: 10px;
-
 }
-
 
 .blog-cards h1 {
     font-weight: 600;
@@ -3871,10 +3889,10 @@ legend {
 
 .blog-cards .cards .card {
    border: 2px solid lavender;
-   overflow-wrap: break-word;
    box-shadow: var(--box-shadow);
    border-radius: 3%;
    margin-bottom: var(--padding-md);
+   overflow-wrap: break-word;
    position: relative;
 }
 
@@ -3890,17 +3908,6 @@ legend {
   }
  
 
-.blog-cards {
-    font-family: "Roboto", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-
-    width: 80%;
-    margin: auto;
-    margin-top: 100px;
-    cursor: pointer;
-    z-index: 10000;
-}
 
 .top-category .cards .card:hover,
 .blog-cards .card:hover {
@@ -3934,6 +3941,7 @@ legend {
 }
 
 
+/* blog card buttons */
 #view-more-btn {
     padding: var(--padding-md);
    
@@ -3946,6 +3954,7 @@ legend {
 }
 
 
+/* sidebar info */
 .top-blogs {
     margin-top: 200px;
 }
@@ -3956,10 +3965,8 @@ legend {
     margin-bottom: 64px;
 }
 
-#blog {
-    margin-bottom: 128px;
-}
 
+/* blog tags */
 .tag {
     position: absolute;
     top: 0;
@@ -4012,6 +4019,7 @@ legend {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: auto;
+    margin-bottom: 8px;
 }
 
 
@@ -4048,11 +4056,8 @@ legend {
     display: none;
    
     border: 1px solid lavender;
-    padding: 20px;
-    
-    
+    padding: 20px; 
 }
-
 
 .reply-link-div,
 .reply-comment {
@@ -4085,6 +4090,7 @@ legend {
     flex-direction: column;
     justify-content: flex-end;
 }
+
 .reply p {
     text-align: right;
 }
@@ -4207,6 +4213,10 @@ legend {
     width: 20px;
 }
 
+.blog-interactions {
+    position: relative;
+}
+
 .post-meta {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -4246,4 +4256,173 @@ small.help-text:hover {
     text-decoration: underline;
 }
 
+
+/* Reactions */
+.user-actions .reactions > a {
+    transform: translateY(74px);
+}
+
+.user-reactions-choices {
+  
+    background: white;
+    border: 4px solid lavender;
+    border-radius: 1%;
+    display: none;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    padding: 2px;
+    width: 50%;
+    
+    /* grid templates */
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: auto;
+    z-index: 10000;
+   
+    /* margin */
+    margin: auto;
+    margin-top: var(--padding-sm);
+    margin-bottom: var(--padding-sm);
+}
+
+
+.user-reactions-choices.show {
+    display: grid;
+}
+
+
+.reaction-icon {
+    border-radius: 50%;
+    border: 3px solid lavender;
+    padding: 4px;
+    
+    /* sizes */
+    width: 35px;
+    height: 35px;
+
+    /* animation plus transitions */
+    transition: opacity 0.3s, transform 0.3s;
+    animation: bounce 1s ease infinite;
+    
+}
+
+.thumb-up-icon.bounce {
+    /* animation plus transitions */
+    transition: opacity 0.3s, transform 0.3s;
+    animation: bounce 1s ease infinite;
+       
+}
+
+
+/* emoji icons displays the animations */
+.reaction-icon:nth-child(1) {
+    animation-delay: 0s;
+  }
+  
+  .reaction-icon:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  
+  .reaction-icon:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  
+  .reaction-icon:nth-child(4) {
+    animation-delay: 0.6s;
+  }
+  
+  .reaction-icon:nth-child(5) {
+    animation-delay: 0.8s;
+  }
+  
+  .reaction-icon:nth-child(6) {
+    animation-delay: 1s;
+  }
+
+
+/* colors for each emoji */
+.like-icon {
+    background: lavender;
+}
+
+.love-icon {
+    background-color: rgba(246, 71, 71, 0.5);
+}
+
+.insight-icon {
+    background: orange;
+}
+
+.celebrate-icon {
+    background: rgb(128, 128, 15);
+ 
+}
+
+.funny-icon {
+    background: rgb(71, 71, 227);
+}
+
+.sparkles-icon {
+    background: #FF4500;
+}
+
+.hundred-icon {
+    background: #d3d348;
+}
+
+.reaction-icon:hover {
+    transform: scale(1.2);
+}
+
+.reaction-icon {
+    position: relative; 
+  }
+  
+.reaction-icon.fly {
+    animation: flyAway 1s linear forwards; 
+  }
+
+.reaction-emoji-name {
+    position: absolute;
+    bottom: 0;
+    font-weight: 400;
+  }
+
+
+/* key frames for the icon */
+@keyframes flyAway {
+    0% {
+      transform: translate(0, 0) scale(1);  /* Start at the initial position with normal size */
+    }
+  
+    30% {
+      transform: translate(-50px, -20px) scale(0.6);  /* Move upwards and left, scaling down */
+    }
+  
+    60% {
+      transform: translate(-100px, -100px) scale(0.7);  /* Continue upwards and left, scaling slightly */
+    }
+  
+    80% {
+      transform: translate(-150px, -150px) scale(0.9);  /* Moving left more, still scaling */
+    }
+  
+    100% {
+      transform: translate(var(--distance-x), -12px) scale(1);  /* Settle into the final position with normal size */
+      
+    }
+  }
+  
+ 
+
+@keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-9px);
+    }
+  }
+  
+  .bounce {
+    animation: bounce 1s infinite;
+  }
 

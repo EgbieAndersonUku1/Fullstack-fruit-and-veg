@@ -1,23 +1,53 @@
 import splitStringByDelimiter from "../utils/parser.js";
 import { validateElement } from "../errors/customErrors.js";
+import { calculateDistanceBetweenTwoPoints } from "../utils/distanceUtils.js";
 
 
-const spinner        = document.querySelector(".small-spinner");
-const commentSection = document.getElementById("comments-section");
+const spinner           = document.querySelector(".small-spinner");
+const commentSection    = document.getElementById("comments-section");
+const blogContainer     = document.querySelector(".blog-interactions");
+const reactionEmojisDiv = document.querySelector(".user-reactions-choices");
+const reactionEmojiPTag = document.querySelector(".reaction-emoji-name p");
+const numOfLikes        = document.querySelector(".num-of-likes");
+const thumbsUpLink      = document.querySelector(".thumbs-up").closest("a");
+const thumbsUpIcon      = document.querySelector(".thumb-up-icon");
 
 
+// validate elements
+validateElement(numOfLikes, "This is not a valid HTML element");
+validateElement(thumbsUpLink, "This is not a valid element ");
+
+
+// Event listeners
 commentSection?.addEventListener("click", handleComment);
+reactionEmojisDiv.addEventListener("click", handleEmojiClick);
+thumbsUpLink.addEventListener("click", handleThumbsUpToggle);
+
+
+thumbsUpIcon?.classList.add("bounce");
+
+
+// const values
+const FLY_CLASS = "fly";
+
+const EMOJIS_ATTRS = {
+    likeIcon: { color: "royalblue", name: "like" },
+    loveIcon: { color: "red", name: "love" },
+    insightIcon: { color: "orange", name: "insight" },
+    funnyIcon: { color: "pink", name: "funny" },
+    celebrateIcon: { color: "green", name: "celebrate" },
+    sparklesIcon: { color: "gold", name: "sparkles" },
+    hundredIcon: { color: "purple", name: "hundred" }
+};
 
 
 function handleComment(e) {
-   
-    const replyLinkDiv = e.target.closest(".author-comment .reply-link-div");
+   const replyLinkDiv = e.target.closest(".author-comment .reply-link-div");
      
     if (replyLinkDiv) {
         handleReplyLinkClick(e); 
     };
 }
-
 
 
 function handleReplyLinkClick(e) {
@@ -40,7 +70,7 @@ function handleReplyLinkClick(e) {
         if (!replyForm) {
             throw new Error(`Expected a reply form but received <${replyForm}>`)
         }
-        clearDiv(replyFormDiv);
+        clearElement(replyFormDiv);
         replyFormDiv.appendChild(replyForm);
              
         const show = replyFormDiv.style.display === "" ? true : false;
@@ -50,14 +80,16 @@ function handleReplyLinkClick(e) {
     
 }
 
+
 function toggleReplyForm(replyForm, replyLink, show = true) {
 
     const NUM_OF_SECS_TO_DISPLAY = 1000;
 
     if (replyForm) {
         spinner.style.display = "block";
+
         setTimeout(() => {
-            spinner.style.display = "none";
+            spinner.style.display   = "none";
             replyForm.style.display = show ? "block" : "";
 
             toggleReplyLinkText(replyLink, show);
@@ -73,7 +105,7 @@ function toggleReplyLinkText(replyLink, showClosMsg=true) {
 }
 
 
-function clearDiv(divToClear) {
+function clearElement(divToClear) {
     divToClear.innerHTML = ""
 }
 
@@ -141,7 +173,6 @@ function createReplyForm(formID) {
 
     divButtonContainer.appendChild(replyButton);
 
-
     form.appendChild(textArea);
     form.appendChild(divInputFieldsContainer);
     form.appendChild(divButtonContainer);
@@ -152,9 +183,9 @@ function createReplyForm(formID) {
 
 function setFormAttributes(form, attrs ) {
 
-    form.id            = attrs.id
-    form.action        = attrs.action;
-    form.method        = attrs.method || "post";
+    form.id      = attrs.id
+    form.action  = attrs.action;
+    form.method  = attrs.method || "post";
     return form;
 };
 
@@ -188,5 +219,94 @@ function createElement({elementToCreate, attrsToSet={}, setterFunc}) {
         console.error(`Something went wrong creating element - ${JSON.stringify(error.message)}`);
         
     }
+}
+
+
+function handleEmojiClick(e) {
+    e.preventDefault();
+
+    if (e.target.nodeName === "IMG" || e.target.nodeName === "A") {
+        removeFlyClass();
+ 
+        const reactionEmoji    = e.target.closest("img");
+        const distanceToTravel = calculateDistanceBetweenTwoPoints(blogContainer, reactionEmoji);
+
+        if (distanceToTravel) {
+            const offset            = 40;
+            const reactionEmojiName = reactionEmoji.dataset.emoji;
+          
+            reactionEmoji.classList.add(FLY_CLASS); 
+            setReactionEmoji(reactionEmojiName);
+            reactionEmoji.style.setProperty('--distance-x', `${-distanceToTravel + offset}px`);
+            updateLikes();
+
+        } else {
+            clearElement(reactionEmojiPTag);
+        }
+       
+    }
+}
+
+
+function removeFlyClass() {
+    const reactionEmojis = document.querySelectorAll(".reaction-icon");
+
+    reactionEmojis.forEach((reactionEmoji) => {
+        reactionEmoji.classList.remove(FLY_CLASS);
+    });
+}
+
+
+function setReactionEmoji(identifier) {
+    clearElement(reactionEmojiPTag);
+    const identifierObject = EMOJIS_ATTRS[identifier];
+  
+
+    if (identifierObject !== "undefined") {
+
+        reactionEmojiPTag.innerText   = identifierObject["name"];
+        const color                   = identifierObject["color"];
+        reactionEmojiPTag.style.color = color;
+    }
+   
+}
+
+
+function updateLikes() {
+    const numOfLikesString = numOfLikes?.lastChild?.textContent;
+
+    if (numOfLikesString) {
+       
+        const likesString = numOfLikesString.split(" ")[1];
+        const likes = parseInt(likesString, 10);
+    
+        if (!isNaN(likes)) {
+           
+            const updatedLikes = likes + 1;
+          
+            numOfLikes.lastChild.textContent = updatedLikes === 1 ? ` ${updatedLikes} like` : ` ${updatedLikes} likes`;
+            console.log(numOfLikesString);
+        }
+    }
+}
+
+
+function handleThumbsUpToggle(e) {
+    e.preventDefault();
+
+    spinner.style.display        = "block";
+    const NUM_OF_SECS_TO_DISPLAY = 1000;
+
+    setTimeout(() => {
+
+        spinner.style.display           = "none";
+        const status                    = reactionEmojisDiv.style.display;
+        reactionEmojisDiv.style.display = status === "grid" ? "" : "grid";
+        thumbsUpLink.style.color        = status === "grid" ? "black"  : "blue";
+        
+        if (status === "grid") {
+            clearElement(reactionEmojiPTag);
+        }
+    }, NUM_OF_SECS_TO_DISPLAY);
 }
 
