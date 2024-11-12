@@ -2,9 +2,7 @@
 {% load static %}
 {% block title %}Blog - details{% endblock title %}
 
-
 {% block body %}
-
 
 <section id="blog-details">
     <div class="container">
@@ -23,6 +21,8 @@
                                 class="blog-icon"></span> By Egbie</span>
                     <span class="post-date"> <span><img src="{% static 'img/icons/clock.svg' %}" alt="clock icon"
                                 class="blog-icon"></span> Nov 06, 2024</span>
+                    <span class="post-date"> <span><img src="{% static 'img/icons/clock.svg' %}" alt="clock icon"
+                                class="blog-icon"></span> 4 min read</span>
                     <span class="post-views"> <span><img src="{% static 'img/icons/people-outline.svg' %}"
                                 alt="clock icon" class="blog-icon"></span> 100+ views</span>
                     <span class="post-bookmarks"> <span><img src="{% static 'img/icons/bookmark-save.svg' %}"
@@ -90,20 +90,37 @@
             <div class="blog-interactions padding-top-lg">
 
                 <div class="user-actions triple-grid">
-                    <a href="#" class="reactions num-of-likes"><img src="{% static '/img/icons/red-heart.svg' %}" alt="red heart icon" class="blog-icon" > 0 likes</a>
-                    <a href="#" class="reactions thumbs-up"><img src="{% static '/img/icons/thumbs-up.svg' %}" alt="thumb icon" class="blog-icon thumb-up-icon" > like</a>
-                    <a href="#" class="reactions num-of-comments"><img src="{% static '/img/icons/comments.svg' %}" alt="comment icon" class="blog-icon">10 Comments</a>
+                    <a href="#" class="reactions num-of-likes blog-link" id="num-of-likes-link"><img
+                            src="{% static '/img/icons/red-heart.svg' %}" alt="red heart icon" class="blog-icon"> 0
+                        likes</a>
+                    <a href="#" class="reactions thumbs-up blog-link"><img src="{% static '/img/icons/thumbs-up.svg' %}"
+                            alt="thumb icon" class="blog-icon thumb-up-icon"> like</a>
+                    <a href="#" class="reactions num-of-comments blog-link"><img
+                            src="{% static '/img/icons/comments.svg' %}" alt="comment icon" class="blog-icon">10
+                        Comments</a>
                 </div>
 
                 <div class=" user-actions user-reactions-choices">
-             
-                    <a href="#" class="reactions like" title="like"><img src="{% static '/img/icons/thumbs-up.svg' %}" alt="like icon" class="reaction-icon like-icon" title="like" data-emoji="likeIcon"> </a>
-                    <a href="#" class="reactions love" title="love"><img src="{% static '/img/icons/red-heart.svg' %}" alt="red heart icon" class="reaction-icon love-icon" title="love" data-emoji="loveIcon"></a>
-                    <a href="#" class="reactions insight" title="insight"><img src="{% static '/img/icons/light-bulb.svg' %}" alt="like icon" class="reaction-icon insight-icon" title="insight" data-emoji="insightIcon"></a>
-                    <a href="#" class="reactions celebrate" title="celebrate"><img src="{% static '/img/icons/clapping-hands-default.svg' %}" alt="comment icon" class="reaction-icon celebrate-icon" title="celebrate" data-emoji="celebrateIcon"></a>
-                    <a href="#" class="reactions funny" title="funny"><img src="{% static '/img/icons/face-with-tears-of-joy.svg' %}" alt="comment icon" class="reaction-icon funny-icon" title="funny" data-emoji="funnyIcon"></a>
-                    <a href="#" class="reactions sparkles" title="funny"><img src="{% static '/img/icons/sparkles.svg' %}" alt="comment icon" class="reaction-icon sparkles-icon" title="sparkles" data-emoji="sparklesIcon"></a>
-                    <a href="#" class="reactions hundred" title="funny"><img src="{% static '/img/icons/hundred-points.svg' %}" alt="comment icon" class="reaction-icon hundred-icon" title="100" data-emoji="hundredIcon"></a>
+
+                    <a href="#" class="reactions like" title="like"><img src="{% static '/img/icons/thumbs-up.svg' %}"
+                            alt="like icon" class="reaction-icon like-icon" title="like" data-emoji="likeIcon"> </a>
+                    <a href="#" class="reactions love" title="love"><img src="{% static '/img/icons/red-heart.svg' %}"
+                            alt="red heart icon" class="reaction-icon love-icon" title="love" data-emoji="loveIcon"></a>
+                    <a href="#" class="reactions insight" title="insight"><img
+                            src="{% static '/img/icons/light-bulb.svg' %}" alt="like icon"
+                            class="reaction-icon insight-icon" title="insight" data-emoji="insightIcon"></a>
+                    <a href="#" class="reactions celebrate" title="celebrate"><img
+                            src="{% static '/img/icons/clapping-hands-default.svg' %}" alt="comment icon"
+                            class="reaction-icon celebrate-icon" title="celebrate" data-emoji="celebrateIcon"></a>
+                    <a href="#" class="reactions funny" title="funny"><img
+                            src="{% static '/img/icons/face-with-tears-of-joy.svg' %}" alt="comment icon"
+                            class="reaction-icon funny-icon" title="funny" data-emoji="funnyIcon"></a>
+                    <a href="#" class="reactions sparkles" title="funny"><img
+                            src="{% static '/img/icons/sparkles.svg' %}" alt="comment icon"
+                            class="reaction-icon sparkles-icon" title="sparkles" data-emoji="sparklesIcon"></a>
+                    <a href="#" class="reactions hundred" title="funny"><img
+                            src="{% static '/img/icons/hundred-points.svg' %}" alt="comment icon"
+                            class="reaction-icon hundred-icon" title="100" data-emoji="hundredIcon"></a>
 
                 </div>
                 <div class="reaction-emoji-name" id="reaction-emoji-name">
@@ -530,16 +547,754 @@
                     <a href="#">
                         <div class="blog-tag">tag content here</div>
                     </a>
-
-
                 </div>
             </div>
         </div>
 
     </div>
 
-    <div class="small-spinner"></div>
+    <!-- The show likes container -->
+    <div id="show-likes" class="d-none">
+        <div class="window-close-container flex-end">
+            <a href="#" class="close-icon"><img src="../../static/img/icons/window-close.svg" alt="close icon"
+                    class="reaction-view-close-icon"></a>
+        </div>
+        <h1 class="padding-bottom-sm">Reactions</h1>
 
+        <!-- tab headers -->
+        <div class="tabs" id="tabs">
+
+            <!-- all tabs -->
+            <div class="tab">
+                <a href="#" class="reactions all-icons highlight tab-active" title="all icons">
+                    <img src="{% static '/img/icons/globe.svg' %}" alt="like icon" class="show-reaction-icon like-icons"
+                        title="all icons" data-emoji="allIcon">
+                    All (26)
+                </a>
+            </div>
+
+            <!-- like tab -->
+            <div class="tab like">
+                <span>
+                    <a href="#" class="reactions like" title="like"><img src="{% static '/img/icons/thumbs-up.svg' %}"
+                            alt="like icon" class="show-reaction-icon like-icon" title="like" data-emoji="likeIcon">
+                        6
+                    </a>
+                </span>
+            </div>
+
+            <!-- tab love -->
+            <div class="tab love">
+                <span>
+                    <a href="#" class="reactions love" title="love"><img src="{% static '/img/icons/red-heart.svg' %}"
+                            alt="red heart icon" class="show-reaction-icon love-icon" title="love"
+                            data-emoji="loveIcon">2</a>
+                </span>
+            </div>
+
+            <!-- tab insight -->
+            <div class="tab insight">
+                <span>
+                    <a href="#" class="reactions insight" title="insight"><img
+                            src="{% static '/img/icons/light-bulb.svg' %}" alt="like icon"
+                            class="show-reaction-icon insight-icon" title="insight" data-emoji="insightIcon">5</a>
+                </span>
+            </div>
+
+            <!-- tab celebrate -->
+            <div class="tab celebrate">
+                <span>
+                    <a href="#" class="reactions celebrate" title="celebrate"><img
+                            src="{% static '/img/icons/clapping-hands-default.svg' %}" alt="comment icon"
+                            class="show-reaction-icon celebrate-icon" title="celebrate" data-emoji="celebrateIcon">4</a>
+
+                </span>
+            </div>
+
+            <!-- tab funny -->
+            <div class="tab funny">
+                <span>
+                    <a href="#" class="reactions funny" title="funny"><img
+                            src="{% static '/img/icons/face-with-tears-of-joy.svg' %}" alt="comment icon"
+                            class="show-reaction-icon funny-icon" title="funny" data-emoji="funnyIcon">4</a>
+
+                </span>
+
+            </div>
+
+            <!-- sparkles tab -->
+            <div class="tab sparkles">
+                <span>
+                    <a href="#" class="reactions funny" title="funny"><img src="{% static '/img/icons/sparkles.svg' %}"
+                            alt="comment icon" class="show-reaction-icon sparkles-icon" title="sparkles"
+                            data-emoji="sparklesIcon">2</a>
+
+                </span>
+
+            </div>
+
+            <!-- hundred tab -->
+            <div class="tab hundred">
+                <span>
+                    <a href="#" class="reactions hundred" title="funny"><img
+                            src="{% static '/img/icons/hundred-points.svg' %}" alt="comment icon"
+                            class="show-reaction-icon hundred-icon" title="hundred" data-emoji="hundredIcon">2</a>
+                </span>
+            </div>
+        </div>
+
+        <hr class="dividor padding-top-lg">
+
+        <div class="d-none tab-section" id="like-tab">
+
+            <div class="like-tab tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="like-tab tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="like-tab tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="like-tab tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="like-tab tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="like-tab tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Tab sections -->
+        <!-- all tabs -->
+        <div class="d-none tab-section" id="all-tab">
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+        </div>
+        <!-- Likes tab -->
+        <div class="d-none tab-section" id="like-tab">
+
+            <div class="like-tab tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="like-tab tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="like-tab tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="like-tab tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="like-tab tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="like-tab tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+        </div>
+        <!-- Love tab -->
+        <div class="d-none tab-section" id="love-tab">
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Insigt tab -->
+        <div class="d-none tab-section" id="insight-tab">
+
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!-- Celebrate tab -->
+        <div class="d-none tab-section" id="celebrate-tab">
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Funny tab -->
+        <div class="d-none tab-section" id="funny-tab">
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!--  Tab -->
+        <div class="d-none tab-section" id="sparkles-tab">
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Hundred tab -->
+        <div class="d-none tab-section" id="hundred-tab">
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="img">
+                    <img src="{% static 'img/display/jpg/person-9.png' %}" alt="image pic" class="tab-image">
+                </div>
+
+                <div class="auth-info">
+                    <p class="bold text-capitalize">Author name</p>
+                    <p>Website if exists</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="small-spinner"></div>
 </section>
 
 <!-- login -->
