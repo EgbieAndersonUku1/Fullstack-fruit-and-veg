@@ -3460,9 +3460,7 @@ legend {
 }
 
 
-.d-none {
-    display: none;
-}
+
 
 .save-btn {
    
@@ -4219,8 +4217,9 @@ legend {
 
 .post-meta {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     grid-template-rows: auto;
+    column-gap: 1px;
 }
 
 
@@ -4304,6 +4303,22 @@ small.help-text:hover {
     
 }
 
+.show-reaction-icon {
+    border-radius: 50%;
+    border: 3px solid lavender;
+    padding: 4px;
+    transform: translateY(6px);
+
+    /* sizes */
+    width: 35px;
+    height: 35px; 
+}
+
+.show-reaction-icon:hover {
+    transition: opacity 0.3s, transform 0.3s;
+    animation: bounce 1s ease infinite;
+}
+
 .thumb-up-icon.bounce {
     /* animation plus transitions */
     transition: opacity 0.3s, transform 0.3s;
@@ -4334,8 +4349,13 @@ small.help-text:hover {
   }
   
   .reaction-icon:nth-child(6) {
+    animation-delay: 0.9s;
+  }
+
+  .reaction-icon:nth-child(6) {
     animation-delay: 1s;
   }
+
 
 
 /* colors for each emoji */
@@ -4386,6 +4406,83 @@ small.help-text:hover {
     font-weight: 400;
   }
 
+
+.blog-link:hover {
+    text-decoration: underline;
+    color: blue;
+}
+
+
+#show-likes{
+
+    border-radius: 1%;
+    border: 2px solid lavender;
+    box-shadow: var(--box-shadow);
+    background: white;
+    padding: 20px;
+    overflow-y: scroll;
+
+
+    /* position */
+    position: fixed;
+    top: 8px;
+    left: 25%;
+    right: 70%;
+    z-index: 10000;
+
+    /* sizes */
+    width: 50%;
+    height: 95%;
+  
+}
+
+#show-likes .tabs {
+    margin-bottom: 10px;
+}
+
+.tab-text {
+    transform: translateY(10px);
+}
+
+#show-likes .tabs {
+
+    display: flex;
+    justify-content: space-around;
+}
+
+#show-likes hr {
+    color: green;
+    font-weight: bolder;
+      
+    height: 4px;
+    background: green;
+    
+}
+
+.tab-image {
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+}
+
+.tab-content {
+    display: grid;
+    grid-template-columns: 15% 85%;
+    grid-template-rows: auto;
+
+    border: 1px solid lavender;
+    border-radius: 2%;
+    padding: 7px;
+    cursor: pointer;
+    background: ghostwhite;
+    margin-bottom: 5px;
+    
+}
+
+.tab-active {
+    text-decoration: underline;
+    border-bottom: 4px solid red;
+}
 
 /* key frames for the icon */
 @keyframes flyAway {

@@ -2,8 +2,12 @@ import { validateElement } from "../errors/customErrors.js";
 import fetchData from "../utils/fetch.js";
 import handleResponse from "../handlers/handleResponse.js";
 import { minimumCharactersToUse } from "../components/characterCounter.js";
-import showSpinner from "../utils/spinner.js";
 import handleTableInteractions from "../utils/tableInteractions.js";
+import {addActiveStatusToHeaderTab, 
+       hideAllTabSection, 
+       removeActiveFromTabs,
+       showTabSection,
+       toggleTabVisibility } from "../utils/tabUtils.js";
 
 const headers                  = document.querySelectorAll("#subscription-tabs .tab > h4");
 const tabSections              = document.querySelectorAll(".tab-section");
@@ -55,55 +59,16 @@ frequencyForm?.addEventListener("submit", handleFormSubmit);
 subscriptionTable.addEventListener("click", handleTableInteractions);
 
 
-
-
-
 function setUp() {
 
-    hideAllTabSection();
-    removeActiveFromTabs();
+    hideAllTabSection(tabSections);
+    removeActiveFromTabs(headers);
 
     showTabSection(subscriptionOverview);
  
     const firstTab = headers[0]
     addActiveStatusToHeaderTab(firstTab);
 
-};
-
-
-function hideAllTabSection() {
-    removeActiveFromTabs();  
-    tabSections.forEach((tabSection) => hideTabSection(tabSection));
-};
-
-
-function showTabSection(tab) {   
-    tab.classList.remove("d-none");
-};
-
-
-function hideTabSection(tab) {
-    tab.classList.add("d-none");
-};
-
-
-function addActiveStatusToHeaderTab(header) {
-    if (header && !header.classList.contains("active")) {
-        header.classList.add("active", "highlight");
-    };
-};
-
-
-function removeActiveFromTabs() {
-   
-    if (headers) {
-        headers.forEach((header) => {
-    
-           if ( header.classList.contains("active")) {
-                header.classList.remove("active", "highlight");
-           };
-        });
-    };
 };
 
 
@@ -119,7 +84,7 @@ function handleSubscriptionTabs(e) {
 
     if (e.target.nodeName === "H4") {
         const innerText = e.target.innerText.toLowerCase();
-        removeActiveFromTabs();
+        removeActiveFromTabs(headers);
 
         switch (innerText) {
             case tabs.OVERVIEW:
@@ -133,14 +98,6 @@ function handleSubscriptionTabs(e) {
                 break;
         }
     }
-};
-
-
-
-function toggleTabVisibility(showTab, hideTabs, header) {
-    hideTabs.forEach(hideTabSection);
-    showTabSection(showTab);
-    addActiveStatusToHeaderTab(header);
 };
 
 

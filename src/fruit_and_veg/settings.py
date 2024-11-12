@@ -138,8 +138,11 @@ EMAIL_HOST_PASSWORD = getenv('EMAIL_HOST_PASSWORD')
 # Determine database configuration based on the USE_LOCAL_DB environment variable
 # If USE_LOCAL_DB is set to True, use local database settings
 # Otherwise, use the production database settings
-USE_LOCAL_DB = getenv("LOCAL_DB", "").strip().title() in ["True", "1"] 
 
+#USE_LOCAL_DB = getenv("LOCAL_DB", "").strip().title() in ["True", "1"] 
+#print( getenv("LOCAL_DB", ""))
+
+USE_LOCAL_DB = True  # set this line manually to use local DB since .env files is not picking it up
 
 if USE_LOCAL_DB:
     print("Using local postgres db")
