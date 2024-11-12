@@ -160,6 +160,14 @@ SECRET_KEY='your_generated_secret_key_here'
 
 Your application should now be set up with PostgreSQL.
 
+### 5. Configure `USE_LOCAL_DB` in `settings.py`
+
+- In the `settings.py` file, locate the `USE_LOCAL_DB` variable and manually set its value to `True`. 
+  This will configure the application to use the local database instead of the external one.
+- This step is required because, for some reason, the `.env` file is not processing the value of the `USE_LOCAL_DB` variable correctly. 
+  It appears as though the variable doesn't exist, causing issues when trying to load the setting from the environment, so to rectify
+  this manually set it to `True` for local and `False` for external.
+
 
 
 ### Django-HTML Syntax Highlighting in VS Code
