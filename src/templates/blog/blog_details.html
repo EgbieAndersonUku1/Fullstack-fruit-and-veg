@@ -131,6 +131,7 @@
 
             <hr class="dividor">
 
+            <!-- The comment section -->
             <div id="comments-section">
                 <h1 class="padding-bottom-md padding-top-md">Comments</h1>
 
@@ -145,15 +146,47 @@
                         </div>
                     </div>
 
-                    <p class="comment" id="1">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
-                        numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
-                        molestias quibusdam natus alias adipisci!
-                    </p>
-
+                    <div class="comment-box">
+                        <div class="open-icon-wrapper flex-end">
+                            <a href="#" class="edit-link"><img src="../../static/img/icons/three-dots.svg" alt="open icon" 
+                                class="blog-icon modify-icon" data-btn="edit-btn" data-action-box-id="action-1"></a>
+                        </div>
+                        <p class="comment" id="1">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
+                            numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
+                            molestias quibusdam natus alias adipisci!
+                        </p>
+                    
+                        <div class="action" id="action-1">
+                            <a href="#" class="open-icon"><img src="../../static/img/icons/three-dots.svg" alt="open icon"></a>
+                            <a href="#" id="edit-comment-1">Edit</a>
+                            <a href="#" id="delete-comment-1">Delete</a>
+                        </div>
+    
+                    </div>
+                  
+                   
                     <div class="reply-link-div">
                         <a class="light-bold text-capitalize padding-bottom-md reply-comment-link"
                             data-reply-box-id="reply-1">Reply</a>
+                    </div>
+
+                    <!-- The edit form -->
+                    <div class="edit-form" id="edit-1">
+                            <form action="" method="post" id="edit-form-1">
+                                <textarea name="comment-form" id="edit-form-area" rows="10" cols="10"
+                                    placeholder="Add a comment.."></textarea>
+            
+                                <div class="form-group triple-grid">
+                                    <input type="text" name="name" id="edit-author-name" required placeholder="Name..">
+                                    <input type="email" name="email" id="edit-email" required placeholder="Email...">
+                                    <input type="text" name="website" id="edit-website" placeholder="Website optional..">
+                                </div>
+            
+                                <div class="button flex-end">
+                                    <button type="submit" class="text-capitalize button-sm comment-btn dark-green-bg">Edit POST</button>
+                                </div>
+                            </form>
                     </div>
 
                     <!-- link the comment id number with reply id (e.g comment id 1 is link with the reply id box = reply-1 for the js)-->

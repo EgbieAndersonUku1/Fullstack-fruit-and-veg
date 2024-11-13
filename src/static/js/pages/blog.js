@@ -25,9 +25,9 @@ const hundredTab        = document.getElementById("hundred-tab");
 const tabs               = document.getElementById("tabs");
 
 // Blog and interaction elements
-const commentSection    = document.getElementById("comments-section");
-const blogContainer     = document.querySelector(".blog-interactions");
-const blogLink          = document.getElementById("num-of-likes-link");
+const commentSection          = document.getElementById("comments-section");
+const blogContainer           = document.querySelector(".blog-interactions");
+const blogLink                = document.getElementById("num-of-likes-link");
 const showEmojiLikeContainer  = document.getElementById("show-likes");
 
 // User interaction and reaction elements
@@ -93,10 +93,23 @@ const EMOJIS_ATTRS = {
 
 
 function handleComment(e) {
+   console.log(e);
+   const EDIT_BTN     = "edit-btn";
    const replyLinkDiv = e.target.closest(".author-comment .reply-link-div");
-     
+ 
+
+   e.preventDefault();
+  
+     // change this to a switch block later
     if (replyLinkDiv) {
         handleReplyLinkClick(e); 
+    } else if (e.target.dataset.btn === EDIT_BTN) {
+        document.body.classList.add('modal-open'); 
+        const actionBoxID = e.target.getAttribute("data-action-box-id");
+        e.target.style.display = "none";
+        const editOption = document.getElementById(actionBoxID);
+        editOption.style.display = "grid";
+        console.log(editOption)
     };
 }
 
@@ -116,7 +129,7 @@ function handleReplyLinkClick(e) {
         validateElement(replyFormDiv, "Reply Form Div is not a valid HTML instance", true);
 
         const replyFormId  = `reply-form${splitStringByDelimiter(replyFormDiv.id)[1]}`;
-        const replyForm    = createReplyForm(replyFormId);
+        const replyForm    = createForm(replyFormId);
         
         if (!replyForm) {
             throw new Error(`Expected a reply form but received <${replyForm}>`)
@@ -161,7 +174,7 @@ function clearElement(divToClear) {
 }
 
 
-function createReplyForm(formID) {
+function createForm(formID, buttonName="Reply", placeholder="Add a reply...") {
  
      // Array of input field attributes
      const inputFieldsAttrs  = [
@@ -195,7 +208,7 @@ function createReplyForm(formID) {
                                                   id:"replay-form-textarea",
                                                   rows:"10",
                                                   cols:"10",
-                                                  placeholder:"Add a reply..",
+                                                  placeholder:placeholder,
                                                  },
                                      setterFunc: setFormElementAttributes,
                                  });
@@ -203,7 +216,7 @@ function createReplyForm(formID) {
     const replyButton = createElement({ elementToCreate: "button",
                                         attrsToSet: {type: "submit",
                                                      className: ["text-capitalize",  "button-sm", "comment-btn", "dark-green-bg"],
-                                                     innerText: "reply"
+                                                     innerText: buttonName
                                                      },
                                                setterFunc: setFormElementAttributes,
 

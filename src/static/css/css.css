@@ -4523,3 +4523,48 @@ small.help-text:hover {
     animation: bounce 1s infinite;
   }
 
+
+
+
+  /* The edit section for the comments */
+  .comment-box {
+    position: relative;
+  }
+
+  .comment-box .action {
+    
+    text-align: center;
+    border: 3px solid lavender;
+       
+    /* postions */
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    /* grid position */
+    display: grid;
+    display: none;
+    
+    background: white;
+
+    /* sizes */
+    width: 25%;
+  
+     
+  }
+
+  .comment-box .action a {
+    border: 1px solid lavender;
+    font-size: var(--font-size-sm);
+  }
+
+  .comment-box .action a:hover {
+   background: ghostwhite;
+  }
+
+  
+/* Prevent background scrolling */
+body.modal-open {
+    overflow: hidden;
+  }
+  
