@@ -30,6 +30,7 @@ class NewsletterSubscriptionAdmin(BaseNewsletterAdmin):
     
 
 class UnsubscribedNewsletterSubscriptionAdmin(BaseNewsletterAdmin):
+    
     def get_queryset(self, request):
         """
         Override the default queryset to show only unsubscribed users.

@@ -3662,20 +3662,6 @@ legend {
     color: white;
 }
 
-
-
-  #subscription-tabs {
-    
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: auto;
-
-    margin-top: var(--padding-lg);
-    cursor: pointer;
-    
-  }
-
-
   #subscription-tabs > div:hover {
     
     color: #1c7920;
@@ -3709,6 +3695,19 @@ legend {
     margin: auto;
 }
 
+
+#subscription-tabs {
+    
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+
+    margin-top: var(--padding-lg);
+    cursor: pointer;
+
+    /* margin-top: 30px; */
+    
+  }
 
 #frequency-btn {
     height: 30px;

@@ -9,11 +9,14 @@
             <h1>Hi, {{ request.user.username | title }}!</h1>
             <p>We're thrilled to have you with us! By subscribing to our newsletter, you'll be the first to know about exclusive events, amazing sales, and special promotions tailored just for you.</p>
             <p>Plus, enjoy an instant <strong>30% off</strong> your next purchase as a warm welcome gift. Don't miss out on the latest updates and offers—subscribe today!</p>
+            <p>You can manage your subscription by clicking <a class="bold highlight" href="{% url 'manage_subscription' %}">here</a></p>
             <p>Thank you for being a valued member of our community!</p>
+            
         </div>
         {% elif has_subscribed_before and not is_subscribed %}
             <h1>Hello, {{ request.user.username | title }}!</h1>
             <p>We noticed that you previously unsubscribed. If you’d like to re-subscribe, please do so via the account section and click the "Subscribe" button.</p>
+            <p>or <a href="{% url 'manage_subscription' %}" class="bold highlight"> Click here</a> to be taken to the subscription page</p>
             
          
         {% else %}
