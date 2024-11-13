@@ -44,7 +44,11 @@ def subscribe_user(request):
                 
         try:
             with transaction.atomic():
-                new_subscriber = NewsletterSubscription.objects.create(user=user, email=email)
+                new_subscriber = NewsletterSubscription.objects.create(user=user, 
+                                                                       email=email, 
+                                                                       subscribed_on=timezone.now(),
+                                                                       unsubscribed=False,
+                                                                       )
             
                 # log the subscription action
                 NewsletterSubscriptionHistory.objects.create(title="User subscribed to newsletter",
@@ -53,7 +57,8 @@ def subscribe_user(request):
                                                             action="subscribed",
                                                             start_date=new_subscriber.subscribed_on,
                                                             frequency=new_subscriber.frequency,
-                                                            subscribed_on=timezone.now(),
+                                                           
+                                                            
                                                             )
                 
                 
@@ -88,7 +93,6 @@ def manage_subscription(request):
     page_obj             = paginator.get_page(page_number)
     
     context = {
-        "is_subscribed": not subscription.unsubscribed if subscription is not None else False,
         "page_obj": page_obj,
         "form": subscription_form,
     }

@@ -19,7 +19,8 @@ def get_subscription_session(request) -> dict:
         subscription = NewsletterSubscription.objects.filter(user=request.user).values("unsubscribed").first()
         
         if  subscription is None:
-            subscribed = False
+            subscribed            = False
+            has_subscribed_before = False
         else:
             is_subscribed         =  subscription["unsubscribed"]
             subscribed            = not is_subscribed
@@ -34,7 +35,7 @@ def get_subscription_session(request) -> dict:
             if not subscription_session:
                 set_session(request, "email")
                 subscription_session = get_session(request, session_name="email") 
-    
+
     return {
         "subscription_session": subscription_session,
         "has_subscribed_before": has_subscribed_before,

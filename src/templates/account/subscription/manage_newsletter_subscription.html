@@ -34,7 +34,9 @@
         {% if is_subscribed %}
             <a href="#"><button type="button" class="padding-sm dark-red-bg" id="unsubscribe-btn">unsubscribe</button></a>
         {% else %}
-             <a href="{% url 're_subscribe' %}"><button type="button" class="padding-sm green-bg" id="subscribed-btn">subscribe</button></a>
+            {% if has_subscribed_before %}
+                <a href="{% url 're_subscribe' %}"><button type="button" class="padding-sm green-bg" id="subscribed-btn">Re-subscribe</button></a>
+            {% endif %}
         {% endif %}
     </div>
 
