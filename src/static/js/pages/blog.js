@@ -12,38 +12,42 @@ import {addActiveStatusToHeaderTab,
 const spinner           = document.querySelector(".small-spinner");
 
 // Tab-related elements for navigation
-const headers           = document.querySelectorAll("#show-likes .tabs .tab a");
-const tabSections       = document.querySelectorAll(".tab-section");
 const allTab            = document.getElementById("all-tab");
+const celebrateTab      = document.getElementById("celebrate-tab");
+const funnyTab          = document.getElementById("funny-tab");
+const headers           = document.querySelectorAll("#show-likes .tabs .tab a");
+const hundredTab        = document.getElementById("hundred-tab");
 const likeTab           = document.getElementById("like-tab");
 const loveTab           = document.getElementById("love-tab");
 const insightTab        = document.getElementById("insight-tab");
-const celebrateTab      = document.getElementById("celebrate-tab");
-const funnyTab          = document.getElementById("funny-tab");
 const sparklesTab       = document.getElementById("sparkles-tab");
-const hundredTab        = document.getElementById("hundred-tab");
-const tabs               = document.getElementById("tabs");
+const tabSections       = document.querySelectorAll(".tab-section");
+const tabs              = document.getElementById("tabs");
 
 // Blog and interaction elements
-const commentSection    = document.getElementById("comments-section");
-const blogContainer     = document.querySelector(".blog-interactions");
-const blogLink          = document.getElementById("num-of-likes-link");
+const blogContainer           = document.querySelector(".blog-interactions");
+const blogLink                = document.getElementById("num-of-likes-link");
+const commentSection          = document.getElementById("comments-section");
 const showEmojiLikeContainer  = document.getElementById("show-likes");
 
+
 // User interaction and reaction elements
+const numOfLikes        = document.querySelector(".num-of-likes");
 const reactionEmojisDiv = document.querySelector(".user-reactions-choices");
 const reactionEmojiPTag = document.querySelector(".reaction-emoji-name p");
-const numOfLikes        = document.querySelector(".num-of-likes");
 const thumbsUpLink      = document.querySelector(".thumbs-up").closest("a");
 const thumbsUpIcon      = document.querySelector(".thumb-up-icon");
 
+
 // Background and UI control elements
-const dimBackgroundElement = document.querySelector(".dim-overlay");
 const closeIcon            = document.querySelector(".close-icon");
+const dimBackgroundElement = document.querySelector(".dim-overlay");
 
 
-const NUM_OF_SECS_TO_DISPLAY = 1000;
+// Constant UI
 const ACTIVE_TAB_CLASSNAME   = "tab-active";
+const NUM_OF_SECS_TO_DISPLAY = 1000;
+
 const TABS = {
     ALL_EMOJI: "allIcon",
     LIKE_EMOJI : "likeIcon",
@@ -53,8 +57,8 @@ const TABS = {
     FUNNY_EMOJI: "funnyIcon",
     SPARKLES_EMOJI: "sparklesIcon",
     HUNDRED_EMOJI: "hundredIcon"
-
 };
+
 
 // Event listeners
 document.addEventListener("DOMContentLoaded", setUp);
@@ -67,102 +71,321 @@ validateElement(numOfLikes, "This is not a valid HTML element");
 validateElement(thumbsUpLink, "This is not a valid element ");
 validateElement(dimBackgroundElement, "This is not a valid element");
 
-
 // Event listeners
 commentSection?.addEventListener("click", handleComment);
 reactionEmojisDiv.addEventListener("click", handleEmojiClick);
 thumbsUpLink.addEventListener("click", handleThumbsUpToggle);
 tabs?.addEventListener("click", handleReactionTabs);
 
-
 thumbsUpIcon?.classList.add("bounce");
 
 
-// const values
-const FLY_CLASS = "fly";
-
+// const Values
+const FLY_CLASS    = "fly";
 const EMOJIS_ATTRS = {
+   
+    celebrateIcon: { color: "green", name: "celebrate" },
+    funnyIcon: { color: "pink", name: "funny" },
+    hundredIcon: { color: "purple", name: "hundred" },
+    insightIcon: { color: "orange", name: "insight" },
     likeIcon: { color: "royalblue", name: "like" },
     loveIcon: { color: "red", name: "love" },
-    insightIcon: { color: "orange", name: "insight" },
-    funnyIcon: { color: "pink", name: "funny" },
-    celebrateIcon: { color: "green", name: "celebrate" },
     sparklesIcon: { color: "gold", name: "sparkles" },
-    hundredIcon: { color: "purple", name: "hundred" }
 };
 
 
-function handleComment(e) {
-   const replyLinkDiv = e.target.closest(".author-comment .reply-link-div");
-     
+/**
+ * Handles comment interactions using event delegation.
+ * Listens for specific events triggered within the comment section, including:
+ * 
+ * 1. When a control panel is clicked. The control panel contains options:
+ *      a. Close Edit
+ *      b. Delete Comment
+ *      c. Edit
+ * 
+ * 2. Detects when the "Edit" link is clicked to trigger an edit action.
+ * 3. Detects when the "Delete" link is clicked to remove a comment.
+ * 
+ * Also listens for reply-related actions:
+ * - If the click happens within a `.reply-link-div` inside an `.author-comment`, 
+ *   it triggers the reply handler.
+ * 
+ * @param {Event} event - The DOM event object.
+ */
+function handleComment(event) {
+  
+    const CONTROL_PANEL = "controlPanel";
+    const replyLinkDiv  = event.target.closest(".author-comment .reply-link-div");
+    const EDIT_LINK     = "Edit";
+    const CLOSE_EDIT    = "Close Edit";
+ 
+    event.preventDefault();
+
     if (replyLinkDiv) {
-        handleReplyLinkClick(e); 
+        handleReplyLink(event);
+    } else if (event.target.dataset.panel === CONTROL_PANEL) {
+        handleControlPanel(event);
+    } else if (event.target.textContent.trim() === EDIT_LINK) {
+        handleEditLink(event);
+    }else if (event.target.textContent.trim() === CLOSE_EDIT) {
+        handleCloseEdit(event);
     };
+   
 }
 
 
-function handleReplyLinkClick(e) {
+/**
+ * Handles actions related to the reply section when the reply link is clicked.
+ * 
+ * This function is triggered by a click event on a reply link within a comment section.
+ * It manages the creation or visibility of the reply form, setting attributes like:
+ * - Button name ("Reply")
+ * - Placeholder text ("Add a reply...")
+ * 
+ * If the reply form div is not a valid HTML element, an error message is displayed.
+ * The function also toggles the text of the reply link between showing and hiding the reply form.
+ * 
+ * @param {Event} event - The DOM event object triggered by the click on the reply link.
+ */
+function handleReplyLink(event) {
+
+    const replyErrorMsg  = "Reply Form Div is not a valid HTML instance";
+    const replyFormID    = "reply-form";
+    const replyFormAttrs = {buttonName: "Reply", placeholder: "Add a reply..."};
+
+    handleLinkClick(event, replyErrorMsg, replyFormID, replyFormAttrs, toggleReplyLinkText);
+
+};
+
+
+
+/**
+ * 
+ * @param {*} event 
+ */
+function handleEditLink(event) {
+
+    const editErrorMsg  = "Edit Form Div is not a valid HTML instance";
+    const editFormID    = "edit-form";
+    const editFormAttrs = {buttonName: "Edit"};
+    const editForm      = handleLinkClick(event, editErrorMsg, editFormID, editFormAttrs, toggleEditLinkText);
+    const commentID     = splitStringByDelimiter(event.target.id, "-")[2];
+
+    if (!commentID) {
+        throw new Error(`Expected a comment ID but received ${commentID}`);
+    };
+
+    const commentToEdit = document.getElementById(commentID);
+    replaceText(editForm, commentToEdit);
+    
+};
+
+
+/**
+ * 
+ * @param {*} event 
+ */
+function handleControlPanel(event) {
+    event.preventDefault();
+    showModal();
+    toggleSpinner();
+    setTimeout(() => {
+        
+        const actionBoxID          = event.target.getAttribute("data-action-box-id");
+        const controlPanel         = document.getElementById(actionBoxID);
+        controlPanel.style.display = "grid";
+
+        toggleSpinner(false);
+            
+    }, NUM_OF_SECS_TO_DISPLAY);  
+};
+
+
+/**
+ * 
+ * @param {*} event 
+ */
+function handleCloseEdit(event) {
+
+    const commentID = splitStringByDelimiter(event.target.id, "-")[2];
+    
+    if (!commentID) {
+        throw new Error(`Expected a comment ID but received ${commentID}`);
+    }
+    
+    const commentToEdit          = document.getElementById(commentID);
+    const editForm               = document.getElementById(`edit-${commentID}`);
+    const controlPanelToggleIcon = document.getElementById(`control-panel-${commentID}`);
+    
+    validateElement(editForm, `This is not a valid HTML form - Expected an edit form but received - ${editForm}`, true);
+    validateElement(controlPanelToggleIcon, `This is not a valid HTML element - Expected a toggle HTML element but received - ${controlPanelToggleIcon}`);
+    
+    toggleSpinner();
+    
+    setTimeout(() => {
+
+        commentToEdit.classList.remove("d-none");
+        editForm.classList.remove("d-none");
+        removeModal();
+        
+        controlPanelToggleIcon.style.display = "block";
+
+        // close control panel
+        const controlPanel                   = document.getElementById(`action-${commentID}`);
+        controlPanel.style.display           = "none";
+
+        // Close the form and change the text button 
+        editForm.style.display               = "none";
+        event.target.textContent             = "Edit";
+
+        toggleSpinner(false);
+
+       
+        }, NUM_OF_SECS_TO_DISPLAY);
+
+};
+
+
+/**
+ * 
+ * @param {*} editForm 
+ * @param {*} textToReplace 
+ */
+function replaceText(editForm, textToReplace) {
+
+    [editForm, textToReplace].every((element) => validateElement(element, "This is not a valid HTML element", true));
+   
+    textToReplace.classList.add("d-none"); 
+
+    const textArea  = editForm.querySelector("textarea");
+    let pTagContent = textToReplace.textContent;
+
+    // Remove leading and trailing spaces and normalize whitespace
+    pTagContent = pTagContent.replace(/\s+/g, ' ')        // Replace multiple spaces with a single space
+                     .replace(/(\n\s*)+/g, '\n')          // Normalize newlines and remove indentation spaces
+                     .trim();
+    
+    textArea.value = pTagContent;
+};
+
+
+/**
+ * 
+ * @param {*} e 
+ * @param {*} errorMsg 
+ * @param {*} formID 
+ * @param {*} formAttrs 
+ * @param {*} toggleLinkFunc 
+ * @returns 
+ */
+function handleLinkClick(e, errorMsg, formID, formAttrs, toggleLinkFunc) {
+
     e.preventDefault();
 
     const ANCHOR_TAG = "A";
 
     if (e.target.nodeName == ANCHOR_TAG) {
 
-        const replyLink = e.target;
+        const link      = e.target;
+        const formDivID = link.dataset.formElementId;
+        const formDiv   = document.getElementById(formDivID);
 
-        const replyFormDivID = replyLink.dataset.replyBoxId;
-        const replyFormDiv   = document.getElementById(replyFormDivID);
+        validateElement(formDiv, errorMsg, true);
 
-        validateElement(replyFormDiv, "Reply Form Div is not a valid HTML instance", true);
-
-        const replyFormId  = `reply-form${splitStringByDelimiter(replyFormDiv.id)[1]}`;
-        const replyForm    = createReplyForm(replyFormId);
+        const formId  = `${formID}${splitStringByDelimiter(formDiv.id)[1]}`;
+        const form    = createForm(formId, formAttrs);
         
-        if (!replyForm) {
-            throw new Error(`Expected a reply form but received <${replyForm}>`)
+        if (!form) {
+            throw new Error(`Expected a form but received <${form}>`)
         }
-        clearElement(replyFormDiv);
-        replyFormDiv.appendChild(replyForm);
+        clearElement(formDiv);
+        formDiv.appendChild(form);
              
-        const show = replyFormDiv.style.display === "" ? true : false;
-        toggleReplyForm(replyFormDiv, replyLink, show);
-        
-    }
+        const show = formDiv.style.display === "" ? true : false;
+        toggleForm(formDiv, link, show, toggleLinkFunc);
+        return form;
+       
+    };
     
 }
 
 
-function toggleReplyForm(replyForm, replyLink, show = true) {
+/**
+ * 
+ * @param {*} form 
+ * @param {*} link 
+ * @param {*} show 
+ * @param {*} toggleLinkTextFunc 
+ */
+function toggleForm(form, link, show = true, toggleLinkTextFunc) {
 
     const NUM_OF_SECS_TO_DISPLAY = 1000;
 
-    if (replyForm) {
+    if (form) {
         spinner.style.display = "block";
 
         setTimeout(() => {
             spinner.style.display   = "none";
-            replyForm.style.display = show ? "block" : "";
+            form.style.display = show ? "block" : "";
 
-            toggleReplyLinkText(replyLink, show);
+            toggleLinkTextFunc(link, show)
 
         }, NUM_OF_SECS_TO_DISPLAY);
     };
 };
 
 
+
+/**
+ * 
+ * @param {*} link 
+ * @param {*} showClosMsg 
+ */
+function toggleEditLinkText(link, showClosMsg=true) {
+  
+    if (link.textContent === "Edit" && !showClosMsg) {
+        link.innerText = "Close Edit";
+        return;
+    };
+
+    link.innerText = showClosMsg ? "Close Edit" : "Edit";
+
+}
+
+
+/**
+ * 
+ * @param {*} replyLink 
+ * @param {*} showClosMsg 
+ */
 function toggleReplyLinkText(replyLink, showClosMsg=true) {
     replyLink.innerText = showClosMsg ? "Close Reply" : "Reply";
 
 }
 
 
+/**
+ * 
+ * @param {*} divToClear 
+ */
 function clearElement(divToClear) {
     divToClear.innerHTML = ""
 }
 
 
-function createReplyForm(formID) {
- 
+/**
+ * 
+ * @param {*} formID 
+ * @param {*} formAttrs 
+ * @returns 
+ */
+function createForm(formID, formAttrs={}) {
+    
+    if (typeof formAttrs === "object" && !("buttonName" in formAttrs)) {
+        throw new Error("One or more of the keys for the form attribute is missing. Expect two keys 'buttonName' and 'placeholder' ");
+    }
+
+    
      // Array of input field attributes
      const inputFieldsAttrs  = [
         {type: "text", name:"author-name", required:true, id:"reply-author-name", placeholder: "Author's name..."},
@@ -195,7 +418,7 @@ function createReplyForm(formID) {
                                                   id:"replay-form-textarea",
                                                   rows:"10",
                                                   cols:"10",
-                                                  placeholder:"Add a reply..",
+                                                  placeholder:formAttrs.placeholder || "Add text....",
                                                  },
                                      setterFunc: setFormElementAttributes,
                                  });
@@ -203,7 +426,7 @@ function createReplyForm(formID) {
     const replyButton = createElement({ elementToCreate: "button",
                                         attrsToSet: {type: "submit",
                                                      className: ["text-capitalize",  "button-sm", "comment-btn", "dark-green-bg"],
-                                                     innerText: "reply"
+                                                     innerText: formAttrs.buttonName,
                                                      },
                                                setterFunc: setFormElementAttributes,
 
@@ -413,7 +636,6 @@ function updateLikes() {
            
             const updatedLikes = likes + 1;
             numOfLikes.lastChild.textContent = updatedLikes === 1 ? ` ${updatedLikes} like` : ` ${updatedLikes} likes`;
-            console.log(numOfLikesString);
         }
     }
 }
@@ -575,4 +797,25 @@ function showReactionContainer(show=true) {
 function toggleLightSwitch(dim = true) {
     dimBackgroundElement.style.display = dim ? "block" : "none";
 }
+
+
+
+/**
+ * Removes the scroll bar from the window which effectively
+ * stops scrolling
+ */
+function showModal() {
+    document.body.classList.add('modal-open'); 
+}
+
+
+
+/**
+ * Adds the scroll bar in the current browser window which effectively
+ * allows the user to scroll
+ */
+function removeModal() {
+    document.body.classList.remove('modal-open'); 
+}
+
 
