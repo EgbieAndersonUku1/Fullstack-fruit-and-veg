@@ -135,6 +135,7 @@
             <div id="comments-section">
                 <h1 class="padding-bottom-md padding-top-md">Comments</h1>
 
+                <!-- author comment -->
                 <div class="author-comment">
                     <div class="card-author-img flex-row">
 
@@ -146,47 +147,36 @@
                         </div>
                     </div>
 
+                    <!-- The comment section  -->
                     <div class="comment-box">
                         <div class="open-icon-wrapper flex-end">
-                            <a href="#" class="edit-link"><img src="../../static/img/icons/three-dots.svg" alt="open icon" 
-                                class="blog-icon modify-icon" data-btn="edit-btn" data-action-box-id="action-1"></a>
+                            <a href="#" class="edit-link"><img src="{% static '/img/icons/three-dots.svg' %}" alt="open icon" 
+                                class="blog-icon modify-icon" id="control-panel-1" data-panel="controlPanel" data-action-box-id="action-1"></a>
                         </div>
+
+                        <!--The post comment with ID which will be linked to action-->
                         <p class="comment" id="1">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
                             numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
                             molestias quibusdam natus alias adipisci!
                         </p>
-                    
+                        
+                        <!-- The control panel the id are linked with the comment id e.g. action-{comment id} , edit-comment-{id} -->
                         <div class="action" id="action-1">
-                            <a href="#" class="open-icon"><img src="../../static/img/icons/three-dots.svg" alt="open icon"></a>
-                            <a href="#" id="edit-comment-1">Edit</a>
+                            <a href="#" id="edit-comment-1" data-form-element-id="edit-1">Edit</a>
                             <a href="#" id="delete-comment-1">Delete</a>
                         </div>
     
                     </div>
                   
-                   
+                    <!-- The reply div id. The reply id also contains the comment id number e.g reply-{comment id} -->
                     <div class="reply-link-div">
-                        <a class="light-bold text-capitalize padding-bottom-md reply-comment-link"
-                            data-reply-box-id="reply-1">Reply</a>
+                        <a class="light-bold text-capitalize padding-bottom-md reply-comment-link" data-form-element-id="reply-1">Reply</a>
                     </div>
 
-                    <!-- The edit form -->
-                    <div class="edit-form" id="edit-1">
-                            <form action="" method="post" id="edit-form-1">
-                                <textarea name="comment-form" id="edit-form-area" rows="10" cols="10"
-                                    placeholder="Add a comment.."></textarea>
-            
-                                <div class="form-group triple-grid">
-                                    <input type="text" name="name" id="edit-author-name" required placeholder="Name..">
-                                    <input type="email" name="email" id="edit-email" required placeholder="Email...">
-                                    <input type="text" name="website" id="edit-website" placeholder="Website optional..">
-                                </div>
-            
-                                <div class="button flex-end">
-                                    <button type="submit" class="text-capitalize button-sm comment-btn dark-green-bg">Edit POST</button>
-                                </div>
-                            </form>
+                    <!-- The edit form which will be created when the control panel is called. Also includes the comment id e.g edit-{comment id}  -->
+                    <div class="edit-form-div" id="edit-1">
+                          
                     </div>
 
                     <!-- link the comment id number with reply id (e.g comment id 1 is link with the reply id box = reply-1 for the js)-->
@@ -195,11 +185,12 @@
                     </div>
                 </div>
 
-                <div class="reply padding-top-md">
+                <!-- Reply comment. The reply comment. Each reply comment is linked to the original post by comment ID -->
+                <div class="reply padding-top-lg">
 
+                    <!-- Card -->
                     <div class="card-author-img reply-author">
                         <img src="{% static 'img/display/jpg/person-9.png' %}" alt="author image" class="comment-icon">
-
 
                         <div class="author-img-attributes">
                             <p>Author name</p>
@@ -207,14 +198,34 @@
                         </div>
                     </div>
 
-                    <p class="comment reply-comment">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
-                        numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
-                        molestias quibusdam natus alias adipisci!
-                    </p>
+                    <div class="comment-box">
+                        <div class="open-icon-wrapper flex-end">
+                            <a href="#" class="edit-link"><img src="{% static '/img/icons/three-dots.svg' %}" alt="open icon"
+                                class="blog-icon modify-icon" id="control-panel-2" data-panel="controlPanel" data-action-box-id="action-2">
+                            </a>
+                        </div>
+                        <p class="comment" id="2">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
+                            numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
+                            molestias quibusdam natus alias adipisci!
+                        </p>
+                    
+                        <div class="action right" id="action-2">
+                            <a href="#" id="edit-comment-2" data-form-element-id="edit-2">Edit</a>
+                            <a href="#" id="delete-comment-2">Delete</a>
+                        </div>
+    
+                    </div>
+
+                     <!-- The edit form -->
+                     <div class="edit-form-div" id="edit-2">
+                     </div>
+                    
                 </div>
 
-                <div class="reply padding-top-md">
+
+
+                <div class="reply padding-top-lg">
 
                     <div class="card-author-img reply-author">
                         <img src="{% static 'img/display/jpg/person-9.png' %}" alt="author image" class="comment-icon">
@@ -226,14 +237,33 @@
                         </div>
                     </div>
 
-                    <p class="comment reply-comment">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
-                        numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
-                        molestias quibusdam natus alias adipisci!
-                    </p>
+                    
+                    <div class="comment-box">
+                        <div class="open-icon-wrapper flex-end">
+                            <a href="#" class="edit-link"><img src="{% static '/img/icons/three-dots.svg' %}" alt="open icon" 
+                                class="blog-icon modify-icon" id="control-panel-3" data-panel="controlPanel" data-action-box-id="action-3">
+                            </a>
+                        </div>
+                        <p class="comment" id="3">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
+                            numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
+                            molestias quibusdam natus alias adipisci!
+                        </p>
+                    
+                        <div class="action right" id="action-3">
+                            <a href="#" id="edit-comment-3" data-form-element-id="edit-3">Edit</a>
+                            <a href="#" id="delete-comment-3">Delete</a>
+                        </div>
+    
+                    </div>
+
+                     <!-- The edit form -->
+                     <div class="edit-form-div" id="edit-3">
+                    </div>
+
                 </div>
 
-                <div class="reply padding-top-md">
+                <div class="reply padding-top-lg">
 
                     <div class="card-author-img reply-author">
                         <img src="{% static 'img/display/jpg/person-9.png' %}" alt="author image" class="comment-icon">
@@ -245,11 +275,29 @@
                         </div>
                     </div>
 
-                    <p class="comment reply-comment">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
-                        numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
-                        molestias quibusdam natus alias adipisci!
-                    </p>
+                    <div class="comment-box">
+                        <div class="open-icon-wrapper flex-end">
+                            <a href="#" class="edit-link"><img src="../../static/img/icons/three-dots.svg" alt="open icon" 
+                                class="blog-icon modify-icon" id="control-panel-4" data-panel="controlPanel" data-action-box-id="action-4">
+                            </a>
+                        </div>
+                        <p class="comment" id="4">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
+                            numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
+                            molestias quibusdam natus alias adipisci! kkii
+                        </p>
+                    
+                        <div class="action right" id="action-4">
+                            <a href="#" id="edit-comment-4" data-form-element-id="edit-4">Edit</a>
+                            <a href="#" id="delete-comment-4">Delete</a>
+                        </div>
+    
+                    </div>
+
+                     <!-- The edit form -->
+                     <div class="edit-form-div" id="edit-4">
+                    </div>
+
                 </div>
 
                 <div class="author-comment">
@@ -263,51 +311,36 @@
                         </div>
                     </div>
 
-                    <p class="comment" id="2">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
-                        numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
-                        molestias quibusdam natus alias adipisci!
-                    </p>
-
-                    <div class="reply-link-div">
-                        <a class="light-bold text-capitalize padding-bottom-md reply-comment-link"
-                            data-reply-box-id="reply-2">Reply</a>
-                    </div>
-
-                    <!-- link the comment id number with reply id (e.g comment id 1 is link with the reply id box = reply-1 for the js)-->
-                    <div class="reply-form" id="reply-2">
-                        <!-- generate dynamically -->
-                    </div>
-                </div>
-
-                <div class="author-comment">
-                    <div class="card-author-img flex-row">
-
-                        <img src="{% static '/img/display/jpg/person.png' %}" alt="author image" class="comment-icon">
-
-                        <div class="author-img-attributes">
-                            <p>Author name <span class="bold">OP</span> </p>
-                            <p>Tue 5 November 2024</p>
+                    <div class="comment-box">
+                        <div class="open-icon-wrapper flex-end">
+                            <a href="#" class="edit-link"><img src="../../static/img/icons/three-dots.svg" alt="open icon" 
+                                class="blog-icon modify-icon" id="control-panel-5" data-panel="controlPanel" data-action-box-id="action-5">
+                            </a>
                         </div>
+                        <p class="comment" id="5">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
+                            numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
+                            molestias quibusdam natus alias adipisci!
+                        </p>
+                    
+                        <div class="action" id="action-5">
+                            <a href="#" id="edit-comment-5" data-form-element-id="edit-5">Edit</a>
+                            <a href="#" id="delete-comment-5">Delete</a>
+                        </div>
+    
                     </div>
 
-                    <p class="comment" id="3">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis voluptatum suscipit nostrum
-                        numquam est quos saepe dolorem inventore expedita, magni aperiam debitis cupiditate optio in
-                        molestias quibusdam natus alias adipisci!
-                    </p>
-
-                    <div class="reply-link-div">
-                        <a class="light-bold text-capitalize padding-bottom-md reply-comment-link"
-                            data-reply-box-id="reply-3">Reply</a>
+                     <!-- The edit form -->
+                     <div class="edit-form-div" id="edit-5">
                     </div>
 
                     <!-- link the comment id number with reply id (e.g comment id 1 is link with the reply id box = reply-1 for the js)-->
-                    <div class="reply-form" id="reply-3">
+                    <div class="reply-form" id="reply-5">
                         <!-- generate dynamically -->
                     </div>
                 </div>
 
+             <!-- end of comment -->
 
 
             </div>

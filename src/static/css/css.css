@@ -123,15 +123,26 @@ textarea {
     font-family: "Poppins", sans-serif;
     cursor: pointer;
     border: 3px solid lavender;
+  
 }
+
+textarea {
+    padding-left: 0;
+    text-indent: 0;
+    box-sizing: border-box;
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
+    white-space: pre-wrap;
+}
+
+
 input:hover,
 textarea:hover {
     background: ghostwhite;
 }
 
-textarea {
-    width: 100%;
-}
+
 
 
 select {
@@ -4537,7 +4548,7 @@ small.help-text:hover {
        
     /* postions */
     position: absolute;
-    top: 0;
+    bottom: -5px;
     right: 0;
 
     /* grid position */
@@ -4567,3 +4578,21 @@ body.modal-open {
     overflow: hidden;
   }
   
+
+.comment-box .right  {
+    display: grid;
+    position: absolute;
+    text-align: center;
+    border: 3px solid lavender;
+    bottom: -2px;
+  
+    display: none;
+    background: white;
+    width: 25%;
+    left: 0;
+}
+
+
+.edit-form-div {
+    margin-bottom: 12px;
+}
