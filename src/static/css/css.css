@@ -123,15 +123,26 @@ textarea {
     font-family: "Poppins", sans-serif;
     cursor: pointer;
     border: 3px solid lavender;
+  
 }
+
+textarea {
+    padding-left: 0;
+    text-indent: 0;
+    box-sizing: border-box;
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
+    white-space: pre-wrap;
+}
+
+
 input:hover,
 textarea:hover {
     background: ghostwhite;
 }
 
-textarea {
-    width: 100%;
-}
+
 
 
 select {
@@ -4522,3 +4533,66 @@ small.help-text:hover {
     animation: bounce 1s infinite;
   }
 
+
+
+
+  /* The edit section for the comments */
+  .comment-box {
+    position: relative;
+  }
+
+  .comment-box .action {
+    
+    text-align: center;
+    border: 3px solid lavender;
+       
+    /* postions */
+    position: absolute;
+    bottom: -5px;
+    right: 0;
+
+    /* grid position */
+    display: grid;
+    display: none;
+    
+    background: white;
+
+    /* sizes */
+    width: 25%;
+  
+     
+  }
+
+  .comment-box .action a {
+    border: 1px solid lavender;
+    font-size: var(--font-size-sm);
+  }
+
+  .comment-box .action a:hover {
+   background: ghostwhite;
+  }
+
+  
+/* Prevent background scrolling */
+body.modal-open {
+    overflow: hidden;
+  }
+  
+
+.comment-box .right  {
+    display: grid;
+    position: absolute;
+    text-align: center;
+    border: 3px solid lavender;
+    bottom: -2px;
+  
+    display: none;
+    background: white;
+    width: 25%;
+    left: 0;
+}
+
+
+.edit-form-div {
+    margin-bottom: 12px;
+}
