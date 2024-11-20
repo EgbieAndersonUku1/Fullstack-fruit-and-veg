@@ -2,7 +2,6 @@ from datetime import timedelta
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-from django.core.exceptions import ValidationError
 
 from subscription.models import NewsletterSubscription
 from .test_helper import create_test_user
