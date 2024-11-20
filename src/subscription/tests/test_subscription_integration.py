@@ -87,7 +87,6 @@ class NewsletterSubscriptionIntegrationTest(TestCase):
         subscription.title = "Updated subscription title"
         subscription.save()
 
-        # Reload the subscription and check if the update is successful
         subscription.refresh_from_db()
         self.assertEqual(subscription.title, "Updated subscription title")
 
