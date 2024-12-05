@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     # my apps
     "home.apps.HomeConfig",
     "account.apps.AccountConfig",
+    "category.apps.CategoryConfig",
     
     "authentication.apps.AuthenticationConfig",
     "blog.apps.BlogConfig",
@@ -103,6 +104,7 @@ TEMPLATES = [
                 'authentication.context_processor.render_authentication_forms',
                 'testimonal.context_processor.get_approved_testimonials',
                 'subscription.context_processor.get_subscription_session',
+                'category.context_processor.get_all_departments'
             ],
         },
     },
@@ -142,7 +144,7 @@ EMAIL_HOST_PASSWORD = getenv('EMAIL_HOST_PASSWORD')
 #USE_LOCAL_DB = getenv("LOCAL_DB", "").strip().title() in ["True", "1"] 
 #print( getenv("LOCAL_DB", ""))
 
-USE_LOCAL_DB = False  # set this line manually to use local DB since .env files is not picking it up
+USE_LOCAL_DB = False # set this line manually to use local DB since .env files is not picking it up
 
 if USE_LOCAL_DB:
     print("Using local postgres db")

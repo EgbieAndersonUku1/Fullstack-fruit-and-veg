@@ -609,6 +609,9 @@ table tr td a:nth-child(even):hover {
     font-family: cursive;
     font-weight: bold;
     padding-bottom: 2px;
+    padding-top: var(--padding-lg);
+    width: var(--global-width-md);
+    margin: auto;
 
 }
 
@@ -816,15 +819,22 @@ nav {
 /* sections */
 .main-section .container {
 
+    border-top: 2px solid lavender;
+    padding-top: 20px;
+
     /* grid elements */
-    display: grid;
-    grid-template-columns: 18% 82%;
-    column-gap: 4px;
+    /* display: grid;
+    grid-template-columns: 18% 82%; */
+    /* column-gap: 4px; */
 
     margin: auto;
     width: var(--global-width-md);
+    height: 100%; 
+
+  
 
 }
+
 
 
 /* The main section */
@@ -1100,6 +1110,7 @@ nav {
 .nav-container__account a[aria-label="View account"]:hover + .nav-container__account__dropdown-menu,
 .links a[aria-label="discounted items"]:hover + .dropdown-menu,
 .links a[aria-label="organic-products"]:hover + .dropdown-menu,
+.links a[aria-label="All departments"]:hover + .dropdown-menu,
 .nav-container__account__dropdown-menu:hover,
 .dropdown-menu:hover {
   cursor: pointer;
