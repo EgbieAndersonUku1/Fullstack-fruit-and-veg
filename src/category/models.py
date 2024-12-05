@@ -17,16 +17,11 @@ class AllDepartmentsModel(models.Model):
     @classmethod  
     def get_all_departments(cls):
         """
-        Retrieves all departments associated with a given user.
-
-        Args:
-            user (User): The user instance used to retrieve the departments.
+        Retrieves all departments associated store.
 
         Returns:
             QuerySet: A queryset containing all departments associated with the user.
 
-        Raises:
-            TypeError: If the provided user is not an instance of the User class.
         """
         return cls.objects.order_by('name')
 
