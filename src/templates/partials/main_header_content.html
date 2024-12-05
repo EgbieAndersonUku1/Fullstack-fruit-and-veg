@@ -1,8 +1,30 @@
 {% load static %}
 
+
+
 <div class="main">
     <div class="head space-between">
         <div class="links">
+            <a href="#" aria-label="All departments">All departments</a>
+            <div class="dropdown-menu organic-products">
+                {% if departments %}
+                    <h3>All departments</h3>
+                    <div class="dropdown-menu__container">
+                        <div class="links">
+                            
+                            {% for department in departments %}
+                                <a href="#" aria-label="View {{ department.name }}"> {{ department.name }}</a>
+                               
+                            {% endfor %}
+                        
+                        </div>
+                        <div class="dropdown-menu__container__img">
+                            <img src="{% static '/img/display/jpg/organic-snacks-banner.jpeg' %}" alt="A snacks banner">
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
             <a href="#featured-products" aria-label="Featured products">Featured products</a>
             <a href="#new-products" aria-label="New products">New products</a>
             <a href="#deals-of-the-week" aria-label="Read our blog">Deal of the week</a>
@@ -53,41 +75,12 @@
     </div>
 
     <div class="body">
-        <div class="search">
-            <form action="/" method="post" id="search">
-                <input type="search" name="search" id="search-form" placeholder="search...."
-                    aria-label="Search">
-                <button type="submit" class="search-btn medium-btn green-bg"
-                    aria-label="Submit search">Search</button>
-            </form>
-
-        </div>
-
-        <div class="main-phone">
-            <div class="icon">
-                <img src="{% static '/img/icons/alternate-phone.svg' %}" alt="A phone icon image" class="nav-icon">
-            </div>
-
-            <div class="phone-info">
-                <a href="tel:02076842569" aria-label="Call us at 0207 684 2569"><span>0207</span> 684
-                    2569</a>
-            </div>
-        </div>
+        {% include "partials/search.html" %}
+      
+        {% include "partials/phone_contact.html" %}
+      
     </div>
 
-    <div class="call-to-action">
-        <div class="info">
-            <p class="small-header bold">Fresh Fruit</p>
-            <p class="large-header">Vegetables</p>
-            <p class="medium-header">100% Organic</p>
-            <p>Free Pickup and delivery available</p>
-
-            <button class="button-md shop-btn" aria-label="Shop now">Shop now</button>
-        </div>
-
-        <div class="main-img">
-            <img src="{% static '/img/main/main-bg.png' %}" alt="The main background image" class="main-image">
-        </div>
-    </div>
-
+    {% include "partials/call_to_action.html" %}
+  
 </div>
