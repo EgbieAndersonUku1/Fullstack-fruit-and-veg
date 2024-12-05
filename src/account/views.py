@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls      import reverse
-
+from django.conf      import settings
 from django.contrib.auth.decorators import login_required
 
 from account.utils.utils import save_file_temporarily
@@ -27,11 +27,12 @@ def account(request):
     return render(request, "account/account/account.html")
 
 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def product_management(request):
     return render(request, "account/product-management/add-new-product/product-management-overview.html")
 
 
-
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def add_basic_description(request):
     
     return handle_form(
@@ -43,7 +44,7 @@ def add_basic_description(request):
       
     )
 
-
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def add_detailed_description(request):
     return handle_form(
         request=request,
@@ -55,6 +56,7 @@ def add_detailed_description(request):
     )
 
 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def add_pricing_and_inventory(request):
      return handle_form(
         request=request,
@@ -65,6 +67,7 @@ def add_pricing_and_inventory(request):
     )
    
 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def add_images_and_media(request):
     
     context      = {"section_id" : "images-and-media"}
@@ -92,6 +95,7 @@ def add_images_and_media(request):
     return render(request, "account/product-management/add-new-product/images-and-media.html", context=context)
 
 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def add_shipping_and_delivery(request):
     return handle_form(request=request,
                        form_class=ShippingAndDeliveryForm,
@@ -103,6 +107,7 @@ def add_shipping_and_delivery(request):
 
 
 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def add_seo_management(request):
     return handle_form(request=request,
                        form_class=SeoAndMetaForm,
@@ -112,6 +117,7 @@ def add_seo_management(request):
                        )
 
 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def add_additonal_information(request):
     return handle_form(request=request,
                        form_class=AdditionalInformationForm,
@@ -121,6 +127,7 @@ def add_additonal_information(request):
                        )
 
 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def view_review(request):
     context = { "section_id" : "review-section", 'is_review_section': True}
     
@@ -133,36 +140,39 @@ def view_review(request):
     context["image_and_media_data"]        = get_base64_images_from_session(image_and_media_session)
     context["shipping_and_delivery_data"]  = request.session.get("shipping_and_delivery", {})
     context["seo_management_data"]         = request.session.get("seo_management", {})
-    context["additional_information_data"] = request.session.get("additional_information", {})
-    
-   
+    context["additional_information_data"] = request.session.get("additional_information", {})   
     
     return render(request, "account/product-management/add-new-product/review-and-submit.html", context=context)
  
  
  
  
- 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def view_products(request):
     return render(request, "account/product-management/view-products/view-products.html")
  
- 
+
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def orders(request):
     return render(request, "account/orders/orders.html")
 
 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def view_item(request, id):
     return render(request, "account/orders/view-item.html")
 
 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def financial_management(request):
     return render(request, "account/financial-management/financial-management.html")
 
 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def invoice(request, item_id):
     return render(request, "account/orders/invoice.html" )
 
 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def refund_overview(request):
     return render(request, "account/refund/refund-management.html")
 
