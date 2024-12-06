@@ -143,7 +143,7 @@ def get_shipping_options():
             },
             "screen_reader_elems": {
                 "id": "standard-desc",
-                "text": "Standard shipping with delivery in 3 to 5 business days"
+                # "text": "Standard shipping with delivery in 3 to 5 business days"
             }
         },
         {
@@ -158,7 +158,7 @@ def get_shipping_options():
             },
             "screen_reader_elems": {
                 "id": "express-desc",
-                "text": "Express shipping with delivery in 1 to 2 business days"
+                # "text": "Express shipping with delivery in 1 to 2 business days"
             }
         },
         {
@@ -173,7 +173,7 @@ def get_shipping_options():
             },
             "screen_reader_elems": {
                 "id": "next-day-desc",
-                "text": "Next-day delivery option"
+                # "text": "Next-day delivery option"
             }
         },
         {
@@ -188,7 +188,7 @@ def get_shipping_options():
             },
             "screen_reader_elems": {
                 "id": "same-day-desc",
-                "text": "Same-day delivery option, order by 2 PM"
+                # "text": "Same-day delivery option, order by 2 PM"
             }
         },
         {
@@ -203,7 +203,7 @@ def get_shipping_options():
             },
             "screen_reader_elems": {
                 "id": "click-collect-desc",
-                "text": "Click and Collect option with delivery in 1 to 2 days"
+                # "text": "Click and Collect option with delivery in 1 to 2 days"
             }
         },
         {
@@ -218,7 +218,7 @@ def get_shipping_options():
             },
             "screen_reader_elems": {
                 "id": "weekend-desc",
-                "text": "Weekend delivery option"
+                # "text": "Weekend delivery option"
             }
         },
         {
@@ -233,7 +233,7 @@ def get_shipping_options():
             },
             "screen_reader_elems": {
                 "id": "free-desc",
-                "text": "Free shipping for orders over £50"
+                # "text": "Free shipping for orders over £50"
             }
         }
     ]

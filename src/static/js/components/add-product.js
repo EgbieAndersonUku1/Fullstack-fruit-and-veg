@@ -4,7 +4,7 @@ import {getAllCheckBoxElementsValue, disableEmptySelectOptions as handleEmptySel
 } from "../utils/utils.js";
 
 import AlertUtils from "../utils/alerts.js";
-import { getFormEntries, toggleInputVisibilityBasedOnSelection } from "../utils/formUtils.js";
+import { toggleInputVisibilityBasedOnSelection } from "../utils/formUtils.js";
 
 
 
@@ -216,6 +216,7 @@ function handleShippingAndDeliveryForm(e) {
 
     const deliveryCheckboxes = document.querySelectorAll(".shipping-options label input[name='shipping']:checked");
 
+    console.log(deliveryCheckboxes);
     if (deliveryCheckboxes.length === 0) {
         selectDeliveryErrorMsg.style.display = "block";
         formComplete = false;
@@ -248,8 +249,6 @@ function handleAdditionalFormInfo(e) {
     e.preventDefault();
     handleFormSubmission(additionInformationForm);
 }
-
-
 
 
 function handleFormSubmission(form) {

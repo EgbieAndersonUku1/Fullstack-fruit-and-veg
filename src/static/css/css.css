@@ -3146,6 +3146,9 @@ legend {
     hyphens: auto;
 }
 
+.add-product-section {
+    margin-bottom: var(--padding-xl);
+}
 
 /* The view product section */
 .view-product-dividor {

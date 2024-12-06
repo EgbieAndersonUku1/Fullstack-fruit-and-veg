@@ -1,5 +1,6 @@
 from django.db import models
 
+from account.utils.product_category_utils import get_product_category_choices
 from authentication.models import User
 
 
@@ -25,4 +26,12 @@ class AllDepartmentsModel(models.Model):
         """
         return cls.objects.order_by('name')
 
-        
+
+
+
+
+    
+
+
+
+
