@@ -39,11 +39,11 @@ class BasicFormDescription(forms.Form):
     brand = forms.CharField(label="Brand", max_length=20,
                             widget=forms.TextInput(attrs={"id": "brand", "placeholder": "Enter a brand..."}))
 
-    sku = forms.CharField(label="SKU (Stock Keeping Unit)", max_length=20,
-                          widget=forms.TextInput(attrs={"id": "sku", "placeholder": "Enter a SKU..."}))
+    sku = forms.CharField(label="SKU (Stock Keeping Unit)", max_length=20, required=False,
+                          widget=forms.TextInput(attrs={"id": "sku", "placeholder": "Enter a SKU or leave blank to have the system autogenerate it.."}))
 
-    upc = forms.CharField(label="UPC (Universal Product Code)", max_length=20,
-                          widget=forms.TextInput(attrs={"id": "upc", "placeholder": "Enter a UPC..."}))
+    upc = forms.CharField(label="UPC (Universal Product Code)", max_length=20, required=False,
+                          widget=forms.TextInput(attrs={"id": "upc", "placeholder": "Enter a UPC or leave blank to have the system autogenerate it..."}))
 
     short_description = forms.CharField(label="Enter a short description",
                                         widget=forms.Textarea(attrs={"id": "short-description", "rows": "5",
@@ -155,21 +155,11 @@ class ImageAndMediaForm(forms.Form):
         })
     )
 
-    primary_video = forms.FileField(
-        label="Upload primary video (optional)",
-        required=False,
-        widget=forms.ClearableFileInput(attrs={
-            "id": "primary-video",
-            "accept": "video/*",
-            "aria-describedby": "primary-video-description"
-        })
-    )
+    
 
-
-class ShippingAndDeliveryForm(BaseFormMeasurements):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.delivery_options = get_shipping_options()
+class ShippingAndDeliveryForm(forms.Form):
+    # TODO add the fields
+    pass
 
 
 class SeoAndMetaForm(forms.Form):
