@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     "home.apps.HomeConfig",
     "account.apps.AccountConfig",
     "category.apps.CategoryConfig",
+    "product.apps.ProductConfig",
     
     "authentication.apps.AuthenticationConfig",
     "blog.apps.BlogConfig",
@@ -147,14 +148,14 @@ EMAIL_HOST_PASSWORD = getenv('EMAIL_HOST_PASSWORD')
 USE_LOCAL_DB = False # set this line manually to use local DB since .env files is not picking it up
 
 if USE_LOCAL_DB:
-    print("Using local postgres db")
+    print("Using local postgres db - set me in the settings.py to use the external db")
     DB_NAME     = getenv("DB_LOCAL_NAME")
     DB_USER     = getenv("DB_LOCAL_USER")
     DB_PASSWORD = getenv("DB_LOCAL_PASSWORD")
     DB_HOST     = getenv("DB_LOCAL_HOST")
     DB_PORT     = getenv("DB_LOCAL_PORT", "5432")
 else:
-    print("Using external postgres db")
+    print("Using external postgres db - set me in the settings.py to use the local db")
     DB_NAME     = getenv("DB_NAME")
     DB_USER     = getenv("DB_USER")
     DB_PASSWORD = getenv("DB_PASSWORD")

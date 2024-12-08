@@ -5,7 +5,6 @@ from  .base_form_helper  import BaseFormMeasurements
 from ..utils.product_category_utils import (get_product_category_choices,
                                             get_product_color_choices, 
                                             get_product_size_choices,
-                                            get_shipping_options
                                             )
 
 
@@ -39,11 +38,11 @@ class BasicFormDescription(forms.Form):
     brand = forms.CharField(label="Brand", max_length=20,
                             widget=forms.TextInput(attrs={"id": "brand", "placeholder": "Enter a brand..."}))
 
-    sku = forms.CharField(label="SKU (Stock Keeping Unit)", max_length=20,
-                          widget=forms.TextInput(attrs={"id": "sku", "placeholder": "Enter a SKU..."}))
+    sku = forms.CharField(label="SKU (Stock Keeping Unit)", max_length=20, required=False,
+                          widget=forms.TextInput(attrs={"id": "sku", "placeholder": "Enter a SKU or leave blank to have the system autogenerate it.."}))
 
-    upc = forms.CharField(label="UPC (Universal Product Code)", max_length=20,
-                          widget=forms.TextInput(attrs={"id": "upc", "placeholder": "Enter a UPC..."}))
+    upc = forms.CharField(label="UPC (Universal Product Code)", max_length=20, required=False,
+                          widget=forms.TextInput(attrs={"id": "upc", "placeholder": "Enter a UPC or leave blank to have the system autogenerate it..."}))
 
     short_description = forms.CharField(label="Enter a short description",
                                         widget=forms.Textarea(attrs={"id": "short-description", "rows": "5",
@@ -155,45 +154,111 @@ class ImageAndMediaForm(forms.Form):
         })
     )
 
-    primary_video = forms.FileField(
-        label="Upload primary video (optional)",
-        required=False,
-        widget=forms.ClearableFileInput(attrs={
-            "id": "primary-video",
-            "accept": "video/*",
-            "aria-describedby": "primary-video-description"
-        })
-    )
+    
 
+class ShippingAndDeliveryForm(forms.Form):
+    DELIVERY_OPTIONS = [
+        ("s", "Standard Delivery"),
+        ("p", "Premium Shipping"),
+        ("e", "Express Shipping") 
+    ]
+    height = forms.CharField(widget=forms.TextInput(attrs={
+                                     "aria-labelledby": "meta-title-label",
+                                     "placeholder": "Enter the shipping height...",
+                                     "type": "number",
+                                     "step": "0.01",
+                                     "min": "1",
+                                     "max": "10000",
+                                 }))
+    width = forms.CharField(widget=forms.TextInput(attrs={
+                                     "aria-labelledby": "meta-title-label",
+                                     "placeholder": "Enter the shipping width..",
+                                     "type": "number",
+                                     "step": "0.01",
+                                     "min": "1",
+                                     "max": "10000",
+                                 }))
+    
+    length = forms.CharField(widget=forms.TextInput(attrs={
+                                     "aria-labelledby": "meta-title-label",
+                                     "placeholder": "Enter the shipping length..",
+                                     "type": "number",
+                                     "step": "0.01",
+                                     "min": "1",
+                                     "max": "10000",
+                                 }))
 
-class ShippingAndDeliveryForm(BaseFormMeasurements):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.delivery_options = get_shipping_options()
+    weight = forms.CharField(widget=forms.TextInput(attrs={
+                                     "aria-labelledby": "meta-title-label",
+                                     "placeholder": "Enter the shipping weight..",
+                                     "type": "number",
+                                     "step": "0.01",
+                                     "min": "0.00",
+                                     "max": "10000",
+                                 }))
+    
+    standard_shipping = forms.CharField(required=False, widget=forms.TextInput(attrs={
+                                     "id": "standard_shipping",
+                                     "aria-labelledby": "meta-title-label",
+                                     "placeholder": "Enter the price for a standard delivery..",
+                                     "type": "number",
+                                     "step": "0.01",
+                                     "min": "0.00",
+                                     "max": "10000",
+                                    
+                                 }))
+    
+    
+    premium_shipping = forms.CharField(required=False, widget=forms.TextInput(attrs={
+                                     "id": "premium_shipping",
+                                     "aria-labelledby": "meta-title-label",
+                                     "placeholder": "Enter the price for a premimum delivery..",
+                                     "type": "number",
+                                     "step": "0.01",
+                                     "min": "0.00",
+                                     "max": "10000",
+                                 }))
+    
+    express_shipping = forms.CharField(required=False, widget=forms.TextInput(attrs={
+                                     "id": "express_shipping",
+                                     "aria-labelledby": "meta-title-label",
+                                     "placeholder": "Enter the price for express shipping..",
+                                     "type": "number",
+                                     "step": "0.01",
+                                     "min": "0.00",
+                                     "max": "10000",
+                                 }))
+    delivery_options = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                                choices=DELIVERY_OPTIONS,
+                                              )
 
 
 class SeoAndMetaForm(forms.Form):
-    meta_title = forms.CharField(label="Meta title", min_length=3, max_length=40,
+    meta_title = forms.CharField(label="Meta title (optional)", min_length=3, max_length=40,
+                                 required=False,
                                  widget=forms.TextInput(attrs={
                                      "id": "meta-title-input",
                                      "aria-labelledby": "meta-title-label",
                                      "placeholder": "Enter a meta title...",
                                  }))
 
-    meta_keywords = forms.CharField(label="Add meta keywords (separate by commas)", min_length=3, 
+    meta_keywords = forms.CharField(label="Add meta keywords (separate by commas) - optional", min_length=3, 
                                     max_length=40, 
+                                    required=False,
                                     widget=forms.TextInput(attrs={
                                         "id": "meta-keyword-input",
                                         "aria-labelledby": "meta-keyword-label",
                                         "placeholder": "e.g delicious, creamy, banana..."
                                     }))
 
-    meta_description = forms.CharField(label="Meta description", widget=forms.Textarea(attrs={
-        "id": "meta-description-textarea",
-        "rows": "10",
-        "cols": "10",
-        "aria-labelledby": "meta-description-label",
-    }))
+    meta_description = forms.CharField(label="Meta description (optional)", 
+                                       required=False,
+                                       widget=forms.Textarea(attrs={
+                                       "id": "meta-description-textarea",
+                                       "rows": "10",
+                                       "cols": "10",
+                                       "aria-labelledby": "meta-description-label",
+                                    }))
 
 
 class AdditionalInformationForm(forms.Form):
@@ -223,10 +288,13 @@ class AdditionalInformationForm(forms.Form):
                                           "id": "return-policy",
                                       }))
 
-    description = forms.CharField(label="Warranty description", widget=forms.Textarea(attrs={
-        "id": "warranty-description",
-        "rows": "15",
-        "cols": "10",
-        "aria-labelledby": "warranty-description-label",
-    }))
+    description = forms.CharField(label="Warranty description (optional)", 
+                                    required=False,
+                                    widget=forms.Textarea(attrs={
+                                    "id": "warranty-description",
+                                    "rows": "15",
+                                    "cols": "10",
+                                    "aria-labelledby": "warranty-description-label",
+                                    "placeholder": "Leave blank for no warranty..."
+                                     }))
 

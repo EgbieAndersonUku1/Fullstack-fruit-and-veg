@@ -1,15 +1,23 @@
 
 import { minimumCharactersToUse } from "./characterCounter.js";
-import {getAllCheckBoxElementsValue, disableEmptySelectOptions as handleEmptySelectOptions
+import {disableEmptySelectOptions as handleEmptySelectOptions
 } from "../utils/utils.js";
 
 import AlertUtils from "../utils/alerts.js";
-import { getFormEntries, toggleInputVisibilityBasedOnSelection } from "../utils/formUtils.js";
+import { toggleInputVisibilityBasedOnSelection } from "../utils/formUtils.js";
 
 
 
-const selectFormCategory = document.getElementById("select-category");
+const selectFormCategory      = document.getElementById("select-category");
 const selectPriceFormCategory = document.getElementById("select-discount");
+const deliveryOptions         = document.querySelectorAll(".options");
+
+
+// get the option
+const standardShippingDiv = document.getElementById("standard");
+const premiumShippingDiv  = document.getElementById("premium");
+const expressShippingDiv  = document.getElementById("express");
+
 
 const PRODUCT_SELECT_OPTION_VALUE  = "new";
 const DISCOUNT_SELECT_OPTION_VALUE = "yes"
@@ -212,9 +220,8 @@ function handleImageAndMediaForm(e) {
 function handleShippingAndDeliveryForm(e) {
     e.preventDefault();
 
-    let formComplete = true;
-
-    const deliveryCheckboxes = document.querySelectorAll(".shipping-options label input[name='shipping']:checked");
+    let formComplete         = true;
+    const deliveryCheckboxes = document.querySelectorAll(".shipping-options .options label input[name='delivery_options']:checked");
 
     if (deliveryCheckboxes.length === 0) {
         selectDeliveryErrorMsg.style.display = "block";
@@ -227,13 +234,15 @@ function handleShippingAndDeliveryForm(e) {
             "confirmButtonText": "Ok"
         })
       
-    };
+    } 
 
     if (shippingAndDeliveryForm.reportValidity() && formComplete) {
         handleFormSubmission(shippingAndDeliveryForm)
     }
 
 }
+
+
 
 
 // handles seo-and-meta-information.html
@@ -248,8 +257,6 @@ function handleAdditionalFormInfo(e) {
     e.preventDefault();
     handleFormSubmission(additionInformationForm);
 }
-
-
 
 
 function handleFormSubmission(form) {
