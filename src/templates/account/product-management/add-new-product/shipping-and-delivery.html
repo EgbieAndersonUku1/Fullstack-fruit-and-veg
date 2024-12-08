@@ -43,19 +43,47 @@
         </div>
 
         <!-- The shipping options -->
-        <h4 class="padding-top-md" id="shipping-options-heading">Shipping Options</h4>
+        <h4 class="padding-top-md" id="shipping-options-heading">Available shipping options for the product</h4>
         <hr class="dividor">
         <div class="shipping-options" aria-labelledby="shipping-options-heading">
-            <fieldset>
-                <h4 class="sr-only">Select a shipping method</h4>
-
+            <h4 class="sr-only">Select a shipping method</h4>
+            {% for delivery_option in form.delivery_options %}
+                <div class="options">
+                    {{ delivery_option }}
+                </div>
                
-              
+            {% endfor %}
              
-            </fieldset>
         </div>
 
-        <p class="error-msg" id="delivery-error-msg" aria-live="assertive">You must select at least one delivery option</p>
+        <h4 class="padding-top-md" id="shipping-options-heading">Shipping Delivery Option Cost</h4>
+        <small>Default will be £0.00 if not set</small>
+        <hr class="dividor">
+         <div class="shipping-cost padding-bottom-md" aria-labelledby="shipping-cost-heading">
+            
+             <div class="group padding-bottom-sm" id="standard">
+                {{ form.standard_shipping.label_tag }}
+                {{ form.standard_shipping }}
+
+                <span id="standard-shipping-desc" class="sr-only">Enter the shipping delivery cost</span>
+             </div>
+             
+             <div class="group padding-bottom-sm" id="premium">
+                {{ form.premium_shipping.label_tag }}
+                {{ form.premium_shipping }}
+
+                <span id="premium_shipping-desc" class="sr-only">Enter the premium delivery cost</span>
+             </div>
+
+             <div class="group padding-bottom-sm" id="express">
+                {{ form.express_shipping.label_tag }}
+                {{ form.express_shipping }}
+
+                <span id="weight-desc" class="sr-only">Enter the express delivery cost</span>
+             </div>
+           
+        
+         </div>
 
         <!-- Navigation Buttons -->
         <div class="button space-between">

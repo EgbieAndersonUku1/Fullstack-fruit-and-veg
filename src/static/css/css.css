@@ -183,6 +183,9 @@ h2 {
     font-weight: 400;
 }
 
+h4 {
+    text-transform: capitalize;
+}
 
 /* fieldset */
 fieldset {
@@ -4610,3 +4613,20 @@ body.modal-open {
 .edit-form-div {
     margin-bottom: 12px;
 }
+
+
+
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+
