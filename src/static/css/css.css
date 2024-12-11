@@ -4630,3 +4630,74 @@ body.modal-open {
 }
 
 
+
+/* faq help */
+#faq-help {
+    width: 30%;
+    border: 1px solid lavender;
+    height: 600px;
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    background: white;
+    z-index: 10000;
+}
+
+
+#faq-help .container .footer {
+    position: absolute;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: 90% 10%;
+    grid-template-rows: auto;
+    column-gap: 20px;
+}
+
+#faq-help   {
+   background: ghostwhite;
+   padding: 10px;
+}
+
+
+
+
+#faq-help .container .body   {
+    overflow-y: scroll;
+}
+
+
+#faq-help .container .body .system p,
+#faq-help .container .body .user p  {
+
+}
+
+
+#faq-help .container .body .system p {
+
+  
+   
+    
+}
+
+#faq-help .container .body .system  {
+  
+    
+}
+
+#faq-help .container .body .user  {
+ 
+   
+    
+}
+
+
+ #faq-help .container .body .user p {
+ 
+   
+    
+}
+  
+ 
+
+
+
