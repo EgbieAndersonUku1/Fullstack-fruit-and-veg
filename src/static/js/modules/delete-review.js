@@ -26,15 +26,19 @@ confirmDelete?.addEventListener("click", handleConfirmDelete);
 
 
 function handleSetUp() {
-    let id = ratingsContainer.id;
+    let id;
+
+    if (ratingsContainer) {
+        id = ratingsContainer.id;
+    }
+  
     if (!id) {
         console.error("The id for the ratings couldn't be found");
-
+    } else  {
+    
+        id = splitStringByDelimiter(id, "-")[1];
+        renderStars(id);
     }
-   
-   id = splitStringByDelimiter(id, "-")[1];
-
-   renderStars(id);
 }
 
 

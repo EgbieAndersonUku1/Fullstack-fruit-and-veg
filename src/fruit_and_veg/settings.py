@@ -62,7 +62,9 @@ INSTALLED_APPS = [
     "home.apps.HomeConfig",
     "account.apps.AccountConfig",
     "category.apps.CategoryConfig",
+    'faq_bot.apps.FaqBotConfig',
     "product.apps.ProductConfig",
+    
     
     "authentication.apps.AuthenticationConfig",
     "blog.apps.BlogConfig",
@@ -341,3 +343,7 @@ CKEDITOR_5_CONFIGS = {
 }
 
 # CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"  
+
+
+# API KEY 
+API_KEY = getenv("API_KEY")

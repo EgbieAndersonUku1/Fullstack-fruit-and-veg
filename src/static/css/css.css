@@ -43,6 +43,8 @@
     /* card elements */
     --card-height: 224px;
     --card-width: 100%;
+
+    --background-purple: #7460d5;;
     
 }
 
@@ -4628,5 +4630,195 @@ body.modal-open {
     white-space: nowrap;
     border: 0;
 }
+
+
+
+/* faq help */
+#faq-help {
+    display: none;
+    width: 30%;
+    border: px solid lavender;
+    height: 600px;
+    position: fixed;
+    right: 10px;
+    bottom: 0;
+    background: white;
+    z-index: 10000;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+
+#faq-help .container .footer {
+    position: absolute;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: 97% 3%;
+    grid-template-rows: auto;
+    column-gap: 10px;
+    width: 85%;
+    padding-bottom: 10px;
+}
+
+#faq-help   {
+   background: ghostwhite;
+   padding: 10px;
+   border-radius: 2%;
+}
+
+.footer .send input {
+    width: 100%;
+
+    background: lavender;
+    height: 45px;
+    color: black;
+}
+
+.footer .send input::placeholder {
+    color: black;
+    padding-left: 10px;
+}
+
+.form-group {
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 95% 5%;
+    grid-template-rows: auto;
+    column-gap: 5px;
+}
+
+
+
+
+/* The faq bot css */
+#faq-help .container .body   {
+    overflow-y: scroll;
+    height: 500px;
+    border: 1px solid lavender;
+    padding: 10px;
+    background: white;
+    border-radius: 3%;
+    color: black;
+    text-transform: capitalize;
+}
+
+#faq-help .container .head {
+
+    background: white;
+    color: white;
+    margin-bottom: 10px;
+
+    /* position */
+    display: grid;
+    grid-template-columns: 90% 10%;
+    grid-template-rows: auto;
+    
+}
+
+
+#faq-help .container .head .intro p {
+   color: black;
+   text-transform: capitalize;
+    
+}
+
+.chat-label {
+   color: black;
+   font-weight: bold;
+   text-transform: capitalize;
+}
+
+
+#faq-help .container .body .user  p,
+#faq-help .container .body .system p {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-transform: none;
+    font-size: 0.90rem;
+}
+
+
+#faq-help .container .body .system p {
+
+    background: rgb(208, 205, 205);
+    border: 1px solid lavender;
+    border-radius: 5%;
+    color: black;
+    margin-bottom: 10px;
+    margin-right: 10%;
+    padding-left: 8px;
+    width: 90%;
+    font-weight: 400;
+}
+
+
+#faq-help .container .body .user {
+  margin-bottom: 40px;
+  text-align: right;
+  margin-bottom: 40px;
+  margin-left: 20px;
+ 
+}
+
+
+#faq-help .container .body .user  p {
+    border: 1px solid lavender;
+    padding-left: 10px;
+    width: 70%;
+    margin-left: 30%;
+    text-align: left;
+    color: white;
+    background: rgb(37, 97, 37);
+}
+
+
+#faq-help .container hr {
+    color: #0c5399;
+}
+
+#faq-help .container .body hr {
+    opacity: 0.3;
+}
+  
+.send-btn button {
+    background: #eaeaed;
+    border: 2px solid lavender;
+    height: 40px;
+    width: 50px;
+    padding: 8px;
+    margin-top: 2px;
+    
+}
+.send-btn button:hover {
+    background: white;
+
+}
+
+#customer-support-img  {
+    height: 50px;
+    width: 50px;
+    border: 2px solid rgb(40, 73, 7);
+    border-radius: 50%;
+    padding: 10px;
+    background: lavender;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 100000;
+    box-shadow: var(--box-shadow);
+   
+}
+
+
+.loader {
+  width: 30px;
+  aspect-ratio: 4;
+  background: radial-gradient(circle closest-side,#000 90%,#0000) 0/calc(100%/3) 100% space;
+  clip-path: inset(0 100% 0 0);
+  animation: l1 1.7s steps(4) infinite;
+  
+}
+@keyframes l1 {to{clip-path: inset(0 -34% 0 0)}}
 
 

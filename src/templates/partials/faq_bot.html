@@ -1,0 +1,53 @@
+{% load static %}
+
+<div class="customer-support">
+    <img src="../../static/img/icons/support.svg" alt="customer support" id="customer-support-img">
+</div>
+
+<section id="faq-help">
+    <div class="container">
+
+        <div class="head">
+            <div class="intro">
+                <p class="bold text-capitalize">EUOrganics FAQ bot</p>
+            </div>
+            <div class="close">
+                <a href="#" class="link" id="close-faq">close</a>
+            </div>
+        </div>
+
+        <div class="body chat" id="body-chat" aria-live="polite">
+            <div class="system">
+                <small class="chat-label">Faq bot</small>
+                <p>Hi, how can I help you?</p>
+                <hr class="dividor">
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <div class="send">
+                <form action="" method="post" id="send-chat-form">
+
+                    {% csrf_token %}
+
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token}}" class="">
+
+                    <div class="form-group">
+                        <div class="input">
+                            <input type="text" name="send" id="send-input-field" placeholder="Ask me anything....">
+                        </div>
+                        <div class="send-btn" id="send-btn">
+                            <button type="submit"><img src="{% static 'img/icons/send.svg' %}" alt="send icon"></button>
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

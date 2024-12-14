@@ -11,6 +11,7 @@ The backend for the Fruit Store website is designed to manage server-side operat
 - **API endpoints for frontend integration**
 - ✨ **Robust & Scalable** ✨
 
+
 ## Table of Contents
 - [Features](#features)
 - [Tech](#tech)
@@ -19,8 +20,9 @@ The backend for the Fruit Store website is designed to manage server-side operat
 - [Email setup](#email-setup)
 - [Django Application Setup with PostgreSQL](#django-application-setup-with-postgresql)
 - [Django-HTML Syntax Highlighting in VS Code](#Django-HTML-Syntax-Highlighting-in-VS-Code)
-- [Create a superuser](#Creating-a-Superuser)
+- [Create a superuser](#creating-a-superuser)
 - [Overview](#overview)
+- [Setting up the API Keys for Your FAQ Bot](#setting-up-the-api-keys-for-your-faq-bot)
 
 
 ## Features
@@ -237,6 +239,30 @@ automatically detect that the templates is HTML and vice-versa with with Django-
 
 You now have Django-HTML syntax highlighting enabled in VS Code! 
 ---
+
+
+## Setting up the API Keys for Your FAQ Bot
+
+The website uses a FAQ bot for customer support. The bot has been trained to answer questions related to the site (e.g., orders, account details, etc.) and will not answer any questions unrelated to the site.
+
+To set up the API key for the FAQ bot, follow these steps:
+
+1. Visit the website: [https://aistudio.google.com/apikey](https://aistudio.google.com/apikey)
+2. Click on **"Create an API Key"**.
+3. If you're not signed in, the website will prompt you to sign in with your Google account. Once signed in:
+    - Click on **"Create an API Key"** again.
+    - From the dropdown menu, select **"Gemini API"** and copy the key.
+4. Open your `.env` file (if you don't have one, create it in the root of your project).
+5. Paste the API key inside the `.env` file under the variable `API_KEY`. For example:
+
+    ```bash
+    API_KEY=your_api_key_here
+    ```
+
+6. Ensure your `.env` file is not tracked in version control (add it to `.gitignore` if necessary).
+
+That's it! You're ready to use the FAQ bot with the API key configured.
+
 
 
 ## Creating a Superuser
