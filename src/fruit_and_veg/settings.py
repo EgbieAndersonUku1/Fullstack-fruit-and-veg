@@ -62,7 +62,9 @@ INSTALLED_APPS = [
     "home.apps.HomeConfig",
     "account.apps.AccountConfig",
     "category.apps.CategoryConfig",
+    'faq_bot.apps.FaqBotConfig',
     "product.apps.ProductConfig",
+    
     
     "authentication.apps.AuthenticationConfig",
     "blog.apps.BlogConfig",
@@ -145,7 +147,7 @@ EMAIL_HOST_PASSWORD = getenv('EMAIL_HOST_PASSWORD')
 #USE_LOCAL_DB = getenv("LOCAL_DB", "").strip().title() in ["True", "1"] 
 #print( getenv("LOCAL_DB", ""))
 
-USE_LOCAL_DB = True # set this line manually to use local DB since .env files is not picking it up
+USE_LOCAL_DB = False # set this line manually to use local DB since .env files is not picking it up
 
 if USE_LOCAL_DB:
     print("Using local postgres db - set me in the settings.py to use the external db")
@@ -341,3 +343,7 @@ CKEDITOR_5_CONFIGS = {
 }
 
 # CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"  
+
+
+# API KEY 
+API_KEY = getenv("API_KEY")

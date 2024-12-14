@@ -1,78 +1,53 @@
 {% load static %}
-       
-        <section id="faq-help">
 
-            <div class="container">
+<div class="customer-support">
+    <img src="../../static/img/icons/support.svg" alt="customer support" id="customer-support-img">
+</div>
 
-                <div class="head">
-                    <div class="intro">
-                        <p>Ask me anything?</p>
+<section id="faq-help">
+    <div class="container">
+
+        <div class="head">
+            <div class="intro">
+                <p class="bold text-capitalize">EUOrganics FAQ bot</p>
+            </div>
+            <div class="close">
+                <a href="#" class="link" id="close-faq">close</a>
+            </div>
+        </div>
+
+        <div class="body chat" id="body-chat" aria-live="polite">
+            <div class="system">
+                <small class="chat-label">Faq bot</small>
+                <p>Hi, how can I help you?</p>
+                <hr class="dividor">
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <div class="send">
+                <form action="" method="post" id="send-chat-form">
+
+                    {% csrf_token %}
+
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token}}" class="">
+
+                    <div class="form-group">
+                        <div class="input">
+                            <input type="text" name="send" id="send-input-field" placeholder="Ask me anything....">
+                        </div>
+                        <div class="send-btn" id="send-btn">
+                            <button type="submit"><img src="{% static 'img/icons/send.svg' %}" alt="send icon"></button>
+                        </div>
+
                     </div>
-                    <div class="close">
-                        <a href="#">close</a>
-                    </div>
-                </div>
-
-                <div class="body chat">
-                    <div class="system">
-                        <small class="chat-label">Faq bot</small>
-                        <p>Hi, how can I help you?</p>
-                        <hr class="dividor">
-                    </div>
-
-                    <!--Note to self remove test data-->
-                 
-                    <div class="user">
-                        <small class="chat-label">User</small>
-                        <p>Do you have physical stores?</p>
-                    </div>
-
-                    <div class="system">
-                        <small class="chat-label">Faq bot</small>
-                        <p>Yes, we have a few phyical stores</p>
-                    </div>
-
-                    <hr class="dividor">
-
-                    <div class="user">
-                        <small class="chat-label">User</small>
-                        <p>Where are the location of these stores</p>
-                    </div>
-
-                    <div class="system">
-                        <small class="chat-label">Faq bot</small>
-                        <p>We have two in London</p>
-                    </div>
-
-                    <hr class="dividor">
-            
-                    <div class="user">
-                        <small class="chat-label">User</small>
-                        <p>What type of products do you have?</p>
-                    </div>
-
-                  
-
-                    <div class="system">
-                        <small class="chat-label">Faq bot</small>
-                        <p>We have a range of products and these include organic food, fruits</p>
-                    </div>
-                    <hr class="dividor">
-
-                   
-                </div>
-
-                <div class="footer">
-                    <div class="send">
-                        <input type="text" name="send" id="send" placeholder="Ask me anything?">
-                    </div>
-                    <div class="btn send-btn">
-                        <p>send</p>
-                    </div>
-                </div>
+                </form>
 
             </div>
 
+        </div>
 
+    </div>
 
-        </section>
+</section>

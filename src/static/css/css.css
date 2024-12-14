@@ -4635,8 +4635,9 @@ body.modal-open {
 
 /* faq help */
 #faq-help {
+    display: none;
     width: 30%;
-    border: 1px solid lavender;
+    border: px solid lavender;
     height: 600px;
     position: fixed;
     right: 10px;
@@ -4661,20 +4662,37 @@ body.modal-open {
 #faq-help   {
    background: ghostwhite;
    padding: 10px;
+   border-radius: 2%;
 }
 
 .footer .send input {
     width: 100%;
+
+    background: lavender;
+    height: 45px;
+    color: black;
 }
 
-.send-btn {
-    cursor: pointer;
+.footer .send input::placeholder {
+    color: black;
+    padding-left: 10px;
 }
+
+.form-group {
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 95% 5%;
+    grid-template-rows: auto;
+    column-gap: 5px;
+}
+
+
+
 
 /* The faq bot css */
 #faq-help .container .body   {
     overflow-y: scroll;
-    height: 510px;
+    height: 500px;
     border: 1px solid lavender;
     padding: 10px;
     background: white;
@@ -4714,19 +4732,24 @@ body.modal-open {
 #faq-help .container .body .system p {
     padding-top: 10px;
     padding-bottom: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-transform: none;
+    font-size: 0.90rem;
 }
 
 
 #faq-help .container .body .system p {
 
-    background: var(--background-purple);
+    background: rgb(208, 205, 205);
     border: 1px solid lavender;
     border-radius: 5%;
-    color: white;
+    color: black;
     margin-bottom: 10px;
-    margin-right: 20%;
+    margin-right: 10%;
     padding-left: 8px;
-    width: 80%;
+    width: 90%;
+    font-weight: 400;
 }
 
 
@@ -4758,7 +4781,44 @@ body.modal-open {
     opacity: 0.3;
 }
   
- 
+.send-btn button {
+    background: #eaeaed;
+    border: 2px solid lavender;
+    height: 40px;
+    width: 50px;
+    padding: 8px;
+    margin-top: 2px;
+    
+}
+.send-btn button:hover {
+    background: white;
 
+}
+
+#customer-support-img  {
+    height: 50px;
+    width: 50px;
+    border: 2px solid rgb(40, 73, 7);
+    border-radius: 50%;
+    padding: 10px;
+    background: lavender;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 100000;
+    box-shadow: var(--box-shadow);
+   
+}
+
+
+.loader {
+  width: 30px;
+  aspect-ratio: 4;
+  background: radial-gradient(circle closest-side,#000 90%,#0000) 0/calc(100%/3) 100% space;
+  clip-path: inset(0 100% 0 0);
+  animation: l1 1.7s steps(4) infinite;
+  
+}
+@keyframes l1 {to{clip-path: inset(0 -34% 0 0)}}
 
 
