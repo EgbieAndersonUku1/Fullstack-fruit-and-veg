@@ -18,7 +18,7 @@ validateElement(sendForm, "The send form couldn't be located", true);
 validateElement(chatBodyContainer, "The chat body couldn't be located", true);
 validateElement(customerSupportImage, "The customer service image couldn't be found", true);
 validateElement(faqSection, "The faq section  element couldn't be found", true);
-validateElement(closeLink, "The close link element couldn't be found", true);
+validateElement(closeLink, "The close link element couldn't be found ", true);
 
 
 
