@@ -54,7 +54,7 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     'jazzmin',     
-    'django_select2',
+    'compressor',
     'django_ckeditor_5',
   
      
@@ -356,3 +356,4 @@ STATICFILES_FINDERS = [
 ]
 
 
+COMPRESS_ENABLED = True 
