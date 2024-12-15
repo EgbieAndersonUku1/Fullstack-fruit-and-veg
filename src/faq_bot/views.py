@@ -33,7 +33,6 @@ def ask_question(request):
             if not isinstance(messages, list):
                 raise TypeError(f"The messages within the message history must be a list -- not type {type(messages)}")
             
-           
             chat  = model.start_chat(history=messages)
             query = chat.send_message(question)
             
@@ -42,11 +41,13 @@ def ask_question(request):
                 "history": message_history,
                 "resp": query.text if query else query
             }
-                     
+            
+            
         except json.JSONDecodeError:
             return JsonResponse({"SUCCESS": False, "MESSAGE": "Invalid request format", "DATA": {}}, status=400)
         
         return JsonResponse({"SUCCESS": True, "MESSAGE": "Successfully received and sent message", "DATA": response}, status=201)
-    
-    return JsonResponse(False, message="Invalid request method", status=405)
+
+    return JsonResponse({"success": False, "message": "Invalid request method"}, status=405)
+
       

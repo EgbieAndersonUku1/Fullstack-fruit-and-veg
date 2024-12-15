@@ -182,7 +182,8 @@ async function sendMessage(text, messageHistory) {
         return response.SUCCESS ? response.DATA : null;
       
     } catch (error) {
-        console.error('Something went wrong:', error);
+        console.warn('Something went wrong:', error);
+        return null
 
         
     }

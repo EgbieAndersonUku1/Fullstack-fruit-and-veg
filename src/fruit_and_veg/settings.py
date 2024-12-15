@@ -17,8 +17,8 @@ from os import getenv
 import logging
 
 # Enables the `.env` file to be loaded
-# load_dotenv()
-load_dotenv()
+load_dotenv(override=True)
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -347,3 +347,12 @@ CKEDITOR_5_CONFIGS = {
 
 # API KEY 
 API_KEY = getenv("API_KEY")
+
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+]
+
+

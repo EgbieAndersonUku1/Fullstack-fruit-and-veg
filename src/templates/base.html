@@ -1,4 +1,5 @@
 {% load static %}
+{% load compress %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +17,11 @@
     <!-- Dynamic Title -->
     <title>{% block title %}Default Title here {% endblock %}</title>
 
+    <!-- Compress the CSS -->
+    {% compress css %}
     <link rel="stylesheet" href="{% static 'css/css.css' %}">
+    {% endcompress %}
+    
 </head>
 
 <body>
