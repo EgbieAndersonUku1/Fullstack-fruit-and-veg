@@ -1,0 +1,85 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../static/css/css.css">
+    <title>Landing Page</title>
+</head>
+<body>
+    
+
+    <section id="landing-page">
+       
+        <div class="container">
+           
+            
+            <p class="landing-title">Who watching?</p>
+
+             <div class="boxes">
+                
+                <a href="{% url 'home' %}">
+                    <div class="box">
+                        <div class="head">
+                            <img src="{% static '/img/icons/home.svg' %}" alt="" class="landing-page-img">
+                        </div>
+                        
+                        <div class="body">
+                            <p>My Home</p>
+                        </div>
+                    </div>
+                </a>
+               
+                <a href="{% url 'account' %}">
+                    <div class="box">
+                        <div class="head">
+                            <img src="{% static '/img/icons/user.svg' %}" alt="" class="landing-page-img">
+                        </div>
+                        
+                        <div class="body">
+                            <p>My Account</p>
+                        </div>
+                    </div>
+
+                </a>
+               
+                <a href="#">
+                    <div class="box">
+                        <div class="head">
+                            <img src="{% static '/img/icons/ordered-list.svg' %}" alt="" class="landing-page-img">
+                        </div>
+                        
+                        <div class="body">
+                            <p> My Orders</p>
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="#">
+                    <div class="box">
+                        <div class="head">
+                            <img src="{% static '/img/icons/settings.svg' %}" alt="" class="landing-page-img">
+                            
+                        </div>
+                        
+                        <div class="body">
+                            <p>Account settings</p>
+                        </div>
+                    </div>
+                </a>
+               
+             </div>
+
+             <div class="manage">
+                <!-- <p>Manage profile</p> -->
+                <p class="landing-title">Manage my options</p>
+             </div>
+        </div>
+
+    </section>
+
+
+</body>
+</html>

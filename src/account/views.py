@@ -27,6 +27,11 @@ def account(request):
     return render(request, "account/account/account.html")
 
 
+@login_required
+def landing_page(request):
+    return render(request, "account/account/landing_page.html")
+
+
 @login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def product_management(request):
     return render(request, "account/product-management/add-new-product/product-management-overview.html")

@@ -233,7 +233,7 @@ async function handleLoginFormSubmit(e) {
         console.log("You have registed...");
         const nextUrl = getQueryParams("next");
 
-        window.location.href = nextUrl ? nextUrl : "/account/";
+        window.location.href = nextUrl ? nextUrl : "/account/landing-page/";
        
       
     }

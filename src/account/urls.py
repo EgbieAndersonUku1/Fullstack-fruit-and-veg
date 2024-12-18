@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
    path("", view=views.account, name="account"),
+   path("landing-page/", view=views.landing_page, name="landing-page"),
    path("product-management/overview/", view=views.product_management, name="product-management"),
    path("product-management/add-new-product/basic-description/", view=views.add_basic_description, name="basic_description_form"),
    path("product-management/add-new-product/detailed-description/", view=views.add_detailed_description, name="detailed_description_form"),

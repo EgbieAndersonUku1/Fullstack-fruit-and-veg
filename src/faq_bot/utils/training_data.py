@@ -664,9 +664,73 @@ Warranty
 **User:** Can I repair my product myself?  
 **System:** Given the perishable nature of our products, we do not recommend any self-repair. If your product is damaged or spoiled, please contact customer support, and we will resolve the issue by sending a replacement or offering a refund.  
 
--
 
+Jobs
+**User**: Do you have any jobs in your physical stores?
+**System**: Thank you for your interest! Currently, we don’t have any vacancies in our physical stores. However, we recommend checking our careers page for updates on new opportunities.
 
+**User**: Do you have any jobs on your site, like admin, data input, or similar roles?
+**System**: We appreciate your interest! At the moment, we don’t have any openings for admin or data input roles. Please keep an eye on our careers page for any future updates.
+
+**User**: Are there any part-time roles available?
+**System**: We currently don’t have any part-time positions open. Please check back later or visit our careers page for updates.
+
+**User**: Can I submit a speculative application?
+**System**: Absolutely! If you'd like to submit a speculative application, please send your CV and cover letter through the contact form on our careers page.
+
+**User**: Are there any remote job opportunities?
+**System**: At this time, we don’t have any remote job opportunities available. Please check our careers page for the latest openings.
+
+**User**: Do you have internship opportunities?
+**System**: Thank you for your interest! Currently, we don’t have any internship opportunities. However, we encourage you to revisit our careers page in the future.
+
+**User**: Do you have any customer service job openings?
+**System**: At the moment, we don’t have any openings in our customer service team. Please check our careers page regularly for updates.
+
+**User**: Are there seasonal jobs available?
+**System**: We currently don’t have any seasonal roles open, but we often hire for these positions closer to the holiday season. Please visit our careers page for updates.
+
+**User**: Can I volunteer at your company?
+**System**: Thank you for your interest! We don’t have a volunteering program at the moment, but we recommend checking our website for updates or alternative opportunities.
+
+**User**: Do you offer graduate schemes or apprenticeships?
+**System**: At this time, we don’t have any graduate schemes or apprenticeship programs. Please revisit our careers page in the future for potential opportunities.
+
+**User**: What qualifications do I need to apply for your jobs?
+**System**: Each role has specific requirements, which are detailed in the job description on our careers page. Please visit the page to find a role that matches your skills and experience.
+
+**User**: Do you offer training for new employees?
+**System**: Yes, we provide training for all new employees as part of their onboarding process. The specifics of the training depend on the role.
+
+**User**: How do I apply for a job?
+**System**: You can apply for any open position directly through our careers page. Simply find the role that interests you, click on it, and follow the instructions to submit your application.
+
+**User**: Can I work for your company if I’m under 18?
+System: Some roles may have age restrictions due to legal requirements or the nature of the job. Please check the job descriptions on our careers page for details.
+
+**User**: Are there management roles available?
+**System**: Currently, we don’t have any management roles available. Please keep an eye on our careers page for updates.
+
+**User**: Can I get notified when new jobs are posted?
+**System**: Yes, you can sign up for job alerts on our careers page. You’ll receive an email notification whenever a new role is posted.
+
+**User**: What types of jobs are available?
+**System**: Although we don’t have any openings right now, we typically hire for a variety of roles, including:
+ - Customer Service: Assisting customers with queries and providing excellent support.
+ - Data Entry: Adding product information, images, and other content to our website.
+ - Physical Store Staff: Helping customers in our physical stores with purchases and inquiries.
+ - Managerial Roles: Overseeing teams and ensuring smooth operations.
+ - Site Administration: Managing the backend of our website and ensuring everything runs smoothly.
+
+**User**: What would be the working out for these jobs?
+**System**: Although we don’t have any openings right now, typical working hours vary depending on the role. For example, 
+          some positions may require shift work, while others follow standard office hours. Please check our careers page for more
+          specific details when roles become available.
+
+**User**: Do you offer remote work opportunities?
+**System**: At the moment, we don’t have any remote positions available. However, some roles may offer flexible working arrangements
+            or the possibility to work from home in the future. Please check our careers page for updates on any remote or hybrid opportunities 
+            when they become available.
 
 
 
