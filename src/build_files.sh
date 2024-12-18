@@ -6,8 +6,8 @@ apt-get install -y python3 python3-pip
 # get the latest pip
 python3.12 -m pip install --upgrade pip
 
-# Set up the Python environment
-pip3 install -r requirements.txt
+# Set up the Python environment and install dependencies without caching
+pip3 install --no-cache-dir -r requirements.txt
 
 # Run your build commands
 python3 manage.py makemigrations

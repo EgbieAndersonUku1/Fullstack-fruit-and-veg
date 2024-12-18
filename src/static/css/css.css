@@ -4822,3 +4822,73 @@ body.modal-open {
 @keyframes l1 {to{clip-path: inset(0 -34% 0 0)}}
 
 
+#landing-page {
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    
+}
+
+#landing-page .container .boxes {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto;
+    column-gap: 10px;
+    margin-bottom: 15px;
+    
+}
+
+#landing-page .container  {
+   width: 70%;
+   margin: auto;
+   padding-top: 15%;
+ 
+    
+}
+
+#landing-page .container .boxes .box {
+    display: grid;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 2%;
+    padding: 35px;
+    box-shadow: rgba(255, 255, 255, 0.25) 0px 54px 55px, 
+            rgba(255, 255, 255, 0.12) 0px -12px 30px, 
+            rgba(255, 255, 255, 0.12) 0px 4px 6px, 
+            rgba(255, 255, 255, 0.17) 0px 12px 13px, 
+            rgba(255, 255, 255, 0.09) 0px -3px 5px;
+    
+}
+
+#landing-page .container .boxes .box:hover {
+    transform: scale(1.1);
+}
+
+.landing-title {
+    text-align: center;
+    color: white;
+    font-size: 1.2rem;
+    padding-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.landing-page-img {
+    width: 40px;
+    height: 40px;
+}
+
+.manage {
+    border: 1px solid white;
+    margin-top: 20px;
+    margin: auto;
+    width: 20%;
+}
+
+.manage p {
+    font-size: 0.9rem;
+    padding: 8px;
+    cursor: pointer;
+    
+}
