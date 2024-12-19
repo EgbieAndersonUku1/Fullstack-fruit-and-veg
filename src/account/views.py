@@ -22,12 +22,12 @@ from .views_helpers import get_base64_images_from_session
 
 # Create your views here.
 
-@login_required
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def account(request):
     return render(request, "account/account/account.html")
 
 
-@login_required
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def landing_page(request):
     return render(request, "account/account/landing_page.html")
 
