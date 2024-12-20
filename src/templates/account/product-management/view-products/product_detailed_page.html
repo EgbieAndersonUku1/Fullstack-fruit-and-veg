@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Product detailed page {% endblock %}
+
+{% block body %}
+
+<section id="details-page">
+    <div class="container">
+        {% include "partials/logo_link.html" %}
+        <div id="product-details" class="padding-top-md">
+
+            <div class="images">
+                <div class="product-main-image">
+                    <img src="{% static '/img/display/jpg/placeholder.jpg' %}" alt="" srcset=""
+                        class="product-main-img">
+                </div>
+                <div class="product-side-images">
+
+                    <img src="{% static '/img/display/jpg/placeholder.jpg' %}" alt="" srcset=""
+                        class="side-img-1 product-side-img">
+
+                    <img src="{% static '/img/display/jpg/placeholder.jpg' %}" alt="" srcset=""
+                        class="side-img-2 product-side-img">
+
+                </div>
+            </div>
+
+            <div class="product-detail">
+
+                <div class="head">
+                    <h1>Product title here</h1>
+                    <h4>Category: Category Name here</h4>
+                    <a href="#">rating stars to go here</a> <small> (Num of customer reviews to go here)</small>
+                </div>
+
+                <div class="body">
+                    <div class="price">
+                        <p>Price to go here</p>
+                    </div>
+
+                    <div class="size-options">
+                        <h1>Sizes</h1>
+                        clickable sizes options to go here
+                    </div>
+
+                    <div class="color-options">
+                        <h1>Color options</h1>
+                        clickable selectable color options
+                    </div>
+
+                    <div class="dimensions">
+                        <h1>Dimensions</h1>
+                        <p>Weight: 100g</p>
+                        <p>Height: 100cm</p>
+                        <p>length: 10cm</p>
+                    </div>
+
+                    <div class="Nutrition">
+                        <h1>Nutrition</h1>
+                        <p>calories: 52</p>
+                        <p> carbohydrates: 14 </p>
+                        <p> sugars: 10</p>
+                        <p>calories: 52</p>
+                        <p>Fibre: 10g</p>
+
+                    </div>
+
+
+                    <div class="key-features">
+                        <h1>Key Features</h1>
+                        <p>Manufacturer: Manufacturer name</p>
+                        <p>Featured: No</p>
+                        <p>Brand: Brand name</p>
+                        <p>Manufacturer: Manufacturer name here </p>
+                        <p>Country of origin: Country of origin </p>
+                        <p>Warranty period: Warranty period here</p>
+                        <p>Stock remaining: Num of stock to go here</p>
+                    </div>
+
+                    <div class="description">
+                        <h1>Description</h1>
+                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Excepturi adipisci placeat illum at
+                        optio eius ex rerum quod quia?
+                        Laboriosam doloremque voluptates nemo fuga odit voluptatum ducimus cum quia quibusdam?
+                    </div>
+
+                    <div class="btn">
+                        <input type="number" name="quantity" id="quantity" step="1" min="1" max="200">
+                        <button class="add-to-cart">Add to cart</button>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="add-product-review">
+            <h1 class="padding-bottom-md">Add your product review</h1>
+            <p class="padding-bottom-sm">You need to log in to be able to review a product</p>
+            <form action="" method="post" id="product-review-form">
+                <label for="title">Title</label>
+                <input type="text" name="title" id="title">
+
+                <label for="description">Description</label>
+                <textarea name="description" id="description" rows="10"></textarea>
+
+                <div class="btn flex-end">
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -28,6 +28,7 @@ urlpatterns = [
     path('blog/', include('blog.urls')),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
     path("faq/", include('faq_bot.urls')),
+    path("product/", include("product.urls")),
     path("profile/", include("user_profile.urls")),
     path("subscription/", include("subscription.urls")),
     path("testimonials/", include("testimonal.urls")),
