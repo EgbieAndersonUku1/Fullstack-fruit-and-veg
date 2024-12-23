@@ -1232,6 +1232,11 @@ nav {
     color: gray;
 }
 
+.medium-bold {
+    font-weight: 500;
+    color: #474747;
+}
+
 .strike-through {
     font-weight: 600;
     text-decoration: line-through;
@@ -4931,7 +4936,7 @@ body.modal-open {
     border: 7px solid lavender;
     position: relative;
     width: 100%;
-    height: 600px;
+    height: 300px;
 }
 
 .product-main-img {
@@ -4950,4 +4955,45 @@ body.modal-open {
 
 .product-side-img {
     width: 100%;
+}
+
+.add-to-cart-btn {
+    color: white;
+    padding: 2px;
+    text-transform: capitalize;
+}
+
+.quantity-field {
+    text-align: center;
+}
+
+.product-detail h1 {
+    font-size: 1.07rem;
+    text-decoration: underline;
+    margin-bottom: 8px;
+}
+
+
+.product-detail p {
+    font-size: 0.95rem;
+}
+
+
+.nutrition span,
+.key-features,
+.dimensions span {
+    text-transform: capitalize;
+    line-height: 1.7;
+}
+
+.add-product-btn {
+    color: white;
+    padding: 2px;
+    margin-top: 10px;
+    text-transform: capitalize;
+    background: var(--dodger-blue);
+}
+
+.price p {
+    font-size: 1.35rem;
 }

@@ -6,13 +6,22 @@
 {% block body %}
 
 <section id="details-page">
+
     <div class="container">
         {% include "partials/logo_link.html" %}
+
+        <ul class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Product</a></li>
+            <li>Product details</li>
+
+        </ul>
+        <hr class="dividor">
         <div id="product-details" class="padding-top-md">
 
             <div class="images">
                 <div class="product-main-image">
-                    <img src="{% static '/img/display/jpg/placeholder.jpg' %}" alt="" srcset=""
+                    <img src="{% static '/img/display/jpg/placeholder.jpg' %}" alt="main product image"
                         class="product-main-img">
                 </div>
                 <div class="product-side-images">
@@ -36,7 +45,7 @@
 
                 <div class="body">
                     <div class="price">
-                        <p>Price to go here</p>
+                        <p><span class="medium-bold">Price</span>: £25.89</p>
                     </div>
 
                     <div class="size-options">
@@ -51,43 +60,62 @@
 
                     <div class="dimensions">
                         <h1>Dimensions</h1>
-                        <p>Weight: 100g</p>
-                        <p>Height: 100cm</p>
-                        <p>length: 10cm</p>
+                        <p><span class="medium-bold">Weight</span>: 100 g</p>
+                        <p><span class="medium-bold">Height</span>: 100 cm</p>
+                        <p><span class="medium-bold">length</span>: 10 cm</p>
+
                     </div>
 
-                    <div class="Nutrition">
+                    <div class="nutrition">
                         <h1>Nutrition</h1>
-                        <p>calories: 52</p>
-                        <p> carbohydrates: 14 </p>
-                        <p> sugars: 10</p>
-                        <p>calories: 52</p>
-                        <p>Fibre: 10g</p>
+                        <p><span class="medium-bold">calories</span>: 52 kcal</p>
+                        <p><span class="medium-bold">carbohydrates</span>: 14 g</p>
+                        <p><span class="medium-bold">sugars</span>: 10 g</p>
+                        <p><span class="medium-bold">calories</span>: 52 kcal</p>
+                        <p><span class="medium-bold">Fibre</span>: 10 g</p>
+                        
 
                     </div>
 
 
                     <div class="key-features">
                         <h1>Key Features</h1>
-                        <p>Manufacturer: Manufacturer name</p>
-                        <p>Featured: No</p>
-                        <p>Brand: Brand name</p>
-                        <p>Manufacturer: Manufacturer name here </p>
-                        <p>Country of origin: Country of origin </p>
-                        <p>Warranty period: Warranty period here</p>
-                        <p>Stock remaining: Num of stock to go here</p>
+                        <p><span class="medium-bold">Manufacturer</span>: Manufacturer name</p>
+                        <p><span class="medium-bold">Featured</span>: No</p>
+                        <p><span class="medium-bold">Brand</span>: Brand name</p>
+                        <p><span class="medium-bold">Manufacturer</span>: Manufacturer name here</p>
+                        <p><span class="medium-bold">Country of origin</span>: Country of origin</p>
+                        <p><span class="medium-bold">Warranty period</span>: Warranty period here</p>
+                        <p><span class="medium-bold">Stock remaining</span>: Num of stock to go here</p>
+
                     </div>
 
+                    <div class="recommendation">
+                        <h1>Recommendation</h1>
+                        <p>
+                            Eat with a slice of cake
+
+                        </p>
+                       
+                    </div>
+
+                    
                     <div class="description">
                         <h1>Description</h1>
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Excepturi adipisci placeat illum at
-                        optio eius ex rerum quod quia?
-                        Laboriosam doloremque voluptates nemo fuga odit voluptatum ducimus cum quia quibusdam?
+                        <p>
+                            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Excepturi adipisci placeat illum at
+                            optio eius ex rerum quod quia?
+                            Laboriosam doloremque voluptates nemo fuga odit voluptatum ducimus cum quia quibusdam?
+
+                        </p>
+                       
                     </div>
 
+                   
+
                     <div class="btn">
-                        <input type="number" name="quantity" id="quantity" step="1" min="1" max="200">
-                        <button class="add-to-cart">Add to cart</button>
+                        <input type="number" name="quantity" id="quantity" step="1" min="1" max="200" class="quantity-field">
+                        <button class="add-to-cart-btn button-md green-bg">Add to cart</button>
                     </div>
 
 
@@ -98,8 +126,8 @@
         </div>
 
         <div id="add-product-review">
-            <h1 class="padding-bottom-md">Add your product review</h1>
-            <p class="padding-bottom-sm">You need to log in to be able to review a product</p>
+            <h3 class="padding-bottom-md">Add your product review</h3>
+            <p class="padding-bottom-sm">You need to log in to be able to review this product</p>
             <form action="" method="post" id="product-review-form">
                 <label for="title">Title</label>
                 <input type="text" name="title" id="title">
@@ -108,7 +136,7 @@
                 <textarea name="description" id="description" rows="10"></textarea>
 
                 <div class="btn flex-end">
-                    <button type="submit">Submit</button>
+                    <button type="submit" class="button-sm add-product-btn">Submit</button>
                 </div>
             </form>
         </div>
