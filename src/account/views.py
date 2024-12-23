@@ -6,13 +6,14 @@ from django.contrib.auth.decorators import login_required
 from account.utils.utils import save_file_temporarily
 from authentication.forms.login_form import LoginForm
 
-from .views_helpers   import handle_form
-from .forms.forms     import (BasicFormDescription, 
+from .views_helpers import handle_form
+from .forms.forms   import (  BasicFormDescription, 
                               DetailedFormDescription,
                               PricingAndInventoryForm, 
                               ImageAndMediaForm, 
                               ShippingAndDeliveryForm,
                               SeoAndMetaForm,
+                              NutritionForm,
                               AdditionalInformationForm,
                               )
 
@@ -117,8 +118,19 @@ def add_seo_management(request):
     return handle_form(request=request,
                        form_class=SeoAndMetaForm,
                        session_key="seo_management",
-                       next_url_name="add_information_form",
+                       next_url_name="nutrition_form",
                        template_name="account/product-management/add-new-product/SEO-and-meta-information.html",
+                       )
+
+
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
+def add_nutrition(request):
+    return handle_form(request=request,
+                       form_class=NutritionForm,
+                       session_key="nutrition",
+                       next_url_name="add_information_form",
+                       template_name="account/product-management/add-new-product/nutrition.html",
+                       
                        )
 
 

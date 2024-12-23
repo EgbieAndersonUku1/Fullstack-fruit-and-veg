@@ -19,7 +19,7 @@
         <hr class="dividor">
         <div id="product-details" class="padding-top-md">
 
-            <div class="images">
+                <div class="images">
                 <div class="product-main-image">
                     <img src="{% static '/img/display/jpg/placeholder.jpg' %}" alt="main product image"
                         class="product-main-img">
@@ -35,27 +35,84 @@
                 </div>
             </div>
 
+            <!-- dummy data removed when it becomes dynamic -->
             <div class="product-detail">
-
                 <div class="head">
                     <h1>Product title here</h1>
-                    <h4>Category: Category Name here</h4>
-                    <a href="#">rating stars to go here</a> <small> (Num of customer reviews to go here)</small>
+
+                    <div class="product-ratings">
+                        <a href="#" id="1" data-value="1">
+                            <img src="{% static 'img/icons/star-filled.svg' %}" alt="star-unfilled"
+                                class="star-unfilled star-rating" data-value="1">
+                        </a>
+                        <a href="#" id="2" data-value="2">
+                            <img src="{% static 'img/icons/star-filled.svg' %}" alt="star-unfilled"
+                                class="star-unfilled star-rating" data-value="2">
+
+                        </a>
+                        <a href="#" id="3" data-value="3">
+                            <img src="{% static 'img/icons/star-filled.svg' %}" alt="star-unfilled"
+                                class="star-unfilled star-rating" data-value="3">
+
+                        </a>
+                        <a href="#" id="4" data-value="4">
+                            <img src="{% static 'img/icons/star-filled.svg' %}" alt="star-unfilled"
+                                class="star-unfilled star-rating" data-value="4">
+
+                        </a>
+                        <a href="#" id="5" data-value="5">
+                            <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled"
+                                class="star-unfilled star-rating" data-value="5">
+                        </a>
+
+
+                    </div>
+
+                    <div class="reviews">
+                        <p>Rating: 4/5 (600 reviews)</p>
+                    </div>
                 </div>
 
                 <div class="body">
-                    <div class="price">
-                        <p><span class="medium-bold">Price</span>: £25.89</p>
+                    <div class="price padding-top-md">
+                        <p class="font-green"><span class="medium-bold">Price</span>: £25.89</p>
                     </div>
 
                     <div class="size-options">
                         <h1>Sizes</h1>
-                        clickable sizes options to go here
+                        <div class="sizes">
+                            <div class="size">
+                                <p>Small</p>
+                            </div>
+                            <div class="size">
+                                <p>Medium</p>
+                            </div>
+                            <div class="size">
+                                <p>Large</p>
+                            </div>
+                            <div class="size">
+                                <p>Extra large</p>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="color-options">
                         <h1>Color options</h1>
-                        clickable selectable color options
+                        <div class="product-colors">
+                            <div class="color">
+                                <p>Blue</p>
+                            </div>
+                            <div class="color">
+                                <p>Green</p>
+                            </div>
+                            <div class="color">
+                                <p>Yellow</p>
+                            </div>
+                            <div class="color">
+                                <p>Purple</p>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="dimensions">
@@ -68,13 +125,12 @@
 
                     <div class="nutrition">
                         <h1>Nutrition</h1>
-                        <p><span class="medium-bold">calories</span>: 52 kcal</p>
-                        <p><span class="medium-bold">carbohydrates</span>: 14 g</p>
-                        <p><span class="medium-bold">sugars</span>: 10 g</p>
-                        <p><span class="medium-bold">calories</span>: 52 kcal</p>
+                        <p><span class="medium-bold">Calories</span>: 52 kcal</p>
+                        <p><span class="medium-bold">Carbohydrates</span>: 14 g</p>
+                        <p><span class="medium-bold">Sugar</span>: 10 g</p>
                         <p><span class="medium-bold">Fibre</span>: 10 g</p>
-                        
-
+                        <p><span class="medium-bold">Protein</span>: 0.3 g</p>
+                        <p><span class="medium-bold">Fat</span>: 0.2 g</p>
                     </div>
 
 
@@ -96,25 +152,25 @@
                             Eat with a slice of cake
 
                         </p>
-                       
+
                     </div>
 
-                    
+
                     <div class="description">
                         <h1>Description</h1>
                         <p>
-                            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Excepturi adipisci placeat illum at
+                            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Excepturi adipisci placeat illum
+                            at
                             optio eius ex rerum quod quia?
                             Laboriosam doloremque voluptates nemo fuga odit voluptatum ducimus cum quia quibusdam?
 
                         </p>
-                       
+
                     </div>
 
-                   
-
                     <div class="btn">
-                        <input type="number" name="quantity" id="quantity" step="1" min="1" max="200" class="quantity-field">
+                        <input type="number" name="quantity" id="quantity" step="1" min="1" max="200"
+                            class="quantity-field">
                         <button class="add-to-cart-btn button-md green-bg">Add to cart</button>
                     </div>
 
@@ -126,14 +182,44 @@
         </div>
 
         <div id="add-product-review">
+            <p class="padding-bottom-sm font-red">You need to log in to be able to review this product</p>
             <h3 class="padding-bottom-md">Add your product review</h3>
-            <p class="padding-bottom-sm">You need to log in to be able to review this product</p>
+            <div class="p-ratings">
+                <a href="#" id="1" data-value="1">
+                    <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled"
+                        class="star-unfilled star-rating" data-value="1">
+                </a>
+                <a href="#" id="2" data-value="2">
+                    <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled"
+                        class="star-unfilled star-rating" data-value="2">
+
+                </a>
+                <a href="#" id="3" data-value="3">
+                    <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled"
+                        class="star-unfilled star-rating" data-value="3">
+
+                </a>
+                <a href="#" id="4" data-value="4">
+                    <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled"
+                        class="star-unfilled star-rating" data-value="4">
+
+                </a>
+                <a href="#" id="5" data-value="5">
+                    <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled"
+                        class="star-unfilled star-rating" data-value="5">
+                </a>
+
+
+            </div>
+
             <form action="" method="post" id="product-review-form">
                 <label for="title">Title</label>
-                <input type="text" name="title" id="title">
+                <input type="text" name="title" id="product-title">
 
                 <label for="description">Description</label>
-                <textarea name="description" id="description" rows="10"></textarea>
+                <textarea name="description" id="product-description-area" rows="10"></textarea>
+                <p class="flex-end minimum-characters">Minimum characters to use: 50</p>
+                <p class="maximum-characters flex-end">Number of characters remaining: 1000</p>
 
                 <div class="btn flex-end">
                     <button type="submit" class="button-sm add-product-btn">Submit</button>
@@ -142,5 +228,10 @@
         </div>
     </div>
 </section>
+
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/pages/product_detail.js' %}" type="module"></script>
 
 {% endblock %}

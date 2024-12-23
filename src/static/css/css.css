@@ -348,6 +348,11 @@ table tr td a:nth-child(even):hover {
     font-weight: bold;
 }
 
+.font-red {
+    color: red;
+    font-weight: bold;
+}
+
 
 .dark-red-bg {
     color: white;
@@ -4904,7 +4909,13 @@ body.modal-open {
     margin-bottom: 60px;
 }
 
-.product-detail .body div {
+.size-options,
+.color-options,
+.dimensions,
+.nutrition,
+.recommendation,
+.description,
+.key-features {
     margin-top: var(--padding-md);
     margin-bottom: var(--padding-md);
 }
@@ -4996,4 +5007,36 @@ body.modal-open {
 
 .price p {
     font-size: 1.35rem;
+}
+
+#product-title {
+    height: 30px;
+}
+
+
+.product-colors,
+.sizes {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: auto;
+    column-gap: 4px;
+    margin-top: var(--padding-md);
+    margin-bottom: var(--padding-md);
+}
+
+
+.product-colors .color,
+.sizes .size {
+    border: 1px solid lavender;
+    text-align: center;
+    background: var(--dodger-blue);
+    color: white;
+    text-transform: capitalize;
+    cursor: pointer;
+}
+
+
+.product-detail .head .product-ratings a img {
+    height: 20px;
+    width: 20px;
 }
