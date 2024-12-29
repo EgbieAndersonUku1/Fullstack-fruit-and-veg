@@ -88,14 +88,14 @@ export class StarRating {
      * @param {boolean} [options.isInteractive=false] - Whether the stars should be interactive for rating (default is false). 
      */
     constructor(ratingsContainer, options = {}) {
-        this.ratingsContainer  = ratingsContainer;
-        this.numOfRatedStars   = options.numOfRatedStars || 5;
-        this.totalNumberOfStars = options.totalNumberOfStars || 5;
-        this.filledStarsSrc    = options.filledStarsSrc;
-        this.unfilledStarsSrc  = options.unfilledStarsSrc;
-        this.renderEmptyStars  = options.renderEmptyStars || false;
-        this._isInitialized    = false;
-        this.isInteractive     = options.isInteractive || false;
+        this.ratingsContainer    = ratingsContainer;
+        this.numOfRatedStars     = options.numOfRatedStars || 5;
+        this.totalNumberOfStars  = options.totalNumberOfStars || 5;
+        this.filledStarsSrc      = options.filledStarsSrc;
+        this.unfilledStarsSrc    = options.unfilledStarsSrc;
+        this.renderEmptyStars    = options.renderEmptyStars || false;
+        this._isInitialized      = false;
+        this.isInteractive       = options.isInteractive || false;
 
         this._validateElement(ratingsContainer, "The ratings container is not a valid HTML element");
     
