@@ -41,16 +41,6 @@
             <hr class="dividor">
         {% endif %}
 
-
-        <div class="product-header product-review-header">
-            <div class="clear-btn">
-                <button id="clear-btn"> 
-                    <span>Clear ratings</span>
-                   
-                </button>
-            </div>
-        </div>
-
         {% if not already_created and not is_editing  %} 
 
         <div class="product-rating">
@@ -109,8 +99,10 @@
                 <form method="post" action="{% url 'add-testimonial' %}" class="product-form" id="testimonial-form">
             {% endif %}
                 {% csrf_token %}
+                
+               <!-- Hidden input to store the star rating for backend processing and database storage -->
+            <input type="hidden" name="star-rating" value="" id="starInputHiddenField">
 
-                <input type="hidden" name="star-rating" value="" id="starInputHiddenField">
 
                 {{ form.job_title.label }}
                 {{ form.job_title }}
