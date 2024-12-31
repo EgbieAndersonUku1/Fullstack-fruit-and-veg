@@ -35,7 +35,7 @@
 
         <!-- Navigation Buttons -->
         <div class="button space-between">
-            <a href="{% url 'pricing_and_inventory_form' %}" class="prev-button center" aria-label="Go to the previous section: Pricing and Inventory Form">
+            <a href="#" onclick="history.back()" class="prev-button center" aria-label="Go to the previous section: Pricing and Inventory Form">
                 &lt; prev
             </a>
             <button type="submit" class="next-button" aria-label="Go to the next section"> next &gt;</button>
@@ -53,6 +53,7 @@
         {% include "partials/form_progress_checker.html" with is_current_page=True current_page='Images and media' id='images-media' %}
         {% include "partials/form_progress_checker.html" with is_current_page=False current_page='Shipping and delivery' id='shipping-delivery' %}
         {% include "partials/form_progress_checker.html" with is_current_page=False current_page='SEO and Meta Information' id='seo-meta-info' %}
+        {% include "partials/form_progress_checker.html" with is_current_page=False current_page='Nutrition' id='nutrition' %}
         {% include "partials/form_progress_checker.html" with is_current_page=False current_page='Additional information' id='additional-info' %}
         {% include "partials/form_progress_checker.html" with is_current_page=False current_page='Review and Submit' id='review-submit' %}
 

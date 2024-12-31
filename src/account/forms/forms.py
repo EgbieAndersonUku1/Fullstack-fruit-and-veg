@@ -261,6 +261,18 @@ class SeoAndMetaForm(forms.Form):
                                     }))
 
 
+
+class NutritionForm(forms.Form):
+    
+    calories      = forms.DecimalField(max_digits=10, decimal_places=2, min_value=0)
+    carbohydrates = forms.DecimalField(max_digits=10, decimal_places=2, min_value=0)
+    sugar         = forms.DecimalField(max_digits=10, decimal_places=2, min_value=0)
+    protein       = forms.DecimalField(max_digits=6, decimal_places=2, min_value=0)
+    fibre         = forms.DecimalField(max_digits=10, decimal_places=2, min_value=0)
+    fat           = forms.DecimalField(max_digits=10, decimal_places=2, min_value=0)
+    
+    
+    
 class AdditionalInformationForm(forms.Form):
     RETURN_POLICY_OPTIONS = [("n", "No"), ("y", "Yes")]
     COUNTRIES_CHOICES = parse_country_file("data/countries.txt")
@@ -288,6 +300,17 @@ class AdditionalInformationForm(forms.Form):
                                           "id": "return-policy",
                                       }))
 
+    recommendation = forms.CharField(label="Recommendation (optional)", 
+                                    required=False,
+                                    widget=forms.Textarea(attrs={
+                                    "id": "recommendation-description",
+                                    "rows": "5",
+                                    "cols": "10",
+                                    "aria-labelledby": "Recommendation-label",
+                                    "placeholder": "Optional: Leave blank if no recommendation (e.g., 'Pair with a fresh salad')"
+
+                                     }))
+    
     description = forms.CharField(label="Warranty description (optional)", 
                                     required=False,
                                     widget=forms.Textarea(attrs={

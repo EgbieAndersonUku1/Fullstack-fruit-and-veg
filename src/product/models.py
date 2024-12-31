@@ -147,6 +147,7 @@ class Product(models.Model):
     meta_description   = models.TextField(blank=True, null=True)
     manufacturer       = models.ForeignKey(Manufacturer, on_delete=models.SET_NULL, related_name="products", null=True, blank=True)
     country_of_origin  = models.CharField(max_length=50)
+    nutrition          = models.JSONField(null=True, blank=True)
     warranty_period    = models.TextField(blank=True, null=True,  default="No warranty")
     created_on         = models.DateTimeField(auto_now_add=True)
     modified_on        = models.DateTimeField(auto_now=True)

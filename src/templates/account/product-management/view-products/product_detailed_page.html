@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %} Product detailed page {% endblock %}
+
+{% block body %}
+{% include "partials/login.html" %}
+
+<section id="details-page">
+
+    <div class="container">
+        {% include "partials/logo_link.html" %}
+
+        <ul class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Product</a></li>
+            <li>Product details</li>
+
+        </ul>
+        <hr class="dividor">
+        
+
+        <div id="product-details" class="padding-top-md">
+
+                <div class="images">
+                    <div class="product-main-image">
+                        
+                        <img src="{% static '/img/display/jpg/baked1.jpeg' %}" alt="main product image"
+                            class="product-main-img">
+                    </div>
+                    <div class="product-side-images">
+
+                        <img src="{% static '/img/display/jpg/baked2.jpeg' %}" alt="" 
+                            class="side-img-1 product-side-img">
+
+                        <img src="{% static '/img/display/jpg/baked3.jpeg' %}" alt="" 
+                            class="side-img-2 product-side-img">
+
+                    </div>
+                <p class="center text-capitalize italic product-images-description"> product images (main and side images)</p>
+            </div>
+
+            <!-- dummy data removed when it becomes dynamic -->
+            <div class="product-detail">
+                <div class="head">
+                    <h1>Product title here</h1>
+
+                    <div class="category padding-bottom-sm padding-top-sm">
+                        <a href="#">
+                            <small class="font-red">Category: <span class="italic font-green">Baked goods</span></small>
+                        </a>
+                    </div>
+
+                    <div class="p-ratings">
+                        <a href="#" id="1" data-value="1">
+                            <img src="{% static 'img/icons/star-filled.svg' %}" alt="star-unfilled"
+                                class="star-unfilled star-rating" data-value="1">
+                        </a>
+                        <a href="#" id="2" data-value="2">
+                            <img src="{% static 'img/icons/star-filled.svg' %}" alt="star-unfilled"
+                                class="star-unfilled star-rating" data-value="2">
+
+                        </a>
+                        <a href="#" id="3" data-value="3">
+                            <img src="{% static 'img/icons/star-filled.svg' %}" alt="star-unfilled"
+                                class="star-unfilled star-rating" data-value="3">
+
+                        </a>
+                        <a href="#" id="4" data-value="4">
+                            <img src="{% static 'img/icons/star-filled.svg' %}" alt="star-unfilled"
+                                class="star-unfilled star-rating" data-value="4">
+
+                        </a>
+                        <a href="#" id="5" data-value="5">
+                            <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled"
+                                class="star-unfilled star-rating" data-value="5">
+                        </a>
+
+
+                    </div>
+
+                    <div class="reviews">
+                        <small>Rating: 4/5 (600 reviews)</small>
+                    </div>
+                </div>
+
+
+                <div class="body">
+                    <div class="price padding-top-md">
+                        <p class="font-green"><span class="medium-bold">Price</span>: £25.89</p>
+                    </div>
+
+                    <p class="padding-top-md font-red text-capitalize">Choose your size and color</p>
+
+                    <div class="size-options">
+                        <div class="sizes">
+                            <div class="size">
+                                <p class="small-size">Small</p>
+                            </div>
+                            <div class="size">
+                                <p class="medium-size">Medium</p>
+                            </div>
+                            <div class="size">
+                                <p class="large-size">Large</p>
+                            </div>
+                            <div class="size">
+                                <p class="extra-size">Extra large</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <hr class="dividor">
+
+                    <div class="color-options">
+                        <div class="product-colors">
+                            <div class="color">
+                                <p>Blue</p>
+                            </div>
+                            <div class="color">
+                                <p>Green</p>
+                            </div>
+                            <div class="color">
+                                <p>Yellow</p>
+                            </div>
+                            <div class="color">
+                                <p>Purple</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dimensions">
+                        <h1>Dimensions</h1>
+                        <p><span class="medium-bold">Weight</span>: 100 g</p>
+                        <p><span class="medium-bold">Height</span>: 100 cm</p>
+                        <p><span class="medium-bold">length</span>: 10 cm</p>
+
+                    </div>
+
+                    <div class="nutrition">
+                        <h1>Nutrition</h1>
+                        <p><span class="medium-bold">Calories</span>: 52 kcal</p>
+                        <p><span class="medium-bold">Carbohydrates</span>: 14 g</p>
+                        <p><span class="medium-bold">Sugar</span>: 10 g</p>
+                        <p><span class="medium-bold">Fibre</span>: 10 g</p>
+                        <p><span class="medium-bold">Protein</span>: 0.3 g</p>
+                        <p><span class="medium-bold">Fat</span>: 0.2 g</p>
+                    </div>
+
+
+                    <div class="key-features">
+                        <h1>Key Features</h1>
+                        <p><span class="medium-bold">Manufacturer</span>: Manufacturer name</p>
+                        <p><span class="medium-bold">Featured</span>: No</p>
+                        <p><span class="medium-bold">Brand</span>: Brand name</p>
+                        <p><span class="medium-bold">Country of origin</span>: Country of origin</p>
+                        <p><span class="medium-bold">Warranty period</span>: Warranty period here</p>
+                        <p><span class="medium-bold">Stock remaining</span>: Num of stock to go here</p>
+
+                    </div>
+
+                    <div class="recommendation">
+                        <h1>Recommendation</h1>
+                        <p>
+                            Eat with a slice of cake
+                        </p>
+                    </div>
+
+                    <div class="description">
+                        <h1>Description</h1>
+                        <p>
+                            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Excepturi adipisci placeat illum
+                            at
+                            optio eius ex rerum quod quia?
+                            Laboriosam doloremque voluptates nemo fuga odit voluptatum ducimus cum quia quibusdam?
+
+                        </p>
+
+                    </div>
+
+                    <div class="btn padding-bottom-md">
+                        <input type="number" name="quantity" id="quantity" step="1" min="1" max="200" value="1"
+                            class="quantity-field">
+                        <button class="add-to-cart-btn button-md green-bg">Add to cart</button>
+                    </div>
+
+                    <hr class="dividor">
+                    <p>Have any questions?</p>
+                    <p>Get in touch with us anytime</p>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="add-product-review">
+            {% if not logged_in %}
+                <p class="padding-bottom-sm font-red">You need to log in to be able to review this product</p>
+            {% endif %}
+
+            {% if logged_in %}
+            <h3 class="padding-bottom-md text-capitalize">Add your product review</h3>
+            <h4 class="padding-top-sm padding-bottom-sm font-red text-capitalize">Rate me</h4>
+            <div class="product-ratings p-ratings padding-bottom-md">
+                <a href="#" id="1" data-value="1">
+                    <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled"
+                        class="star-unfilled star-rating" data-value="1">
+                </a>
+                <a href="#" id="2" data-value="2">
+                    <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled"
+                        class="star-unfilled star-rating" data-value="2">
+
+                </a>
+                <a href="#" id="3" data-value="3">
+                    <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled"
+                        class="star-unfilled star-rating" data-value="3">
+
+                </a>
+                <a href="#" id="4" data-value="4">
+                    <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled"
+                        class="star-unfilled star-rating" data-value="4">
+
+                </a>
+                <a href="#" id="5" data-value="5">
+                    <img src="{% static 'img/icons/star-unfilled.svg' %}" alt="star-unfilled"
+                        class="star-unfilled star-rating" data-value="5">
+                </a>
+
+            </div>
+            {% endif %}
+            <form action="" method="post" id="product-review-form">
+                <label for="title">Title</label>
+                <input type="text" name="title" id="product-title">
+
+                <label for="description">Description</label>
+                <textarea name="description" id="product-description-area" rows="10"></textarea>
+                <p class="flex-end minimum-characters">Minimum characters to use: 50</p>
+                <p class="maximum-characters flex-end">Number of characters remaining: 1000</p>
+
+                {% if logged_in %}
+                <div class="btn flex-end">
+                    <button type="submit" class="button-sm add-product-btn">Submit</button>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/pages/product_detail.js' %}" type="module"></script>
+
+{% endblock %}

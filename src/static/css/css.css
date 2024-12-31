@@ -348,6 +348,11 @@ table tr td a:nth-child(even):hover {
     font-weight: bold;
 }
 
+.font-red {
+    color: red;
+    font-weight: bold;
+}
+
 
 .dark-red-bg {
     color: white;
@@ -363,6 +368,13 @@ table tr td a:nth-child(even):hover {
     color: white;
     background: var(--dodger-blue);
 }
+
+
+.gray-bg {
+    color: white;
+    background: gray;
+}
+
 
 .white-bg {
     background: white;
@@ -433,8 +445,9 @@ table tr td a:nth-child(even):hover {
 
 }
 
-
-
+.italic {
+    font-style: italic;
+}
 
 .banner__sales_display {
     font-size: 1.15rem;
@@ -1230,6 +1243,11 @@ nav {
 .light-bold {
     font-weight: 400;
     color: gray;
+}
+
+.medium-bold {
+    font-weight: 400;
+    color: #474747;
 }
 
 .strike-through {
@@ -2601,33 +2619,7 @@ footer .container h4 {
     position: relative;
 }
 
-#clear-btn {
 
-  
-    background: #831919;
-    border: 1px solid rgb(12, 198, 189);
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    color: white;
-    display: none;
-    font-size: 0.90rem;
-    width: 11%;
-
-
-    /* position */
-    position: absolute;
-    top: 0;
-    right: 0;
-
-    /* button attributes */
-    padding: 10px;
-    text-transform: capitalize;
-  
-}
-
-#clear-btn:hover {
-    color: white;
-    background: black;
-}
 
 .not-found {
     display: none;
@@ -4891,4 +4883,177 @@ body.modal-open {
     padding: 8px;
     cursor: pointer;
     
+}
+
+/* product details */
+#details-page {
+    margin-top: 40px;
+    margin-bottom: 60px;
+}
+
+.size-options,
+.color-options,
+.dimensions,
+.nutrition,
+.recommendation,
+.description,
+.key-features {
+    margin-top: var(--padding-md);
+    margin-bottom: var(--padding-md);
+}
+
+#product-details {
+    display: grid;
+    grid-template-columns: 35% 65%;
+    grid-template-rows: auto;
+    column-gap: 12px;
+}
+
+#details-page .container {
+    width: 70%;
+    margin: auto;
+}
+
+
+#add-product-review {
+    margin-top: 90px;
+}
+
+#product-review-form {
+    display: grid;
+
+}
+
+.product-main-image {
+    position: relative;
+    position: relative;
+    width: 100%;
+    height: 300px;
+  
+   
+}
+
+.product-main-img {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+}
+
+.product-side-images {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    column-gap: 10px;
+    margin-top: 10px;
+  
+}
+
+.product-side-img {
+    width: 100%;
+    height: 200px;
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+
+}
+
+
+.product-side-img,
+.product-main-img {
+    border-radius: 8%;
+}
+
+.add-to-cart-btn {
+    color: white;
+    padding: 2px;
+    text-transform: capitalize;
+}
+
+.quantity-field {
+    text-align: center;
+}
+
+.product-detail h1 {
+    font-size: 1.05rem;
+    text-decoration: underline;
+    margin-bottom: 8px;
+    font-weight: 400;
+}
+
+
+.product-detail p {
+    font-size: 0.95rem;
+}
+
+
+.nutrition span,
+.key-features,
+.dimensions span {
+    text-transform: capitalize;
+    line-height: 1.6;
+}
+
+.add-product-btn {
+    color: white;
+    padding: 2px;
+    margin-top: 10px;
+    text-transform: capitalize;
+    background: var(--dodger-blue);
+}
+
+.price p {
+    font-size: 1.35rem;
+}
+
+#product-title {
+    height: 30px;
+}
+
+
+.product-colors,
+.sizes {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto;
+    column-gap: 4px;
+    
+}
+
+
+.product-colors .color,
+.sizes .size {
+    border: 1px solid lavender;
+    text-align: center;
+    background: var(--dodger-blue);
+    color: white;
+    text-transform: capitalize;
+    cursor: pointer;
+}
+
+
+.product-detail .head .product-ratings a img {
+    height: 20px;
+    width: 20px;
+}
+
+
+.p-ratings a img {
+    height: 25px;
+    width: 25px;
+}
+
+
+/* Ratings within the head i.e. none clickable ratings */
+.head .p-ratings a img {
+    height: 16px;
+    width: 16px;
+}
+
+
+.product-images-description {
+    font-size: 0.8rem;
+}
+
+#product-description-area, 
+#product-title {
+    background: ghostwhite;
 }
