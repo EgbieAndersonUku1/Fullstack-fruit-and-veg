@@ -121,7 +121,8 @@ export class StarRating {
      */
     _validateElement(element, msg) {
         if (!(element instanceof HTMLElement)) {
-            throw new Error(msg);
+            // throw new Error(msg);
+            console.warn(msg)
         }
     }
 
@@ -137,7 +138,13 @@ export class StarRating {
         if (this.isInteractive) {
 
             console.log("Starting interactive mode....");
-            this.ratingsContainer.addEventListener("click", this._handleStarClick);
+
+            try {
+                this.ratingsContainer.addEventListener("click", this._handleStarClick);
+            } catch (error) {
+                console.warn("Error - Could not activate the addEventListener ");
+            }
+            
 
         } else {
             this._updateStarDisplay(this.numOfRatedStars);
