@@ -24,11 +24,20 @@ function generateSessionKey() {
 }
 
 
-function saveToLocalStorage(name, valueToSave, stringfy = false) {
-    if (!stringfy) {
-        localStorage.setItem(name, valueToSave); 
-    } else {
-        localStorage.setItem(name, JSON.stringify(valueToSave)); 
+function saveToLocalStorage(name, valueToSave, stringify = false) {
+    try {
+        if (!window.localStorage) {
+            console.error("LocalStorage is not supported by this browser.");
+            return;
+        }
+        if (!stringify) {
+            localStorage.setItem(name, valueToSave);
+        } else {
+            localStorage.setItem(name, JSON.stringify(valueToSave));
+        }
+        console.log(`Saved ${name}:`, stringify ? JSON.stringify(valueToSave) : valueToSave);
+    } catch (error) {
+        console.error("Error saving to localStorage:", error);
     }
 }
 
@@ -48,6 +57,9 @@ function redirectToNewPage(newPageUrl) {
     window.location.href = newPageUrl;
 }
 
+export function clearStorage() {
+    localStorage.clear();
+}
 
 function getCurrentDay() {
     return new Date().getDate();

@@ -98,7 +98,7 @@ function handleClick(e) {
             handleProductColorSelect(e);
             break;
         case classList.contains("product-side-images"):
-            const sideImage = e.target;
+            const sideImage = e.target.closest("img");
             swapImages(mainImageContainer, sideImage);
             break;
         default:
@@ -177,14 +177,15 @@ function highlightSelectedElement(element) {
 function deselectAllElements(container) {
     validateElement(container, "The HTML element is not valid", true);
 
-    const sizes = container.querySelectorAll("div");
+    const elements = container.querySelectorAll("div");
 
-    if (!sizes) {
+    if (!elements) {
         throw new Error("Something went wrong and the containment elements couldn't be deselected");
     }
 
-    sizes.forEach((size) => {
-        size.style.background = "#1E90FF";
+    const dodgerBlue = "#1E90FF";
+    elements.forEach((element) => {
+        element.style.background = dodgerBlue;
     });
 }
 

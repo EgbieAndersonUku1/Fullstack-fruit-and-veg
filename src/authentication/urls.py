@@ -4,6 +4,7 @@ from . import views
 
 
 urlpatterns = [
+     path("check/session/", view=views.check_session, name="check_session"),
      path("validate/password/", view=views.validate_password, name='validate_password'),
      path("validate/username/", view=views.validate_username, name='validate_username'),
      path("validate/email/", view=views.validate_email, name='validate_email'),

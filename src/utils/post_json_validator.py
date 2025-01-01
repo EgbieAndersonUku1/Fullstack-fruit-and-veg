@@ -1,9 +1,6 @@
 import json
 from django.http import JsonResponse
 
-from django.http import JsonResponse
-import json
-
 
 def create_json_response(is_valid, message, status):
     """Helper function to create a JSON response."""

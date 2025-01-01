@@ -1,5 +1,6 @@
 import PasswordStrengthChecker from "../utils/password.js";
 import fetchData from "../utils/fetch.js";
+import { saveToLocalStorage, clearStorage } from "../utils/utils.js";
 import { getFormEntries } from "../utils/formUtils.js";
 
 
@@ -59,7 +60,9 @@ const registerButtonElement = document.getElementById("register-btn");
 const passwordStrengthChecker = new PasswordStrengthChecker()
 
 
-// Event listeners
+
+
+
 
 
 // Show the login form and registration form when the corresponding links in the navigation bar are clicked
@@ -162,11 +165,12 @@ async function processRegistrationform(formData) {
             url: "authentication/validate/password/",
             csrfToken: csrfToken,
             body: { password: formData.password },
+
         });
 
        
         const usernameValidation = await fetchData({
-            url: "authentication/validate/username/",
+            url: "/authentication/validate/username/",
             csrfToken: csrfToken,
             body: { username: formData.username }
         });
@@ -230,9 +234,10 @@ async function handleLoginFormSubmit(e) {
     const resp = await processLoginForm(formData);
 
     if (resp) {
-        console.log("You have registed...");
+        console.log("You have logged in...");
         const nextUrl = getQueryParams("next");
-
+        clearStorage();
+        saveToLocalStorage("authenticated", "logged_in");
         window.location.href = nextUrl ? nextUrl : "/account/landing-page/";
        
       
@@ -613,5 +618,6 @@ function doPasswordMatch(password, confirmPassword) {
     doPasswordsMatch.classList.toggle("opacity-md", (password && password !== confirmPassword));
     return password === confirmPassword;
 }
+
 
 

@@ -1,31 +1,48 @@
-async function fetchData({url, csrfToken, body, method="POST"}) {
-    
-    
-    if (typeof body != "object") {
-        throw new Error(`The body must be an object not type ${typeof body}`)
-    }
-    
- 
+export default async function fetchData({ url, csrfToken = null, body = null, method = "POST" }) {
+
     try {
-        const response = await fetch(url, {
-            method: method,
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": csrfToken,
-            },
-            body: JSON.stringify(body)
-        });
+
+        const allowedMethods = ["POST", "GET"];
+        if (!allowedMethods.includes(method)) {
+            throw new Error(`Invalid method: ${method}. Allowed methods are ${allowedMethods.join(", ")}`);
+        };
+
+        if (method === "POST" && typeof body !== "object" || body === null) {
+            throw new Error(`Body must be a non-null object for POST requests, received: ${typeof body}`);
+        };
+      
+        const headers = {
+            "Content-Type": "application/json",
+        };
+
+        if (csrfToken) {
+            headers["X-CSRFToken"] = csrfToken;
+        };
+
+        const options = {
+            method,
+            headers,
+        };
+
+
+         if (method === "POST" && body) {
+            options.body = JSON.stringify(body);
+        };
+
+        const response = await fetch(url, options);
 
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        return response.json();
+        return await response.json();
+
     } catch (error) {
-        console.error('Fetch error:', error);
+
+        console.error("Fetch error:", error);
         return null;
     }
 }
 
 
-export default fetchData;
+

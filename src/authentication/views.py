@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
@@ -356,3 +357,24 @@ def new_password(request, username, token):
     return render(request, "passwords/new_password.html", context=context)
 
 
+def check_session(request):
+    """
+    Checks if the user is logged in.
+
+    This function is intended for use with a fetch request. If the user is 
+    authenticated, it returns a JSON response indicating `is_logged_in: True`. 
+    Otherwise, it returns a JSON response with `is_logged_in: False`.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        JsonResponse: A JSON response with the user's login status.
+    """
+    if request.user.is_authenticated:
+        return JsonResponse({"IS_LOGGED_IN": True}, status=200)
+    return JsonResponse({"IS_LOGGED_IN": False}, status=200)
+
+    
+        
+        
