@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
-from django.urls      import reverse
-from django.conf      import settings
-from django.contrib.auth.decorators import login_required
+from django.shortcuts                import render, redirect
+from django.core.files.storage       import FileSystemStorage
+from django.urls                     import reverse
+from django.conf                     import settings
+from django.contrib.auth.decorators  import login_required
 
-from account.utils.utils import save_file_temporarily
+from account.utils.utils             import save_file_temporarily
 from authentication.forms.login_form import LoginForm
 
 from .views_helpers import handle_form
@@ -17,8 +18,12 @@ from .forms.forms   import (  BasicFormDescription,
                               AdditionalInformationForm,
                               )
 
+from product.models import Product, Category, Brand
 
 from .views_helpers import get_base64_images_from_session
+from utils.converter import decode_base64_to_image_bytes
+from utils.generator import generate_random_image_filename
+
 
 
 # Create your views here.
@@ -150,7 +155,6 @@ def view_review(request):
     
     image_and_media_session = request.session.get("temp_file_paths", {})
   
-    # add to the context
     context["basic_form_data"]             = request.session.get("basic_form_description", {})
     context["detailed_form_data"]          = request.session.get("detailed_form_description", {})
     context["price_and_inventory_data"]    = request.session.get("pricing_and_inventory_form", {})
@@ -159,7 +163,47 @@ def view_review(request):
     context["seo_management_data"]         = request.session.get("seo_management", {})
     context["additional_information_data"] = request.session.get("additional_information", {})   
     
-    print(context["shipping_and_delivery_data"])
+    images = context["image_and_media_data"]
+    main_image, side_image_1, side_image_2  = decode_base64_to_image_bytes(images[0]), decode_base64_to_image_bytes(images[1]), decode_base64_to_image_bytes(images[2])
+    
+    BASE_FOLDER = "product_images"
+
+    fs = FileSystemStorage()
+
+    # # Save the images to the filesystem (this makes them permanent)
+    main_image_filename   = generate_random_image_filename("main_image", main_image, BASE_FOLDER)
+    side_image_1_filename = generate_random_image_filename("side_image", side_image_1, BASE_FOLDER)
+    side_image_2_filename = generate_random_image_filename("side_image", side_image_2, BASE_FOLDER)
+    
+    main_image_path   = fs.save(main_image_filename, main_image)
+    side_image_1_path = fs.save(side_image_1_filename, side_image_1)
+    side_image_2_path = fs.save(side_image_2_filename, side_image_2)
+    
+    is_featured = True if context["basic_form_data"]["is_featured_item"].lower() == "y" else False
+    
+    # Determine the category
+    category_name  = context["basic_form_data"].get("new_category", "N/A")
+    if category_name == "N/A":
+        category_name = context["basic_form_data"]["category"]
+    
+    # Get or create the Category and Brand
+    category, created = Category.objects.get_or_create(category=category_name)
+    brand,    created = Brand.objects.get_or_create(name=context["basic_form_data"]["brand"])
+
+    product = Product(
+        name=context["basic_form_data"].get("name"),
+        is_featured=is_featured,
+        category=category,
+        brand=brand,
+        sku=context["basic_form_data"].get("sku", ""),
+        short_description=context["basic_form_data"].get("short_description", ""),
+        primary_image=main_image_path,
+        side_image=side_image_1_path,
+        side_image_2=side_image_2_path,
+    )
+    
+    # note to self - uncomment bottom line once all values have been extracted from the form
+    # product.save()
     return render(request, "account/product-management/add-new-product/review-and-submit.html", context=context)
  
  

@@ -1,5 +1,7 @@
 from secrets import token_urlsafe
 
+from utils.utils import get_image_extenstion
+
 
 def generate_token():
     """Generates a url safe token"""
@@ -46,8 +48,6 @@ def generate_forgotten_password_url(request, user):
 
 
 
-
-
 def _generate_url(request, user, verification_key, path):
     """
     Private function to generate the verification URL for the user based on the request and verification key.
@@ -72,3 +72,17 @@ def _generate_url(request, user, verification_key, path):
     protocol     = 'https' if request.is_secure() else 'http'
     
     return f"{protocol}://{current_site}/{path}/{user.username}/{token}/"
+
+
+def generate_random_image_filename(base_image_name, image, basefolder=None):
+      
+    extenstion         = get_image_extenstion(image)
+    generated_filename = ""
+    
+    if basefolder:
+         basefolder = basefolder[:-1] if basefolder.endswith("/") else basefolder
+         generated_filename = f'product_images/{generate_token()}_{base_image_name}.{extenstion}'
+    else:
+        generated_filename = f'{generate_token()}_{base_image_name}.{extenstion}'
+    return generated_filename
+    

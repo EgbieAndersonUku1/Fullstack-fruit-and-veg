@@ -1,15 +1,7 @@
-import base64
-
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from pathlib import Path
-from time import time
-from django.utils import timezone
-
-
-from .utils.utils import create_timestamped_directory, encode_image_bytes_to_base64, get_saved_temp_file,  upload_to
-
-from account.utils.converter import convert_decimal_to_float
+from .utils.utils import create_timestamped_directory, get_saved_temp_file,  upload_to
+from utils.converter import encode_image_bytes_to_base64, convert_decimal_to_float
 
 
 

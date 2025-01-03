@@ -1,11 +1,9 @@
-import base64
-
 from os.path import splitext, join
-import tempfile
-
 from pathlib import Path
 from time import time
 from django.utils import timezone
+
+import tempfile
 
 
 
@@ -36,10 +34,6 @@ def get_saved_temp_file(temp_file_path):
         file_bytes = file.read()
         return file_bytes
 
-
-def encode_image_bytes_to_base64(image_bytes):
-    return base64.b64encode(image_bytes).decode('utf-8')
-    
 
 def create_unique_file_name(original_name):
     
@@ -86,3 +80,6 @@ def create_timestamped_directory(folder_name):
     
     return path
     
+    
+
+
