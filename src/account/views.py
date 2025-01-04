@@ -199,8 +199,8 @@ def view_review(request):
     discounted_price   = 0
     is_discounted      = False
 
-    if context["detailed_form_data"].get('select_discount', '').lower() == "yes":
-        discounted_price = context["detailed_form_data"].get("add_discount")
+    if context["price_and_inventory_data"].get('select_discount', '').lower() == "yes":
+        discounted_price = context["price_and_inventory_data"].get("add_discount")
         is_discounted    = True
     
     # Get or create the Category and Brand
@@ -208,6 +208,7 @@ def view_review(request):
     brand,    _ = Brand.objects.get_or_create(name=context["basic_form_data"]["brand"])
     
 
+    
     # create a model
     product = Product(
         name=context["basic_form_data"].get("name"),
@@ -221,7 +222,7 @@ def view_review(request):
         side_image_2=side_image_2_path,
         weight=detailed_data.get("weight"),
         long_description=detailed_data.get("description", ""),
-        price=context["detailed_form_data"].get("price"),
+        price=context["price_and_inventory_data"].get("price"),
         is_discounted_price=is_discounted,
         discount_price=discounted_price,
        
@@ -243,10 +244,10 @@ def view_review(request):
                     height=detailed_data.get("height"),
                     width=detailed_data.get("width"),
                     length=detailed_data.get("length"),
-                    availability=context["detailed_form_data"].get("available"),
-                    stock_quantity=context["detailed_form_data"].get("quantity_stock"),
-                    minimum_stock_order=context["detailed_form_data"].get("minimum_order"),
-                    maximum_stock_order=context["detailed_form_data"].get("maximum_order"),
+                    availability=context["price_and_inventory_data"].get("available"),
+                    stock_quantity=context["price_and_inventory_data"].get("quantity_stock"),
+                    minimum_stock_order=context["price_and_inventory_data"].get("minimum_order"),
+                    maximum_stock_order=context["price_and_inventory_data"].get("maximum_order"),
                     
                 )
             )
@@ -254,7 +255,7 @@ def view_review(request):
     # note to self uncomment this to batch save after model is built
     # ProductVariation.objects.bulk_create(product_variations)  # Batch save for efficiency 
          
-    print(context["price_and_inventory_data"])
+ 
     return render(request, "account/product-management/add-new-product/review-and-submit.html", context=context)
  
  
