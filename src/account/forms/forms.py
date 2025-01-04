@@ -82,7 +82,7 @@ class PricingAndInventoryForm(forms.Form):
                                                                "step": "0.01"
                                                                }))
 
-    category = forms.ChoiceField(label="Availability", choices=STOCK_CHOICES, widget=forms.Select(attrs={
+    available = forms.ChoiceField(label="Availability", choices=STOCK_CHOICES, widget=forms.Select(attrs={
         "id": "availability",
         "class": "select-category",
     }))
