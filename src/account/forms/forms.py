@@ -162,35 +162,40 @@ class ShippingAndDeliveryForm(forms.Form):
         ("p", "Premium Shipping"),
         ("e", "Express Shipping") 
     ]
-    height = forms.CharField(widget=forms.TextInput(attrs={
+    shipping_height = forms.CharField(label="Shippng height (centimetres)",
+                                     widget=forms.TextInput(attrs={
                                      "aria-labelledby": "meta-title-label",
-                                     "placeholder": "Enter the shipping height...",
+                                     "placeholder": "Enter the shipping height, including only the product in its shipping packaging (e.g., height of the box or wrapping).",
                                      "type": "number",
                                      "step": "0.01",
                                      "min": "1",
                                      "max": "10000",
                                  }))
-    width = forms.CharField(widget=forms.TextInput(attrs={
+    shipping_width = forms.CharField(label="Shipping weight (centimetres)",
+                                    widget=forms.TextInput(attrs={
                                      "aria-labelledby": "meta-title-label",
-                                     "placeholder": "Enter the shipping width..",
+                                     "placeholder": "Enter the shipping width, including only the product in its shipping packaging (e.g., width of the box or wrapping).",
                                      "type": "number",
                                      "step": "0.01",
                                      "min": "1",
                                      "max": "10000",
                                  }))
     
-    length = forms.CharField(widget=forms.TextInput(attrs={
-                                     "aria-labelledby": "meta-title-label",
-                                     "placeholder": "Enter the shipping length..",
+    shipping_length = forms.CharField(label="Shipping length (centimetres)",
+                                    widget=forms.TextInput(attrs={
+                                    "aria-labelledby": "meta-title-label",
+                                    "placeholder": "Enter the shipping length, including only the product in its shipping packaging (e.g., length of the box or wrapping).",
                                      "type": "number",
                                      "step": "0.01",
                                      "min": "1",
                                      "max": "10000",
                                  }))
 
-    weight = forms.CharField(widget=forms.TextInput(attrs={
+
+
+    shipping_weight = forms.CharField(widget=forms.TextInput(attrs={
                                      "aria-labelledby": "meta-title-label",
-                                     "placeholder": "Enter the shipping weight..",
+                                     "placeholder": "Enter the shipping weight, including only the product in its shipping packaging (e.g., weight of the box or wrapping).",
                                      "type": "number",
                                      "step": "0.01",
                                      "min": "0.00",
@@ -207,7 +212,6 @@ class ShippingAndDeliveryForm(forms.Form):
                                      "max": "10000",
                                     
                                  }))
-    
     
     premium_shipping = forms.CharField(required=False, widget=forms.TextInput(attrs={
                                      "id": "premium_shipping",

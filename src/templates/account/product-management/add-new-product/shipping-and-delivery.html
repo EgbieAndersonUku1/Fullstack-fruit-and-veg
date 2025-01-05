@@ -14,19 +14,19 @@
         <hr class="dividor">
         <div class="dimensions" aria-labelledby="shipping-dimensions-heading">
             
-            {{ form.length.label_tag }}
-            {{ form.length }}
+            {{ form.shipping_length.label_tag }}
+            {{ form.shipping_length }}
 
             <span id="length-desc" class="sr-only">Enter the length in centimeters</span>
 
 
-            {{ form.width.label_tag }}
-            {{ form.width }}
+            {{ form.shipping_width.label_tag }}
+            {{ form.shipping_width }}
 
             <span id="width-desc" class="sr-only">Enter the width in centimeters</span>
 
-            {{ form.height.label_tag }}
-            {{ form.height }}
+            {{ form.shipping_height.label_tag }}
+            {{ form.shipping_height }}
 
             <span id="height-desc" class="sr-only">Enter the height in centimeters</span>
         </div>
@@ -36,8 +36,8 @@
         <hr class="dividor">
         <div class="shipping-weight" aria-labelledby="shipping-weight-heading">
 
-            {{ form.weight.label_tag }}
-            {{ form.weight }}
+            {{ form.shipping_weight.label_tag }}
+            {{ form.shipping_weight }}
 
             <span id="weight-desc" class="sr-only">Enter the weight in kilograms</span>
         </div>

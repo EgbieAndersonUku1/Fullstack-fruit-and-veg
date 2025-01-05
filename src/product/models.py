@@ -1,7 +1,9 @@
 from django.db import models
+from enum import Enum
 from django.forms import ValidationError
-from utils.generator import generate_token
 
+from utils.generator import generate_token
+from utils.custom_errors import ShippingDataError
 
 # Create your models here.
 
@@ -95,17 +97,21 @@ class ProductVariation(models.Model):
 class Shipping(models.Model):
     """The model represents the shipping"""
     
-    product              = models.ForeignKey("Product", on_delete=models.SET_NULL, blank=True, null=True )
-    shipping_height      = models.DecimalField(max_digits=10, decimal_places=2)  
-    shipping_width       = models.DecimalField(max_digits=10, decimal_places=2)  
-    shipping_length      = models.DecimalField(max_digits=10, decimal_places=2)  
-    shipping_weight      = models.DecimalField(max_digits=10, decimal_places=2)  
-    standard_shipping    = models.DecimalField(max_digits=10, decimal_places=2)  
-    premium_shipping     = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, default=0.00)  
-    express_shipping     = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, default=0.00)  
-    created_on           = models.DateTimeField(auto_now_add=True)
-    modified_on          = models.DateTimeField(auto_now=True)
-            
+    class ShippingType(models.TextChoices):
+        STANDARD = "s", "Standard"
+        EXPRESS = "e",  "Express"
+        PREMIUM = "p",  "Premium"
+
+    product      = models.ForeignKey("Product", on_delete=models.SET_NULL, blank=True, null=True)
+    height       = models.DecimalField(max_digits=10, decimal_places=2, default=0)  
+    width        = models.DecimalField(max_digits=10, decimal_places=2, default=0)  
+    length       = models.DecimalField(max_digits=10, decimal_places=2, default=0)  
+    weight       = models.DecimalField(max_digits=10, decimal_places=2, default=0)  
+    price        = models.DecimalField(max_digits=10, decimal_places=2, default=0) 
+    shippng_type = models.CharField(choices=ShippingType.choices, default=ShippingType.STANDARD)
+    created_on   = models.DateTimeField(auto_now_add=True)
+    modified_on  = models.DateTimeField(auto_now=True)
+        
     def __str__(self) -> str:
         return self.product.name
     
@@ -129,7 +135,33 @@ class Shipping(models.Model):
                 raise ValidationError(f"The {field.replace("_", " ")} cannot be less that 0")
        
             
-           
+    def apply_shipping_options(self, shipping_data, save=True):
+        """
+        Updates the shipping object based on the provided shipping data.
+        """
+        if not isinstance(shipping_data, dict):
+            raise ShippingDataError(f"Expected 'shipping_data' to be a dictionary, got {type(shipping_data).__name__}.")
+
+        if "delivery_options" not in shipping_data:
+            raise ShippingDataError("'delivery_options' key is missing from the shipping_data dictionary.")
+
+        # Extract and validate delivery options
+        delivery_options = shipping_data.get("delivery_options", [])
+        if not isinstance(delivery_options, list):
+            raise ShippingDataError(f"'delivery_options' should be a list, got {type(delivery_options).__name__}.")
+
+        for delivery_option in delivery_options:
+            if delivery_option.lower() == Shipping.ShippingType.STANDARD.value > 0:
+                self.standard_shipping = shipping_data.get("standard_shipping", 0)
+            elif delivery_option.lower() == Shipping.ShippingType.EXPRESS.value > 0:
+                self.express_shipping = shipping_data.get("express_shipping", 0)
+            elif delivery_option.lower() == Shipping.ShippingType.PREMIUM.value > 0:
+                self.premium_shipping = shipping_data.get("premium_shipping", 0)
+
+        if save:
+            self.save()
+
+            
 class Product(models.Model):
     """The model represent the fields for each product e.g product name, description, etc"""
     

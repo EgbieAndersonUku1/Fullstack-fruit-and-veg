@@ -1,9 +1,13 @@
 from django.shortcuts import render, redirect
+from django.core.files.storage import FileSystemStorage
 from django.urls import reverse
+from typing import List
+
 from .utils.utils import create_timestamped_directory, get_saved_temp_file,  upload_to
 from utils.converter import encode_image_bytes_to_base64, convert_decimal_to_float
-
-
+from product.models import Product, Category, Brand, ProductVariation, Shipping
+from utils.converter import decode_base64_to_image_bytes
+from utils.generator import generate_random_image_filename
 
 
 def handle_form(request, form_class, session_key, next_url_name, template_name, checkbox_fields_to_store=set()):
@@ -229,6 +233,164 @@ def get_base64_images_from_session(session_dict):
 
 
 
-def verify_form_data(form_context, expected_field_values):
-    # To be written
-    pass
+ 
+def get_category(context):
+    
+    NOT_APPLICABLE  = "N/A"
+
+    category_name  = context.get("new_category", NOT_APPLICABLE)
+    if category_name == NOT_APPLICABLE:
+        category_name = context.get("category")
+    
+    if not category_name:
+        raise ValueError("Expected a category name but got None")
+    return category_name
+    
+    
+    
+def save_images(images):
+    BASE_FOLDER = "product_images"
+    
+    # Extract images from the context (base64 to image byte objects)
+    if len(images) != 3:
+        raise ValueError("Expected three images, but received a different number.")
+    
+    main_image, side_image_1, side_image_2 = extract_images(images)
+    
+    # Save images to storage and return paths
+    fs = FileSystemStorage()
+    
+    main_image_path   = save_image_to_storage(main_image,   "main_image", BASE_FOLDER, fs)
+    side_image_1_path = save_image_to_storage(side_image_1, "side_image", BASE_FOLDER, fs)
+    side_image_2_path = save_image_to_storage(side_image_2, "side_image", BASE_FOLDER, fs)
+    
+    return main_image_path, side_image_1_path, side_image_2_path
+
+
+def extract_images(images):
+    # Make sure we have exactly three images to decode
+    
+    try:
+        main_image   = decode_base64_to_image_bytes(images[0])
+        side_image_1 = decode_base64_to_image_bytes(images[1])
+        side_image_2 = decode_base64_to_image_bytes(images[2])
+        return main_image, side_image_1, side_image_2
+    except Exception as e:
+        raise ValueError(f"Error decoding images: {str(e)}")
+
+
+def save_image_to_storage(image, image_type, folder, fs):
+    # Generate a random filename and save the image to storage
+    filename = generate_random_image_filename(image_type, image, folder)
+    image_path = fs.save(filename, image)
+    return image_path
+
+
+
+
+def create_product_variations(product, merged_context) -> List[ProductVariation]:
+    """
+    Create product variations based on size and color combinations from the merged context.
+
+    :param product: A Product instance.
+    :param merged_context: A dictionary containing size, color, and other product details.
+    :return: A list of ProductVariation instances.
+    """
+    if not isinstance(product, Product):
+        raise ValueError(
+            f"The product instance is not of type Product. Expected Product instance, got {type(product).__name__}."
+        )
+
+    # Required keys for ProductVariation creation
+    required_keys = [
+        "sizes",
+        "colors",
+        "height",
+        "width",
+        "length",
+        "available",
+        "quantity_stock",
+        "minimum_order",
+        "maximum_order",
+    ]
+
+    # Validate required keys
+    missing_keys = [key for key in required_keys if key not in merged_context]
+    if missing_keys:
+        raise KeyError(f"The following keys are missing in merged_context: {', '.join(missing_keys)}")
+
+    product_variations = []
+
+    # Iterate over size and color combinations to create ProductVariation instances
+    for size in merged_context.get("sizes", []):
+        for color in merged_context.get("colors", []):
+            product_variations.append(
+                ProductVariation(
+                    product=product,
+                    color=color,
+                    size=size,
+                    height=merged_context["height"],
+                    width=merged_context["width"],
+                    length=merged_context["length"],
+                    availability=merged_context["available"],
+                    stock_quantity=merged_context["quantity_stock"],
+                    minimum_stock_order=merged_context["minimum_order"],
+                    maximum_stock_order=merged_context["maximum_order"],
+                )
+            )
+
+    return product_variations
+
+
+def create_shipping_variations(product, merged_context) -> List[Shipping]:
+    """
+    Create shipping variations for a given product based on delivery options in the merged context.
+
+    :param product: A Product instance.
+    :param merged_context: A dictionary containing shipping details and options.
+    :return: A list of Shipping instances.
+    """
+    if not isinstance(product, Product):
+        raise ValueError(
+            f"The product instance is not of type Product. Expected Product instance, got {type(product).__name__}."
+        )
+
+    # Required keys for Shipping object creation
+    required_keys = [
+        "delivery_options",
+        "shipping_height",
+        "shipping_width",
+        "shipping_length",
+        "shipping_weight",
+    ]
+    
+    # Validate required keys
+    missing_keys = [key for key in required_keys if key not in merged_context]
+    if missing_keys:
+        raise KeyError(f"The following keys are missing in merged_context: {', '.join(missing_keys)}")
+
+    delivery_variations = []
+
+    for delivery_option in merged_context.get("delivery_options", []):
+        price = 0  
+        if delivery_option == Shipping.ShippingType.STANDARD:
+            price = merged_context.get("standard_shipping", 0)
+        elif delivery_option == Shipping.ShippingType.PREMIUM:
+            price = merged_context.get("premium_shipping", 0)
+        elif delivery_option == Shipping.ShippingType.EXPRESS:
+            price = merged_context.get("express_shipping", 0)
+
+        # Append the created Shipping instance
+        delivery_variations.append(
+            Shipping(
+                product=product,
+                height=merged_context["shipping_height"],
+                width=merged_context["shipping_width"],
+                length=merged_context["shipping_length"],
+                weight=merged_context["shipping_weight"],
+                price=price,
+                shipping_type=delivery_option,
+            )
+        )
+
+    return delivery_variations

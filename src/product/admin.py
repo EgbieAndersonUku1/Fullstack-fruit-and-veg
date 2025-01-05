@@ -28,18 +28,18 @@ class ShippingAdmin(admin.ModelAdmin):
     This standalone model allows for direthct management of shipping attributes
     (e.g., shipping height, shippng width) without navigating through the parent Product model.
     """
-    list_display = ["product", "shipping_height", "shipping_width", "shipping_length"]
+    list_display = ["product", "height", "width", "length"]
     fieldsets    = [
         ("General Information", { "fields": ["product" ]}),
-        ("Dimensions", { "fields": ["shipping_height", "shipping_width", "shipping_length"]}),
+        ("Dimensions", { "fields": ["height", "width", "length"]}),
         ("Weight", { "fields": ["shipping_weight"]}),
-        ("Shipping Options", { "fields": ["standard_shipping", "premium_shipping", "express_shipping"]}),
+        ("Shipping Options", { "fields": ["price"]}),
     ]
     
     readonly_fields = ["created_on", "modified_on"]
     list_per_page   = 25
-    list_filter     = ["standard_shipping", "premium_shipping", "express_shipping"]
-    search_fields   = ["standard_shipping", "premium_shipping", "express_shipping"]
+    list_filter     = ["price"]
+    search_fields   = ["price"]
     
 
 class CategoryAdmin(admin.ModelAdmin):

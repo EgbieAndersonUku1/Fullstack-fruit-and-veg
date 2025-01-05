@@ -1,5 +1,4 @@
 from django.shortcuts                import render, redirect
-from django.core.files.storage       import FileSystemStorage
 from django.urls                     import reverse
 from django.conf                     import settings
 from django.contrib.auth.decorators  import login_required
@@ -7,7 +6,14 @@ from django.contrib.auth.decorators  import login_required
 from account.utils.utils             import save_file_temporarily
 from authentication.forms.login_form import LoginForm
 
-from .views_helpers import handle_form
+from .views_helpers import (get_base64_images_from_session, 
+                            handle_form,
+                            save_images,
+                            get_category,
+                            create_product_variations,
+                            create_shipping_variations,
+                            )
+
 from .forms.forms   import (  BasicFormDescription, 
                               DetailedFormDescription,
                               PricingAndInventoryForm, 
@@ -18,12 +24,7 @@ from .forms.forms   import (  BasicFormDescription,
                               AdditionalInformationForm,
                               )
 
-from product.models import Product, Category, Brand, ProductVariation
-
-from .views_helpers import get_base64_images_from_session
-from utils.converter import decode_base64_to_image_bytes
-from utils.generator import generate_random_image_filename
-
+from product.models import Product, Category, Brand, Shipping, ProductVariation
 
 
 # Create your views here.
@@ -151,10 +152,12 @@ def add_additonal_information(request):
 
 @login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def view_review(request):
+    
     context = { "section_id" : "review-section", 'is_review_section': True}
     
     image_and_media_session = request.session.get("temp_file_paths", {})
-  
+    
+    # show in the review section through the context
     context["basic_form_data"]             = request.session.get("basic_form_description", {})
     context["detailed_form_data"]          = request.session.get("detailed_form_description", {})
     context["price_and_inventory_data"]    = request.session.get("pricing_and_inventory_form", {})
@@ -162,100 +165,64 @@ def view_review(request):
     context["shipping_and_delivery_data"]  = request.session.get("shipping_and_delivery", {})
     context["seo_management_data"]         = request.session.get("seo_management", {})
     context["nutrition_data"]              = request.session.get("nutrition", {})        
-    context["additional_information_data"] = request.session.get("additional_information", {})   
+    context["additional_information_data"] = request.session.get("additional_information", {}) 
     
-    # get the sizes and colors stored in as a dict within a list e.g {size: ["red", "blue"], color: ["purple", "green"]}
-    product_variations = []
-    sizes         = context["detailed_form_data"].get("size", [])
-    colors        = context["detailed_form_data"].get("color", [])
-    detailed_data = context["detailed_form_data"]
+    images = context["image_and_media_data"] 
     
-    # decode the image from temp folder
-    BASE_FOLDER  = "product_images"
-    images       = context["image_and_media_data"]
-    main_image, side_image_1, side_image_2  = decode_base64_to_image_bytes(images[0]), decode_base64_to_image_bytes(images[1]), decode_base64_to_image_bytes(images[2])
+    merged_context = {
+        **context["basic_form_data"],
+        **context["detailed_form_data"],
+        **context["price_and_inventory_data"],
+        **context["shipping_and_delivery_data"],
+        **context["seo_management_data"],
+        **context["nutrition_data"],
+        **context["additional_information_data"],
+    }
+    main_image_path, side_image_1_path, side_image_2_path =  save_images(images)
     
-  
-    # # Save the images to the filesystem (this makes them permanent)
-    fs = FileSystemStorage()
+    is_featured   = True if merged_context.get("is_featured_item", "").lower() == "y"   else False
+    is_discounted = True if merged_context.get("select_discount", "").lower()  == "yes" else False
     
-    main_image_filename   = generate_random_image_filename("main_image", main_image, BASE_FOLDER)
-    side_image_1_filename = generate_random_image_filename("side_image", side_image_1, BASE_FOLDER)
-    side_image_2_filename = generate_random_image_filename("side_image", side_image_2, BASE_FOLDER)
+    category, _  = Category.objects.get_or_create(category=get_category(merged_context))
+    brand,    _  = Brand.objects.get_or_create(name=merged_context.get("brand"))
     
-    main_image_path   = fs.save(main_image_filename, main_image)
-    side_image_1_path = fs.save(side_image_1_filename, side_image_1)
-    side_image_2_path = fs.save(side_image_2_filename, side_image_2)
-    
-    is_featured = True if context["basic_form_data"]["is_featured_item"].lower() == "y" else False
-    
-    # Determine the category
-    category_name  = context["basic_form_data"].get("new_category", "N/A")
-    if category_name == "N/A":
-        category_name = context["basic_form_data"]["category"]
-    
-    
-    # determine if a discount option is chosen
-    discounted_price   = 0
-    is_discounted      = False
-
-    if context["price_and_inventory_data"].get('select_discount', '').lower() == "yes":
-        discounted_price = context["price_and_inventory_data"].get("add_discount")
-        is_discounted    = True
-    
-    # Get or create the Category and Brand
-    category, _ = Category.objects.get_or_create(category=category_name)
-    brand,    _ = Brand.objects.get_or_create(name=context["basic_form_data"]["brand"])
-    
-
-    
-    # create a model
     product = Product(
-        name=context["basic_form_data"].get("name"),
+        name=merged_context.get("name"),
         is_featured=is_featured,
+        long_description=merged_context.get("description"),
+        short_description=merged_context.get("short_description"),
         category=category,
         brand=brand,
-        sku=context["basic_form_data"].get("sku", ""),
-        short_description=context["basic_form_data"].get("short_description", ""),
+        sku=merged_context.get("sku"),
+        upc=merged_context.get("upc"),
+        price=merged_context.get("price"),
+        weight=merged_context.get("weight"),
+        is_discounted_price=is_discounted,
+        discount_price=merged_context.get("add_discount"), 
         primary_image=main_image_path,
         side_image=side_image_1_path,
         side_image_2=side_image_2_path,
-        weight=detailed_data.get("weight"),
-        long_description=detailed_data.get("description", ""),
-        price=context["price_and_inventory_data"].get("price"),
-        is_discounted_price=is_discounted,
-        discount_price=discounted_price,
-       
+        nutrition={
+            'calories': merged_context.get("calories"), 
+            'carbohydrates': merged_context.get("carbohydrates"), 
+            'sugar': merged_context.get("sugar"),
+            'protein': merged_context.get("protein"),
+            'fibre': merged_context.get("fibre"),   
+        }
+        
     )
     
-    
-    # note to self - uncomment bottom line once all values have been extracted from the form
+    # note to self - uncomment botton once all have been extracted
     # product.save()
+    # product_variations_list = create_product_variations(product, merged_context)
+    # product_shipping_variations = create_shipping_variations(product, merged_context)
     
-    
-    # Create and save product variations
-    for size in sizes:
-        for color in colors:
-            product_variations.append(
-                ProductVariation(
-                    product=product,
-                    color=color,
-                    size=size,
-                    height=detailed_data.get("height"),
-                    width=detailed_data.get("width"),
-                    length=detailed_data.get("length"),
-                    availability=context["price_and_inventory_data"].get("available"),
-                    stock_quantity=context["price_and_inventory_data"].get("quantity_stock"),
-                    minimum_stock_order=context["price_and_inventory_data"].get("minimum_order"),
-                    maximum_stock_order=context["price_and_inventory_data"].get("maximum_order"),
-                    
-                )
-            )
-    
-    # note to self uncomment this to batch save after model is built
-    # ProductVariation.objects.bulk_create(product_variations)  # Batch save for efficiency 
-         
- 
+    # # Batch save for efficiency 
+    # ProductVariation.objects.bulk_create(product_variations_list)  
+    # Shipping.objects.bulk_create(product_shipping_variations)
+  
+   
+
     return render(request, "account/product-management/add-new-product/review-and-submit.html", context=context)
  
  
