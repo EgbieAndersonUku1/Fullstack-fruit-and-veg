@@ -301,7 +301,6 @@ def create_product_variations(product, merged_context) -> List[ProductVariation]
             f"The product instance is not of type Product. Expected Product instance, got {type(product).__name__}."
         )
 
-    # Required keys for ProductVariation creation
     required_keys = [
         "sizes",
         "colors",
@@ -314,7 +313,7 @@ def create_product_variations(product, merged_context) -> List[ProductVariation]
         "maximum_order",
     ]
 
-    # Validate required keys
+  
     missing_keys = [key for key in required_keys if key not in merged_context]
     if missing_keys:
         raise KeyError(f"The following keys are missing in merged_context: {', '.join(missing_keys)}")
@@ -324,6 +323,7 @@ def create_product_variations(product, merged_context) -> List[ProductVariation]
     # Iterate over size and color combinations to create ProductVariation instances
     for size in merged_context.get("sizes", []):
         for color in merged_context.get("colors", []):
+            
             product_variations.append(
                 ProductVariation(
                     product=product,
@@ -355,7 +355,7 @@ def create_shipping_variations(product, merged_context) -> List[Shipping]:
             f"The product instance is not of type Product. Expected Product instance, got {type(product).__name__}."
         )
 
-    # Required keys for Shipping object creation
+   
     required_keys = [
         "delivery_options",
         "shipping_height",
@@ -364,7 +364,7 @@ def create_shipping_variations(product, merged_context) -> List[Shipping]:
         "shipping_weight",
     ]
     
-    # Validate required keys
+   
     missing_keys = [key for key in required_keys if key not in merged_context]
     if missing_keys:
         raise KeyError(f"The following keys are missing in merged_context: {', '.join(missing_keys)}")
@@ -380,7 +380,6 @@ def create_shipping_variations(product, merged_context) -> List[Shipping]:
         elif delivery_option == Shipping.ShippingType.EXPRESS:
             price = merged_context.get("express_shipping", 0)
 
-        # Append the created Shipping instance
         delivery_variations.append(
             Shipping(
                 product=product,
