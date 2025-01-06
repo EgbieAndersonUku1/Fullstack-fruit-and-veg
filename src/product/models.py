@@ -47,7 +47,7 @@ class Manufacturer(models.Model):
     name         = models.CharField(max_length=255)
     description  = models.TextField(blank=True, null=True)
     address      = models.CharField(max_length=255)
-    contact_num  = models.CharField(blank=True, null=True, max_length=12) 
+    contact_num  = models.CharField(blank=True, null=True, max_length=20) 
     is_certified = models.BooleanField(default=True)
     created_on   = models.DateTimeField(auto_now_add=True)
     modified_on  = models.DateTimeField(auto_now=True)
@@ -187,6 +187,8 @@ class Product(models.Model):
     country_of_origin   = models.CharField(max_length=50)
     nutrition           = models.JSONField(null=True, blank=True)
     warranty_period     = models.TextField(blank=True, null=True,  default="No warranty")
+    is_returnable       = models.BooleanField(default=False)
+    recommendation      = models.CharField(max_length=255, blank=True, null=True)
     created_on          = models.DateTimeField(auto_now_add=True)
     modified_on         = models.DateTimeField(auto_now=True)
             

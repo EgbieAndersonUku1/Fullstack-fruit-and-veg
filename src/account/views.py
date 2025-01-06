@@ -2,9 +2,11 @@ from django.shortcuts                import render, redirect
 from django.urls                     import reverse
 from django.conf                     import settings
 from django.contrib.auth.decorators  import login_required
+from django.contrib                  import messages
 
-from account.utils.utils             import save_file_temporarily
-from authentication.forms.login_form import LoginForm
+from account.utils.utils  import save_file_temporarily
+from utils.custom_errors  import EmptyProductFormError
+
 
 from .views_helpers import (get_base64_images_from_session, 
                             handle_form,
@@ -24,7 +26,7 @@ from .forms.forms   import (  BasicFormDescription,
                               AdditionalInformationForm,
                               )
 
-from product.models import Product, Category, Brand, Shipping, ProductVariation
+from product.models import Product, Category, Brand, Shipping, ProductVariation, Manufacturer
 
 
 # Create your views here.
@@ -167,25 +169,49 @@ def view_review(request):
     context["nutrition_data"]              = request.session.get("nutrition", {})        
     context["additional_information_data"] = request.session.get("additional_information", {}) 
     
-    images = context["image_and_media_data"] 
+    return render(request, "account/product-management/add-new-product/review-and-submit.html", context=context)
+ 
+ 
+ 
+@login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
+def process_and_save_product_form(request):
+    
+    image_and_media_session = request.session.get("temp_file_paths", {})
+        
+    images = get_base64_images_from_session(image_and_media_session)
     
     merged_context = {
-        **context["basic_form_data"],
-        **context["detailed_form_data"],
-        **context["price_and_inventory_data"],
-        **context["shipping_and_delivery_data"],
-        **context["seo_management_data"],
-        **context["nutrition_data"],
-        **context["additional_information_data"],
-    }
-    main_image_path, side_image_1_path, side_image_2_path =  save_images(images)
+        **request.session.get("basic_form_description", {}),
+        **request.session.get("detailed_form_description", {}),
+        **request.session.get("pricing_and_inventory_form", {}),
+        **request.session.get("shipping_and_delivery", {}),
+        **request.session.get("seo_management", {})
+        **request.session.get("nutrition", {}),        
+        **request.session.get("additional_information", {}) 
     
-    is_featured   = True if merged_context.get("is_featured_item", "").lower() == "y"   else False
-    is_discounted = True if merged_context.get("select_discount", "").lower()  == "yes" else False
+    }
+    
+    if not merged_context:
+        raise EmptyProductFormError("No data was provided in the product form. Please ensure all required fields are filled.")
+
+    main_image_path, side_image_1_path, side_image_2_path = save_images(images)
+    
+    is_featured   = True  if merged_context.get("is_featured_item", "").lower() == "y"   else False
+    is_discounted = True  if merged_context.get("select_discount", "").lower()  == "yes" else False
+    is_returnable = True  if merged_context.get("return_policy", "").lower()    == "y"   else False
     
     category, _  = Category.objects.get_or_create(category=get_category(merged_context))
     brand,    _  = Brand.objects.get_or_create(name=merged_context.get("brand"))
     
+    manufactuer, _ = Manufacturer.objects.get_or_create(
+        name=merged_context.get("manufacturer"),
+        description=merged_context.get("manufacturer_description"),
+        address=merged_context.get("manufacturer_address"),
+        contact_num=merged_context.get("manufacturer_phone_number"),
+    )
+    
+    manufactuer.save()
+   
     product = Product(
         name=merged_context.get("name"),
         is_featured=is_featured,
@@ -202,6 +228,14 @@ def view_review(request):
         primary_image=main_image_path,
         side_image=side_image_1_path,
         side_image_2=side_image_2_path,
+        meta_title=merged_context.get("meta_title"),
+        meta_keywords=merged_context.get("meta_keywords"),
+        meta_description=merged_context.get("meta_description"),
+        manufacturer=manufactuer,
+        is_returnable=is_returnable,
+        recommendation=merged_context.get("recommendation"),
+        country_of_origin=merged_context.get("country_made"),
+        warranty_period=merged_context.get("warranty_description"),
         nutrition={
             'calories': merged_context.get("calories"), 
             'carbohydrates': merged_context.get("carbohydrates"), 
@@ -212,22 +246,18 @@ def view_review(request):
         
     )
     
-    # note to self - uncomment botton once all have been extracted
-    # product.save()
-    # product_variations_list = create_product_variations(product, merged_context)
-    # product_shipping_variations = create_shipping_variations(product, merged_context)
+    product.save()
+    product_variations_list = create_product_variations(product, merged_context)
+    product_shipping_variations = create_shipping_variations(product, merged_context)
     
-    # # Batch save for efficiency 
-    # ProductVariation.objects.bulk_create(product_variations_list)  
-    # Shipping.objects.bulk_create(product_shipping_variations)
+    # Batch save for efficiency 
+    ProductVariation.objects.bulk_create(product_variations_list)  
+    Shipping.objects.bulk_create(product_shipping_variations)
+    
+    messages.success(request, "You have successfully added the product to the database")
+    return redirect("basic_description_form")
+ 
   
-   
-
-    return render(request, "account/product-management/add-new-product/review-and-submit.html", context=context)
- 
- 
- 
- 
 @login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def view_products(request):
     return render(request, "account/product-management/view-products/view-products.html")

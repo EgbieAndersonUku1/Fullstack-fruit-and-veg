@@ -281,7 +281,7 @@ class AdditionalInformationForm(forms.Form):
     RETURN_POLICY_OPTIONS = [("n", "No"), ("y", "Yes")]
     COUNTRIES_CHOICES = parse_country_file("data/countries.txt")
 
-    title = forms.CharField(label="Manufacturer title", min_length=4, 
+    manufacturer = forms.CharField(label="Manufacturer title", min_length=4, 
                             max_length=40, 
                             widget=forms.TextInput(attrs={
                                 "id": "manufacturer-title",
@@ -289,19 +289,62 @@ class AdditionalInformationForm(forms.Form):
                                 "placeholder": "Enter a manufacturer title...",
                             }))
 
-    countries = forms.ChoiceField(label="Country of origin",
+    
+    manufacturer_address = forms.CharField(label="Manufacturer address (optional)",
+            required=False,
+            max_length=10000,  
+            widget=forms.Textarea(attrs={
+                "id": "manufacturer-address",
+                "rows": "4",
+                "cols": "10",
+                "aria-required": "false",  # Explicitly indicates to screen readers that this field is optional
+                "aria-labelledby": "warranty-description-label",
+                "placeholder": "Optional address about the manufacturer. Maximum characters 1000 characters..."
+            })
+        )
+      
+    manufacturer_description = forms.CharField(label="Manufacturer description (optional)",
+            required=False,
+            max_length=255,  
+            widget=forms.Textarea(attrs={
+                "id": "manufacturer-description",
+                "rows": "4",
+                "cols": "10",
+                "aria-required": "false",  # Explicitly indicates to screen readers that this field is optional
+                "aria-labelledby": "warranty-description-label",
+                "placeholder": "Optional information about the manufacturer. Maximum characters 255 characters..."
+            })
+        )
+    
+    manufacturer_phone_number = forms.CharField(label="Manufactuer Phone number (optional)", min_length=11, 
+                            max_length=15, 
+                            required=False,
+                            
+                            widget=forms.TextInput(attrs={
+                                "id": "manufacturer-phone-number",
+                                "aria-required": "false",  # Explicitly indicates to screen readers that this field is optional
+                                "aria-labelledby": "manufacturer-phone-number",
+                                "placeholder": "Optional information about the manufacturer phone number.....",
+                            }))
+    
+    country_made = forms.ChoiceField(label="Country the product was made",
                                   choices=COUNTRIES_CHOICES,
                                   widget=forms.Select(attrs={
                                       "aria-label": "Select Country of Origin",
                                       "id": "countries",
+                                       "aria-required": "true",  
+                                      "placeholder": "Country the product was made...",
                                   }))
 
+    
     return_policy = forms.ChoiceField(label="Return policy",
                                       choices=RETURN_POLICY_OPTIONS,
                                       initial=RETURN_POLICY_OPTIONS[0],
                                       widget=forms.Select(attrs={
                                           "aria-label": "Select Return Policy",
+                                          
                                           "id": "return-policy",
+                                          "aria-required": "true",
                                       }))
 
     recommendation = forms.CharField(label="Recommendation (optional)", 
@@ -311,17 +354,24 @@ class AdditionalInformationForm(forms.Form):
                                     "rows": "5",
                                     "cols": "10",
                                     "aria-labelledby": "Recommendation-label",
+                                    "aria-required": "false",  # Explicitly indicates to screen readers that this field is optional
                                     "placeholder": "Optional: Leave blank if no recommendation (e.g., 'Pair with a fresh salad')"
 
                                      }))
     
-    description = forms.CharField(label="Warranty description (optional)", 
+    warranty_description = forms.CharField(label="Warranty description (optional)", 
                                     required=False,
                                     widget=forms.Textarea(attrs={
                                     "id": "warranty-description",
                                     "rows": "15",
                                     "cols": "10",
                                     "aria-labelledby": "warranty-description-label",
-                                    "placeholder": "Leave blank for no warranty..."
+                                    "placeholder": "Leave blank for no warranty...",
+                                    "aria-required": "false",  # Explicitly indicates to screen readers that this field is optional
                                      }))
 
+    def clean_manufacturer_description(self):
+        description = self.cleaned_data.get('manufacturer_description', '').strip()
+        if len(description.split()) > 255:  
+            raise forms.ValidationError("Description cannot exceed 50 words.")
+        return description

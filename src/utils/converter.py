@@ -1,6 +1,5 @@
 from datetime import datetime
 from decimal import Decimal
-from io import BytesIO
 from django.core.files.base import ContentFile
 
 import base64

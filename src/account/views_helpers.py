@@ -5,7 +5,7 @@ from typing import List
 
 from .utils.utils import create_timestamped_directory, get_saved_temp_file,  upload_to
 from utils.converter import encode_image_bytes_to_base64, convert_decimal_to_float
-from product.models import Product, Category, Brand, ProductVariation, Shipping
+from product.models import Product, ProductVariation, Shipping
 from utils.converter import decode_base64_to_image_bytes
 from utils.generator import generate_random_image_filename
 
@@ -268,7 +268,6 @@ def save_images(images):
 
 
 def extract_images(images):
-    # Make sure we have exactly three images to decode
     
     try:
         main_image   = decode_base64_to_image_bytes(images[0])

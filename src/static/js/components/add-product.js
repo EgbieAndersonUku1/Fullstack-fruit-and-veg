@@ -11,6 +11,7 @@ import { toggleInputVisibilityBasedOnSelection } from "../utils/formUtils.js";
 const selectFormCategory      = document.getElementById("select-category");
 const selectPriceFormCategory = document.getElementById("select-discount");
 const deliveryOptions         = document.querySelectorAll(".options");
+const phoneNumber             = document.getElementById("manufacturer-phone-number");
 
 
 // get the option
@@ -29,7 +30,8 @@ document.addEventListener("DOMContentLoaded", (e) => handleEmptySelectOptions(se
 document.addEventListener("DOMContentLoaded", (e) => handleEmptySelectOptions(selectPriceFormCategory))
 
 
-
+// handle the phone number entry in real time
+phoneNumber?.addEventListener("input", handlePhoneNumOrganisation);
 
 
 // checkboxes error msg selector
@@ -244,7 +246,6 @@ function handleShippingAndDeliveryForm(e) {
 
 
 
-
 // handles seo-and-meta-information.html
 function handleSeoAndMetaForm(e) {
     e.preventDefault();
@@ -266,13 +267,30 @@ function handleFormSubmission(form) {
 }
 
 
+function handlePhoneNumOrganisation(e) {
+   
 
+    let phoneNumber          = e.target.value;
+    let formattedPhoneNumber = '';
 
+    // Remove any non-numeric characters
+    const digitsOnly = phoneNumber.replace(/\D/g, '');
 
+    if (phoneNumber !== digitsOnly) {
+        e.target.value = digitsOnly; 
+    }
 
+    // Format the phone number by adding dashes after every third digit
+    for (let i = 0; i < digitsOnly.length; i++) {
+       
+        if (i > 2 && i % 4 === 0) {
 
+            formattedPhoneNumber += '-';
+        }
+        formattedPhoneNumber += digitsOnly[i];
+    
+    }
 
-
-
-
+    e.target.value = formattedPhoneNumber;
+}
 
