@@ -14,6 +14,7 @@ from .views_helpers import (get_base64_images_from_session,
                             get_category,
                             create_product_variations,
                             create_shipping_variations,
+                            redirect_to_incomplete_step
                             )
 
 from .forms.forms   import (  BasicFormDescription, 
@@ -171,13 +172,20 @@ def view_review(request):
     context["basic_form_data"]             = request.session.get("basic_form_description", {})
     context["detailed_form_data"]          = request.session.get("detailed_form_description", {})
     context["price_and_inventory_data"]    = request.session.get("pricing_and_inventory_form", {})
-    context["image_and_media_data"]        = get_base64_images_from_session(image_and_media_session)
+ 
     context["shipping_and_delivery_data"]  = request.session.get("shipping_and_delivery", {})
     context["seo_management_data"]         = request.session.get("seo_management", {})
     context["nutrition_data"]              = request.session.get("nutrition", {})        
     context["additional_information_data"] = request.session.get("additional_information", {}) 
     
-    return render(request, "account/product-management/add-new-product/review-and-submit.html", context=context)
+    try:
+        context["image_and_media_data"] = get_base64_images_from_session(image_and_media_session)
+    except ValueError as e:
+        print(e)
+        messages.error(request, "Something went wrong and your images couldn't be found. Please upload again and then submit again")
+        return redirect(reverse("images_and_media_form"))
+    
+    return redirect_to_incomplete_step(request, "account/product-management/add-new-product/review-and-submit.html", context=context)
  
  
  
