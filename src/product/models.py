@@ -60,9 +60,9 @@ class ProductVariation(models.Model):
     """The model represents the different product variations such as size, color, dimensions, etc."""
     
     class Availability(models.TextChoices):
-        IN_STOCK     = ("IS", "In Stock")
-        OUT_OF_STOCK = ("OO", "Out of Stock")
-        PRE_ORDER    = ("PO", "Pre-order")
+        IN_STOCK     = ("is", "In Stock")
+        OUT_OF_STOCK = ("oo", "Out of Stock")
+        PRE_ORDER    = ("po", "Pre-order")
         
     product             = models.ForeignKey("Product", on_delete=models.CASCADE, related_name='product_variations')
     color               = models.CharField(max_length=90)
@@ -73,12 +73,22 @@ class ProductVariation(models.Model):
     stock_quantity      = models.PositiveIntegerField(default=0)
     minimum_stock_order = models.PositiveBigIntegerField(default=0)
     maximum_stock_order = models.PositiveBigIntegerField(default=0)
-    availability        = models.CharField(choices=Availability.choices, default=Availability.IN_STOCK, max_length=3)
+    availability        = models.CharField(choices=Availability.choices, default=Availability.IN_STOCK, max_length=2)
     created_on          = models.DateTimeField(auto_now_add=True)
     modified_on         = models.DateTimeField(auto_now=True)
     
     def __str__(self) -> str:
         return f"{self.product.name} - {self.color} - {self.size}"
+    
+    def stock_availability(self):
+        """Return a readable display of the stock's availability."""
+        if self.availability == self.Availability.IN_STOCK:
+            return "In Stock"
+        elif self.availability == self.Availability.OUT_OF_STOCK:
+            return "Out of Stock"
+        elif self.availability == self.Availability.PRE_ORDER:
+            return "Pre-order"
+        return "Unknown"  
     
     def clean(self):
         if self.minimum_stock_order > self.maximum_stock_order:
@@ -102,17 +112,20 @@ class Shipping(models.Model):
         EXPRESS = "e",  "Express"
         PREMIUM = "p",  "Premium"
 
-    product      = models.ForeignKey("Product", on_delete=models.SET_NULL, blank=True, null=True)
+    product      = models.ForeignKey("Product", on_delete=models.CASCADE, blank=True, null=True)
     height       = models.DecimalField(max_digits=10, decimal_places=2, default=0)  
     width        = models.DecimalField(max_digits=10, decimal_places=2, default=0)  
     length       = models.DecimalField(max_digits=10, decimal_places=2, default=0)  
     weight       = models.DecimalField(max_digits=10, decimal_places=2, default=0)  
     price        = models.DecimalField(max_digits=10, decimal_places=2, default=0) 
-    shippng_type = models.CharField(choices=ShippingType.choices, default=ShippingType.STANDARD)
+    shipping_type = models.CharField(choices=ShippingType.choices, default=ShippingType.STANDARD)
     created_on   = models.DateTimeField(auto_now_add=True)
     modified_on  = models.DateTimeField(auto_now=True)
         
     def __str__(self) -> str:
+        return self.shipping_type
+    
+    def product_name(self):
         return self.product.name
     
     def clean(self):
@@ -121,13 +134,11 @@ class Shipping(models.Model):
         before saving to the database.
         """
         negative_fields = {
-            "shipping_height": self.shipping_height,
-            "shipping_width": self.shipping_width,
-            "shipping_length": self.shipping_length,
-            "shipping_weight": self.shipping_weight,
-            "standard_shipping": self.standard_shipping,
-            "premium_shipping": self.premium_shipping,
-            "express_shipping": self.express_shipping,
+            "shipping_height": self.height,
+            "shipping_width": self.width,
+            "shipping_length": self.length,
+            "shipping_weight": self.weight,
+            "standard_shipping": self.price,
         }
         
         for field, value in negative_fields.items():
@@ -152,11 +163,11 @@ class Shipping(models.Model):
 
         for delivery_option in delivery_options:
             if delivery_option.lower() == Shipping.ShippingType.STANDARD.value > 0:
-                self.standard_shipping = shipping_data.get("standard_shipping", 0)
+                self.shipping_type = shipping_data.get("standard_shipping", 0)
             elif delivery_option.lower() == Shipping.ShippingType.EXPRESS.value > 0:
-                self.express_shipping = shipping_data.get("express_shipping", 0)
+                self.shipping_type = shipping_data.get("express_shipping", 0)
             elif delivery_option.lower() == Shipping.ShippingType.PREMIUM.value > 0:
-                self.premium_shipping = shipping_data.get("premium_shipping", 0)
+                self.shipping_type = shipping_data.get("premium_shipping", 0)
 
         if save:
             self.save()
@@ -171,8 +182,8 @@ class Product(models.Model):
     is_featured         = models.BooleanField(default=False)
     category            = models.ForeignKey(Category, on_delete=models.CASCADE, null=False, related_name="products")
     brand               = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products')
-    sku                 = models.CharField(max_length=255, unique=True, default=generate_token) 
-    upc                 = models.CharField(max_length=255, unique=True, default=generate_token) 
+    sku                 = models.CharField(max_length=255, unique=True) 
+    upc                 = models.CharField(max_length=255, unique=True) 
     price               = models.DecimalField(max_digits=10, decimal_places=2)    
     is_discounted_price = models.BooleanField(default=False)
     discount_price      = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
@@ -191,20 +202,32 @@ class Product(models.Model):
     recommendation      = models.CharField(max_length=255, blank=True, null=True)
     created_on          = models.DateTimeField(auto_now_add=True)
     modified_on         = models.DateTimeField(auto_now=True)
-            
+    
+    def __str__(self):
+        return self.name 
+    
+    def brand_name(self):
+        return self.brand.title()
+    
     def get_warranty_period(self):
         return self.warranty_period or "No warranty"
     
     def clean(self):
-        if self.discount and not self.discount_price:
+        if self.is_discounted_price and not self.discount_price:
             raise ValidationError("Discount price must be set when discount is enabled.")
-        if not self.discount and self.discount_price:
+        if not self.is_discounted_price and self.discount_price:
             raise ValidationError("Discount price should be empty when discount is disabled.")
-        if self.discount and self.discount_price and (self.price >= self.discount_price):
+        if self.is_discounted_price and self.discount_price and (self.price >= self.discount_price):
             raise ValidationError("Discount price cannot be greater or equal to the actual price")
 
     def get_discounted_price(self):
         """Returns the discounted price else returns the actual price"""  
         return self.discount_price if self.discount else self.price      
-
-            
+    
+    def save(self, *args, **kwargs):
+        """Allows the save method to be overriden"""
+        if not self.sku:
+            self.sku = generate_token()
+        if not self.upc:
+            self.upc = generate_token()
+        super().save(*args, **kwargs)

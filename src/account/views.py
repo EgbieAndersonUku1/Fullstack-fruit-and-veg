@@ -14,7 +14,8 @@ from .views_helpers import (get_base64_images_from_session,
                             get_category,
                             create_product_variations,
                             create_shipping_variations,
-                            redirect_to_incomplete_step
+                            redirect_to_incomplete_step,
+                            clear_product_request,
                             )
 
 from .forms.forms   import (  BasicFormDescription, 
@@ -96,7 +97,7 @@ def add_images_and_media(request):
         
         form = ImageAndMediaForm(request.POST, request.FILES)
         if form.is_valid():
-    
+            request.session["step4_completed"]  = True
             if form.has_changed():
                 
                 file_fields     = ['primary_image', 'side_image1', 'side_image2', 'primary_video']
@@ -106,7 +107,7 @@ def add_images_and_media(request):
                     if field in request.FILES:
                         temp_file_paths[field]     = save_file_temporarily(request.FILES[field])
                 request.session["temp_file_paths"]  = temp_file_paths
-                request.session["step4_completed"]  = True
+              
                 
             return redirect(reverse("shipping_and_delivery_form"))
     
@@ -183,7 +184,7 @@ def view_review(request):
     except ValueError as e:
         print(e)
         messages.error(request, "Something went wrong and your images couldn't be found. Please upload again and then submit again")
-        return redirect(reverse("images_and_media_form"))
+        # return redirect(reverse("images_and_media_form"))
     
     return redirect_to_incomplete_step(request, "account/product-management/add-new-product/review-and-submit.html", context=context)
  
@@ -197,7 +198,7 @@ def process_and_save_product_form(request):
         **request.session.get("detailed_form_description", {}),
         **request.session.get("pricing_and_inventory_form", {}),
         **request.session.get("shipping_and_delivery", {}),
-        **request.session.get("seo_management", {})
+        **request.session.get("seo_management", {}),
         **request.session.get("nutrition", {}),        
         **request.session.get("additional_information", {}) 
     
@@ -274,8 +275,7 @@ def process_and_save_product_form(request):
     ProductVariation.objects.bulk_create(product_variations_list)  
     Shipping.objects.bulk_create(product_shipping_variations)
     
-    # clear the session data
-    request.session.clear()
+    clear_product_request(request)
     
     messages.success(request, "You have successfully added the product to the database")
     return redirect(reverse("basic_description_form"))

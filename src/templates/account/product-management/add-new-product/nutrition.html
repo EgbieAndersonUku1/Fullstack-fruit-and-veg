@@ -7,7 +7,7 @@
 
 {% block body %}
 
-    <form action="" method="post" class="add-product-form" id="nutrition">
+    <form action="" method="post" class="add-product-form" id="nutrition-form">
 
         {% csrf_token %}
         {% include "partials/form_errors.html" with form=form %}

@@ -741,8 +741,8 @@
         </div>
 
 
-        <a href="#" class="button flex-end padding-top-md">
-            <button class="next-button" type="button" id="review-submit-btn">Submit &gt;</button>
+        <a href="{% url 'process_form' %}" class="button flex-end padding-top-md" id="review-submit-btn">
+            <button class="next-button" type="button" class="review-submit-btn">Submit &gt;</button>
         </a>
 
     </div>
@@ -766,5 +766,5 @@
 
 {% block script %}
     <script src="{% static '/js/pages/review.js' %}" type="module"></script>
-    <script src=".{% static '/js/components/add-product.js' %}" type="module"></script>
+    <script src="{% static '/js/components/add-product.js' %}" type="module"></script>
 {% endblock %}

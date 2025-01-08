@@ -12,3 +12,4 @@ class EmptyMediaAndImagesError(Exception):
     """Custom exception raised when the product form contains no data."""
     pass
     
+    

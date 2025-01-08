@@ -102,10 +102,11 @@ def handle_form(request, form_class, session_key, next_url_name, template_name, 
         
         form = form_class(request.POST)
         if form.is_valid():
+            request.session[f"step{current_step}_completed"] = True
             if form.has_changed():
                 request.session[session_key] = convert_decimal_to_float(form.cleaned_data)
                
-                request.session[f"step{current_step}_completed"] = True
+              
                 store_checked_inputs_in_session(request, checkbox_fields_to_store, session_key)
                  
             return redirect(reverse(next_url_name))
@@ -304,8 +305,8 @@ def create_product_variations(product, merged_context) -> List[ProductVariation]
     validate_instance_of(product, Product)
     
     required_keys = [
-        "sizes",
-        "colors",
+        "size",
+        "color",
         "height",
         "width",
         "length",
@@ -314,14 +315,16 @@ def create_product_variations(product, merged_context) -> List[ProductVariation]
         "minimum_order",
         "maximum_order",
     ]
-
+    
+    # print(merged_context)
+    
     validate_required_keys(merged_context, required_keys)
     
     product_variations = []
 
     # Iterate over size and color combinations to create ProductVariation instances
-    for size in merged_context.get("sizes", []):
-        for color in merged_context.get("colors", []):
+    for size in merged_context.get("size", []):
+        for color in merged_context.get("color", []):
             
             product_variations.append(
                 ProductVariation(
@@ -366,6 +369,7 @@ def create_shipping_variations(product, merged_context) -> List[Shipping]:
 
     for delivery_option in merged_context.get("delivery_options", []):
         price = 0  
+     
         if delivery_option == Shipping.ShippingType.STANDARD:
             price = merged_context.get("standard_shipping", 0)
         elif delivery_option == Shipping.ShippingType.PREMIUM:
@@ -466,3 +470,43 @@ def redirect_to_incomplete_step(request, template_name, context):
             return redirect(reverse(url_name))
        
     return render(request, template_name, context=context)
+
+
+
+def clear_product_request(request):
+    """
+    Clear specific keys related to product requests from the session.
+
+
+    This function removes session data for various product-related forms
+    to ensure a clean state for future product requests. The following 
+    session keys are cleared if they exist:
+        - "basic_form_description"
+        - "detailed_form_description"
+        - "pricing_and_inventory_form"
+        - "shipping_and_delivery"
+        - "seo_management"
+        - "nutrition"
+        - "additional_information"
+        - "image_and_media_data"
+
+    Args:
+        request: HttpRequest object containing session data.
+
+    Returns:
+        None
+    """
+    keys_to_clear = [
+        "basic_form_description",
+        "detailed_form_description",
+        "pricing_and_inventory_form",
+        "shipping_and_delivery",
+        "seo_management",
+        "nutrition",
+        "additional_information",
+        "image_and_media_data",
+    ]
+    
+    for key in keys_to_clear:
+        if key in request.session:
+            del request.session[key]

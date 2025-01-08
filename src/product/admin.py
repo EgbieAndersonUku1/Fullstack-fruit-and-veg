@@ -28,12 +28,12 @@ class ShippingAdmin(admin.ModelAdmin):
     This standalone model allows for direthct management of shipping attributes
     (e.g., shipping height, shippng width) without navigating through the parent Product model.
     """
-    list_display = ["product", "height", "width", "length"]
+    list_display = ["shipping_type", "product", "height", "width", "length", "created_on", "modified_on"]
     fieldsets    = [
-        ("General Information", { "fields": ["product" ]}),
+        ("General Information", { "fields": ["product", "price", "shipping_type" ]}),
         ("Dimensions", { "fields": ["height", "width", "length"]}),
-        ("Weight", { "fields": ["shipping_weight"]}),
-        ("Shipping Options", { "fields": ["price"]}),
+        ("Weight", { "fields": ["weight"]}),
+      
     ]
     
     readonly_fields = ["created_on", "modified_on"]
@@ -46,26 +46,29 @@ class CategoryAdmin(admin.ModelAdmin):
     """
     Displays category model in the admin interface.
     """
-    list_display    = ["category", "created_on", "modified_on"]
-    list_per_page   = 25
-    readonly_fields = ["created_on", "modified_on"]
-    search_fields   = ["category"]
+    list_display       = ["id", "category", "created_on", "modified_on"]
+    list_per_page      = 25
+    readonly_fields    = ["created_on", "modified_on"]
+    search_fields      = ["category"]
+    list_display_links = ["id", "category"]
     
     
 class ProductModelAdmin(admin.ModelAdmin):
     """
     Displays the product model admin interface.
     """
-    list_display  = ["name", "is_featured"]
-    list_filter   = ["is_featured", "name", "brand", "is_featured"]
-    search_fields = ["name", "sku", "upc", "brand", 
-                     "meta_title", "meta_keywords", 
-                     "country_of_origin", "manufacturer", "id"]
+    list_display      = ["id", "name", "brand_name", "price",  "is_discounted_price", "is_featured", "created_on", "modified_on"]
+    list_filter       = ["is_featured", "name", "brand", "is_featured"]
+    search_fields     = ["name", "sku", "upc", "brand", 
+                         "meta_title", "meta_keywords", 
+                         "country_of_origin", "manufacturer", "id"]
+    list_display_links = ["id", "name"]
+    list_per_page = 25
     
     
     fieldsets = [
         ("General Information", { "fields": ["name", "short_description", "category", "brand", "sku", "upc", "long_description" ]}),
-        ("Pricing and Discounts", { "fields": ["price", "discount", "discount_price"]}),
+        ("Pricing and Discounts", { "fields": ["price", "is_discounted_price", "discount_price"]}),
         ("Media", { "fields": ["primary_image", "side_image", "side_image_2"]}),
         ("SEO Metadata", { "fields": ["meta_title", "meta_keywords", "meta_description"]}),
         ("Additonal information", { "fields": ["manufacturer", "country_of_origin", "warranty_period"]}),
@@ -77,7 +80,10 @@ class ProductModelAdmin(admin.ModelAdmin):
     list_per_page   = 25
     inlines         = [ProductVariationStackInline, ShippingStackInline]
     
-
+    def brand_name(self, obj):
+        return obj.brand
+    
+    
 class ProductVariationAdmin(admin.ModelAdmin):
     """
     Admin interface for the ProductVariation model.
@@ -85,9 +91,12 @@ class ProductVariationAdmin(admin.ModelAdmin):
     This standalone model allows for direct management of product attributes
     (e.g., size, color) without navigating through the parent Product model.
     """
-    list_display = ["product", "color", "size", "availability"]
-    list_filter = ["product", "size", "color", "availability", "height", "width", "length"]
-    search_fields = ["size", "color", "availability", "height", "width", "length", "id"]
+    list_display       = ["id", "product", "stock_quantity", "color", "size", "stock_availability", "created_on", "modified_on"]
+    list_filter        = ["product", "size", "color", "availability", "height", "width", "length"]
+    search_fields      = ["size", "color", "availability", "height", "width", "length", "id"]
+    list_display_links = ["id", "product"]
+    list_per_page      = 25
+
     
     fieldsets = [
         ("General Information", {"fields": ["product", "color", "size", "availability"]}),
@@ -96,18 +105,21 @@ class ProductVariationAdmin(admin.ModelAdmin):
     ]
 
     readonly_fields = ["created_on", "modified_on"]
-    list_per_page = 25
-
+   
+    def stock_availability(self, obj):
+        """Return a readable display of the stock's availability."""
+        return obj.stock_availability()
 
 
 class BrandModelAdmin(admin.ModelAdmin):
     """
     Displays brand model in the admin interface.
     """
-    list_display    = ["name", "created_on", "modified_on"]
-    list_per_page   = 25
-    readonly_fields = ["created_on", "modified_on"]
-    search_fields   = ["name", "id"]
+    list_display       = ["id", "name", "created_on", "modified_on"]
+    list_per_page      = 25
+    readonly_fields    = ["created_on", "modified_on"]
+    search_fields      = ["name", "id"]
+    list_display_links = ["id", "name"]
 
 
 
@@ -115,10 +127,11 @@ class ManufacturerAdmin(admin.ModelAdmin):
     """
     Displays manufacturer model in the admin interface.
     """
-    list_display    = ["id", "name", "address", "contact_num", "created_on", "modified_on"]
-    list_per_page   = 25
-    readonly_fields = ["created_on", "modified_on"]
-    search_fields   = ["name", "contact_num", "id"]
+    list_display       = ["id", "name", "contact_num", "is_certified", "contact_num", "created_on", "modified_on"]
+    list_per_page      = 25
+    readonly_fields    = ["created_on", "modified_on"]
+    search_fields      = ["name", "contact_num", "id"]
+    list_display_links = ["id", "name"]
     
     
     
