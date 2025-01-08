@@ -444,7 +444,6 @@ def redirect_to_incomplete_step(request, template_name, context):
         {"msg": "You cannot move to the next step because you haven't completed step 6", "url_name": "seo_and_meta_form",          "stage": "step6"},
         {"msg": "You cannot move to the next step because you haven't completed step 7", "url_name": "nutrition_form",             "stage": "step7"},
         {"msg": "You cannot move to the next step because you haven't completed step 8", "url_name": "add_information_form",       "stage": "step8"},
-        {"msg": "You cannot move to the next step because you haven't completed step 9", "url_name": "view_review",                "stage": "step9"},
     ]
 
     current_url_name = resolve(request.path_info).url_name  
