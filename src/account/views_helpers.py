@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.core.files.storage import FileSystemStorage
-from django.urls import reverse
+from django.urls import resolve, reverse
+from django.contrib import messages
 from typing import List
 
 from .utils.utils import create_timestamped_directory, get_saved_temp_file,  upload_to
@@ -10,7 +11,7 @@ from utils.converter import decode_base64_to_image_bytes
 from utils.generator import generate_random_image_filename
 
 
-def handle_form(request, form_class, session_key, next_url_name, template_name, checkbox_fields_to_store=set()):
+def handle_form(request, form_class, session_key, next_url_name, template_name, current_step, checkbox_fields_to_store=set()):
     """
     Handles form processing, session management, and checkbox state preservation.
 
@@ -25,6 +26,10 @@ def handle_form(request, form_class, session_key, next_url_name, template_name, 
         - session_key: The key used to store and retrieve the form data from the session.
         - next_url_name: The name of the URL to redirect to after a successful form submission.
         - template_name: The name of the template to render if the form is not valid or if the form is initially loaded.
+       -  current_step: An integer or string representing the current step in the multi-step form process (e.g., 'Step 1', 'Step 2'). 
+                        This parameter helps identify which form page the user is currently filling out, allowing the session or 
+                        application to keep track of progress and display the appropriate form fields or templates for that step.
+
         - checkbox_fields_to_store: (Optional) A set of input field names (strings) that correspond to groups of 
         checkboxes. The selected values for these checkboxes will be stored in the session under keys 
         matching the input field names. If a single input field name is entered it must 
@@ -100,14 +105,14 @@ def handle_form(request, form_class, session_key, next_url_name, template_name, 
             if form.has_changed():
                 request.session[session_key] = convert_decimal_to_float(form.cleaned_data)
                
+                request.session[f"step{current_step}_completed"] = True
                 store_checked_inputs_in_session(request, checkbox_fields_to_store, session_key)
-                            
+                 
             return redirect(reverse(next_url_name))
     
     context["form"] = form
+    return redirect_to_incomplete_step(request, template_name, context)
     
-    return render(request, template_name, context=context)
-
 
 
 def store_checked_inputs_in_session(request, checkbox_elements, session_key):
@@ -295,11 +300,9 @@ def create_product_variations(product, merged_context) -> List[ProductVariation]
     :param merged_context: A dictionary containing size, color, and other product details.
     :return: A list of ProductVariation instances.
     """
-    if not isinstance(product, Product):
-        raise ValueError(
-            f"The product instance is not of type Product. Expected Product instance, got {type(product).__name__}."
-        )
-
+   
+    validate_instance_of(product, Product)
+    
     required_keys = [
         "sizes",
         "colors",
@@ -312,11 +315,8 @@ def create_product_variations(product, merged_context) -> List[ProductVariation]
         "maximum_order",
     ]
 
-  
-    missing_keys = [key for key in required_keys if key not in merged_context]
-    if missing_keys:
-        raise KeyError(f"The following keys are missing in merged_context: {', '.join(missing_keys)}")
-
+    validate_required_keys(merged_context, required_keys)
+    
     product_variations = []
 
     # Iterate over size and color combinations to create ProductVariation instances
@@ -349,12 +349,9 @@ def create_shipping_variations(product, merged_context) -> List[Shipping]:
     :param merged_context: A dictionary containing shipping details and options.
     :return: A list of Shipping instances.
     """
-    if not isinstance(product, Product):
-        raise ValueError(
-            f"The product instance is not of type Product. Expected Product instance, got {type(product).__name__}."
-        )
-
-   
+    
+    validate_instance_of(product, Product)
+    
     required_keys = [
         "delivery_options",
         "shipping_height",
@@ -363,11 +360,8 @@ def create_shipping_variations(product, merged_context) -> List[Shipping]:
         "shipping_weight",
     ]
     
+    validate_required_keys(merged_context, required_keys)
    
-    missing_keys = [key for key in required_keys if key not in merged_context]
-    if missing_keys:
-        raise KeyError(f"The following keys are missing in merged_context: {', '.join(missing_keys)}")
-
     delivery_variations = []
 
     for delivery_option in merged_context.get("delivery_options", []):
@@ -392,3 +386,83 @@ def create_shipping_variations(product, merged_context) -> List[Shipping]:
         )
 
     return delivery_variations
+
+
+
+def validate_required_keys(context, required_keys):
+    """
+    Validates that the required keys are present in the merged context.
+    
+    :param context: A dictionary containing product details.
+    :param required_keys: A list of required keys that must be present in merged_context.
+    :raises KeyError: If any required key is missing.
+    """
+    missing_keys = [key for key in required_keys if key not in context]
+    if missing_keys:
+        raise KeyError(f"The following keys are missing in context: {', '.join(missing_keys)}")
+
+
+
+def validate_instance_of(instance, expected_class):
+    """
+    Validates if the instance is an instance of the expected class.
+
+    :param instance: The object to validate.
+    :param expected_class: The class that the instance should be an instance of.
+    :raises ValueError: If the instance is not an instance of the expected class.
+    """
+    if not isinstance(instance, expected_class):
+        raise ValueError(
+            f"The instance is not of type {expected_class.__name__}. Expected {expected_class.__name__} instance, got {type(instance).__name__}."
+        )
+        
+
+
+def redirect_to_incomplete_step(request, template_name, context):
+    """
+    Handles navigation through a multi-step form for adding products. 
+    
+    This function prevents the user from moving to the next step if the current step is incomplete. 
+    Users are free to revisit any previous steps that have already been completed, either via the back button or a direct URL.
+
+    Parameters:
+        request: The HTTP request object.
+        template_name: The current template path for the product form. If the user is redirected, this template will not be rendered.
+        context: The context dictionary containing data to render the template.
+
+    Returns:
+        - Redirects the user to the first incomplete step if any are detected.
+        - Renders the current step's template if all prior steps are complete or if revisiting a completed step.
+    """
+    
+    steps = [
+        {"msg": "You cannot move to the next step because you haven't completed step 1", "url_name": "basic_description_form",     "stage": "step1"},
+        {"msg": "You cannot move to the next step because you haven't completed step 2", "url_name": "detailed_description_form",  "stage": "step2"},
+        {"msg": "You cannot move to the next step because you haven't completed step 3", "url_name": "pricing_and_inventory_form", "stage": "step3"},
+        {"msg": "You cannot move to the next step because you haven't completed step 4", "url_name": "images_and_media_form",      "stage": "step4"},
+        {"msg": "You cannot move to the next step because you haven't completed step 5", "url_name": "shipping_and_delivery_form", "stage": "step5"},
+        {"msg": "You cannot move to the next step because you haven't completed step 6", "url_name": "seo_and_meta_form",          "stage": "step6"},
+        {"msg": "You cannot move to the next step because you haven't completed step 7", "url_name": "nutrition_form",             "stage": "step7"},
+        {"msg": "You cannot move to the next step because you haven't completed step 8", "url_name": "add_information_form",       "stage": "step8"},
+    ]
+
+    current_url_name = resolve(request.path_info).url_name  
+
+    for step in steps:
+        url_name = step["url_name"]
+        stage_completed = request.session.get(f'{step["stage"]}_completed', False)
+
+        # Allow the user to stay on the current page if it is already completed 
+        # or be able to revisit any page that they have already completed
+        if current_url_name == url_name:
+            if stage_completed:
+                break  
+            else:
+                break   # Prevent moving forward on incomplete steps
+
+        if not stage_completed:
+            msg = step["msg"]
+            messages.info(request, msg)
+            return redirect(reverse(url_name))
+       
+    return render(request, template_name, context=context)

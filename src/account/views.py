@@ -5,7 +5,7 @@ from django.contrib.auth.decorators  import login_required
 from django.contrib                  import messages
 
 from account.utils.utils  import save_file_temporarily
-from utils.custom_errors  import EmptyProductFormError
+from utils.custom_errors  import EmptyProductFormError, EmptyMediaAndImagesError
 
 
 from .views_helpers import (get_base64_images_from_session, 
@@ -48,12 +48,12 @@ def product_management(request):
 
 @login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def add_basic_description(request):
-    
     return handle_form(
         request=request,
         form_class=BasicFormDescription,
         session_key='basic_form_description',
         next_url_name='detailed_description_form',
+        current_step=1,
         template_name='account/product-management/add-new-product/basic-product-information.html',
       
     )
@@ -66,6 +66,7 @@ def add_detailed_description(request):
         session_key='detailed_form_description',
         next_url_name='pricing_and_inventory_form',
         template_name='account/product-management/add-new-product/detailed-description-specs.html',
+        current_step=2,
         checkbox_fields_to_store=("size", "color")
     )
 
@@ -77,7 +78,8 @@ def add_pricing_and_inventory(request):
         form_class=PricingAndInventoryForm,
         session_key='pricing_and_inventory_form',
         next_url_name='images_and_media_form',
-        template_name='account/product-management/add-new-product/pricing-inventory.html'
+        template_name='account/product-management/add-new-product/pricing-inventory.html',
+        current_step=3,
     )
    
 
@@ -87,6 +89,7 @@ def add_images_and_media(request):
     context      = {"section_id" : "images-and-media"}
     initial_data = request.session.get("temp_file_paths", {})
     form         = ImageAndMediaForm(initial=initial_data)
+    
     
     if request.method == "POST":
         
@@ -100,8 +103,9 @@ def add_images_and_media(request):
                 
                 for field in file_fields:
                     if field in request.FILES:
-                        temp_file_paths[field]  = save_file_temporarily(request.FILES[field])
-                request.session["temp_file_paths"] = temp_file_paths
+                        temp_file_paths[field]     = save_file_temporarily(request.FILES[field])
+                request.session["temp_file_paths"]  = temp_file_paths
+                request.session["step4_completed"]  = True
                 
             return redirect(reverse("shipping_and_delivery_form"))
     
@@ -116,7 +120,8 @@ def add_shipping_and_delivery(request):
                        session_key="shipping_and_delivery",
                        next_url_name="seo_and_meta_form",
                        template_name="account/product-management/add-new-product/shipping-and-delivery.html",
-                       checkbox_fields_to_store=("shipping",)
+                       checkbox_fields_to_store=("shipping",),
+                       current_step=5,
                        )
 
 
@@ -128,6 +133,7 @@ def add_seo_management(request):
                        session_key="seo_management",
                        next_url_name="nutrition_form",
                        template_name="account/product-management/add-new-product/SEO-and-meta-information.html",
+                       current_step=6
                        )
 
 
@@ -138,6 +144,7 @@ def add_nutrition(request):
                        session_key="nutrition",
                        next_url_name="add_information_form",
                        template_name="account/product-management/add-new-product/nutrition.html",
+                       current_step=7,
                        
                        )
 
@@ -149,6 +156,7 @@ def add_additonal_information(request):
                        session_key="additional_information",
                        next_url_name="view_review",
                        template_name="account/product-management/add-new-product/additonal-information.html",
+                       current_step=8
                        )
 
 
@@ -176,10 +184,6 @@ def view_review(request):
 @login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
 def process_and_save_product_form(request):
     
-    image_and_media_session = request.session.get("temp_file_paths", {})
-        
-    images = get_base64_images_from_session(image_and_media_session)
-    
     merged_context = {
         **request.session.get("basic_form_description", {}),
         **request.session.get("detailed_form_description", {}),
@@ -194,6 +198,14 @@ def process_and_save_product_form(request):
     if not merged_context:
         raise EmptyProductFormError("No data was provided in the product form. Please ensure all required fields are filled.")
 
+    image_and_media_session = request.session.get("temp_file_paths", {})
+    
+    if not image_and_media_session:
+        raise EmptyMediaAndImagesError("No images were found. Please ensure that there are images associated with this product")
+    
+    
+    images = get_base64_images_from_session(image_and_media_session)
+    
     main_image_path, side_image_1_path, side_image_2_path = save_images(images)
     
     is_featured   = True  if merged_context.get("is_featured_item", "").lower() == "y"   else False
@@ -247,15 +259,18 @@ def process_and_save_product_form(request):
     )
     
     product.save()
-    product_variations_list = create_product_variations(product, merged_context)
+    product_variations_list     = create_product_variations(product, merged_context)
     product_shipping_variations = create_shipping_variations(product, merged_context)
     
     # Batch save for efficiency 
     ProductVariation.objects.bulk_create(product_variations_list)  
     Shipping.objects.bulk_create(product_shipping_variations)
     
+    # clear the session data
+    request.session.clear()
+    
     messages.success(request, "You have successfully added the product to the database")
-    return redirect("basic_description_form")
+    return redirect(reverse("basic_description_form"))
  
   
 @login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')

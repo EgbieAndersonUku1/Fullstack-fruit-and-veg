@@ -6,3 +6,9 @@ class ShippingDataError(Exception):
 class EmptyProductFormError(Exception):
     """Custom exception raised when the product form contains no data."""
     pass
+
+
+class EmptyMediaAndImagesError(Exception):
+    """Custom exception raised when the product form contains no data."""
+    pass
+    

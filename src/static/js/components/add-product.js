@@ -1,4 +1,4 @@
-
+import { validateElement } from "../errors/customErrors.js";
 import { minimumCharactersToUse } from "./characterCounter.js";
 import {disableEmptySelectOptions as handleEmptySelectOptions
 } from "../utils/utils.js";
@@ -12,6 +12,7 @@ const selectFormCategory      = document.getElementById("select-category");
 const selectPriceFormCategory = document.getElementById("select-discount");
 const deliveryOptions         = document.querySelectorAll(".options");
 const phoneNumber             = document.getElementById("manufacturer-phone-number");
+const reviewButton            = document.getElementById("review-submit-btn");
 
 
 // get the option
@@ -33,6 +34,8 @@ document.addEventListener("DOMContentLoaded", (e) => handleEmptySelectOptions(se
 // handle the phone number entry in real time
 phoneNumber?.addEventListener("input", handlePhoneNumOrganisation);
 
+
+validateElement(reviewButton, "There is no review button html element found with page");
 
 // checkboxes error msg selector
 const selectColorErrorMsg = document.getElementById("color-error-msg");
@@ -58,6 +61,7 @@ imageAndMediaForm?.addEventListener("submit", handleImageAndMediaForm);
 shippingAndDeliveryForm?.addEventListener("submit", handleShippingAndDeliveryForm);
 seoAndMetaForm?.addEventListener("submit", handleSeoAndMetaForm);
 additionInformationForm?.addEventListener("submit", handleAdditionalFormInfo);
+reviewButton?.addEventListener("click", handleReviewSubmit);
 
 
 
@@ -267,9 +271,16 @@ function handleFormSubmission(form) {
 }
 
 
+function handleReviewSubmit(e) {
+    e.preventDefault();
+
+
+}
+
+
+
 function handlePhoneNumOrganisation(e) {
    
-
     let phoneNumber          = e.target.value;
     let formattedPhoneNumber = '';
 
@@ -280,10 +291,10 @@ function handlePhoneNumOrganisation(e) {
         e.target.value = digitsOnly; 
     }
 
-    // Format the phone number by adding dashes after every third digit
+    // Format the phone number by adding dashes after every fourth digit
     for (let i = 0; i < digitsOnly.length; i++) {
        
-        if (i > 2 && i % 4 === 0) {
+        if (i > 0 && i % 4 === 0) {
 
             formattedPhoneNumber += '-';
         }
@@ -293,4 +304,6 @@ function handlePhoneNumOrganisation(e) {
 
     e.target.value = formattedPhoneNumber;
 }
+
+
 

@@ -24,6 +24,7 @@
 
     <!-- The navigation  -->
     {% include "partials/base_nav.html" %}
+  
 
     <!-- the main body -->
     <main>
@@ -32,6 +33,10 @@
 
             {% include "partials/logo_link.html" %}
 
+            <div class="messages">
+                {% include "partials/messages.html" %}
+            </div>
+            
             <div class="content-container">
         
                 <!-- Breadcrumb Navigation -->

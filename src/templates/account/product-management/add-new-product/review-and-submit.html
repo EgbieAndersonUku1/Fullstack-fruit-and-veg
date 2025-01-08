@@ -730,6 +730,7 @@
                             {{ additional_information_data.description }} 
                         {% else %}
                           You haven't entered a warranty policy. This specifies whether the item is covered by a warranty and the terms of that coverage.
+                          Note, this optional and the page will still submit even if one is not provided
                         {% endif %}
                     </p>
                 </div>
@@ -740,9 +741,10 @@
         </div>
 
 
-        <div class="button flex-end padding-top-md">
+        <a href="#" class="button flex-end padding-top-md">
             <button class="next-button" type="button" id="review-submit-btn">Submit &gt;</button>
-        </div>
+        </a>
+
     </div>
 
     <div class="progress-list">
