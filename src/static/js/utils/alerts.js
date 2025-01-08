@@ -45,6 +45,32 @@ const AlertUtils = {
         });
     },
 
+
+    async showSaveAlert({showDenyButton = true,  
+        showCancelButton = true, 
+        confirmButtonText = "Save", 
+        denyButtonText = "Don't save", 
+        title = "Do you want to save the changes?"
+      }) {
+          return Swal.fire({
+              title: title,
+              showDenyButton: showDenyButton,
+              showCancelButton: showCancelButton,
+              confirmButtonText: confirmButtonText,
+              denyButtonText: denyButtonText
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  Swal.fire("Saved!", "", "success");
+                  return true;
+              } else if (result.isDenied) {
+                  Swal.fire("Changes are not saved", "", "info");
+                  return false;
+              }
+              return null;
+          });
+      }
+      
+
 };
 
 export default AlertUtils;

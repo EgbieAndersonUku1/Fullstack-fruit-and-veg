@@ -10,23 +10,42 @@
     <form action="" method="post" class="add-product-form" id="shipping-and-delivery-form">
         {% csrf_token %}
         <!-- The shipping dimensions -->
-        <h4 class="padding-top-md" id="shipping-dimensions-heading">Shipping Dimensions</h4>
+        <h4 class="padding-top-sm" id="shipping-dimensions-heading">Shipping Dimensions</h4>
         <hr class="dividor">
-        <div class="dimensions" aria-labelledby="shipping-dimensions-heading">
+        <div class="shipping-dimensions" aria-labelledby="shipping-dimensions-heading">
             
-            {{ form.length.label_tag }}
-            {{ form.length }}
-
+            <!-- shipping height-->
+            <div class="shipping-label">
+                {{ form.shipping_length.label_tag }}
+            </div>
+            
+            <div class="helptext">
+                <small class="help-text">{{ form.shipping_length.help_text }}</small>
+            </div>
+            {{ form.shipping_length }}
             <span id="length-desc" class="sr-only">Enter the length in centimeters</span>
 
-
-            {{ form.width.label_tag }}
-            {{ form.width }}
+            <!-- shipping width-->
+            <div class="shipping-label padding-top-md">
+                {{ form.shipping_width.label_tag }}
+            </div>
+            
+            <div class="helptext">
+                <small class="help-text">{{ form.shipping_width.help_text }}</small>
+            </div>
+            {{ form.shipping_width }}
 
             <span id="width-desc" class="sr-only">Enter the width in centimeters</span>
 
-            {{ form.height.label_tag }}
-            {{ form.height }}
+            <div class="shipping-label padding-top-md">
+                {{ form.shipping_height.label_tag }}
+            </div>
+           
+            <div class="helptext">
+                <small class="help-text">{{ form.shipping_height.help_text }}</small>
+            </div>
+          
+            {{ form.shipping_height }}
 
             <span id="height-desc" class="sr-only">Enter the height in centimeters</span>
         </div>
@@ -36,8 +55,12 @@
         <hr class="dividor">
         <div class="shipping-weight" aria-labelledby="shipping-weight-heading">
 
-            {{ form.weight.label_tag }}
-            {{ form.weight }}
+            {{ form.shipping_weight.label_tag }}
+            <div class="helptext">
+                <small class="help-text">{{ form.shipping_weight.help_text }}</small>
+            </div>
+          
+            {{ form.shipping_weight }}
 
             <span id="weight-desc" class="sr-only">Enter the weight in kilograms</span>
         </div>

@@ -22,7 +22,7 @@
                         {% if basic_form_data.name %} 
                             {{ basic_form_data.name | capfirst }}
                         {% else %}
-                            You haven't entered a value 
+                            You haven't entered a product name
                         {% endif %}
 
                     </p>
@@ -40,7 +40,7 @@
                         {% if basic_form_data.category == "New" %} 
                             {{ basic_form_data.category | capfirst }}
                          {% else %}
-                             Not applicable since a new category has been chosen
+                            Not applicable, as a new category has been selected.
                         {% endif %}
                     </p>
                   
@@ -57,7 +57,7 @@
                         {% if basic_form_data.new_category != "N/A" %} 
                             {{ basic_form_data.new_category | capfirst }}
                         {% else %}
-                            Not applicable since the product category has already been selected
+                            This field is not applicable since the product category has already been selected from the dropdown menu.
                         {% endif %}
                     </p>
                    
@@ -74,7 +74,7 @@
                         {% if basic_form_data.brand %} 
                             {{ basic_form_data.brand | capfirst }}
                         {% else %}
-                             You haven't entered a value 
+                             You haven't entered a brand name.
                         {% endif %}
                     </p>
                    
@@ -91,7 +91,7 @@
                         {% if basic_form_data.sku %} 
                             {{ basic_form_data.sku | capfirst }}
                         {% else %}
-                            You haven't entered a value 
+                            You haven't entered a SKU value. A random value will be automatically generated and saved to the database upon submission
                         {% endif %}
                     </p>
                    
@@ -108,7 +108,7 @@
                         {% if basic_form_data.upc  %} 
                             {{ basic_form_data.upc | capfirst }}
                         {% else %}
-                            You haven't entered a value 
+                            You haven't entered a UPC value. A random value will be automatically generated and saved to the database upon submissio
                         {% endif %}
                     </p>
                    
@@ -125,7 +125,7 @@
                         {% if basic_form_data.short_description  %} 
                           <p>{{ basic_form_data.short_description | capfirst }}</p>
                         {% else %}
-                            You haven't entered a value 
+                            You haven't entered a short description for this product 
                         {% endif %}
                     </p>
                 </div>
@@ -149,7 +149,7 @@
                         {% if detailed_form_data.color  %} 
                             {{ detailed_form_data.color|join:", " }}
                         {% else %}
-                             You haven't entered a value 
+                             You haven't assigned a color option to this product.
                         {% endif %}
                     </p>
                 </div>
@@ -165,7 +165,7 @@
                         {% if detailed_form_data.length  %} 
                             {{ detailed_form_data.length  }} cm
                         {% else %}
-                            You haven't entered a value 
+                            There is no length associated with this product
                         {% endif %}
                     </p>
                    
@@ -180,7 +180,7 @@
                     {% if detailed_form_data.width  %} 
                         {{ detailed_form_data.width  }} cm
                     {% else %}
-                        You haven't entered a value 
+                        There is no width associated with this product
                     {% endif %}
                 </div>
                 <a class="edit" href="{% url 'detailed_description_form' %}">
@@ -195,7 +195,7 @@
                         {% if detailed_form_data.height  %} 
                             {{ detailed_form_data.height  }} cm
                         {% else %}
-                            You haven't entered a value 
+                            There is no height associated with this product
                         {% endif %}
                     </p>
                     
@@ -210,7 +210,7 @@
                     {% if detailed_form_data.size  %} 
                         {{ detailed_form_data.size|join:", "  }}
                     {% else %}
-                        You haven't entered a value 
+                        You haven't provided different size options for this product
                     {% endif %}
                 </div>
                 <a class="edit" href="{% url 'detailed_description_form' %}">
@@ -225,7 +225,7 @@
                         {% if detailed_form_data.weight  %} 
                             {{ detailed_form_data.weight  }} Grams
                         {% else %}
-                            You haven't entered a value 
+                            There is no weight assigned to this product
                         {% endif %}
                     </p>
                     
@@ -242,7 +242,7 @@
                         {% if detailed_form_data.description  %} 
                             <p id="detailed-description">{{ detailed_form_data.description  }}</p>
                         {% else %}
-                            You haven't entered a value 
+                           You haven't provided a description (long) for this product
                         {% endif %}
                     </p>
                     
@@ -268,7 +268,7 @@
                         {% if price_and_inventory_data.price %}
                            £{{ price_and_inventory_data.price }}
                         {% else %}
-                           You haven't entered a value
+                            There is no price assigned to this product
                         {% endif %}
 
                     </p>
@@ -295,7 +295,7 @@
                             {% endif %}
                             
                         {% else %}
-                            You haven't entered a value
+                             No availability options have been assigned to this product. Availability options indicate whether the item is in stock, out of stock, or available for pre-order.
                         {% endif %}
                     </p>
                    
@@ -349,7 +349,7 @@
                         {% elif price_and_inventory_data.quantity_stock == 0 %}
                             You currently have no stock
                         {% else %}
-                            You haven't entered a value
+                            You haven't entered a whether the item is in stock
                         {% endif %}
                     </p>
                    
@@ -369,7 +369,7 @@
                         {% elif price_and_inventory_data.minimum_order == 0 %}
                             There is no minimum stock order
                         {% else %}
-                            You haven't entered a value
+                            You haven't entered a minimum order quantity
                         {% endif %}
                     </p>
                   
@@ -389,7 +389,7 @@
                         {% elif price_and_inventory_data.maximum_order == 0 %}
                             There is no maximum stock order
                         {% else %}
-                            You haven't entered a value
+                            You haven't entered a maximum order quantity
                         {% endif %}
                     </p>
                    
@@ -450,10 +450,10 @@
 
                     <p id="product-shipping-length">
 
-                        {% if shipping_and_delivery_data.length %}
-                            {{ shipping_and_delivery_data.length }}
+                        {% if shipping_and_delivery_data.shipping_length %}
+                            {{ shipping_and_delivery_data.shipping_length }}
                         {% else %}
-                            You haven't entered a value
+                            You haven't entered the shipping length, which refers to the item's length when packaged, including the box or packaging material."
                         {% endif %}
                     </p>
                    
@@ -468,10 +468,10 @@
                     <h4 id="width-heading">Width</h4>
 
                     <p id="product-shipping-width">
-                        {% if shipping_and_delivery_data.width %}
-                            {{ shipping_and_delivery_data.width }}
+                        {% if shipping_and_delivery_data.shipping_width %}
+                            {{ shipping_and_delivery_data.shipping_width }}
                         {% else %}
-                             You haven't entered a value
+                        You haven't entered the shipping width, which refers to the item's width when packaged, including the box or packaging material
                         {% endif %}
                     </p>
                    
@@ -486,10 +486,10 @@
                     <h4 id="height-heading">Height</h4>
                     <p id="product-shipping-height">
 
-                        {% if shipping_and_delivery_data.height %}
-                            {{ shipping_and_delivery_data.height }}
+                        {% if shipping_and_delivery_data.shipping_height %}
+                            {{ shipping_and_delivery_data.shipping_height }}
                         {% else %}
-                            You haven't entered a value
+                        You haven't entered the shipping height, which refers to the item's height when packaged, including the box or packaging material
                         {% endif %}
                     </p>
                    
@@ -504,10 +504,10 @@
                     <h4 id="shipping-weight-heading">Shipping Weight (kg)</h4>
                     <p id="product-shipping-weight">
 
-                        {% if shipping_and_delivery_data.weight %}
-                             {{ shipping_and_delivery_data.weight }}
+                        {% if shipping_and_delivery_data.shipping_weight %}
+                             {{ shipping_and_delivery_data.shipping_weight }}
                         {% else %}
-                            You haven't entered a value
+                        You haven't entered the shipping weight, which refers to the item's weight when packaged, including the box or packaging material
                         {% endif %}
                     </p>
                     
@@ -521,11 +521,16 @@
                 <div class="info">
                     <h4 id="shipping-options-heading">Shipping Options</h4>
                     
-                    <p id="product-shipping-delivery-options">
-                        {% if shipping_and_delivery_data.shipping %}
-                            {{ shipping_and_delivery_data.shipping | join:", " }}
+                    <p class="text-capitalize padding-top-md underline padding-bottom-sm">key</p>
+                    <p>e = Express shipping</p>
+                    <p>s = Standard shipping</p>
+                    <p class="padding-bottom-sm">p = Premium shipping</p>
+
+                    <p id="product-shipping-delivery-options padding-top-sm">
+                        {% if shipping_and_delivery_data.delivery_options %}
+                        Shipping delivery options chosen: {{ shipping_and_delivery_data.delivery_options | join:", " }}
                         {% else %}
-                            You haven't entered a value
+                            You haven't entered a shipping delivery options for the product
                         {% endif %}
                     </p>
                    
@@ -550,7 +555,8 @@
                         {% if seo_management_data.meta_title %}
                             {{ seo_management_data.meta_title }}
                         {% else %}
-                            You haven't entered a value
+                        You haven't entered a meta title. The meta title appears as the clickable headline in search engine results and should 
+                        accurately describe the page content. Note that this is optional, and the form will still submit even if it is not provided.
                         {% endif %}
                     </p>
                     
@@ -570,8 +576,8 @@
                         {% if seo_management_data.meta_keywords %}
                             {{ seo_management_data.meta_keywords }}
                         {% else %}
-                        
-                            You haven't entered a value
+                        You haven't entered any meta keywords. Meta keywords are terms that help search engines 
+                        understand the content of your page. Note that this is optional, and the form will still submit even if they are not provided
                         {% endif %}
                     </p>
                    
@@ -590,7 +596,9 @@
                         {% if seo_management_data.meta_description %}
                             {{ seo_management_data.meta_description  }}
                         {% else %}
-                            You haven't entered a value
+                            You haven't entered a meta description. The meta description is a brief summary of the page content 
+                            that appears in search engine results. Note that this is optional, and the form will still submit even 
+                            if it is not provided.
                         {% endif %}
                     </p>
                    
@@ -613,10 +621,10 @@
 
                     <p id="product-manufacter-title">
 
-                        {% if additional_information_data.title %}
-                            {{ additional_information_data.title  }}
+                        {% if additional_information_data.manufacturer %}
+                            {{ additional_information_data.manufacturer  }}
                         {% else %}
-                            You haven't entered a value
+                        You haven't entered a manufacturer title. The manufacturer title identifies the brand or maker of the product.
                         {% endif %}
                     </p>
                    
@@ -627,15 +635,59 @@
                 </a>
             </div>
 
+            <div class="product-info space-between" role="group" aria-labelledby="manufacturer-title-heading">
+                <div class="info">
+                    <h4 id="manufacturer-title-heading">Manufacturer Description</h4>
+
+                    <p id="product-manufacter-description">
+
+                        {% if additional_information_data.manufacturer_description %}
+                            {{ additional_information_data.manufacturer_description  }}
+                        {% else %}
+                        You haven't entered a manufacturer description. This field is optional and will be submitted regardless of 
+                        whether it's filled out or not.
+                        {% endif %}
+                    </p>
+                   
+                   
+                </div>
+                <a class="edit" href="{% url 'add_information_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
+            </div>
+
+
+            <div class="product-info space-between" role="group" aria-labelledby="manufacturer-title-heading">
+                <div class="info">
+                    <h4 id="manufacturer-title-heading">Manufacturer Phone number</h4>
+
+                    <p id="product-manufacter-phone_number">
+
+                        {% if additional_information_data.manufacturer_phone_number %}
+                            {{ additional_information_data.manufacturer_phone_number  }}
+                        {% else %}
+                            You haven't entered a manufacturer's phone number. This field is optional and will be submitted regardless of 
+                            whether it's filled out or not.
+                        {% endif %}
+                    </p>
+                   
+                   
+                </div>
+                <a class="edit" href="{% url 'add_information_form' %}">
+                    <button aria-label="Edit length">Edit</button>
+                </a>
+            </div>
+
+
             <div class="product-info space-between" role="group" aria-labelledby="country-of-origin-heading">
                 <div class="info">
                     <h4 id="country-of-origin-heading">Country of origin </h4>
                     <p id="product-country-code">
 
-                        {% if additional_information_data.title %}
-                            Country code: {{ additional_information_data.countries  }}
+                        {% if additional_information_data.country_made %}
+                            Country code: {{ additional_information_data.country_made  }}
                         {% else %}
-                            You haven't entered a value
+                            You haven't entered a country associated with this product.
                         {% endif %}
                     </p>
                     
@@ -659,7 +711,7 @@
                                 {% endif %}
                         
                             {% else %}
-                                You haven't entered a value
+                                You haven't entered a return policy. This indicates whether the item is eligible for return or not
                             {% endif %}
                         </p>
                        
@@ -677,7 +729,8 @@
                         {% if additional_information_data.description %}
                             {{ additional_information_data.description }} 
                         {% else %}
-                            You haven't entered a value</p>
+                          You haven't entered a warranty policy. This specifies whether the item is covered by a warranty and the terms of that coverage.
+                          Note, this optional and the page will still submit even if one is not provided
                         {% endif %}
                     </p>
                 </div>
@@ -688,9 +741,10 @@
         </div>
 
 
-        <div class="button flex-end padding-top-md">
-            <button class="next-button" type="button" id="review-submit-btn">Submit &gt;</button>
-        </div>
+        <a href="{% url 'process_form' %}" class="button flex-end padding-top-md" id="review-submit-btn">
+            <button class="next-button" type="button" class="review-submit-btn">Submit &gt;</button>
+        </a>
+
     </div>
 
     <div class="progress-list">
@@ -701,7 +755,7 @@
         {% include "partials/form_progress_checker.html" with is_current_page=False current_page='Images and media' id='images-media' remove_opacity=True%}
         {% include "partials/form_progress_checker.html" with is_current_page=False current_page='Shipping and delivery' id='shipping-delivery' remove_opacity=True %}
         {% include "partials/form_progress_checker.html" with is_current_page=False current_page='SEO and Meta Information' id='seo-meta-info' remove_opacity=True%}
-        {% include "partials/form_progress_checker.html" with is_current_page=False current_page='Nutrition' id='nutrition' %}
+        {% include "partials/form_progress_checker.html" with is_current_page=False current_page='Nutrition' id='nutrition' remove_opacity=True %}
         {% include "partials/form_progress_checker.html" with is_current_page=False current_page='Additional information' id='additional-info' remove_opacity=True %}
         {% include "partials/form_progress_checker.html" with is_current_page=True current_page='Review and Submit' id='review-submit' %}
 
@@ -712,5 +766,5 @@
 
 {% block script %}
     <script src="{% static '/js/pages/review.js' %}" type="module"></script>
-    <script src=".{% static '/js/components/add-product.js' %}" type="module"></script>
+    <script src="{% static '/js/components/add-product.js' %}" type="module"></script>
 {% endblock %}

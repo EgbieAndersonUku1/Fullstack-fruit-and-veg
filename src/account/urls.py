@@ -15,6 +15,7 @@ urlpatterns = [
    path("product-management/add-new-product/nutrition/", view=views.add_nutrition, name="nutrition_form"),
    path("product-management/add-new-product/additional-information/", view=views.add_additonal_information, name="add_information_form"),
    path("product-management/add-new-product/review-and-submit/", view=views.view_review, name="view_review"),
+   path("product-management/add-new-product/save-product-form/", view=views.process_and_save_product_form, name="process_form"),
    path("product-management/add-new-product/view-products/", view=views.view_products, name="view_products"),
    path("orders/order/", view=views.orders, name="orders"),
    path("orders/view-item/<int:id>", views.view_item, name="view-item"),

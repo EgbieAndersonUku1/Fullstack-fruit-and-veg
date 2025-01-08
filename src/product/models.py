@@ -1,7 +1,9 @@
 from django.db import models
+from enum import Enum
 from django.forms import ValidationError
-from utils.generator import generate_token
 
+from utils.generator import generate_token
+from utils.custom_errors import ShippingDataError
 
 # Create your models here.
 
@@ -45,7 +47,7 @@ class Manufacturer(models.Model):
     name         = models.CharField(max_length=255)
     description  = models.TextField(blank=True, null=True)
     address      = models.CharField(max_length=255)
-    contact_num  = models.CharField(blank=True, null=True, max_length=12) 
+    contact_num  = models.CharField(blank=True, null=True, max_length=20) 
     is_certified = models.BooleanField(default=True)
     created_on   = models.DateTimeField(auto_now_add=True)
     modified_on  = models.DateTimeField(auto_now=True)
@@ -57,21 +59,36 @@ class Manufacturer(models.Model):
 class ProductVariation(models.Model):
     """The model represents the different product variations such as size, color, dimensions, etc."""
     
+    class Availability(models.TextChoices):
+        IN_STOCK     = ("is", "In Stock")
+        OUT_OF_STOCK = ("oo", "Out of Stock")
+        PRE_ORDER    = ("po", "Pre-order")
+        
     product             = models.ForeignKey("Product", on_delete=models.CASCADE, related_name='product_variations')
     color               = models.CharField(max_length=90)
-    size                = models.CharField(max_length=50, verbose_name="Size (e.g s, m, l, xl)")
-    height              = models.DecimalField(max_digits=10, decimal_places=2)
-    width               = models.DecimalField(max_digits=10, decimal_places=2)
-    length              = models.DecimalField(max_digits=10, decimal_places=2)
+    size                = models.CharField(max_length=50, verbose_name="Size (e.g. s, m, l, xl)")
+    height              = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Height (in cm)")  
+    width               = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Width (in cm)")    
+    length              = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Length (in cm)")   
     stock_quantity      = models.PositiveIntegerField(default=0)
     minimum_stock_order = models.PositiveBigIntegerField(default=0)
     maximum_stock_order = models.PositiveBigIntegerField(default=0)
-    availability        = models.BooleanField(default=False)
+    availability        = models.CharField(choices=Availability.choices, default=Availability.IN_STOCK, max_length=2)
     created_on          = models.DateTimeField(auto_now_add=True)
     modified_on         = models.DateTimeField(auto_now=True)
     
     def __str__(self) -> str:
         return f"{self.product.name} - {self.color} - {self.size}"
+    
+    def stock_availability(self):
+        """Return a readable display of the stock's availability."""
+        if self.availability == self.Availability.IN_STOCK:
+            return "In Stock"
+        elif self.availability == self.Availability.OUT_OF_STOCK:
+            return "Out of Stock"
+        elif self.availability == self.Availability.PRE_ORDER:
+            return "Pre-order"
+        return "Unknown"  
     
     def clean(self):
         if self.minimum_stock_order > self.maximum_stock_order:
@@ -90,18 +107,25 @@ class ProductVariation(models.Model):
 class Shipping(models.Model):
     """The model represents the shipping"""
     
-    product              = models.ForeignKey("Product", on_delete=models.SET_NULL, blank=True, null=True )
-    shipping_height      = models.DecimalField(max_digits=10, decimal_places=2)  
-    shipping_width       = models.DecimalField(max_digits=10, decimal_places=2)  
-    shipping_length      = models.DecimalField(max_digits=10, decimal_places=2)  
-    shipping_weight      = models.DecimalField(max_digits=10, decimal_places=2)  
-    standard_shipping    = models.DecimalField(max_digits=10, decimal_places=2)  
-    premium_shipping     = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, default=0.00)  
-    express_shipping     = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, default=0.00)  
-    created_on           = models.DateTimeField(auto_now_add=True)
-    modified_on          = models.DateTimeField(auto_now=True)
-            
+    class ShippingType(models.TextChoices):
+        STANDARD = "s", "Standard"
+        EXPRESS = "e",  "Express"
+        PREMIUM = "p",  "Premium"
+
+    product      = models.ForeignKey("Product", on_delete=models.CASCADE, blank=True, null=True)
+    height       = models.DecimalField(max_digits=10, decimal_places=2, default=0)  
+    width        = models.DecimalField(max_digits=10, decimal_places=2, default=0)  
+    length       = models.DecimalField(max_digits=10, decimal_places=2, default=0)  
+    weight       = models.DecimalField(max_digits=10, decimal_places=2, default=0)  
+    price        = models.DecimalField(max_digits=10, decimal_places=2, default=0) 
+    shipping_type = models.CharField(choices=ShippingType.choices, default=ShippingType.STANDARD)
+    created_on   = models.DateTimeField(auto_now_add=True)
+    modified_on  = models.DateTimeField(auto_now=True)
+        
     def __str__(self) -> str:
+        return self.shipping_type
+    
+    def product_name(self):
         return self.product.name
     
     def clean(self):
@@ -110,13 +134,11 @@ class Shipping(models.Model):
         before saving to the database.
         """
         negative_fields = {
-            "shipping_height": self.shipping_height,
-            "shipping_width": self.shipping_width,
-            "shipping_length": self.shipping_length,
-            "shipping_weight": self.shipping_weight,
-            "standard_shipping": self.standard_shipping,
-            "premium_shipping": self.premium_shipping,
-            "express_shipping": self.express_shipping,
+            "shipping_height": self.height,
+            "shipping_width": self.width,
+            "shipping_length": self.length,
+            "shipping_weight": self.weight,
+            "standard_shipping": self.price,
         }
         
         for field, value in negative_fields.items():
@@ -124,47 +146,88 @@ class Shipping(models.Model):
                 raise ValidationError(f"The {field.replace("_", " ")} cannot be less that 0")
        
             
-           
+    def apply_shipping_options(self, shipping_data, save=True):
+        """
+        Updates the shipping object based on the provided shipping data.
+        """
+        if not isinstance(shipping_data, dict):
+            raise ShippingDataError(f"Expected 'shipping_data' to be a dictionary, got {type(shipping_data).__name__}.")
+
+        if "delivery_options" not in shipping_data:
+            raise ShippingDataError("'delivery_options' key is missing from the shipping_data dictionary.")
+
+        # Extract and validate delivery options
+        delivery_options = shipping_data.get("delivery_options", [])
+        if not isinstance(delivery_options, list):
+            raise ShippingDataError(f"'delivery_options' should be a list, got {type(delivery_options).__name__}.")
+
+        for delivery_option in delivery_options:
+            if delivery_option.lower() == Shipping.ShippingType.STANDARD.value > 0:
+                self.shipping_type = shipping_data.get("standard_shipping", 0)
+            elif delivery_option.lower() == Shipping.ShippingType.EXPRESS.value > 0:
+                self.shipping_type = shipping_data.get("express_shipping", 0)
+            elif delivery_option.lower() == Shipping.ShippingType.PREMIUM.value > 0:
+                self.shipping_type = shipping_data.get("premium_shipping", 0)
+
+        if save:
+            self.save()
+
+            
 class Product(models.Model):
     """The model represent the fields for each product e.g product name, description, etc"""
     
-    name               = models.CharField(max_length=150)
-    long_description   = models.TextField(verbose_name="Long description")
-    short_description  = models.TextField(max_length=255, verbose_name="Short description")
-    is_featured        = models.BooleanField(default=False)
-    category           = models.ForeignKey(Category, on_delete=models.CASCADE, null=False, related_name="products")
-    brand              = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products')
-    sku                = models.CharField(max_length=255, unique=True, default=generate_token) 
-    upc                = models.CharField(max_length=255, unique=True, default=generate_token) 
-    price              = models.DecimalField(max_digits=10, decimal_places=2)    
-    discount           = models.BooleanField(default=False)
-    discount_price     = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    primary_image      = models.ImageField(upload_to="product_images")
-    side_image         = models.ImageField(upload_to="product_images")
-    side_image_2       = models.ImageField(upload_to="product_images")
-    meta_title         = models.CharField(max_length=255, blank=True, null=True)
-    meta_keywords      = models.CharField(max_length=255, blank=True, null=True)
-    meta_description   = models.TextField(blank=True, null=True)
-    manufacturer       = models.ForeignKey(Manufacturer, on_delete=models.SET_NULL, related_name="products", null=True, blank=True)
-    country_of_origin  = models.CharField(max_length=50)
-    nutrition          = models.JSONField(null=True, blank=True)
-    warranty_period    = models.TextField(blank=True, null=True,  default="No warranty")
-    created_on         = models.DateTimeField(auto_now_add=True)
-    modified_on        = models.DateTimeField(auto_now=True)
-            
+    name                = models.CharField(max_length=150)
+    long_description    = models.TextField(verbose_name="Long description")
+    short_description   = models.TextField(max_length=255, verbose_name="Short description")
+    is_featured         = models.BooleanField(default=False)
+    category            = models.ForeignKey(Category, on_delete=models.CASCADE, null=False, related_name="products")
+    brand               = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products')
+    sku                 = models.CharField(max_length=255, unique=True) 
+    upc                 = models.CharField(max_length=255, unique=True) 
+    price               = models.DecimalField(max_digits=10, decimal_places=2)    
+    is_discounted_price = models.BooleanField(default=False)
+    discount_price      = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    weight              = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    primary_image       = models.ImageField(upload_to="product_images")
+    side_image          = models.ImageField(upload_to="product_images")
+    side_image_2        = models.ImageField(upload_to="product_images")
+    meta_title          = models.CharField(max_length=255, blank=True, null=True)
+    meta_keywords       = models.CharField(max_length=255, blank=True, null=True)
+    meta_description    = models.TextField(blank=True, null=True)
+    manufacturer        = models.ForeignKey(Manufacturer, on_delete=models.SET_NULL, related_name="products", null=True, blank=True)
+    country_of_origin   = models.CharField(max_length=50)
+    nutrition           = models.JSONField(null=True, blank=True)
+    warranty_period     = models.TextField(blank=True, null=True,  default="No warranty")
+    is_returnable       = models.BooleanField(default=False)
+    recommendation      = models.CharField(max_length=255, blank=True, null=True)
+    created_on          = models.DateTimeField(auto_now_add=True)
+    modified_on         = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.name 
+    
+    def brand_name(self):
+        return self.brand.title()
+    
     def get_warranty_period(self):
         return self.warranty_period or "No warranty"
     
     def clean(self):
-        if self.discount and not self.discount_price:
+        if self.is_discounted_price and not self.discount_price:
             raise ValidationError("Discount price must be set when discount is enabled.")
-        if not self.discount and self.discount_price:
+        if not self.is_discounted_price and self.discount_price:
             raise ValidationError("Discount price should be empty when discount is disabled.")
-        if self.discount and self.discount_price and (self.price >= self.discount_price):
+        if self.is_discounted_price and self.discount_price and (self.price >= self.discount_price):
             raise ValidationError("Discount price cannot be greater or equal to the actual price")
 
     def get_discounted_price(self):
         """Returns the discounted price else returns the actual price"""  
         return self.discount_price if self.discount else self.price      
-
-            
+    
+    def save(self, *args, **kwargs):
+        """Allows the save method to be overriden"""
+        if not self.sku:
+            self.sku = generate_token()
+        if not self.upc:
+            self.upc = generate_token()
+        super().save(*args, **kwargs)

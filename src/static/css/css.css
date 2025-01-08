@@ -4270,6 +4270,7 @@ small.help-text {
     color: #6c757d; 
     font-size: 0.875em; 
     cursor: pointer;
+    font-style: italic;
 }
 
 small.help-text:hover {

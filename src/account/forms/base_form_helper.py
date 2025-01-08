@@ -1,7 +1,7 @@
 from django import forms
 
 class BaseFormMeasurements(forms.Form):
-    length = forms.DecimalField(label="Length (centimetres)", max_digits=10, decimal_places=2, 
+    length = forms.DecimalField(label="Length", max_digits=10, decimal_places=2, 
                                 widget=forms.NumberInput(attrs={
                                     "id": "length",
                                     "min": "0.1",
@@ -12,7 +12,7 @@ class BaseFormMeasurements(forms.Form):
                                     
                                 }))
     
-    width = forms.DecimalField(label="Width (centimetres)", max_digits=10, decimal_places=2, 
+    width = forms.DecimalField(label="Width", max_digits=10, decimal_places=2, 
                                 widget=forms.NumberInput(attrs={
                                     "id": "width",
                                     "min": "0.1",
@@ -23,7 +23,7 @@ class BaseFormMeasurements(forms.Form):
                                     
                                 }))
     
-    height = forms.DecimalField(label="Height (centimetres)", max_digits=10, decimal_places=2, 
+    height = forms.DecimalField(label="Height", max_digits=10, decimal_places=2, 
                                 widget=forms.NumberInput(attrs={
                                     "id": "height",
                                     "min": "0.1",
@@ -33,7 +33,7 @@ class BaseFormMeasurements(forms.Form):
                                     "aria-describedby":"height-desc",
                                 }))
     
-    weight = forms.DecimalField(label="Weight (grams)", max_digits=10, decimal_places=2, 
+    weight = forms.DecimalField(label="Weight", max_digits=10, decimal_places=2, 
                                 widget=forms.NumberInput(attrs={
                                     "id": "weight",
                                     "min": "0.01",

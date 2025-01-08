@@ -1,5 +1,8 @@
 from datetime import datetime
 from decimal import Decimal
+from django.core.files.base import ContentFile
+
+import base64
 
 
 def convert_decimal_to_float(data):
@@ -35,3 +38,15 @@ def string_to_date(date_str: str, date_format: str = "%Y-%m-%d") -> datetime.dat
         return datetime.strptime(date_str, date_format).date()
     except ValueError:
         raise ValueError(f"Unable to parse date string: {date_str}")
+    
+
+
+def encode_image_bytes_to_base64(image_bytes):
+    return base64.b64encode(image_bytes).decode('utf-8')
+    
+    
+def decode_base64_to_image_bytes(base64_string):
+    image_data = base64.b64decode(base64_string)
+    file = ContentFile(image_data)
+    return file
+

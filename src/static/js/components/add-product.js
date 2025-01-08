@@ -1,26 +1,36 @@
-
 import { minimumCharactersToUse } from "./characterCounter.js";
-import {disableEmptySelectOptions as handleEmptySelectOptions
-} from "../utils/utils.js";
-
+import {disableEmptySelectOptions as handleEmptySelectOptions} from "../utils/utils.js";
+import { saveToLocalStorage, getItemFromLocalStorage, removeItemFromLocalStorage } from "../utils/utils.js";
+import { redirectToNewPage } from "../utils/utils.js";
 import AlertUtils from "../utils/alerts.js";
 import { toggleInputVisibilityBasedOnSelection } from "../utils/formUtils.js";
 
 
-
+// selectors
 const selectFormCategory      = document.getElementById("select-category");
 const selectPriceFormCategory = document.getElementById("select-discount");
-const deliveryOptions         = document.querySelectorAll(".options");
+const phoneNumber             = document.getElementById("manufacturer-phone-number");
+const reviewButton            = document.getElementById("review-submit-btn");
 
-
-// get the option
-const standardShippingDiv = document.getElementById("standard");
-const premiumShippingDiv  = document.getElementById("premium");
-const expressShippingDiv  = document.getElementById("express");
 
 
 const PRODUCT_SELECT_OPTION_VALUE  = "new";
 const DISCOUNT_SELECT_OPTION_VALUE = "yes"
+const PAGE_COMPLETE                = "pageCompleted";
+
+
+let pageCompleted = getItemFromLocalStorage(PAGE_COMPLETE, true) || {
+    step1: false,
+    step2: false,
+    step3: false,
+    step4: false,
+    step5: false,
+    step6: false,
+    step7: false,
+    step8: false,
+
+};
+
 
 // handle the empty field in the select option for basic form
 document.addEventListener("DOMContentLoaded", (e) => handleEmptySelectOptions(selectFormCategory))
@@ -29,7 +39,8 @@ document.addEventListener("DOMContentLoaded", (e) => handleEmptySelectOptions(se
 document.addEventListener("DOMContentLoaded", (e) => handleEmptySelectOptions(selectPriceFormCategory))
 
 
-
+// handle the phone number entry in real time
+phoneNumber?.addEventListener("input", handlePhoneNumOrganisation);
 
 
 // checkboxes error msg selector
@@ -46,6 +57,7 @@ const imageAndMediaForm = document.getElementById("image-media-form");
 const shippingAndDeliveryForm = document.getElementById("shipping-and-delivery-form");
 const seoAndMetaForm = document.getElementById("seo-and-meta-form");
 const additionInformationForm = document.getElementById("additional-information-form");
+const nutritionForm = document.getElementById("nutrition-form");
 
 
 // AddEventListners for the forms
@@ -55,8 +67,9 @@ pricingInventoryForm?.addEventListener("submit", handlePriceInventoryForm);
 imageAndMediaForm?.addEventListener("submit", handleImageAndMediaForm);
 shippingAndDeliveryForm?.addEventListener("submit", handleShippingAndDeliveryForm);
 seoAndMetaForm?.addEventListener("submit", handleSeoAndMetaForm);
+nutritionForm?.addEventListener("submit", handleNutritionForm);
 additionInformationForm?.addEventListener("submit", handleAdditionalFormInfo);
-
+reviewButton?.addEventListener("click", handleReviewSubmit);
 
 
 // field selectors for textArea fields
@@ -149,7 +162,7 @@ selectDiscountCategoryElement?.addEventListener("change", () => toggleInputVisib
 // Handles the form submission for basic-product-information.html
 function handleBasicInformationForm(e) {
     e.preventDefault();
-    handleFormSubmission(basicForm);
+    handleFormSubmission(basicForm, "step1");
     
 }
 
@@ -192,7 +205,7 @@ function handleDetailedInformationForm(e) {
 
 
     if (detailedForm.reportValidity() && formComplete) {
-        handleFormSubmission(detailedForm)
+        handleFormSubmission(detailedForm, "step2")
     }
 }
 
@@ -200,7 +213,7 @@ function handleDetailedInformationForm(e) {
 // handles pricing-inventory.html
 function handlePriceInventoryForm(e) {
     e.preventDefault();
-    handleFormSubmission(pricingInventoryForm);
+    handleFormSubmission(pricingInventoryForm, "step3");
 
 };
 
@@ -210,7 +223,7 @@ function handlePriceInventoryForm(e) {
 function handleImageAndMediaForm(e) {
 
     e.preventDefault();
-    handleFormSubmission(imageAndMediaForm)
+    handleFormSubmission(imageAndMediaForm, "step4")
   
 };
 
@@ -237,42 +250,116 @@ function handleShippingAndDeliveryForm(e) {
     } 
 
     if (shippingAndDeliveryForm.reportValidity() && formComplete) {
-        handleFormSubmission(shippingAndDeliveryForm)
+        handleFormSubmission(shippingAndDeliveryForm, "step5");
     }
 
 }
-
 
 
 
 // handles seo-and-meta-information.html
 function handleSeoAndMetaForm(e) {
     e.preventDefault();
-    handleFormSubmission(seoAndMetaForm);
+    handleFormSubmission(seoAndMetaForm, "step6");
 };
 
 
 // handles additional-information.html
 function handleAdditionalFormInfo(e) {
     e.preventDefault();
-    handleFormSubmission(additionInformationForm);
+    handleFormSubmission(additionInformationForm, "step8");
 }
 
 
-function handleFormSubmission(form) {
+function handleFormSubmission(form, step) {
     if (form.reportValidity()) {
+        markPageAsComplete(step);
         form.submit()
     }
 }
 
 
+function handleNutritionForm(e) {
+    e.preventDefault();
+    handleFormSubmission(nutritionForm, "step7")
+}
+
+
+function handleReviewSubmit(e) {
+    e.preventDefault();
+   
+    console.log(reviewButton.href);
+    const canSubmit = checkIfCanSubmit();
+
+    if (canSubmit) {
+        AlertUtils.showSaveAlert({showDenyButton: true}).then((value) => {
+            if (value) {
+                const submitUrl = reviewButton.href;
+                if (!submitUrl) {
+                    throw new Error(`Something went wrong and the submission url was found got ${submitUrl}`);
+                };
+               
+                removeItemFromLocalStorage(PAGE_COMPLETE);
+                redirectToNewPage(submitUrl);
+              
+            }
+        });
+    }
+}
+
+
+function handlePhoneNumOrganisation(e) {
+   
+    let phoneNumber          = e.target.value;
+    let formattedPhoneNumber = '';
+
+    // Remove any non-numeric characters
+    const digitsOnly = phoneNumber.replace(/\D/g, '');
+
+    if (phoneNumber !== digitsOnly) {
+        e.target.value = digitsOnly; 
+    }
+
+    // Format the phone number by adding dashes after every fourth digit
+    for (let i = 0; i < digitsOnly.length; i++) {
+       
+        if (i > 0 && i % 4 === 0) {
+
+            formattedPhoneNumber += '-';
+        }
+        formattedPhoneNumber += digitsOnly[i];
+    
+    }
+
+    e.target.value = formattedPhoneNumber;
+}
 
 
 
+function markPageAsComplete(step) {
+
+    pageCompleted[step] = true;
+    saveToLocalStorage(PAGE_COMPLETE, pageCompleted, true);
+  
+}
 
 
+function checkIfCanSubmit() {
+    for (let key in pageCompleted) {
 
+        if (!pageCompleted[key]) {
+            const stepNo = key.slice(-1);
 
+            AlertUtils.showAlert({
+                "title": "Incomplete step",
+                "icon": "warning",
+                "text": `Step ${stepNo} hasn't been completed!`,
+                "confirmButtonText": "Ok",
+            })
+            return false;
+        }
+    };
+    return true;
+}
 
-
-
+console.log(pageCompleted);
