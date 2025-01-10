@@ -212,6 +212,7 @@ class ShippingAndDeliveryForm(forms.Form):
                                      "step": "0.01",
                                      "min": "0.00",
                                      "max": "10000",
+                                     "value": "0.00",
                                     
                                  }))
     
@@ -223,6 +224,7 @@ class ShippingAndDeliveryForm(forms.Form):
                                      "step": "0.01",
                                      "min": "0.00",
                                      "max": "10000",
+                                     "value": "0.00",
                                  }))
     
     express_shipping = forms.CharField(required=False, widget=forms.TextInput(attrs={
@@ -233,6 +235,7 @@ class ShippingAndDeliveryForm(forms.Form):
                                      "step": "0.01",
                                      "min": "0.00",
                                      "max": "10000",
+                                     "value": "0.00",
                                  }))
     delivery_options = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
                                                 choices=DELIVERY_OPTIONS,

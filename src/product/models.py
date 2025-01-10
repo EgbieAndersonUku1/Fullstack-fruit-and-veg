@@ -1,5 +1,5 @@
 from django.db import models
-from enum import Enum
+from django.db.models.functions import Lower
 from django.forms import ValidationError
 
 from utils.generator import generate_token
@@ -11,13 +11,13 @@ from utils.custom_errors import ShippingDataError
 class Brand(models.Model):
     """The model represents the brand for a given product"""
     
-    name        = models.CharField(max_length=100)
+    name        = models.CharField(max_length=100, db_index=True, unique=True, null=False)
     description = models.TextField(blank=True, null=True)
     created_on  = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=True)
     
     class Meta:
-        ordering = ['name'] 
+        ordering = [Lower('name')]   # Ensures case-insensitive alphabetical ordering
         
     def __str__(self) -> str:
         return self.name
@@ -78,7 +78,7 @@ class ProductVariation(models.Model):
     modified_on         = models.DateTimeField(auto_now=True)
     
     def __str__(self) -> str:
-        return f"{self.product.name} - {self.color} - {self.size}"
+        return f"Name: <{self.product.name.title()}> - Colour: <{self.color.title()}> - Size: <{self.size.title()}>"
     
     def stock_availability(self):
         """Return a readable display of the stock's availability."""
@@ -86,7 +86,7 @@ class ProductVariation(models.Model):
             return "In Stock"
         elif self.availability == self.Availability.OUT_OF_STOCK:
             return "Out of Stock"
-        elif self.availability == self.Availability.PRE_ORDER:
+        else: 
             return "Pre-order"
         return "Unknown"  
     
@@ -123,7 +123,13 @@ class Shipping(models.Model):
     modified_on  = models.DateTimeField(auto_now=True)
         
     def __str__(self) -> str:
-        return self.shipping_type
+        if self.shipping_type == self.ShippingType.STANDARD:
+            return "Shipping Type - Standard"
+        elif self.shipping_type == self.ShippingType.EXPRESS:
+            return "Shipping Type - Express"
+        else: 
+            return "Shipping Type - Premium"
+        
     
     def product_name(self):
         return self.product.name
