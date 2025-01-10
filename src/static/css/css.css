@@ -4266,6 +4266,7 @@ legend {
     font-size: var(--font-size-sm);
 }
 
+.helptext, 
 small.help-text {
     color: #6c757d; 
     font-size: 0.875em; 
