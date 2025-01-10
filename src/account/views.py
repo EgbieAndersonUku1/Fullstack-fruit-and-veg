@@ -229,6 +229,7 @@ def process_and_save_product_form(request):
         description=merged_context.get("manufacturer_description"),
         address=merged_context.get("manufacturer_address"),
         contact_num=merged_context.get("manufacturer_phone_number"),
+        is_certified=merged_context.get("is_certified"),
     )
     
     manufactuer.save()

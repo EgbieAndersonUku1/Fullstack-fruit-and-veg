@@ -26,7 +26,7 @@ class Brand(models.Model):
 class Category(models.Model):
     """The model represents the category for each product"""
     
-    category    = models.CharField(max_length=100)
+    category    = models.CharField(max_length=100, unique=True, null=False, db_index=True)
     description = models.TextField(blank=True, null=True)
     created_on  = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=True)
@@ -34,7 +34,7 @@ class Category(models.Model):
     class Meta:
         verbose_name        = "Category"
         verbose_name_plural = "Categories"
-        ordering = ['category'] 
+        ordering            = ['category'] 
         
     def __str__(self) -> str:
         return self.category
@@ -44,9 +44,9 @@ class Category(models.Model):
 class Manufacturer(models.Model):
     """The model represents the manufacturer of the product"""
     
-    name         = models.CharField(max_length=255)
+    name         = models.CharField(max_length=255, unique=True, db_index=True, null=False)
     description  = models.TextField(blank=True, null=True)
-    address      = models.CharField(max_length=255)
+    address      = models.CharField(max_length=255, null=True)
     contact_num  = models.CharField(blank=True, null=True, max_length=20) 
     is_certified = models.BooleanField(default=True)
     created_on   = models.DateTimeField(auto_now_add=True)
@@ -86,7 +86,7 @@ class ProductVariation(models.Model):
             return "In Stock"
         elif self.availability == self.Availability.OUT_OF_STOCK:
             return "Out of Stock"
-        else: 
+        elif self.availability == self.Availability.PRE_ORDER:
             return "Pre-order"
         return "Unknown"  
     

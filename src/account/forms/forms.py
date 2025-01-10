@@ -283,7 +283,7 @@ class NutritionForm(forms.Form):
     
     
 class AdditionalInformationForm(forms.Form):
-    RETURN_POLICY_OPTIONS = [("n", "No"), ("y", "Yes")]
+    OPTIONS = [("n", "No"), ("y", "Yes")]
     COUNTRIES_CHOICES = parse_country_file("data/countries.txt")
 
     manufacturer = forms.CharField(label="Manufacturer title*", min_length=4, 
@@ -294,6 +294,14 @@ class AdditionalInformationForm(forms.Form):
                                 "placeholder": "Enter a manufacturer title...",
                             }))
 
+    
+    is_certified = forms.ChoiceField(label="is Certified*", 
+                                     choices=OPTIONS, 
+                                     help_text="Select whether the item or user is certified.",
+                                     widget=forms.Select(attrs={
+        "id": "is_certified",
+        "class": "select-category",
+    }))
     
     manufacturer_address = forms.CharField(label="Manufacturer address",
             required=False,
@@ -307,7 +315,9 @@ class AdditionalInformationForm(forms.Form):
                 "placeholder": "Optional address about the manufacturer. Maximum characters 1000 characters..."
             })
         )
-      
+    
+    
+    
     manufacturer_description = forms.CharField(label="Manufacturer description",
             required=False,
             max_length=255,  
@@ -343,8 +353,8 @@ class AdditionalInformationForm(forms.Form):
 
     
     return_policy = forms.ChoiceField(label="Return policy",
-                                      choices=RETURN_POLICY_OPTIONS,
-                                      initial=RETURN_POLICY_OPTIONS[0],
+                                      choices=OPTIONS,
+                                      initial=OPTIONS[0],
                                       widget=forms.Select(attrs={
                                           "aria-label": "Select Return Policy",
                                           

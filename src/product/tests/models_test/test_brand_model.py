@@ -87,7 +87,7 @@ class BrandModelTest(TestCase):
         special_name = "Test Brand @2025!"
         self.brand.name = special_name
         self.brand.save()
-        
+        self.brand.refresh_from_db()
         self.assertEqual(str(self.brand), special_name, msg="The __str__ method did not return the correct value for special characters.")
 
     
