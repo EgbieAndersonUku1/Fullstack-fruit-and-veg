@@ -65,11 +65,11 @@ class ProductVariation(models.Model):
         PRE_ORDER    = ("po", "Pre-order")
         
     product             = models.ForeignKey("Product", on_delete=models.CASCADE, related_name='product_variations')
-    color               = models.CharField(max_length=90)
-    size                = models.CharField(max_length=50, verbose_name="Size (e.g. s, m, l, xl)")
-    height              = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Height (in cm)")  
-    width               = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Width (in cm)")    
-    length              = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Length (in cm)")   
+    color               = models.CharField(max_length=90, null=False)
+    size                = models.CharField(max_length=50, verbose_name="Size (e.g. s, m, l, xl)", null=False)
+    height              = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Height (in cm)", null=False)  
+    width               = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Width (in cm)", null=False)    
+    length              = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Length (in cm)", null=False)   
     stock_quantity      = models.PositiveIntegerField(default=0)
     minimum_stock_order = models.PositiveBigIntegerField(default=0)
     maximum_stock_order = models.PositiveBigIntegerField(default=0)
@@ -127,10 +127,8 @@ class Shipping(models.Model):
             return "Shipping Type - Standard"
         elif self.shipping_type == self.ShippingType.EXPRESS:
             return "Shipping Type - Express"
-        else: 
-            return "Shipping Type - Premium"
+        return "Shipping Type - Premium"
         
-    
     def product_name(self):
         return self.product.name
     

@@ -35,7 +35,7 @@ def create_test_manufacturer(
         Manufacturer: A new instance of the Manufacturer model.
 
     Example usage:
-        >>> manufacturer = create_manufacturer_instance(
+        >>> manufacturer = create_test_manufacturer(
         ...     name="Test Manufacturer", 
         ...     description="A test manufacturer", 
         ...     address="123 Test St", 
