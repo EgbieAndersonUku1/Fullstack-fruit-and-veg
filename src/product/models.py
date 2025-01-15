@@ -1,6 +1,9 @@
 from django.db import models
 from django.db.models.functions import Lower
 from django.forms import ValidationError
+from phonenumber_field.modelfields import PhoneNumberField
+
+
 
 from utils.generator import generate_token
 from utils.custom_errors import ShippingDataError
@@ -47,7 +50,7 @@ class Manufacturer(models.Model):
     name         = models.CharField(max_length=255, unique=True, db_index=True, null=False)
     description  = models.TextField(blank=True, null=True)
     address      = models.CharField(max_length=255, null=True)
-    contact_num  = models.CharField(blank=True, null=True, max_length=20) 
+    contact_num  = PhoneNumberField(blank=True, null=True) 
     is_certified = models.BooleanField(default=True)
     created_on   = models.DateTimeField(auto_now_add=True)
     modified_on  = models.DateTimeField(auto_now=True)
@@ -186,8 +189,8 @@ class Product(models.Model):
     is_featured         = models.BooleanField(default=False)
     category            = models.ForeignKey(Category, on_delete=models.CASCADE, null=False, related_name="products")
     brand               = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products')
-    sku                 = models.CharField(max_length=255, unique=True) 
-    upc                 = models.CharField(max_length=255, unique=True) 
+    sku                 = models.CharField(max_length=255, unique=True, null=False) 
+    upc                 = models.CharField(max_length=255, unique=True, null=False) 
     price               = models.DecimalField(max_digits=10, decimal_places=2)    
     is_discounted_price = models.BooleanField(default=False)
     discount_price      = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
@@ -199,7 +202,7 @@ class Product(models.Model):
     meta_keywords       = models.CharField(max_length=255, blank=True, null=True)
     meta_description    = models.TextField(blank=True, null=True)
     manufacturer        = models.ForeignKey(Manufacturer, on_delete=models.SET_NULL, related_name="products", null=True, blank=True)
-    country_of_origin   = models.CharField(max_length=50)
+    country_of_origin   = models.CharField(max_length=255)
     nutrition           = models.JSONField(null=True, blank=True)
     warranty_period     = models.TextField(blank=True, null=True,  default="No warranty")
     is_returnable       = models.BooleanField(default=False)
@@ -234,4 +237,7 @@ class Product(models.Model):
             self.sku = generate_token()
         if not self.upc:
             self.upc = generate_token()
+        
+        if len(self.short_description) > 255:
+            raise ValidationError("Short description cannot exceed 255 characters.")
         super().save(*args, **kwargs)

@@ -55,6 +55,7 @@ ALLOWED_HOSTS = [
 INSTALLED_APPS = [
     'jazzmin',     
     'compressor',
+    'phonenumber_field',
     'django_ckeditor_5',
   
      

@@ -1,48 +1,192 @@
 from django.test import TestCase
-from django.utils import timezone
 from django.core.exceptions import ValidationError
-from django.db.utils import IntegrityError
-
+from django.db.utils import IntegrityError, DataError
+from random import randint
+from django.core.files.uploadedfile import SimpleUploadedFile
 from uuid import uuid4
 
-from product.models import ProductVariation, Product, Category, Manufacturer
-from product.tests.factory import CategoryFactory, ProductFactory
+from product.models import Brand, ProductVariation, Product, Category, Manufacturer
+from product.tests.factory import ProductFactory, BrandFactory, ManufacturerFactory, CategoryFactory
 
+from factory import Faker
 
 # Create your tests here.
 class ProductModelTest(TestCase):
-  
+    
     def test_single_product_creation(self):
         """Test if a single product has been created and saved in the database"""
         
-        EXPECTED_NAME = "Test Product"
-        product       = ProductFactory(name="Test Product")
-        self.assertEqual(product.name, EXPECTED_NAME)
+        ProductFactory()
+
+        EXPECTED_COUNT = 1
+        
+        self.assertEqual(Product.objects.count(), EXPECTED_COUNT)
+        
+        
+    def test_product_factory_creates_product_with_default_values(self):
+        """Test that the ProductFactory creates a Product with default values"""
+        
+        product = ProductFactory()
+        
+        self.assertIsInstance(product, Product)
+        self.assertFalse(product.is_featured)
+        self.assertTrue(product.name)
+        self.assertGreater(product.price, 0)
+        self.assertGreater(product.weight, 0)
+        self.assertIsNotNone(product.primary_image)
+        self.assertIsNotNone(product.side_image)
+        self.assertIsNotNone(product.side_image_2)
+        self.assertIsInstance(product.brand, Brand)
+        self.assertIsInstance(product.category, Category)
+        self.assertIsInstance(product.manufacturer, Manufacturer)
+
+    def test_product_name_is_saved_correctly(self):
+        """Test if a product's custom name is saved correctly to the database"""
+
+        product = ProductFactory()
         
         # Test if it was saved to the database
         product_in_db = Product.objects.filter(name=product.name).exists()
         self.assertTrue(product_in_db)
 
-    def test_if_product_with_custom_name_is_created(self):
-        """Test if a product with a custom name is created and saved in the database"""
+    def test_name_does_not_save_exceed_length(self):
+        """Test that the name doesn't save when it exceeds the expected length"""
         
-        EXPECTED_NAME = "Unique Product"
-        product       = ProductFactory(name=EXPECTED_NAME)
+        # Dynamically fetch the max length from the model field
+        expected_character_length = Product._meta.get_field('name').max_length
         
-        self.assertEqual(product.name, EXPECTED_NAME)
+        # Generate a string that exceeds the limit
+        long_name = "l" * (expected_character_length + 1)
+        long_name_length = len(long_name)
+        exceeds_by = long_name_length - expected_character_length
         
-        # Test if it was saved to the database
-        product_in_db = Product.objects.filter(name=product.name).exists()
-        self.assertTrue(product_in_db)
+        with self.assertRaises(DataError, msg=(
+            f"Long name exceeds the expected length of {expected_character_length} characters. "
+            f"Current Length: {long_name_length} -- exceeds by {exceeds_by}."
+        )):
+            _ = ProductFactory(name=long_name)
 
-    def test_if_product_with_custom_description_is_created(self):
-        """Test if a product with a custom name is created and saved in the database"""
+    def test_long_description_is_saved_correctly(self):
+        """Test if a product description is saved in the database"""
         
-        EXPECTED_DESC = "Unique Product description"
-        product       = ProductFactory(long_description=EXPECTED_DESC)
-        
-        self.assertEqual(product.long_description, EXPECTED_DESC)
+        product       = ProductFactory()
+        saved_product = Product.objects.get(id=product.id)
         
         # Test if it was saved to the database
-        product_in_db = Product.objects.get(name=product.name)
-        self.assertEqual(product.long_description, product_in_db.long_description)
+        self.assertEqual(product.long_description, saved_product.long_description)
+
+    def test_short_description_does_not_save_when_description_exceed_expected_length(self):
+        """Test that short description raises an error when it exceeds the expected length."""
+        
+        # Dynamically fetch the max length from the model field
+        expected_character_length = Product._meta.get_field('short_description').max_length
+        
+        # Generate a string that exceeds the limit
+        long_short_description = "l" * (expected_character_length + 1)
+        description_length     = len(long_short_description)
+        exceeds_by             = description_length - expected_character_length
+        
+        with self.assertRaises(ValidationError, msg=(
+            f"Short description exceeds the expected length of {expected_character_length} characters. "
+            f"Current Length: {description_length} exceeds by {exceeds_by}."
+        )):
+            ProductFactory(short_description=long_short_description)
+
+    def test_is_featured_is_automatically_created_as_false_and_saved(self):
+        """Test if 'is_featured' defaults to False and the product is saved to the database."""
+        
+        product = ProductFactory()
+        
+        # Assert the product instance is saved in the database is false
+        product_in_db = Product.objects.get(id=product.id)
+        self.assertFalse(product_in_db.is_featured)
+    
+    def test_if_sku_is_automatically_created_by_default(self):
+        """Test if the SKU is automatically created by defalut"""
+        
+        product = ProductFactory()
+        
+        saved_in_db = Product.objects.get(id=product.id)
+        self.assertIsNotNone(saved_in_db.sku)
+        self.assertEqual(product.sku, saved_in_db.sku)
+
+    def test_if_sku_can_be_added_by_user(self):
+        """Test if a user-defined SKU can be added and saved in the database."""
+        
+        sku     = "TEST-SKU-123"
+        product = ProductFactory(sku=sku)
+        
+        # Check if the product SKU is set correctly
+        self.assertEqual(product.sku, sku, "The SKU should match the user-defined token.")
+        
+        # Check if the product with the specified SKU exists in the database
+        product_exists = Product.objects.filter(sku=sku).exists()
+        self.assertTrue(product_exists, "The product with the specified SKU should exist in the database.")
+        
+    def test_database_enforces_unique_sku(self):
+        """Ensure the database raises an IntegrityError for duplicate SKUs."""
+        
+        sku     = "TEST-SKU-123"
+        ProductFactory(sku=sku)
+        
+        # Attempt to create another product with the same SKU, which should fail
+        with self.assertRaises(IntegrityError, msg="Expected an IntegrityError when trying to create a product with a duplicate SKU"):
+            ProductFactory(sku=sku)
+
+    def test_database_enforces_unique_upc(self):
+        """Ensure the database raises an IntegrityError for duplicate SKUs."""
+        
+        upc     = "TEST-UPC-123"
+        ProductFactory(upc=upc)
+        
+        # Attempt to create another product with the same UPC, which should fail
+        with self.assertRaises(IntegrityError, msg="Expected an IntegrityError when trying to create a product with a duplicate UPC"):
+            ProductFactory(upc=upc)
+            
+    def test_price_is_saved_correctly(self):
+        """Test if the price is saved correctly"""
+        
+        product = ProductFactory()
+        
+        product_exists = Product.objects.filter(price=product.price).exists()
+        self.assertIsNotNone(product_exists)
+        
+    def test_price_exceeding_maximum_digits_raises_error(self):
+        """Ensure a ValidationError is raised when the price exceeds the maximum allowed digits."""
+
+        # Dynamically fetch the max digits allowed for the price field
+        max_digits     = Product._meta.get_field('price').max_digits
+        invalid_price  = 10 ** (max_digits + 1)  # e.g., max_digits = 10 -> invalid_price = 10000000000
+        
+        with self.assertRaises(DataError, msg=f"Expected ValidationError when attempting to save a price exceeding {max_digits} digits."):
+            ProductFactory(price=invalid_price)
+    
+    def test_price_exceeding_maximum_decimal_places_raises_error(self):
+        """Ensure a ValidationError is raised when the price exceeds the allowed decimal places."""
+        
+        # Dynamically fetch the max decimal places allowed for the price field
+        max_decimal_places = Product._meta.get_field('price').decimal_places
+        
+        # Create an invalid price that exceeds the allowed decimal places
+        price = 250.5568822544
+        invalid_price = round(price, max_decimal_places + 1)  # Adding 1 extra decimal place amd round to specified decimal e.g 3, 4, etc
+
+        related_fields = {
+            "name": "Test name",
+            "long_description": "Test description",
+            "short_description": "Short description",
+            "brand": BrandFactory(),
+            "category": CategoryFactory(),
+            "manufacturer": ManufacturerFactory(),
+            "weight": randint(1, 50),
+            "primary_image": SimpleUploadedFile("primary_image.jpg", b"file_content", content_type="image/jpeg"),
+            "side_image": SimpleUploadedFile("side_image.jpg", b"file_content", content_type="image/jpeg"),
+            "side_image_2": SimpleUploadedFile("side_image_2.jpg", b"file_content", content_type="image/jpeg"),
+            "country_of_origin": Faker("country"),
+        }
+
+        with self.assertRaises(ValidationError, msg=f"Expected a ValidationError as the price exceeds {max_decimal_places} decimal places."):
+            product = Product(**related_fields)
+            product.price = invalid_price
+            product.full_clean()  # Validates model constraints, including field-specific validators
+            product.save()
