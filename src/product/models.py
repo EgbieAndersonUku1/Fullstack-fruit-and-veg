@@ -220,24 +220,27 @@ class Product(models.Model):
         return self.warranty_period or "No warranty"
     
     def clean(self):
-        if self.is_discounted_price and not self.discount_price:
-            raise ValidationError("Discount price must be set when discount is enabled.")
-        if not self.is_discounted_price and self.discount_price:
+        super().clean()
+        if self.is_discounted_price:
+            
+            if not self.discount_price:
+                raise ValidationError("Discount price must be set when discount is enabled.")
+            if self.discount_price < 0:
+                raise ValidationError(f"The discount price cannot be a negative number. Got {self.discount_price}.")
+            if self.discount_price >= self.price:  
+                raise ValidationError("Discount price must be less than the actual price.")
+        elif self.discount_price:
             raise ValidationError("Discount price should be empty when discount is disabled.")
-        if self.is_discounted_price and self.discount_price and (self.price >= self.discount_price):
-            raise ValidationError("Discount price cannot be greater or equal to the actual price")
 
+        if self.price < 0:
+            raise ValidationError(f"The price cannot be less than zero. Got {self.price}.")
+
+        if self.weight < 0:
+            raise ValidationError(f"The weight of the product cannot be less than zero. Got {self.weight}.")
+        
     def get_discounted_price(self):
         """Returns the discounted price else returns the actual price"""  
         return self.discount_price if self.discount else self.price      
     
-    def save(self, *args, **kwargs):
-        """Allows the save method to be overriden"""
-        if not self.sku:
-            self.sku = generate_token()
-        if not self.upc:
-            self.upc = generate_token()
-        
-        if len(self.short_description) > 255:
-            raise ValidationError("Short description cannot exceed 255 characters.")
-        super().save(*args, **kwargs)
+    
+   

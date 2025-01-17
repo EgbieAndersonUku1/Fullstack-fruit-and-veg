@@ -13,6 +13,23 @@ from factory import Faker
 # Create your tests here.
 class ProductModelTest(TestCase):
     
+    def setUp(self):
+        self.related_fields =  {
+            "name": "Test name",
+            "long_description": "Test description",
+            "short_description": "Short description",
+            "sku": "sku",
+            "upc": "upc",
+            "brand": BrandFactory(),
+            "category": CategoryFactory(),
+            "manufacturer": ManufacturerFactory(),
+            "weight": randint(1, 50),
+            "primary_image": SimpleUploadedFile("primary_image.jpg", b"file_content", content_type="image/jpeg"),
+            "side_image": SimpleUploadedFile("side_image.jpg", b"file_content", content_type="image/jpeg"),
+            "side_image_2": SimpleUploadedFile("side_image_2.jpg", b"file_content", content_type="image/jpeg"),
+            "country_of_origin": Faker("country"),
+        }
+        
     def test_single_product_creation(self):
         """Test if a single product has been created and saved in the database"""
         
@@ -21,7 +38,6 @@ class ProductModelTest(TestCase):
         EXPECTED_COUNT = 1
         
         self.assertEqual(Product.objects.count(), EXPECTED_COUNT)
-        
         
     def test_product_factory_creates_product_with_default_values(self):
         """Test that the ProductFactory creates a Product with default values"""
@@ -56,9 +72,9 @@ class ProductModelTest(TestCase):
         expected_character_length = Product._meta.get_field('name').max_length
         
         # Generate a string that exceeds the limit
-        long_name = "l" * (expected_character_length + 1)
+        long_name        = "l" * (expected_character_length + 1)
         long_name_length = len(long_name)
-        exceeds_by = long_name_length - expected_character_length
+        exceeds_by       = long_name_length - expected_character_length
         
         with self.assertRaises(DataError, msg=(
             f"Long name exceeds the expected length of {expected_character_length} characters. "
@@ -171,22 +187,102 @@ class ProductModelTest(TestCase):
         price = 250.5568822544
         invalid_price = round(price, max_decimal_places + 1)  # Adding 1 extra decimal place amd round to specified decimal e.g 3, 4, etc
 
-        related_fields = {
-            "name": "Test name",
-            "long_description": "Test description",
-            "short_description": "Short description",
-            "brand": BrandFactory(),
-            "category": CategoryFactory(),
-            "manufacturer": ManufacturerFactory(),
-            "weight": randint(1, 50),
-            "primary_image": SimpleUploadedFile("primary_image.jpg", b"file_content", content_type="image/jpeg"),
-            "side_image": SimpleUploadedFile("side_image.jpg", b"file_content", content_type="image/jpeg"),
-            "side_image_2": SimpleUploadedFile("side_image_2.jpg", b"file_content", content_type="image/jpeg"),
-            "country_of_origin": Faker("country"),
-        }
-
         with self.assertRaises(ValidationError, msg=f"Expected a ValidationError as the price exceeds {max_decimal_places} decimal places."):
-            product = Product(**related_fields)
+             # use Product model since ProductFactory doesn't raise an error
+            product = Product(**self.related_fields)
             product.price = invalid_price
             product.full_clean()  # Validates model constraints, including field-specific validators
             product.save()
+
+    def test_negative_price_raises_error(self):
+        """Ensure a ValidationError is raised when the price entered is negative."""
+        
+        invalid_price = -1
+
+        with self.assertRaises(ValidationError, msg=("Expected an error message to be raised because the price entered is negative")):
+            # use Product model since ProductFactory doesn't raise an error
+            product = Product(**self.related_fields)
+            product.price = invalid_price
+            product.full_clean()  # Validates model constraints, including field-specific validators
+            product.save()
+
+    def test_error_when_discount_price_none_and_is_discounted_true(self):
+        """Ensure a ValidationError is raised when is_discounted_price is True but discount_price is None."""
+        
+        with self.assertRaises(ValidationError, 
+                                msg="Expected a ValidationError because discount price is None while is_discounted_price is True"
+                                ):
+            # Use Product model directly since ProductFactory doesn't raise an error
+            product = Product(**self.related_fields)
+            product.is_discounted_price = True
+            product.discount_price      =  None
+            product.full_clean()  # Validates model constraints, including field-specific validators
+            product.save()
+
+    def test_error_when_discount_price_is_set_and_is_discounted_false(self):
+        """Ensure a ValidationError is raised when is_discounted_price is False but discount_price is set"""
+        
+        with self.assertRaises(ValidationError, 
+                                msg="Expected a ValidationError because discount price is set but is_discounted_price is set to false"
+                                ):
+            # Use Product model directly since ProductFactory doesn't raise an error
+            product = Product(**self.related_fields)
+            product.is_discounted_price = False
+            product.discount_price      = 10
+            product.full_clean()  # Validates model constraints, including field-specific validators
+            product.save()
+    
+    def test_negative_discount_raises_error(self):
+        """Ensure a ValidationError is raised when the is_discounted_price is negative"""
+        
+        with self.assertRaises(ValidationError, 
+                                msg="Expected a ValidationError because discount price is negative"
+                                ):
+            # Use Product model directly since ProductFactory doesn't raise an error
+            product = Product(**self.related_fields)
+            product.is_discounted_price = True
+            product.discount_price      =  -10
+            product.full_clean()  # Validates model constraints, including field-specific validators
+            product.save()
+
+    def test_error_raise_if_discount_price_is_greater_than_price(self):
+        """Ensure a ValidationError is raised when the discounted price is greater than the actually price"""
+
+        # This test checks the condition where the discount price is greater than the actual price.
+        # If the test passes, it means the logic enforcing this condition is correct.
+        #
+        # To intentionally create a failure and test whether the validation logic works properly:
+        # Comment out the validation lines at 230 and 231 in the product model file, which check if the discount price is less than the actual price.
+        # Run the test to confirm if it fails as expected.
+        #
+        # After the failure is confirmed, uncomment the lines to restore the validation and ensure the logic is working correctly:
+        # if self.discount_price >= self.price:
+        #     raise ValidationError("Discount price must be less than the actual price.")
+
+        
+        with self.assertRaises(ValidationError, 
+                                msg="Expected a ValidationError because discount price is greater than the actually price"
+                                ):
+            # Use Product model directly since ProductFactory doesn't raise an error
+            product = Product(**self.related_fields)
+            product.is_discounted_price = True
+            product.price               = 150
+            product.discount_price      = 200
+            product.full_clean()  # Validates model constraints, including field-specific validators
+            product.save()
+    
+    def test_negative_weight_error(self):
+        """Ensure a ValidationError is raised when the weight is negative"""
+        
+        with self.assertRaises(ValidationError, 
+                                msg="Expected a ValidationError because the weight is negative"
+                                ):
+            # Use Product model directly since ProductFactory doesn't raise an error
+            product = Product(**self.related_fields)
+            product.price  = 10
+            product.weight = -100
+            product.full_clean()  # Validates model constraints, including field-specific validators
+            product.save()
+            
+    def tearDown(self):
+        return super().tearDown()
