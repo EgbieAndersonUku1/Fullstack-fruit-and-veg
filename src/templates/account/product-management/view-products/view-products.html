@@ -7,47 +7,21 @@
 
     <div class="content-container">
 
+        {% include "partials/logo_link.html" %}
         <!-- Breadcrumb Navigation -->
         <ul class="breadcrumb">
             <li><a href="{% url 'home' %}">Home</a></li>
             <li><a href="{% url 'account' %}">My account</a></li>
             <li><a href="{% url 'product-management' %}">Product management overview</a></li>
-            <li>Add new product</li>
+            <li>View products</li>
         </ul>
 
         <!-- Section Heading -->
-        <h1 id="add-product-heading" class="padding-top-md lighten text-capitalize">Add new product</h1>
-        <p class="account-info">View products</p>
-        <hr class="divider">
+        <h1 id="add-product-heading" class="padding-top-md lighten text-capitalize">View products</h1>
+        <p class="account-info">View all products</p>
+        <hr class="dividor">
 
-        <!-- clear button -->
-        <div class="clearBtn flex-end">
-            <button type="button" id="clearBtn">Clear</button>
-        </div>
-
-        <!-- the table -->
-        <div class="space-between" id="tabs">
-            <a href="#" class="tab active" id="all-products-tab">All products</a>
-            <a href="#" class="tab" id="live-products-tab">Live products</a>
-            <a href="#" class="tab" id="not-live-products-tab"> Not live</a>
-        </div>
-        <hr class="dividor view-product-dividor">
-
-        <p id="product-msg"></p>
-
-        <!-- All products -->
-        <div id="all-products" class="tab-content">
-
-        </div>
-
-
-        <!-- live products -->
-        <div id="live-products" class="tab-content">
-        </div>
-
-        <!-- not live -->
-        <div id="not-live" class="tab-content">
-        </div>
+    
 
 
     </div>

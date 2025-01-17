@@ -3,6 +3,8 @@ from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError, DataError
 from random import randint
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.files.storage import default_storage
+
 from uuid import uuid4
 
 from product.models import Brand, ProductVariation, Product, Category, Manufacturer
@@ -286,3 +288,5 @@ class ProductModelTest(TestCase):
             
     def tearDown(self):
         return super().tearDown()
+    
+

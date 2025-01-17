@@ -1,4 +1,5 @@
 from django.core.files.uploadedfile import SimpleUploadedFile
+
 import factory
 
 from product.models import Category, Product, ProductVariation, Shipping, Manufacturer, Brand
