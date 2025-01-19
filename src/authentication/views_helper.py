@@ -1,9 +1,9 @@
 import json
 from django.conf import settings
-from django.http import JsonResponse
 from django.contrib import messages
 
 from utils.generator import generate_token, generate_verification_url
+from account.views_helpers import get_local_ip_address
 
 
 def send_verification_email(request, user, subject, follow_up_message, send_func, generate_verification_url_func=None, **kwargs):
@@ -67,3 +67,28 @@ def send_verification_email(request, user, subject, follow_up_message, send_func
         print(verification_url)
         messages.error(request, "An unexpected error occurred while sending the email. Please try again later.")
         return False
+
+
+def get_client_ip_address(request) -> str:
+    """
+    Retrieve the IP address of the client making the request.
+    
+    This function checks for the 'X-Forwarded-For' header to get the client's real IP address
+    in case the request is passed through a proxy. If the header is not present, it falls back
+    to the 'REMOTE_ADDR' header. If the client is on localhost (127.0.0.1), it retrieves
+    the local IP address of the machine.
+    """
+    
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    LOCALHOST       = '127.0.0.1'
+    
+    if x_forwarded_for:
+        # If the request passes through a proxy, the first IP in the list is the real client IP
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    
+    if ip == LOCALHOST:  
+        ip = get_local_ip_address()
+    
+    return ip
