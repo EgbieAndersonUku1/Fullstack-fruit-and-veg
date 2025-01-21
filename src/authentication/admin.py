@@ -246,6 +246,7 @@ class UserDeviceAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('user', 'local_ip', 'user_agent', 'platform' )}),
         ('Timezones', {'fields': ('frontend_timezone', 'backend_timezone')}),
+        ('Broswer', {'fields': ('browser', 'browser_version')}),
         ('Screen size', {'fields': ('screen_width', 'screen_height')}),
         ('Additional information', {'fields': ('pixel_ratio', 'is_touch_device', 'last_login', 'created_on', 'modified_on')}),
       

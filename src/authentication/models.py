@@ -692,6 +692,8 @@ class UserDevice(models.Model):
     screen_height     = models.PositiveSmallIntegerField(null=False, db_index=True)
     platform          = models.CharField(max_length=255, null=False, verbose_name="Device Platform")
     pixel_ratio       = models.CharField(max_length=255, db_index=True, null=False)
+    browser           = models.CharField(max_length=255, null=True, db_index=True) # e.g chrome
+    browser_version   = models.CharField(max_length=255, null=True, db_index=True) # e.g version 131.1
     is_touch_device   = models.BooleanField(default=False, verbose_name="Is Touchscreen Device")
     last_login        = models.DateTimeField(auto_now=True, verbose_name="Last Login Time")
     created_on        = models.DateTimeField(auto_now_add=True)
