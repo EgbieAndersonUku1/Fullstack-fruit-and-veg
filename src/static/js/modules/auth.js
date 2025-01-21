@@ -2,6 +2,7 @@ import PasswordStrengthChecker from "../utils/password.js";
 import fetchData from "../utils/fetch.js";
 import { saveToLocalStorage, clearStorage } from "../utils/utils.js";
 import { getFormEntries } from "../utils/formUtils.js";
+import fingerprintDevice from "../utils/browser.js";
 
 
 // DOM Elements for Authentication
@@ -51,6 +52,7 @@ const loginMsgFElement      = document.getElementById("login-msg");
 
 // csrf token
 const csrfToken             =  document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
 
 // form buttons
 const loginButtonElement    = document.getElementById("login-btn");
@@ -234,11 +236,13 @@ async function handleLoginFormSubmit(e) {
     const resp = await processLoginForm(formData);
 
     if (resp) {
-        console.log("You have logged in...");
-        const nextUrl = getQueryParams("next");
-        clearStorage();
-        saveToLocalStorage("authenticated", "logged_in");
-        window.location.href = nextUrl ? nextUrl : "/account/landing-page/";
+
+        
+        // console.log("You have logged in...");
+        // const nextUrl = getQueryParams("next");
+        // clearStorage();
+        // saveToLocalStorage("authenticated", "logged_in");
+        // window.location.href = nextUrl ? nextUrl : "/account/landing-page/";
        
       
     }
@@ -271,7 +275,7 @@ async function processLoginForm(formData) {
     try {
         const validateReport = await fetchData({url: "authentication/login/",
             csrfToken: csrfToken,
-            body: { auth: {email:formData.email, password:formData.password }},
+            body: { auth: {email:formData.email, password:formData.password, userDeviceInfo: fingerprintDevice() }},
             });
 
        
@@ -282,7 +286,6 @@ async function processLoginForm(formData) {
         setButtonState(false, loginButtonElement, "Login", "please wait...");
     }
 }
-
 
 /**
  * Updates the UI based on the validation report for a given field.

@@ -15,6 +15,7 @@ from .models import (
                     StaffUserProxy,
                     SuperUserProxy,
                     User,
+                    UserDevice,
                     VerifiedUserProxy,
                     TempBannedUserProxy
 )
@@ -231,6 +232,29 @@ class UserBanAdmin(admin.ModelAdmin):
 
 
 
+
+class UserDeviceAdmin(admin.ModelAdmin):
+    
+    list_display        = ["id", "local_ip", "platform", "last_login", "created_on", "modified_on"]
+    list_display_links  = ["id", "local_ip", "platform"]
+    list_filter         = ["is_touch_device"]
+    list_per_page       = 25
+    search_fields       = ["id", "local_ip", "platform"]
+    readonly_fields     = ["last_login", "created_on", "modified_on"]
+    
+    # Fieldsets define the layout of the form view
+    fieldsets = (
+        (None, {'fields': ('user', 'local_ip', 'user_agent', 'platform' )}),
+        ('Timezones', {'fields': ('frontend_timezone', 'backend_timezone')}),
+        ('Screen size', {'fields': ('screen_width', 'screen_height')}),
+        ('Additional information', {'fields': ('pixel_ratio', 'is_touch_device', 'last_login', 'created_on', 'modified_on')}),
+      
+    )
+
+    def screen_resolution(self, obj):
+        return obj.screen_resolution
+
+
 admin.site.register(ActiveUserProxy, AdminActiveUserProxy)
 admin.site.register(AdminUserProxy, AdminUserProxyModel)
 admin.site.register(BannedUserProxy, AdminBannedUserProxy)
@@ -241,3 +265,4 @@ admin.site.register(StaffUserProxy, AdminStaffUserProxy)
 admin.site.register(TempBannedUserProxy, AdminBTempBannedUserProxy)
 admin.site.register(User, AdminUser)
 admin.site.register(VerifiedUserProxy, AdminVerifiedUserProxy)
+admin.site.register(UserDevice, UserDeviceAdmin)

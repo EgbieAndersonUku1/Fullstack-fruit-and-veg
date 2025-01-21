@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib import messages
 
 from utils.generator import generate_token, generate_verification_url
-from account.views_helpers import get_local_ip_address
+from utils.utils import get_local_ip_address
 
 
 def send_verification_email(request, user, subject, follow_up_message, send_func, generate_verification_url_func=None, **kwargs):
@@ -73,10 +73,10 @@ def get_client_ip_address(request) -> str:
     """
     Retrieve the IP address of the client making the request.
     
-    This function checks for the 'X-Forwarded-For' header to get the client's real IP address
-    in case the request is passed through a proxy. If the header is not present, it falls back
-    to the 'REMOTE_ADDR' header. If the client is on localhost (127.0.0.1), it retrieves
-    the local IP address of the machine.
+    This function checks the 'X-Forwarded-For' header to get the client's real IP address 
+    when the request passes through a proxy. If the header is absent, it falls back to 
+    'REMOTE_ADDR'. If the request returned is a localhost (127.0.0.1), the local IP address is returned, 
+    which is typically only meaningful within the local network.
     """
     
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -89,6 +89,7 @@ def get_client_ip_address(request) -> str:
         ip = request.META.get('REMOTE_ADDR')
     
     if ip == LOCALHOST:  
+        # Get the local ip address if client ip fails
         ip = get_local_ip_address()
     
     return ip

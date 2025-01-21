@@ -7,6 +7,8 @@ from django.utils.translation import gettext_lazy as _
 
 from typing import Optional
 from utils.dates import calculate_days_between_dates, is_date_valid
+from utils.utils import get_local_ip_address
+
 
 
 # Create your models here.
@@ -678,3 +680,30 @@ class NonActiveUserProxy(User):
         proxy = True
         verbose_name = "Non-active User"
         verbose_name_plural = "Non-active Users"
+        
+
+class UserDevice(models.Model):
+    user              = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_devices")
+    local_ip          = models.GenericIPAddressField(null=False, verbose_name="Local Device IP Address", default=get_local_ip_address)  # local device ip e.g 192.168.x.x
+    frontend_timezone = models.CharField(max_length=255, null=False, db_index=True, verbose_name="Frontend Time Zone")
+    backend_timezone  = models.CharField(max_length=255, null=False, db_index=True, verbose_name="Backend Time Zone")
+    user_agent        = models.CharField(max_length=1000, null=False, db_index=True, verbose_name="User Agent")
+    screen_width      = models.PositiveSmallIntegerField(null=False, db_index=True)
+    screen_height     = models.PositiveSmallIntegerField(null=False, db_index=True)
+    platform          = models.CharField(max_length=255, null=False, verbose_name="Device Platform")
+    pixel_ratio       = models.CharField(max_length=255, db_index=True, null=False)
+    is_touch_device   = models.BooleanField(default=False, verbose_name="Is Touchscreen Device")
+    last_login        = models.DateTimeField(auto_now=True, verbose_name="Last Login Time")
+    created_on        = models.DateTimeField(auto_now_add=True)
+    modified_on       = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user.username} - <Platform: {self.platform}> - Screen Resolution: <{self.screen_resolution}>"
+    
+    @property
+    def screen_resolution(self):
+        return f"{self.screen_width}x{self.screen_height}"
+
+    class Meta:
+        verbose_name        = "User Device"
+        verbose_name_plural = "User Devices"

@@ -478,22 +478,3 @@ def clear_product_request(request):
     for key in keys_to_clear:
         if key in request.session:
             del request.session[key]
-
-
-def get_local_ip_address():
-    """
-    Returns the local IP address of the machine, not the global IP address.
-    
-    The local IP address is the address assigned to the machine within a local network
-    (typically something like 192.168.x.x or 10.x.x.x), as opposed to the global IP 
-    address used for internet communication. This method uses the `socket` library to 
-    obtain the local IP address of the machine running the code.
-
-    This function is primarily useful for testing/development within the Django ecosystem
-    because when running in a development mode the'request.META.get("HTTP_X_FORWARDED_FOR") 
-    or request.META.get("REMOTE_ADDR")' will always return a `127.0.0.1` (localhost) 
-    """
-    # Importing socket functions inside the function to limit their scope
-    # since this is only for testing/development purposes.
-    from socket import gethostname, gethostbyname
-    return gethostbyname(gethostname())

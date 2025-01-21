@@ -25,7 +25,8 @@ def is_travel_impossible(last_coordinates:dict, current_coordinates:dict, max_sp
         # Typical cruising speed is around 900 km/h (approximately 560 mph or 250 m/s).
 
         # Supersonic Aircraft (e.g., Concorde):
-        # Supersonic jets travel at speeds exceeding the speed of sound, typically around 2,180 km/h (approximately 1,354 mph or 606 m/s).
+        # Supersonic jets travel at speeds exceeding the speed of sound, typically around
+        #   2,180 km/h (approximately 1,354 mph or 606 m/s).
 
         #Private Jets:
         # Cruising speed is slightly lower, around 600–800 km/h (approximately 375–500 mph or 166–222 m/s).
@@ -73,7 +74,7 @@ def is_travel_impossible(last_coordinates:dict, current_coordinates:dict, max_sp
     if time_difference_in_hours == 0:
         return True  # Instantaneous travel is impossible
 
-    required_speed = distance_in_kilometers / time_difference_in_hours
+    required_speed = distance_in_kilometers / time_difference_in_hours  # speed = distance/time
     
     if required_speed <= max_speed_kmh:
         return False 
@@ -113,7 +114,7 @@ def calculate_distance(lat1: float, lon1: float, lat2: float, lon2: float, in_ki
         
     """
     for coordinate in [lat1, lon1, lat2, lon2]:
-        if not coordinate:
+        if not isinstance(coordinate, (int or float)):
             raise ValueError(f"The value <{coordinate}>  is not a int or a float")
     
     if not (-90 <= lat1 <= 90 and -90 <= lat2 <= 90):
@@ -156,12 +157,14 @@ def calculate_time_difference_in_hours(datetime1, datetime2):
     if is_datetime1_aware != is_datetime2_aware:
         raise ValueError("Both datetime objects must have the same timezone-awareness")
 
+    HOURS_IN_SECONDS = 3600
+    
     if not is_datetime1_aware:
         datetime1 = make_aware(datetime1)
     if not is_datetime2_aware:
         datetime2 = make_aware(datetime2)
     
     delta = abs(datetime1 - datetime2)
-    return delta.total_seconds() / 3600
+    return delta.total_seconds() / HOURS_IN_SECONDS
 
 

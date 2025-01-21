@@ -20,6 +20,8 @@ from utils.send_emails_types import (send_registration_email,
                                       )
 
 
+
+
 # Create your views here.
 User = get_user_model()
 
@@ -78,17 +80,19 @@ def user_login(request):
             bool: True if the user is authenticated and active, otherwise False.
         """
         
-        email    = data.get("email")
-        password = data.get("password")
-        user     = authenticate(request, email=email, password=password)
+        email     = data.get("email")
+        password  = data.get("password")
+        user      = authenticate(request, email=email, password=password)
         
-     
         if user:
             if user.is_banned:
                 error_msg = "Your account has been banned, please contact support."
             elif not user.is_active:
                 error_msg = "Your account is no longer active, please contact support."
             else:
+                request.session["user_device_info"] = data.get("userDeviceInfo")
+                
+                print(request.session["user_device_info"])
                 messages.success(request, "Welcome back, you have successfully logged in.")
                 login(request, user)
                 return True, ''
@@ -104,7 +108,6 @@ def user_login(request):
                             validation_func=validate_user_login,
         
     )
-
 
 
 @login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
@@ -376,5 +379,4 @@ def check_session(request):
     return JsonResponse({"IS_LOGGED_IN": False}, status=200)
 
     
-        
-        
+    
