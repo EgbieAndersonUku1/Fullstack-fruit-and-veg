@@ -238,11 +238,11 @@ async function handleLoginFormSubmit(e) {
     if (resp) {
 
         
-        // console.log("You have logged in...");
-        // const nextUrl = getQueryParams("next");
-        // clearStorage();
-        // saveToLocalStorage("authenticated", "logged_in");
-        // window.location.href = nextUrl ? nextUrl : "/account/landing-page/";
+        console.log("You have logged in...");
+        const nextUrl = getQueryParams("next");
+        clearStorage();
+        saveToLocalStorage("authenticated", "logged_in");
+        window.location.href = nextUrl ? nextUrl : "/account/landing-page/";
        
       
     }
