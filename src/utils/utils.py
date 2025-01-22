@@ -1,5 +1,8 @@
 from PIL import Image
+from device_detector import DeviceDetector
 from socket import gethostname, gethostbyname
+import requests
+
 
 def get_image_extenstion(image):    
     image = Image.open(image)
@@ -16,3 +19,9 @@ def get_local_ip_address():
     obtain the local IP address of the machine running the code.
     """
     return gethostbyname(gethostname())
+
+
+def get_device(request):
+    user_agent_string = request.META.get('HTTP_USER_AGENT', '')
+    device            = DeviceDetector(user_agent_string).parse()
+    return device.device_type

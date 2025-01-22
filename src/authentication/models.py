@@ -77,8 +77,8 @@ class CustomBaseUser(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """Custom user model extending AbstractBaseUser and PermissionsMixin."""
 
-    username                 = models.CharField(_("username"), max_length=20, unique=True)
-    email                    = models.EmailField(_("email"), max_length=40, unique=True)
+    username                 = models.CharField(_("username"), max_length=20, unique=True, db_index=True)
+    email                    = models.EmailField(_("email"), max_length=40, unique=True, db_index=True)
     is_active                = models.BooleanField(_("is active"), default=True)
     is_staff                 = models.BooleanField(_("is staff"), default=False)
     is_superuser             = models.BooleanField(_("is superuser"), default=False)
@@ -685,20 +685,25 @@ class NonActiveUserProxy(User):
 class UserDevice(models.Model):
     user              = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_devices")
     local_ip          = models.GenericIPAddressField(null=False, verbose_name="Local Device IP Address", default=get_local_ip_address)  # local device ip e.g 192.168.x.x
-    frontend_timezone = models.CharField(max_length=255, null=False, db_index=True, verbose_name="Frontend Time Zone")
-    backend_timezone  = models.CharField(max_length=255, null=False, db_index=True, verbose_name="Backend Time Zone")
+    frontend_timezone = models.CharField(max_length=100, null=False, db_index=True, verbose_name="Frontend Time Zone")
+    backend_timezone  = models.CharField(max_length=100, null=False, db_index=True, verbose_name="Backend Time Zone")
     user_agent        = models.CharField(max_length=1000, null=False, db_index=True, verbose_name="User Agent")
-    screen_width      = models.PositiveSmallIntegerField(null=False, db_index=True)
-    screen_height     = models.PositiveSmallIntegerField(null=False, db_index=True)
-    platform          = models.CharField(max_length=255, null=False, verbose_name="Device Platform")
-    pixel_ratio       = models.CharField(max_length=255, db_index=True, null=False)
-    browser           = models.CharField(max_length=255, null=True, db_index=True) # e.g chrome
-    browser_version   = models.CharField(max_length=255, null=True, db_index=True) # e.g version 131.1
+    screen_width      = models.PositiveSmallIntegerField(null=False, db_index=False)
+    screen_height     = models.PositiveSmallIntegerField(null=False, db_index=False)
+    platform          = models.CharField(max_length=50, null=False, verbose_name="Operating System")
+    pixel_ratio       = models.CharField(max_length=50, db_index=False, null=False)
+    browser           = models.CharField(max_length=50, null=True, db_index=True) # e.g chrome
+    browser_version   = models.CharField(max_length=50, null=True, db_index=True) # e.g version 131.1
+    device            = models.CharField(max_length=60, null=True, blank=False, db_index=True) # e.g desktop, laptop
     is_touch_device   = models.BooleanField(default=False, verbose_name="Is Touchscreen Device")
     last_login        = models.DateTimeField(auto_now=True, verbose_name="Last Login Time")
     created_on        = models.DateTimeField(auto_now_add=True)
     modified_on       = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name        = "User Device"
+        verbose_name_plural = "User Devices"
+        
     def __str__(self):
         return f"{self.user.username} - <Platform: {self.platform}> - Screen Resolution: <{self.screen_resolution}>"
     
@@ -709,3 +714,34 @@ class UserDevice(models.Model):
     class Meta:
         verbose_name        = "User Device"
         verbose_name_plural = "User Devices"
+        
+
+
+class LoginAttempt(models.Model):
+    user              = models.ForeignKey(User, on_delete=models.CASCADE, related_name="login_attempts")
+    client_ip_address = models.GenericIPAddressField(db_index=True)
+    host_name         = models.CharField(max_length=255)
+    organization      = models.CharField(max_length=255)
+    country           = models.CharField(max_length=255, db_index=True)
+    city              = models.CharField(max_length=255, db_index=True)
+    region            = models.CharField(max_length=255, db_index=True)
+    longitude         = models.DecimalField(max_digits=9, decimal_places=6, db_index=True)
+    latitude          = models.DecimalField(max_digits=9, decimal_places=6, db_index=True)
+    timezone          = models.CharField(max_length=255, db_index=True)
+    timestamp         = models.DateTimeField(auto_now_add=True)
+    org               = models.CharField(max_length=255, null=True, blank=True, verbose_name="Organization")
+    hostname          = models.CharField(max_length=255, null=True, blank=True, verbose_name="Hostname")
+    is_successful     = models.BooleanField(default=False)
+    created_on        = models.DateTimeField(auto_now_add=True)
+    modified_on       = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Login Attempt"
+        verbose_name_plural = "Login Attempts"
+        indexes = [
+            models.Index(fields=["client_ip_address", "timestamp"]),
+            models.Index(fields=["country", "region", "city"]),
+        ]
+
+    def __str__(self):
+        return f"LoginAttempt(user:{self.user}, ip:{self.client_ip_address}, success:{self.is_successful})"

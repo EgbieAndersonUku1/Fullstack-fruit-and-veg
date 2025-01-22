@@ -10,10 +10,11 @@ from django.shortcuts import render, redirect
 from .utils.password_validator import PasswordStrengthChecker
 from utils.post_json_validator import validate_json_and_respond
 from utils.generator import generate_forgotten_password_url
+
 from .forms.register_form import RegisterForm
 from .forms.passwords.forgotten_password import ForgottenPasswordForm
 from .forms.passwords.new_password import NewPasswordForm
-from .views_helper import send_verification_email
+from .views_helper import send_verification_email, get_client_ip_address, get_location_from_ip
 from utils.send_emails_types import (send_registration_email, 
                                       resend_expired_verification_email, 
                                       send_forgotten_password_verification_email
@@ -92,7 +93,11 @@ def user_login(request):
             else:
                 request.session["user_device_info"] = data.get("userDeviceInfo")
                 
-                print(request.session["user_device_info"])
+                location = get_location_from_ip(get_client_ip_address(request))
+                
+                # note to self remove - check to see if location is retrieved
+                print(location)
+             
                 messages.success(request, "Welcome back, you have successfully logged in.")
                 login(request, user)
                 return True, ''

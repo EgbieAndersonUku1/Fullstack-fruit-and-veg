@@ -1,10 +1,18 @@
-import json
 from django.conf import settings
 from django.contrib import messages
 
 from utils.generator import generate_token, generate_verification_url
 from utils.utils import get_local_ip_address
+from utils.validator import is_ip_address_valid
+from utils.custom_errors import IPAddressError
 
+from dotenv import load_dotenv
+from os import getenv
+import requests
+
+
+# Enables the `.env` file to be loaded
+load_dotenv(override=True)
 
 def send_verification_email(request, user, subject, follow_up_message, send_func, generate_verification_url_func=None, **kwargs):
     """
@@ -88,8 +96,60 @@ def get_client_ip_address(request) -> str:
     else:
         ip = request.META.get('REMOTE_ADDR')
     
-    if ip == LOCALHOST:  
-        # Get the local ip address if client ip fails
-        ip = get_local_ip_address()
-    
+    if ip == LOCALHOST or getenv("MODE") == "development":  
+        
+        # In development mode, the system returns the localhost IP address (127.0.0.1).
+        # This is due to the fact that requests in development are typically made from the same machine, so the IP address is local.
+        # In such cases, the user global IP address is fetched from the CLIENT_IP_ADDRESS variable in the .env file to ensure
+        # the rest of the application functions as expected.
+        ip = getenv("CLIENT_IP_ADDRESS")
+        
+        if not is_ip_address_valid(ip):
+            raise IPAddressError(f"The ip address <{ip}> retrieved from the .env is not a valid ip address. IP address must either be an IPV4 or IPV6")
+      
     return ip
+
+
+def get_location_from_ip(ip_address):
+    """
+    Takes either IPV4 or IPV6 ip address and returns the geolocation data using the ipinfo.io API
+        
+    Args:
+        ip_address (str): An ipv4 or ipv6 address that will be used to retrieve the location data.
+        
+    :Raises
+        Raise `IPAddressError` if the ip address provided or the API is invalid.
+           
+    :Returns
+        Returns a dictionary containing the geo-location data. The dictionary contains the following info:
+            - IP
+            - Hostname
+            - City
+            - Region
+            - Country
+            - loc (latitude, longitude)
+            - org
+            - Postal
+            - Timezone
+            
+    """
+    if not is_ip_address_valid(ip_address):
+        raise IPAddressError("The ip address <{ip_address}> does not appear to be an IPv4 or IPv6 address")
+    
+    API_KEY  = getenv("IPINFO_API_KEY")
+   
+    if not API_KEY:
+        raise IPAddressError("IPINFO_API_KEY is not set in environment variables.")
+    
+    URL = f"https://ipinfo.io/{ip_address}?token={API_KEY}"
+    
+    try:
+        response = requests.get(URL)
+        
+        if not response.ok:
+            raise IPAddressError(f"Failed to retrieve location for IP address <{ip_address}>. API returned status code {response.status_code}.")
+        
+        location = response.json()
+        return location
+    except requests.exceptions.RequestException as e:
+        raise IPAddressError(f"An error occurred while attempting to fetch data for IP address <{ip_address}>: {e}")

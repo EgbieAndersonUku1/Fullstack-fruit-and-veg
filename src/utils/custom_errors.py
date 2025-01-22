@@ -12,4 +12,8 @@ class EmptyMediaAndImagesError(Exception):
     """Custom exception raised when the product form contains no data."""
     pass
     
-    
+
+class IPAddressError(Exception):
+    """Custom exception raised for invalid IP addresses."""
+    pass
+

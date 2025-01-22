@@ -18,6 +18,7 @@ The backend for the Fruit Store website is designed to manage server-side operat
 - [Current Status](#current-status)
 - [Secret Key Setup](#secret-key-setup)
 - [Email setup](#email-setup)
+- [GEO location API setup](#geo-location-api-setup)
 - [Django Application Setup with PostgreSQL](#django-application-setup-with-postgresql)
 - [Django-HTML Syntax Highlighting in VS Code](#Django-HTML-Syntax-Highlighting-in-VS-Code)
 - [Create a superuser](#creating-a-superuser)
@@ -169,6 +170,97 @@ Your application should now be set up with PostgreSQL.
 - This step is required because, for some reason, the `.env` file is not processing the value of the `USE_LOCAL_DB` variable correctly. 
   It appears as though the variable doesn't exist, causing issues when trying to load the setting from the environment, so to rectify
   this manually set it to `True` for local and `False` for external.
+
+
+## Geo location API setup
+
+I```markdown
+## Geo-Location API Setup  
+
+To detect suspicious login activity, such as logging in from two geographically impossible locations within a short period (e.g., logging in from London and 30 minutes later from New York), this application uses the `ipinfo` API. The API converts an IP address into its geo-location, enabling the application to identify unusual activity.  
+
+By signing up for the API, you are granted **50,000 free requests per month**.  
+
+---
+
+### Setting up the API  
+To detect suspicious login activity, such as logging in from two geographically impossible locations within a short period (e.g., logging in from London and 30 minutes later from New York), this application uses the ipinfo API. The API converts an IP address into its geo-location, enabling the application to identify unusual activity.
+
+To begin using this API you first need to sign up for the API, you are granted 50,000 free requests per month.
+
+1. **Sign Up**  
+   - Visit [ipinfo.io](https://ipinfo.io/).  
+   - Sign up using your Gmail, Github or another email address.  
+   - After signing up, you will be automatically redirected to the dashboard.  
+
+2. **Retrieve Your API Token and Global IP Address**  
+   - On the dashboard, you will see an overview that includes your global IP address in step 1 and an API token in step 3.  
+   - Make a note of the global IP address and token for later use.  
+
+3. **Test the API**  
+   You can test the API using the `curl` command or using python function `requests` module :  
+   ```bash  
+   # Replace <GLOBAL_IP_ADDRESS> and <API_TOKEN> with your values  
+   curl ipinfo.io/<GLOBAL_IP_ADDRESS>?token=<API_TOKEN>  
+   ```  
+   Sample response:  
+   ```json  
+   {  
+     "ip": "<GLOBAL_IP_ADDRESS>",  
+     "hostname": "example-hostname",  
+     "city": "Example City",  
+     "region": "England",  
+     "country": "GB",  
+     "loc": "51.5098,-0.1180",  
+     "org": "Example Organisation",  
+     "postal": "EC1A 1BB",  
+     "timezone": "Europe/London"  
+   }  
+
+   with request:
+
+   import requests
+
+   ip     = "<GLOBAL_IP_ADDRESS>"  # Replace this with the IP you're testing
+   token  = "<API_TOKEN>"
+
+   # API URL and key
+   api_url = f"ipinfo.io/{ip}?token={token}"
+
+   # Make the request
+   response = requests.get(api_url)
+
+   # Check the response
+   if response.status_code == 200:
+      print("API Response:", response.json())
+   else:
+      print("Error:", response.status_code, response.text)
+   ```
+
+4. **Configure Your Environment Variables**  
+   - Open the `.env.example` file and copy its contents into your `.env` file.  
+   - Add your global IP address and API token as follows:  
+
+   ```env  
+   CLIENT_IP_ADDRESS=<Your_Global_IP_Address>  
+   IPINFO_API_KEY=<Your_API_Token>  
+   MODE=development  
+
+   Double check that MODE=development
+   ```  
+
+   ```
+   - **`CLIENT_IP_ADDRESS`**: The global IP address assigned to you by your ISP.  
+   - **`IPINFO_API_KEY`**: The API token used to retrieve geo-location data.  
+   - **`MODE`**: Defines the application's mode (`development` or `production`).  
+
+   ```
+
+### Why the `MODE` Variable is Necessary  
+
+When running the application in **development mode**, the IP address returned by Django requests is a `localhost` address (e.g., `127.0.0.1`) or a subnet address (e.g., `192.168.x.x`), which is meaningless outside your local network.  
+
+To ensure the application functions correctly during development, the `MODE` variable tells the application to use the global IP address provided in the `.env` file instead of the local IP address. Without this configuration, the application cannot retrieve valid geo-location data, as `localhost` and subnet addresses are not suitable for external lookups.  
 
 
 
