@@ -1,7 +1,9 @@
 from django.conf import settings
 
 from utils.send_email import send_email
+from django_q.tasks import async_task
 
+from utils.hooks import process_email_result
 
 def send_registration_email(subject, from_email, user, verification_url):
     """
@@ -197,19 +199,26 @@ def _send_email_helper(email_template_html, email_template_text, **kwargs):
     Returns:
         - bool: True if the email was sent successfully, False otherwise.
     """
-    return send_email(
-        subject=kwargs["subject"],
-        from_email=kwargs["from_email"],
-        to_email=kwargs["to_email"],
-        email_template=email_template_html,
-        text_template=email_template_text,
-        context={
+    
+    # set up the dictionary
+    context = {
             "username":kwargs.get("username"),
             "verification_url": kwargs.get("verification_url"),
             "email_address":kwargs.get("email_address"),
             "new_subscriber": kwargs.get("new_subscriber"),
             "unsubscriber": kwargs.get("unsubscriber"),
         }
+    
+    task_id = async_task(
+        send_email,  
+        kwargs["subject"], 
+        kwargs["from_email"], 
+        kwargs["to_email"], 
+        email_template_html,  
+        email_template_text,  
+        context,
+        hook=process_email_result,
     )
 
-    
+    return task_id 
+

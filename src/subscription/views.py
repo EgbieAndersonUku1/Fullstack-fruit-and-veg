@@ -14,7 +14,7 @@ from .utils.sessions import set_session
 
 from .models import NewsletterSubscription, NewsletterSubscriptionHistory, SubscriptionMessage
 from .form import SubscriptionFeedBackForm
-from utils.send_emails_types import notify_admin_of_user_unsubscription, notify_admin_of_new_subscriber
+from utils.tasks import notify_admin_of_user_unsubscription, notify_admin_of_new_subscriber
 from utils.post_json_validator import validate_json_and_respond
 
 

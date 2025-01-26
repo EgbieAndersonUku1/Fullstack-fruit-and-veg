@@ -3,7 +3,11 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 from typing import Optional
+from requests import RequestException
 
+import logging
+
+logger = logging.getLogger("custom_logger")
 
 def send_email(subject:str, 
                from_email:str, 
@@ -36,11 +40,23 @@ def send_email(subject:str,
     try:
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
         msg.attach_alternative(html_content, "text/html")
-        return msg.send()
+        
+        resp = msg.send()
+        if resp:
+            logger.info(f"Successful sent email to user with email: {to_email}")
+        else:
+            logger.critical(f"Failed to sent email to user with email: {to_email}")
+        return resp
+    
+    except RequestException as e:
+        logger.error(f"Network error while sending email to {to_email}: {str(e)}")
+        return f"Network error: {str(e)}"
+    
     except Exception as e:
-        print(f"Failed to send email: {e}")
+        logger.error(f"General error received while trying to sent an email to user with email: {to_email}")
+        return f"Failed to send email: {e}"
         
     except NoneType as e:
-        print(f"Error: {e}")
+        logger.error(f"Unspecified error received while sending email to {to_email}: {str(e)}")
         
     return False

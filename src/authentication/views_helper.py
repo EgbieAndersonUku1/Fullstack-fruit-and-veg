@@ -1,18 +1,30 @@
 from django.conf import settings
 from django.contrib import messages
+from django.core.cache import cache
+from django.conf import settings
+from django.utils import timezone
 
+from authentication.models import UserBaseLineData, UserDevice, User
 from utils.generator import generate_token, generate_verification_url
-from utils.utils import get_local_ip_address
 from utils.validator import is_ip_address_valid
 from utils.custom_errors import IPAddressError
+from utils.validator import validate_required_keys
+from utils.distance_calculator import is_travel_impossible
+from utils.utils import get_device, hash_ip
 
-from dotenv import load_dotenv
 from os import getenv
+from dotenv import load_dotenv
+
 import requests
+import logging
+
+
+
+logger = logging.getLogger('custom_logger')
 
 
 # Enables the `.env` file to be loaded
-load_dotenv(override=True)
+load_dotenv()
 
 def send_verification_email(request, user, subject, follow_up_message, send_func, generate_verification_url_func=None, **kwargs):
     """
@@ -110,7 +122,114 @@ def get_client_ip_address(request) -> str:
     return ip
 
 
-def get_location_from_ip(ip_address):
+def is_suspicious_login(ip_address, user_baseline_data):
+    """
+    Checks if the login attempt appears suspicious based on the geo-location data.
+
+    Args:
+        ip_address (str): The IP address of the client.
+        user_baseline_data (dict): The baseline data for the user, containing "latitude", "longitude", and "timestamp".
+
+    Returns:
+        tuple: (bool, str) where the first value is True if login is valid, False otherwise,
+               and the second value is an error message if suspicious.
+    """
+  
+    AIRPLANE_SPEED_KMH = 900
+    REQUIRED_KEYS      = ["latitude", "longitude", "timestamp"]
+
+    # Validate baseline data
+    if not user_baseline_data or not isinstance(user_baseline_data, dict):
+        logger.error(f"Invalid baseline data provided to the is_supicious_login function: {user_baseline_data}")
+        return False, "Invalid baseline data."
+
+    try:
+        validate_required_keys(user_baseline_data, REQUIRED_KEYS)
+    except KeyError as e:
+        logger.error(f"Invalid - {e}")
+        return False, "Missing keys for the user baseline data"
+
+    # Retrieve current geo-location
+    try:
+        
+        current_geo_location = get_cached_geo_location_or_from_ip(ip_address)
+        
+        if not current_geo_location:
+            logger.error("Missing the current geo location data")
+            return False, "Missing the current geo-location data"
+        
+        loc = current_geo_location.get("loc")
+        
+        if not loc or "," not in loc:
+            logger.error(f"Invalid 'loc' format in current_geo_location. Data: {current_geo_location}")
+            return False, "Invalid current_geo_location dictionary"
+        
+        latitude, longitude = map(float, loc.split(","))
+        
+        timestamp = current_geo_location.get("timestamp")
+        
+        if not timestamp:
+            logger.error(f"Invalid 'timestamp' not found in the current geo location. Data: {current_geo_location}")
+            return False, "The timestamp wasn't found"
+
+        current_coordinates = {
+                "latitude": latitude,
+                "longitude": longitude,
+                "timestamp": current_geo_location.get("timestamp"),
+        }
+        
+        if not is_travel_impossible(user_baseline_data, current_coordinates, AIRPLANE_SPEED_KMH):
+            return False, "We detected an unusual login attempt and have temporarily blocked access for your security. Please verify your identity or contact support for assistance."
+        return True, ""
+    
+    except ValueError as e:
+        error = str(e)
+        logger.error(f"Failed to retrieve location data: {error}")
+        return False, error
+
+
+def get_cached_geo_location_or_from_ip(ip_address):
+    """
+    Retrieves the geo-location from the cache using the ip address. 
+    If geo-location is not found, the ip-address is used to retrieved
+    the geo-location, stored and then returned to the user. If the 
+    geo-location cannot be retrieve a value of None is returned.
+    
+    Args:
+        ip_address (str): The ip address that will be used to return the geo-location.
+    
+    Returns:
+        - A dictionary containing the geo-location 
+            {
+                "latitude": 51.50853, 
+                "!ongitude": -0.12574,
+                "timestamp": 0.12985288
+            }
+        
+        - None if the geo-location cannot be retrieved using the ip-address
+    """
+    key              = f"client_ip_geo_location_{ip_address}"
+    ONE_HOUR_IN_SECS = 3600
+    geo_location     = cache.get(key)
+    
+    if geo_location:
+        print("Getting from cache...")
+        return geo_location
+    
+    current_geo_location = _get_location_from_ip(ip_address)
+    print("Retrieving geo-location data from a new request...")
+        
+    if not current_geo_location:
+        logger.error(f"The current geo location for the {ip_address} couldn't be retrieved")
+        return None
+        
+    current_geo_location["timestamp"] = timezone.now()
+        
+    cache.set(key=key, value=current_geo_location, timeout=ONE_HOUR_IN_SECS)
+    return current_geo_location
+
+
+def _get_location_from_ip(ip_address):
     """
     Takes either IPV4 or IPV6 ip address and returns the geolocation data using the ipinfo.io API
         
@@ -122,15 +241,15 @@ def get_location_from_ip(ip_address):
            
     :Returns
         Returns a dictionary containing the geo-location data. The dictionary contains the following info:
-            - IP
-            - Hostname
-            - City
-            - Region
-            - Country
+            - ip
+            - hostname
+            - city
+            - region
+            - country
             - loc (latitude, longitude)
             - org
-            - Postal
-            - Timezone
+            - postal
+            - timezone
             
     """
     if not is_ip_address_valid(ip_address):
@@ -144,8 +263,9 @@ def get_location_from_ip(ip_address):
     URL = f"https://ipinfo.io/{ip_address}?token={API_KEY}"
     
     try:
+                     
         response = requests.get(URL)
-        
+
         if not response.ok:
             raise IPAddressError(f"Failed to retrieve location for IP address <{ip_address}>. API returned status code {response.status_code}.")
         
@@ -153,3 +273,81 @@ def get_location_from_ip(ip_address):
         return location
     except requests.exceptions.RequestException as e:
         raise IPAddressError(f"An error occurred while attempting to fetch data for IP address <{ip_address}>: {e}")
+
+
+def validate_user_status(user):
+    
+    error_msg = ""
+    is_valid  = True
+    
+    if user.is_banned:
+        error_msg = "Your account has been banned, please contact support."
+        is_valid  = False
+    elif not user.is_active:
+        error_msg = "Your account is no longer active, please contact support."
+        is_valid  = False
+        
+    return is_valid, error_msg
+
+
+def get_user_baseline_data(ip_address):
+    ip_address = hash_ip(ip_address, getenv("SECRET_KEY"))
+    return UserBaseLineData.objects.filter(client_ip_address=ip_address).first()
+
+
+def extract_coordinates(data):
+    
+    try:
+        return {
+            "latitude":  data.latitude,
+            "longitude": data.longitude,
+            "timestamp": data.timestamp,
+        }
+    except ValueError:
+        logger.error(f"Failed to extract the necessary coordiantes from the data:  {data}")
+        return None
+    
+
+def process_user_device(user:User, user_device_info:str, request, ip_address, baseline_data):
+    """
+    
+    
+    """
+    SECRET_KEY      = getenv("SECRET_KEY")
+    existing_device = UserDevice.get_by_user(user=user)
+    is_same_device  = True
+    
+    if not existing_device:
+        UserDevice.objects.create(
+            user=user,
+            frontend_timezone=user_device_info.get("timeZone"),
+            user_agent=user_device_info.get("userAgent", "Unknown"),
+            screen_width=user_device_info.get("screenWidth", 0),
+            screen_height=user_device_info.get("screenHeight", 0),
+            is_touch_device=user_device_info.get("isDeviceTouchScreen"),
+            platform=user_device_info.get("platform"),
+            browser=user_device_info.get("browser"),
+            browser_version=user_device_info.get("browserVersion"),
+            device=get_device(request),
+            pixel_ratio=user_device_info.get("pixelRatio"),
+        )
+     
+    if existing_device:
+        is_same_device = any([existing_device.frontend_timezone == user_device_info.get("timeZone"),
+                             existing_device.screen_width==user_device_info.get("screenWidth"),
+                             existing_device.user_agent==user_device_info.get("userAgent"),
+                             existing_device.screen_height==user_device_info.get("screenHeight"),
+                             existing_device.is_touch_device==user_device_info.get("isDeviceTouchScreen"),
+                             existing_device.platform==user_device_info.get("platform"),
+                             existing_device.browser==user_device_info.get("browser"),
+                             existing_device.browser_version==user_device_info.get("browserVersion"),
+                             existing_device.pixel_ratio==user_device_info.get("pixelRatio")
+        ])
+
+    if hash_ip(ip_address, SECRET_KEY) != hash_ip(baseline_data.client_ip_address, SECRET_KEY) or not is_same_device:
+        # Todo
+        # send to user telling them their have logged in from a different device
+        # allong with user device info
+        pass
+    
+    return True

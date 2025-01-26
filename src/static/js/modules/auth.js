@@ -3,6 +3,7 @@ import fetchData from "../utils/fetch.js";
 import { saveToLocalStorage, clearStorage } from "../utils/utils.js";
 import { getFormEntries } from "../utils/formUtils.js";
 import fingerprintDevice from "../utils/browser.js";
+import { redirectToNewPage } from "../utils/utils.js";
 
 
 // DOM Elements for Authentication
@@ -50,6 +51,9 @@ const emailErrorField       = document.querySelector(".email-error-field")
 // login message field
 const loginMsgFElement      = document.getElementById("login-msg");
 
+// spinner element
+const spinner               = document.querySelector(".spinner")
+
 // csrf token
 const csrfToken             =  document.querySelector('input[name="csrfmiddlewaretoken"]').value;
 
@@ -60,11 +64,6 @@ const registerButtonElement = document.getElementById("register-btn");
 
 
 const passwordStrengthChecker = new PasswordStrengthChecker()
-
-
-
-
-
 
 
 // Show the login form and registration form when the corresponding links in the navigation bar are clicked
@@ -130,6 +129,8 @@ async function handleRegisterFormSubmit(e) {
   
     if (resp) {
         console.log("Registration successful");
+
+        spinner?.classList.remove("show");
         registerForm.submit();
     }
 };
@@ -159,6 +160,7 @@ async function handleRegisterFormSubmit(e) {
  */
 async function processRegistrationform(formData) {
    
+    spinner?.classList.add("show");
     setButtonState(true, registerButtonElement, "register", "please wait");
 
     try {
@@ -194,6 +196,7 @@ async function processRegistrationform(formData) {
         return passwordValidation?.IS_VALID && isEmailValid && isUsernameValid;
 
     } catch (error) {
+        spinner?.classList.remove("show");
         setButtonState(true, registerButtonElement, "register", "please wait");
     }
 }
@@ -236,15 +239,18 @@ async function handleLoginFormSubmit(e) {
     const resp = await processLoginForm(formData);
 
     if (resp) {
-
-        
+      
         console.log("You have logged in...");
         const nextUrl = getQueryParams("next");
+        const url     = nextUrl ? nextUrl : "/account/landing-page/";
+        spinner?.classList.remove("show");
         clearStorage();
         saveToLocalStorage("authenticated", "logged_in");
-        window.location.href = nextUrl ? nextUrl : "/account/landing-page/";
+        redirectToNewPage(url);
+        
        
-      
+    } else {
+        spinner?.classList.remove("show");
     }
       
 }
@@ -269,6 +275,7 @@ async function handleLoginFormSubmit(e) {
  */
 async function processLoginForm(formData) {
      
+    spinner?.classList.add("show");
     setButtonState(true, loginButtonElement, "Login", "please wait...");
 
 
@@ -284,6 +291,9 @@ async function processLoginForm(formData) {
 
     } catch (error) {
         setButtonState(false, loginButtonElement, "Login", "please wait...");
+        spinner?.classList.remove("show");
+        
+      
     }
 }
 

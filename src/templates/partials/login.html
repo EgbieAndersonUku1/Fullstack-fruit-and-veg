@@ -14,11 +14,11 @@
 
              
             <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-
-            
+      
             {% include "partials/form_errors.html" %}
 
-           
+            <div class="spinner" class="login-spinner"></div>
+
             <p class="light-red d-none" id="login-msg"></p>
             {{ login_form.email.label_tag }}
             {{ login_form.email}}

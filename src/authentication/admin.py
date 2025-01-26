@@ -15,20 +15,17 @@ from .models import (
                     StaffUserProxy,
                     SuperUserProxy,
                     User,
-                    LoginAttempt,
                     UserDevice,
+                    UserBaseLineData,
                     VerifiedUserProxy,
                     TempBannedUserProxy
 )
 
 
-
-
 class BaseUserAdminReadonlyFields(admin.ModelAdmin):
     readonly_fields = ["password", "email", "username", "verification_data"]
 
-    
-    
+
 class BaseUserAdmin(admin.ModelAdmin):
     ordering            = ['-date_created']
     list_display        = ('id', 'email', 'username', 'is_superuser', 'is_staff', 'is_active', 'is_email_verified', 'last_login')
@@ -236,8 +233,8 @@ class UserBanAdmin(admin.ModelAdmin):
 
 class UserDeviceAdmin(admin.ModelAdmin):
     
-    list_display        = ["id", "user", "local_ip", "platform", "last_login", "created_on", "modified_on"]
-    list_display_links  = ["id", "local_ip", "platform"]
+    list_display        = ["id", "user", "platform", "last_login", "created_on", "modified_on"]
+    list_display_links  = ["id", "platform"]
     list_filter         = ["is_touch_device"]
     list_per_page       = 25
     search_fields       = ["id", "local_ip", "platform"]
@@ -246,19 +243,17 @@ class UserDeviceAdmin(admin.ModelAdmin):
     # Fieldsets define the layout of the form view
     fieldsets = (
         (None, {'fields': ('user', 'local_ip', 'user_agent', 'platform', "device" )}),
-        ('Timezones', {'fields': ('frontend_timezone', 'backend_timezone')}),
+        ('Timezones', {'fields': ('frontend_timezone',)}),
         ('Browser', {'fields': ('browser', 'browser_version')}),
         ('Screen size', {'fields': ('screen_width', 'screen_height')}),
         ('Additional information', {'fields': ('pixel_ratio', 'is_touch_device', 'last_login', 'created_on', 'modified_on')}),
       
     )
 
-    
 
-class LoginAttemptAdmin(admin.ModelAdmin):
-    
-    list_display        = ["id", "user", "client_ip_address", "hostname", "country"]
-    list_display_links  = ["id", "client_ip_address", "country"]
+class BaseLineDataAdmin(admin.ModelAdmin):
+    list_display        = ["id", "user", "country", "hostname", "created_on", "modified_on"]
+    list_display_links  = ["id", "country"]
     list_filter         = ["is_successful"]
     list_per_page       = 25
     search_fields       = ["id", "client_ip_address", "country", "region", "latitude", "longitude"]
@@ -266,13 +261,17 @@ class LoginAttemptAdmin(admin.ModelAdmin):
     
     # Fieldsets define the layout of the form view
     fieldsets = (
-        (None, {'fields': ('user', 'client_ip_address', 'hostname', 'org', 'country', 'region', )}),
+        (None, {'fields': ('user', 'client_ip_address', 'hostname', 'organization', 'country', 'region', )}),
         ('Coordinates', {'fields': ('latitude', 'longitude')}),
         ('Additional information', {'fields': ('timezone', 'created_on', 'modified_on')}),
       
     )
-    
 
+
+
+class UserBaseLineDataAdmin(BaseLineDataAdmin):
+   pass
+    
 
 admin.site.register(ActiveUserProxy, AdminActiveUserProxy)
 admin.site.register(AdminUserProxy, AdminUserProxyModel)
@@ -285,4 +284,4 @@ admin.site.register(TempBannedUserProxy, AdminBTempBannedUserProxy)
 admin.site.register(User, AdminUser)
 admin.site.register(VerifiedUserProxy, AdminVerifiedUserProxy)
 admin.site.register(UserDevice, UserDeviceAdmin)
-admin.site.register(LoginAttempt, LoginAttemptAdmin)
+admin.site.register(UserBaseLineData, UserBaseLineDataAdmin)

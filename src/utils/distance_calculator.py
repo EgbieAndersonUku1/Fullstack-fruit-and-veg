@@ -1,7 +1,7 @@
 from geopy.distance import geodesic
 from datetime import datetime
 from django.utils.timezone import is_aware, make_aware
-
+from decimal import Decimal
 
 from utils.validator import validate_required_keys
 
@@ -20,18 +20,6 @@ def is_travel_impossible(last_coordinates:dict, current_coordinates:dict, max_sp
         
     Example usage:
     
-        # Assume travel by plane
-        # Commercial Jet Airliners (e.g., Boeing 737, 747, Airbus A320):
-        # Typical cruising speed is around 900 km/h (approximately 560 mph or 250 m/s).
-
-        # Supersonic Aircraft (e.g., Concorde):
-        # Supersonic jets travel at speeds exceeding the speed of sound, typically around
-        #   2,180 km/h (approximately 1,354 mph or 606 m/s).
-
-        #Private Jets:
-        # Cruising speed is slightly lower, around 600–800 km/h (approximately 375–500 mph or 166–222 m/s).
-
-
         >>> from datetime import datetime
         >>> last_coordinates = {
                 "latitude": 40.7128,  # New York
@@ -53,7 +41,9 @@ def is_travel_impossible(last_coordinates:dict, current_coordinates:dict, max_sp
         raise ValueError("Inputs must be dictionaries.")
 
     required_keys = ["longitude", "latitude", "timestamp"]
+    
     for coordinates in [last_coordinates, current_coordinates]:
+        
         validate_required_keys(coordinates, required_keys)
         if not isinstance(coordinates["timestamp"], datetime):
             raise ValueError(f"Timestamp must be a datetime object. Got {type(coordinates['timestamp'])}.")
@@ -81,7 +71,10 @@ def is_travel_impossible(last_coordinates:dict, current_coordinates:dict, max_sp
     return True
     
     
-def calculate_distance(lat1: float, lon1: float, lat2: float, lon2: float, in_kilometers: bool = True) -> float:
+def calculate_distance(lat1: Decimal| float,
+                       lon1: Decimal|float, 
+                       lat2: Decimal|float, lon2: float|Decimal,
+                       in_kilometers: bool = True) -> float:
     """
     Calculates the geodesic distance between two sets of coordinates (latitude and longitude).
     
@@ -114,8 +107,8 @@ def calculate_distance(lat1: float, lon1: float, lat2: float, lon2: float, in_ki
         
     """
     for coordinate in [lat1, lon1, lat2, lon2]:
-        if not isinstance(coordinate, (int or float)):
-            raise ValueError(f"The value <{coordinate}>  is not a int or a float")
+         if not isinstance(coordinate, (int, float, Decimal)):
+            raise ValueError(f"The value <{coordinate}> is not an int, float, or Decimal. Type {type(coordinate)}")
     
     if not (-90 <= lat1 <= 90 and -90 <= lat2 <= 90):
         raise ValueError("Latitude values must be between -90 and 90 degrees.")

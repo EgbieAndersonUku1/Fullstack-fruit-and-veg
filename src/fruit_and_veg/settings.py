@@ -22,7 +22,9 @@ load_dotenv(override=True)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-TEMPLATES = join(BASE_DIR, "templates")
+TEMPLATES   = join(BASE_DIR, "templates")
+CACHES_DIR  = join(BASE_DIR, "cache_directory")
+APP_NAME    = "EUOrganics"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -57,7 +59,8 @@ INSTALLED_APPS = [
     'compressor',
     'phonenumber_field',
     'django_ckeditor_5',
-  
+    'django_q',
+    
      
     # my apps
     "home.apps.HomeConfig",
@@ -197,6 +200,21 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': CACHES_DIR,
+        'TIMEOUT': 86400,  # Cache timeout in seconds 24 hours
+        'OPTIONS': {
+            'MAX_ENTRIES': 4000,  # Maximum number of cache entries
+        },
+    }
+}
+
 
 
 # Internationalization
@@ -361,3 +379,59 @@ STATICFILES_FINDERS = [
 
 
 COMPRESS_ENABLED = True 
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        'file': {
+            'level': 'DEBUG',  
+            'class': 'logging.FileHandler',
+            'filename': 'app.log',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'custom_logger': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG', 
+            'propagate': False,
+        },
+    },
+}
+
+
+
+#
+# set up Django-q parmeters
+
+Q_CLUSTER = {
+    'name': APP_NAME,
+    'workers': 4,
+    'timeout': 60,
+    'retry': 70,
+    'queue_limit': 50,
+    'bulk': 10,
+    'orm': 'default',  # Use the Django ORM broker
+    'retry_delay': 10,  # Wait 10 seconds before retrying
+}

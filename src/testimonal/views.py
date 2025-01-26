@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Testimonial, TestimonialMessages
 from .forms.testimonial.testimonial_form import TestimonialForm
-from  utils.send_emails_types import notify_admin_of_new_testimonial
+from  utils.tasks import notify_admin_of_new_testimonial
 # Create your views here.
 
 
