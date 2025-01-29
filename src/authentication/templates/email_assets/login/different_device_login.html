@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Login Alert</title>
+</head>
+<body style="min-height: 90vh; max-height: 100vh; overflow: auto; margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
+
+    <main>
+        <section id="login-alert" style="background: ghostwhite;">
+            <div class="container" style="background: white; width: 70%; margin: auto; padding: 16px; border: 2px solid lavender; border-radius: 8px;">
+
+                <!-- Logo section -->
+                <div class="logo" style="text-align: center;">
+                    <img src="https://raw.githubusercontent.com/EgbieAndersonUku1/euorganics-email-assets/main/email_assets/images/registration/logo.png" alt="Logo" class="img-logo" style="height: 100px; width: auto;">
+                </div>
+
+                <h1 style="text-align: center; font-family: fantasy; font-size: 32px; color: rgb(6, 64, 6); margin-top: 16px;">
+                    EU Organics Online Store
+                </h1>
+
+                <div class="content">
+                    <p style="font-size: 24px; padding-top: 16px;">
+                        Dear {{ username }},
+                    </p>
+
+                    <p style="font-size: 16px; padding-top: 8px;">
+                        We noticed that you logged into your EUOrganics account from a different device or location. If this was you, no further action is required. However, if you did not initiate this login, we strongly recommend securing your account by changing your password immediately.
+                    </p>
+
+                    <p style="font-size: 16px; padding-top: 8px;">
+                        Details of the login attempt:
+                    </p>
+
+                    <div style="font-size: 16px; padding-bottom: 16px;">
+                        <ul>
+                            <li>Location: {{ location }}</li>
+                            <li>Device: {{ device }}</li>
+                            <li>IP: {{ ip }}</li>
+                            <li>Local IP: {{ local_ip }}</li>
+                            <li>Browser: {{ browser }}</li>
+                            <li>Timezone: {{ timezone }}</li>
+                            <li>Screen width: {{ screen_width }}</li>
+                            <li>Screen height: {{ screen_height }}</li>
+                            <li>Is Touch Screen: {{ is_touch_screen }}</li>
+                            <li>Platform: {{ platform }}</li>
+                            <li>Browser version: {{ browser_version }}</li>
+                            <li>Pixel ratio: {{ pixel_ratio }}</li>
+                        </ul>
+                    </div>
+
+                    <p style="font-size: 16px; padding-bottom: 16px;">
+                        Please confirm if this was you. If not, we will help you secure your account.
+                    </p>
+
+                    <!-- Buttons Section -->
+                    <div style="text-align: center; padding-top: 24px;">
+                        <a href="#" style="text-decoration: none;">
+                            <button style="background-color: #28a745; color: white; border: none; border-radius: 4px; padding: 12px 24px; font-size: 16px; cursor: pointer; margin-right: 12px;">
+                                Yes, It Was Me
+                            </button>
+                        </a>
+                        <a href="#" style="text-decoration: none;">
+                            <button style="background-color: #dc3545; color: white; border: none; border-radius: 4px; padding: 12px 24px; font-size: 16px; cursor: pointer; margin-left: 12px;">
+                                No, Secure Account
+                            </button>
+                        </a>
+                    </div>
+
+                    <p style="font-size: 16px; padding-top: 32px;">
+                        Thank you for choosing EUOrganics. Your security is our priority.
+                    </p>
+
+                    <p style="font-size: 16px; font-weight: bolder;">
+                        Best regards,
+                    </p>
+                    <p style="font-size: 16px; font-weight: bolder;">
+                        The EUOrganics Team
+                    </p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

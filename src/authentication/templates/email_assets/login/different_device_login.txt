@@ -1,0 +1,29 @@
+**Subject**: New Login from a Different Device
+
+Dear {{ username }},
+
+We noticed that you logged into your EUOrganics account from a different device or location.
+
+If this was you, no further action is required. However, if you did not initiate this login, we strongly recommend securing your account by changing your password immediately.
+
+Details of the login attempt:
+- Location: {{ location }}
+- Device: {{ device }}
+- IP: {{ ip }}
+- Local IP: {{ local_ip }}
+- Browser: {{ browser }}
+- Timezone: {{ timezone }}
+- Screen width: {{ screen_width }}
+- Screen height: {{ screen_height }}
+- Is Touch Screen: {{ is_touch_screen }}
+- Platform: {{ platform }}
+- Browser version: {{ browser_version }}
+- Pixel ratio: {{ pixel_ratio }}
+
+If you have any questions or need further assistance, feel free to reach out to our support team.
+
+Thank you for choosing EUOrganics. Your security is our priority.
+
+Best regards,  
+The EUOrganics Team
+

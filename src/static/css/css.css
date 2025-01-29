@@ -3668,6 +3668,10 @@ legend {
   }
 
 
+.spinner.show {
+    display: block;
+}
+
  
   @keyframes spin {
     0% {

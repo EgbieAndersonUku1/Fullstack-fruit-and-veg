@@ -2,8 +2,7 @@ from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save
 from django.utils import timezone
 
-from utils.send_emails_types import notify_admin_of_user_unsubscription, notify_admin_of_new_subscriber
-from .models import NewsletterSubscription, NewsletterSubscriptionHistory
+from .models import NewsletterSubscription
 
 
 @receiver(pre_save, sender=NewsletterSubscription)

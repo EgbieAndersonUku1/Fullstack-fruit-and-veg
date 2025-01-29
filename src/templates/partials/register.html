@@ -21,6 +21,7 @@
                 {% csrf_token %}
 
                 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                <div class="spinner"></div>
 
                 {{ register_form.username.label_tag }}
                 {{ register_form.username }}

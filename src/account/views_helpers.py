@@ -9,6 +9,7 @@ from utils.converter import encode_image_bytes_to_base64, convert_decimal_to_flo
 from product.models import Product, ProductVariation, Shipping
 from utils.converter import decode_base64_to_image_bytes
 from utils.generator import generate_random_image_filename
+from utils.validator import validate_required_keys, validate_instance_of
 
 
 def handle_form(request, form_class, session_key, next_url_name, template_name, current_step, checkbox_fields_to_store=set()):
@@ -194,9 +195,6 @@ def save_file_with_timestamped_directory(file, base_folder, create_unique_name_f
         raise Exception(f"An error occurred while uploading the file: {e}")
 
     return full_file_path
-
-
-
 
 
 def get_base64_images_from_session(session_dict):
@@ -390,36 +388,6 @@ def create_shipping_variations(product, merged_context) -> List[Shipping]:
         )
 
     return delivery_variations
-
-
-
-def validate_required_keys(context, required_keys):
-    """
-    Validates that the required keys are present in the merged context.
-    
-    :param context: A dictionary containing product details.
-    :param required_keys: A list of required keys that must be present in merged_context.
-    :raises KeyError: If any required key is missing.
-    """
-    missing_keys = [key for key in required_keys if key not in context]
-    if missing_keys:
-        raise KeyError(f"The following keys are missing in context: {', '.join(missing_keys)}")
-
-
-
-def validate_instance_of(instance, expected_class):
-    """
-    Validates if the instance is an instance of the expected class.
-
-    :param instance: The object to validate.
-    :param expected_class: The class that the instance should be an instance of.
-    :raises ValueError: If the instance is not an instance of the expected class.
-    """
-    if not isinstance(instance, expected_class):
-        raise ValueError(
-            f"The instance is not of type {expected_class.__name__}. Expected {expected_class.__name__} instance, got {type(instance).__name__}."
-        )
-        
 
 
 def redirect_to_incomplete_step(request, template_name, context):

@@ -2,22 +2,40 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
+from .models import UserBaseLineData
 from .utils.password_validator import PasswordStrengthChecker
 from utils.post_json_validator import validate_json_and_respond
 from utils.generator import generate_forgotten_password_url
+from authentication.views_helper import (is_suspicious_login,
+                                         validate_user_status,
+                                         get_user_baseline_data,
+                                         extract_coordinates,
+                                         process_user_device,
+                                         handle_suspicious_login,
+                                         )
+
 from .forms.register_form import RegisterForm
 from .forms.passwords.forgotten_password import ForgottenPasswordForm
 from .forms.passwords.new_password import NewPasswordForm
-from .views_helper import send_verification_email
-from utils.send_emails_types import (send_registration_email, 
+from .views_helper import send_verification_email, get_client_ip_address, get_cached_geo_location_or_from_ip
+from utils.utils import hash_ip
+from utils.tasks import (send_registration_email, 
                                       resend_expired_verification_email, 
                                       send_forgotten_password_verification_email
                                       )
+
+import logging
+
+from dotenv import load_dotenv
+from os import getenv
+
+load_dotenv()
+
+logger = logging.getLogger('custom_logger')
 
 
 # Create your views here.
@@ -36,7 +54,30 @@ def register(request):
             
             user = form.save(commit=False)
             user.set_password(form.cleaned_data["password"])
+            user.save()
             
+            ip_address   = get_client_ip_address(request)
+            geo_location = get_cached_geo_location_or_from_ip(ip_address)
+            
+            latitude, longitude = map(float, geo_location.get("loc").split(","))
+            
+            ip_address = geo_location.get("ip")
+            hashed_ip  = hash_ip(ip_address, secret_key=getenv("SECRET_KEY"))
+            
+            UserBaseLineData.objects.create(user=user,
+                                            client_ip_address=hashed_ip,
+                                            hostname=geo_location.get("hostname"),
+                                            city=geo_location.get("city"),
+                                            region=geo_location.get("region"),
+                                            country=geo_location.get("country"),
+                                            longitude=longitude,
+                                            latitude=latitude,
+                                            organization=geo_location.get("org"),
+                                            timezone=geo_location.get("timezone"),                   
+                                            )
+            
+        
+            # set the registration
             subject           = "Please verify your email address"
             follow_up_message = "An email verification email has been sent. Please verify your email address."
             send_verification_email(request, user, subject, follow_up_message, send_registration_email)
@@ -78,33 +119,44 @@ def user_login(request):
             bool: True if the user is authenticated and active, otherwise False.
         """
         
-        email    = data.get("email")
-        password = data.get("password")
-        user     = authenticate(request, email=email, password=password)
+        email            = data.get("email")
+        password         = data.get("password")
+        user_device_info = data.get("userDeviceInfo")
+        user             = authenticate(request, email=email, password=password)
         
-     
-        if user:
-            if user.is_banned:
-                error_msg = "Your account has been banned, please contact support."
-            elif not user.is_active:
-                error_msg = "Your account is no longer active, please contact support."
-            else:
-                messages.success(request, "Welcome back, you have successfully logged in.")
-                login(request, user)
-                return True, ''
-        else:
-            error_msg="The username and/or password is invalid."
+        if not user:
+            logger.warning(f"Failed login attempt for user with email: {email}")
+            return False, "The username and/or password is invalid."
         
-        return False, error_msg
-
+        status_ok, error_msg = validate_user_status(user)
+        
+        if not status_ok:
+            return False, error_msg
     
+        ip_address     = get_client_ip_address(request)
+        baseline_data  = get_user_baseline_data(ip_address, user)
+        
+        if not baseline_data:
+            logger.error("Baseline data not found for IP: %s", ip_address)
+            return False, "Baseline data missing."
+        
+        is_supicious_login, msg = is_suspicious_login(ip_address, extract_coordinates(baseline_data))
+        if is_supicious_login:
+            handle_suspicious_login(user, user_device_info, ip_address)
+            return False, msg
+        
+        process_user_device(user, user_device_info, request, ip_address, baseline_data)        
+       
+        messages.success(request, "Welcome back, you have successfully logged in.")
+        login(request, user)
+        return True, ''
+        
     return validate_json_and_respond(request,
                             field_name,
                             follow_up_message='Credentials are valid.',
                             validation_func=validate_user_login,
         
     )
-
 
 
 @login_required(login_url=settings.LOGIN_URL, redirect_field_name='next')
@@ -126,7 +178,7 @@ def validate_password(request):
     Validates the strength of a password provided in the request.
 
     This function is called by a fetch request from the frontend to check if the provided password meets 
-    the required strength criteria. It uses the `password_strength_checker` helper function to assess 
+    the required strength criteria. It uses the `validate_password_strength` helper function to assess 
     the password's strength and provides appropriate feedback based on the validation result.
 
     Args:
@@ -142,12 +194,13 @@ def validate_password(request):
     field_name = "password"
     error_msg  = f"{field_name.title()} is in use"
     
-    def password_strength_checker(password):
+    def validate_password_strength(password):
         checker = PasswordStrengthChecker(password)  
         return checker.is_strong_password(), error_msg
 
-    return validate_json_and_respond(request, field_name, follow_up_message='Password is valid', 
-                           validation_func=password_strength_checker)
+    return validate_json_and_respond(request, field_name, 
+                                     follow_up_message='Password is valid', 
+                                    validation_func=validate_password_strength)
 
 
 def validate_email(request):
@@ -174,9 +227,11 @@ def validate_email(request):
     def is_email_unique(email):
         return not User.objects.filter(email=email).exists(), error_msg
     
-    return validate_json_and_respond(request, field_name, follow_up_message='Email is valid', 
-                           validation_func=is_email_unique
-                           )
+    return validate_json_and_respond(request, 
+                                     field_name, 
+                                     follow_up_message='Email is valid', 
+                                     validation_func=is_email_unique
+                                    )
 
 
 def validate_username(request):
@@ -203,8 +258,11 @@ def validate_username(request):
     def is_username_unique(username):
         return not User.objects.filter(username=username).exists(), error_msg
     
-    return validate_json_and_respond(request, field_name, follow_up_message='Username is valid',  
-                          validation_func=is_username_unique)
+    return validate_json_and_respond(request, 
+                                     field_name, 
+                                     follow_up_message='Username is valid',  
+                                     validation_func=is_username_unique
+                                     )
 
 
 
@@ -375,6 +433,3 @@ def check_session(request):
         return JsonResponse({"IS_LOGGED_IN": True}, status=200)
     return JsonResponse({"IS_LOGGED_IN": False}, status=200)
 
-    
-        
-        

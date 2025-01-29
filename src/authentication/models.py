@@ -3,10 +3,17 @@ from datetime import datetime, timedelta
 from django.utils.timezone import make_aware, is_naive
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+
 
 from typing import Optional
 from utils.dates import calculate_days_between_dates, is_date_valid
+from utils.utils import get_local_ip_address
+
+import logging
+
+logger = logging.getLogger('custom_logger')
 
 
 # Create your models here.
@@ -75,8 +82,8 @@ class CustomBaseUser(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """Custom user model extending AbstractBaseUser and PermissionsMixin."""
 
-    username                 = models.CharField(_("username"), max_length=20, unique=True)
-    email                    = models.EmailField(_("email"), max_length=40, unique=True)
+    username                 = models.CharField(_("username"), max_length=20, unique=True, db_index=True)
+    email                    = models.EmailField(_("email"), max_length=40, unique=True, db_index=True)
     is_active                = models.BooleanField(_("is active"), default=True)
     is_staff                 = models.BooleanField(_("is staff"), default=False)
     is_superuser             = models.BooleanField(_("is superuser"), default=False)
@@ -381,6 +388,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class BanUser(models.Model):
+    """A model for banning a users"""
     user                = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bans")
     ban_reason          = models.TextField()  
     ban_start_date      = models.DateTimeField(null=True, blank=True)
@@ -678,3 +686,139 @@ class NonActiveUserProxy(User):
         proxy = True
         verbose_name = "Non-active User"
         verbose_name_plural = "Non-active Users"
+        
+
+class UserDevice(models.Model):
+    """A model that captures the user device"""
+    user              = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_devices", db_index=True)
+    local_ip          = models.GenericIPAddressField(null=False, verbose_name="Local Device IP Address", default=get_local_ip_address)  # local device ip e.g 192.168.x.x
+    frontend_timezone = models.CharField(max_length=100, null=False, db_index=True, verbose_name="Frontend Time Zone")
+    user_agent        = models.CharField(max_length=1000, null=False, db_index=True, verbose_name="User Agent")
+    screen_width      = models.PositiveSmallIntegerField(null=False, db_index=False)
+    screen_height     = models.PositiveSmallIntegerField(null=False, db_index=False)
+    platform          = models.CharField(max_length=50, null=False, verbose_name="Operating System")
+    pixel_ratio       = models.FloatField(max_length=50, db_index=False, null=False)
+    browser           = models.CharField(max_length=50, null=True, db_index=True) # e.g chrome
+    browser_version   = models.CharField(max_length=50, null=True, db_index=True) # e.g version 131.1
+    device            = models.CharField(max_length=80, null=True, blank=False, db_index=True) # e.g desktop, laptop
+    is_touch_device   = models.BooleanField(default=False, verbose_name="Is Touchscreen Device")
+    last_login        = models.DateTimeField(auto_now=True, verbose_name="Last Login Time")
+    created_on        = models.DateTimeField(auto_now_add=True)
+    modified_on       = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name        = "User Device"
+        verbose_name_plural = "User Devices"
+        
+    def __str__(self):
+        return f"{self.user.username} - <Platform: {self.platform}> - Screen Resolution: <{self.screen_resolution}>"
+    
+    @property
+    def screen_resolution(self):
+        return f"{self.screen_width}x{self.screen_height}"
+    
+    @classmethod
+    def get_by_user(cls, user):
+        try:
+            return cls.objects.get(user=user)
+        except cls.DoesNotExist:
+            return None
+        except cls.MultipleObjectsReturned:
+            logging.warning("Expect a single object to be returned but multiple were returned instead. Extracted only the first object")
+            return cls.objects.filter(user=user).first()
+
+    class Meta:
+        verbose_name        = "User Device"
+        verbose_name_plural = "User Devices"
+        
+    def clean(self):
+        if self.pixel_ratio < 0:
+            raise ValidationError({"pixel_ratio": "The pixel ratio cannot be less than 0"})
+       
+    def save(self, *args, **kwargs):
+        self.clean()  # Validate before saving
+        super().save(*args, **kwargs)  
+        
+class BaseModel(models.Model):
+    """
+    A base model for capturing various user attributes.
+
+    This model is intended to be inherited by other models to include shared fields or functionality 
+    related to user attributes.
+    """
+
+    client_ip_address = models.TextField(db_index=True,null=True, blank=True, max_length=64, verbose_name="hashed ip address") 
+    hostname          = models.CharField(max_length=255, db_index=True, null=True, blank=True)
+    organization      = models.CharField(max_length=255, null=True, blank=True)
+    country           = models.CharField(max_length=255, db_index=True, null=True, blank=True)
+    city              = models.CharField(max_length=255, db_index=True, null=True, blank=True)
+    region            = models.CharField(max_length=255, db_index=True, null=True, blank=True)
+    longitude         = models.DecimalField(max_digits=9, decimal_places=6, db_index=True, null=True, blank=True)
+    latitude          = models.DecimalField(max_digits=9, decimal_places=6, db_index=True, null=True, blank=True)
+    timezone          = models.CharField(max_length=255, db_index=True)
+    timestamp         = models.DateTimeField(auto_now_add=True)
+    is_successful     = models.BooleanField(default=False)
+    created_on        = models.DateTimeField(auto_now_add=True)
+    modified_on       = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+        indexes  = [
+            models.Index(fields=["client_ip_address", "timestamp"]),
+            models.Index(fields=["country", "region", "city"]),
+        ]
+
+
+class UserBaseLineData(BaseModel):
+    """
+    The baseline model that captures a baseline of the user attributes. The model inherits
+    is fields and attributes from the BaseModel.  
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="registration_baseline")
+
+    @property
+    def timestamp(self):
+        return self.created_on
+    
+    class Meta:
+        verbose_name        = "User Baseline Data"
+        verbose_name_plural = "Users Baseline Data"
+        
+    @classmethod
+    def get_by_ip_address_and_user(cls, ip_address: str, user:User) -> User | None:
+        """
+        Retrieve the model instance associated with the given IP address.
+
+        Args:
+            ip_address (str): The IP address used to locate the instance.
+
+        Returns:
+            User | None: The model instance if found, otherwise None.
+        """
+        return cls.objects.filter(client_ip_address=ip_address, user=user).first()
+  
+    @classmethod
+    def get_by_user(cls, user:User) -> User | None:
+        """
+        Retrieve the model instance associated with the given user.
+
+        Args:
+            user (User): The user object used to locate the model instance.
+
+        Returns:
+            Optional[User]: The model instance if found, otherwise None.
+
+        Raises:
+            ValueError: If the provided user is not an instance of the User class.
+        """
+        
+        try:
+            return cls.objects.get(user=user)
+        except cls.DoesNotExist:
+            return None
+        except cls.MultipleObjectsReturned:
+            logging.warning("Expect a single object to be returned but multiple were returned instead. Extracted only the first object.")
+            return cls.objects.filter(user=user).first()
+    
+    def __str__(self) -> str:
+        return f"Baseline data:{self.user}, ip:{self.client_ip_address}, success:{self.is_successful})"

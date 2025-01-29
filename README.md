@@ -18,7 +18,9 @@ The backend for the Fruit Store website is designed to manage server-side operat
 - [Current Status](#current-status)
 - [Secret Key Setup](#secret-key-setup)
 - [Email setup](#email-setup)
+- [GEO location API setup](#geo-location-api-setup)
 - [Django Application Setup with PostgreSQL](#django-application-setup-with-postgresql)
+- [Django Q setup](#django-q-setup)
 - [Django-HTML Syntax Highlighting in VS Code](#Django-HTML-Syntax-Highlighting-in-VS-Code)
 - [Create a superuser](#creating-a-superuser)
 - [Overview](#overview)
@@ -170,6 +172,217 @@ Your application should now be set up with PostgreSQL.
   It appears as though the variable doesn't exist, causing issues when trying to load the setting from the environment, so to rectify
   this manually set it to `True` for local and `False` for external.
 
+
+## Geo location API setup
+
+I```markdown
+## Geo-Location API Setup  
+
+To detect suspicious login activity, such as logging in from two geographically impossible locations within a short period (e.g., logging in from London and 30 minutes later from New York), this application uses the `ipinfo` API. The API converts an IP address into its geo-location, enabling the application to identify unusual activity.  
+
+By signing up for the API, you are granted **50,000 free requests per month**.  
+
+---
+
+### Setting up the API  
+
+To begin using this API you first need to sign up for the API, you are granted 50,000 free requests per month.
+
+1. **Sign Up**  
+   - Visit [ipinfo.io](https://ipinfo.io/).  
+   - Sign up using your Gmail, Github or another email address.  
+   - After signing up, you will be automatically redirected to the dashboard.  
+
+2. **Retrieve Your API Token and Global IP Address**  
+   - On the dashboard, you will see an overview that includes your global IP address in step 1 and an API token in step 3.  
+   - Make a note of the global IP address and token for later use.  
+
+3. **Test the API**  
+   You can test the API using the `curl` command or using python function `requests` module :  
+   ```bash  
+   # Replace <GLOBAL_IP_ADDRESS> and <API_TOKEN> with your values  
+   curl ipinfo.io/<GLOBAL_IP_ADDRESS>?token=<API_TOKEN>  
+   ```  
+   Sample response:  
+   ```json  
+   {  
+     "ip": "<GLOBAL_IP_ADDRESS>",  
+     "hostname": "example-hostname",  
+     "city": "Example City",  
+     "region": "England",  
+     "country": "GB",  
+     "loc": "51.5098,-0.1180",  
+     "org": "Example Organisation",  
+     "postal": "EC1A 1BB",  
+     "timezone": "Europe/London"  
+   }  
+
+   with request:
+
+   import requests
+
+   ip     = "<GLOBAL_IP_ADDRESS>"  # Replace this with the IP you're testing
+   token  = "<API_TOKEN>"
+
+   # API URL and key
+   api_url = f"ipinfo.io/{ip}?token={token}"
+
+   # Make the request
+   response = requests.get(api_url)
+
+   # Check the response
+   if response.status_code == 200:
+      print("API Response:", response.json())
+   else:
+      print("Error:", response.status_code, response.text)
+   ```
+
+4. **Configure Your Environment Variables**  
+   - Open the `.env.example` file and copy its contents into your `.env` file.  
+   - Add your global IP address and API token as follows:  
+
+   ```env  
+   CLIENT_IP_ADDRESS=<Your_Global_IP_Address>  
+   IPINFO_API_KEY=<Your_API_Token>  
+   MODE=development  
+
+   Double check that MODE=development
+   ```  
+
+   ```
+   - **`CLIENT_IP_ADDRESS`**: The global IP address assigned to you by your ISP.  
+   - **`IPINFO_API_KEY`**: The API token used to retrieve geo-location data.  
+   - **`MODE`**: Defines the application's mode (`development` or `production`).  
+
+   ```
+
+### Why the `MODE` Variable is Necessary  
+
+When running the application in **development mode**, the IP address returned by Django requests is a `localhost` address (e.g., `127.0.0.1`) or a subnet address (e.g., `192.168.x.x`), which is meaningless outside your local network.  
+
+To ensure the application functions correctly during development, the `MODE` variable tells the application to use the global IP address provided in the `.env` file instead of the local IP address. Without this configuration, the application cannot retrieve valid geo-location data, as `localhost` and subnet addresses are not suitable for external lookups.  
+
+
+### Django Q setup
+
+This application uses Django-Q, a lightweight alternative to Celery, for handling background tasks efficiently. One key use case for this application is sending emails in the background.
+
+By offloading email sending to Django-Q, the application avoids blocking the main thread which ensures that users experiences a responsive interface while emails are processed asynchronously/in the background.
+
+
+### Email Processing with Django-Q
+
+This application uses **Django-Q** to handle email sending asynchronously. Here is a brief outline:
+
+1. **Asynchronous Processing**:
+   - Email tasks are queued and processed in the background.
+   - The task result will determine whether the email was successfully sent.
+
+2. **Result Handling**:
+   - Successful email sending will log a success message and return `True`.
+   - Failures or errors during email processing will log the issue and provide detailed information about the cause.
+
+3. **How to Monitor Task Results**:
+   - Results are logged to the configured logger (`app.log` by default which is in the same level as the `src` directory).
+   - Results can also be viewed in Django Admin section
+   - You can also check Django-Q's task queue use custom hooks for result processing.
+
+4. **Expected Wait Times**:
+   - Email tasks are usually processed and sent within a few seconds, depending on server load and network conditions it can take anyway up to 5-15 minutes .
+   - If an email doesn't show up in your email after 30 minutes it could be due to:
+     - Network issues.
+     - Problems with the email provider.
+     - No more storage or close to full storage in your email account
+
+5. **Debugging**:
+   - If an email task fails, review the logs or task queue for error details.
+   - Check if it is in a queue in the admin interface as Django-q stores a list of things it needs to process and works of that list one at a time
+   - Check your admin with Django-Q section
+   - Common issues include invalid email addresses, network timeouts, or misconfigured email settings.
+
+
+### Additonal information about Django-Q
+
+```
+Django-Q is a popular task queue and scheduling library for Django. This application enables you to offload time-consuming or asynchronous tasks by
+allowing them to be manage/run in the background without blocking the main application. Tasks can also be scheduled to perform recurring tasks. 
+
+The key features and capabilities:
+
+### **Key Features:**
+1. **Asynchronous Task Processing:**
+   - Execute tasks in the background without blocking the main application.
+   - Supports concurrent task execution using multiprocessing.
+
+2. **Task Scheduling:**
+   - Built-in scheduler for running recurring tasks (e.g., periodic or cron-like jobs).
+
+3. **Cluster Support:**
+   - Run task workers on multiple servers, enabling horizontal scaling.
+   - Distribute workload across the cluster.
+
+4. **Database-backed Broker:**
+   - Tasks are stored in the database, which simplifies the setup.
+   - No need for external brokers like Redis or RabbitMQ, although support for Redis is also available.
+
+5. **Result Persistence:**
+   - Store task results in the database for easy retrieval.
+   - Query task statuses and results directly from the database.
+
+6. **Integration with Django:**
+   - Works seamlessly with Django's ORM and settings.
+   - Customizable to fit Django applications.
+
+7. **Flexible Configuration:**
+   - Control worker concurrency, timeout, retries, and other settings.
+
+8. **Hook Functions:**
+   - Define custom hooks to execute additional logic after task completion (e.g., success or failure).
+
+9. **Secure Pickling:**
+   - Safely serialize tasks using Django's pickling mechanism, ensuring compatibility and security.
+
+---
+
+### **When to Use Django-Q:**
+- When your application needs to handle long-running or time-consuming tasks.
+- When you require periodic or scheduled tasks.
+- When you prefer a simpler setup without external dependencies like Celery.
+
+
+### Why Django-Q?
+
+Lightweight: Ideal for projects that don't require the full complexity of Celery.
+Efficiency: Handles tasks like email sending seamlessly in the background.
+User Experience: Prevents the application from freezing while waiting for tasks to complete.
+
+
+### **Example Use Cases:**
+1. Sending emails or notifications.
+2. Processing large datasets.
+3. Generating reports asynchronously.
+4. Running scheduled tasks, such as daily backups or clean-ups.
+5. Offloading intensive computations to background workers.
+
+
+```
+
+For more information, visit the official Django-Q documentation: [Django-Q Official Documentation](https://django-q.readthedocs.io/en/latest/)
+
+
+### **How to use Django-Q with this application - run the Worker:**
+
+Open a separate terminal and enter the following command. This will tell the application to use Django-Q
+
+```bash
+   python manage.py qcluster
+```
+
+Once that is done open another terminal and then enter the following
+
+```bash
+   python manage.py runserver
+```
 
 
 ### Django-HTML Syntax Highlighting in VS Code
@@ -346,6 +559,9 @@ pip install -r requirements.txt
 
 # Run migrations
 python manage.py migrate
+
+# open a separate terminal and enter the following command
+python manage.py qcluster
 
 # Run the development server
 python manage.py runserver

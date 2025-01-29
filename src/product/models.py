@@ -1,6 +1,9 @@
 from django.db import models
 from django.db.models.functions import Lower
 from django.forms import ValidationError
+from phonenumber_field.modelfields import PhoneNumberField
+
+
 
 from utils.generator import generate_token
 from utils.custom_errors import ShippingDataError
@@ -47,7 +50,7 @@ class Manufacturer(models.Model):
     name         = models.CharField(max_length=255, unique=True, db_index=True, null=False)
     description  = models.TextField(blank=True, null=True)
     address      = models.CharField(max_length=255, null=True)
-    contact_num  = models.CharField(blank=True, null=True, max_length=20) 
+    contact_num  = PhoneNumberField(blank=True, null=True) 
     is_certified = models.BooleanField(default=True)
     created_on   = models.DateTimeField(auto_now_add=True)
     modified_on  = models.DateTimeField(auto_now=True)
@@ -65,11 +68,11 @@ class ProductVariation(models.Model):
         PRE_ORDER    = ("po", "Pre-order")
         
     product             = models.ForeignKey("Product", on_delete=models.CASCADE, related_name='product_variations')
-    color               = models.CharField(max_length=90)
-    size                = models.CharField(max_length=50, verbose_name="Size (e.g. s, m, l, xl)")
-    height              = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Height (in cm)")  
-    width               = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Width (in cm)")    
-    length              = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Length (in cm)")   
+    color               = models.CharField(max_length=90, null=False)
+    size                = models.CharField(max_length=50, verbose_name="Size (e.g. s, m, l, xl)", null=False)
+    height              = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Height (in cm)", null=False)  
+    width               = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Width (in cm)", null=False)    
+    length              = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Length (in cm)", null=False)   
     stock_quantity      = models.PositiveIntegerField(default=0)
     minimum_stock_order = models.PositiveBigIntegerField(default=0)
     maximum_stock_order = models.PositiveBigIntegerField(default=0)
@@ -127,10 +130,8 @@ class Shipping(models.Model):
             return "Shipping Type - Standard"
         elif self.shipping_type == self.ShippingType.EXPRESS:
             return "Shipping Type - Express"
-        else: 
-            return "Shipping Type - Premium"
+        return "Shipping Type - Premium"
         
-    
     def product_name(self):
         return self.product.name
     
@@ -188,8 +189,8 @@ class Product(models.Model):
     is_featured         = models.BooleanField(default=False)
     category            = models.ForeignKey(Category, on_delete=models.CASCADE, null=False, related_name="products")
     brand               = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products')
-    sku                 = models.CharField(max_length=255, unique=True) 
-    upc                 = models.CharField(max_length=255, unique=True) 
+    sku                 = models.CharField(max_length=255, unique=True, null=False) 
+    upc                 = models.CharField(max_length=255, unique=True, null=False) 
     price               = models.DecimalField(max_digits=10, decimal_places=2)    
     is_discounted_price = models.BooleanField(default=False)
     discount_price      = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
@@ -201,13 +202,14 @@ class Product(models.Model):
     meta_keywords       = models.CharField(max_length=255, blank=True, null=True)
     meta_description    = models.TextField(blank=True, null=True)
     manufacturer        = models.ForeignKey(Manufacturer, on_delete=models.SET_NULL, related_name="products", null=True, blank=True)
-    country_of_origin   = models.CharField(max_length=50)
+    country_of_origin   = models.CharField(max_length=255)
     nutrition           = models.JSONField(null=True, blank=True)
     warranty_period     = models.TextField(blank=True, null=True,  default="No warranty")
     is_returnable       = models.BooleanField(default=False)
     recommendation      = models.CharField(max_length=255, blank=True, null=True)
     created_on          = models.DateTimeField(auto_now_add=True)
     modified_on         = models.DateTimeField(auto_now=True)
+    is_live             = models.BooleanField(default=False)
     
     def __str__(self):
         return self.name 
@@ -219,21 +221,27 @@ class Product(models.Model):
         return self.warranty_period or "No warranty"
     
     def clean(self):
-        if self.is_discounted_price and not self.discount_price:
-            raise ValidationError("Discount price must be set when discount is enabled.")
-        if not self.is_discounted_price and self.discount_price:
+        super().clean()
+        if self.is_discounted_price:
+            
+            if not self.discount_price:
+                raise ValidationError("Discount price must be set when discount is enabled.")
+            if self.discount_price < 0:
+                raise ValidationError(f"The discount price cannot be a negative number. Got {self.discount_price}.")
+            if self.discount_price >= self.price:  
+                raise ValidationError("Discount price must be less than the actual price.")
+        elif self.discount_price:
             raise ValidationError("Discount price should be empty when discount is disabled.")
-        if self.is_discounted_price and self.discount_price and (self.price >= self.discount_price):
-            raise ValidationError("Discount price cannot be greater or equal to the actual price")
 
+        if self.price < 0:
+            raise ValidationError(f"The price cannot be less than zero. Got {self.price}.")
+
+        if self.weight < 0:
+            raise ValidationError(f"The weight of the product cannot be less than zero. Got {self.weight}.")
+        
     def get_discounted_price(self):
         """Returns the discounted price else returns the actual price"""  
         return self.discount_price if self.discount else self.price      
     
-    def save(self, *args, **kwargs):
-        """Allows the save method to be overriden"""
-        if not self.sku:
-            self.sku = generate_token()
-        if not self.upc:
-            self.upc = generate_token()
-        super().save(*args, **kwargs)
+    
+   
