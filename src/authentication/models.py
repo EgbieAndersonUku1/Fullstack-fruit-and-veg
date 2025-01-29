@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from django.utils.timezone import make_aware, is_naive
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 
@@ -696,7 +697,7 @@ class UserDevice(models.Model):
     screen_width      = models.PositiveSmallIntegerField(null=False, db_index=False)
     screen_height     = models.PositiveSmallIntegerField(null=False, db_index=False)
     platform          = models.CharField(max_length=50, null=False, verbose_name="Operating System")
-    pixel_ratio       = models.CharField(max_length=50, db_index=False, null=False)
+    pixel_ratio       = models.FloatField(max_length=50, db_index=False, null=False)
     browser           = models.CharField(max_length=50, null=True, db_index=True) # e.g chrome
     browser_version   = models.CharField(max_length=50, null=True, db_index=True) # e.g version 131.1
     device            = models.CharField(max_length=80, null=True, blank=False, db_index=True) # e.g desktop, laptop
@@ -722,12 +723,22 @@ class UserDevice(models.Model):
             return cls.objects.get(user=user)
         except cls.DoesNotExist:
             return None
+        except cls.MultipleObjectsReturned:
+            logging.warning("Expect a single object to be returned but multiple were returned instead. Extracted only the first object")
+            return cls.objects.filter(user=user).first()
 
     class Meta:
         verbose_name        = "User Device"
         verbose_name_plural = "User Devices"
         
-
+    def clean(self):
+        if self.pixel_ratio < 0:
+            raise ValidationError({"pixel_ratio": "The pixel ratio cannot be less than 0"})
+       
+    def save(self, *args, **kwargs):
+        self.clean()  # Validate before saving
+        super().save(*args, **kwargs)  
+        
 class BaseModel(models.Model):
     """
     A base model for capturing various user attributes.
@@ -774,7 +785,7 @@ class UserBaseLineData(BaseModel):
         verbose_name_plural = "Users Baseline Data"
         
     @classmethod
-    def get_by_ip_address(cls, ip_address: str) -> User | None:
+    def get_by_ip_address_and_user(cls, ip_address: str, user:User) -> User | None:
         """
         Retrieve the model instance associated with the given IP address.
 
@@ -784,14 +795,8 @@ class UserBaseLineData(BaseModel):
         Returns:
             User | None: The model instance if found, otherwise None.
         """
-        try:
-            return cls.objects.get(client_ip_address=ip_address)
-        except cls.DoesNotExist:
-            return None
-        except cls.MultipleObjectsReturned:
-            logging.warning("Expect a single object to be returned but multiple were returned instead. Extracted only the first object")
-            return cls.objects.filter(client_ip_address=ip_address).first()
-        
+        return cls.objects.filter(client_ip_address=ip_address, user=user).first()
+  
     @classmethod
     def get_by_user(cls, user:User) -> User | None:
         """

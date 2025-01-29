@@ -1,7 +1,10 @@
 from django.conf import settings
-
-from utils.send_email import send_email
+from django.utils import timezone
 from django_q.tasks import async_task
+
+from utils.utils import get_local_ip_address
+from utils.send_email import send_email
+
 
 from utils.hooks import process_email_result
 
@@ -105,7 +108,6 @@ def notify_admin_of_new_testimonial(subject, user):
                              )
 
 
-
 def notify_user_of_approved_testimonial(subject, user):
     """
     Sends an email to the user that their testimonial has been approved
@@ -122,7 +124,6 @@ def notify_user_of_approved_testimonial(subject, user):
                              to_email=user.email,
                              username=user.username,
                              )
-
 
 
 def notify_user_of_admin_response(subject, user):
@@ -181,7 +182,78 @@ def notify_admin_of_user_unsubscription(subject, user):
                              )
 
 
-def _send_email_helper(email_template_html, email_template_text, **kwargs):
+
+def notify_user_of_suspicious_login(subject, user, user_device, ip_address):
+    """
+    Sends an email to the user notify them that their login attempt
+    was blocked due to a suspicious login attempt.
+    """
+    email_template_html = "email_assets/login/suspicious_login.html"
+    email_template_text = "email_assets/login/suspicious_login.txt"
+   
+    context = {
+        "username": user.username,
+        "ip": ip_address,
+        "local_ip": get_local_ip_address(),
+        "browser": user_device.get("browser"),
+        "browser_version": user_device.get("browserVersion"),
+        "date": timezone.now(),
+        "screen_width": user_device.get("screenWidth"),
+        "screen_height": user_device.get("screenHeight"),
+        "is_touch_screen": user_device.get("isDeviceTouchScreen"),
+        "platform": user_device.get("platform"),
+        "pixel_ratio": user_device.get("pixelRatio"),
+        "device": user_device.get("device"),
+        "location": user_device.get("timeZone"),    
+    }
+    
+    admin_email_address = settings.EMAIL_HOST_USER
+    return _send_email_helper(email_template_html,
+                             email_template_text,
+                             subject=subject,
+                             from_email=admin_email_address,
+                             to_email=user.email,
+                             unsubscriber=user,
+                             context=context
+                             )
+
+
+def notify_user_of_different_browser_login(subject, user, user_device, ip_address):
+    """
+    Sends an email to the user notify them that their login using
+    a different browser.
+    """
+    email_template_html = "email_assets/login/different_device_login.html"
+    email_template_text = "email_assets/login/different_device_login.txt"
+    
+    context = {
+        "username": user.username,
+        "ip": ip_address,
+        "local_ip": get_local_ip_address(),
+        "browser": user_device.get("userAgent"),
+        "browser_version": user_device.get("browserVersion"),
+        "date": timezone.now(),
+        "screen_width": user_device.get("screenWidth"),
+        "screen_height": user_device.get("screenHeight"),
+        "is_touch_screen": user_device.get("isDeviceTouchScreen"),
+        "platform": user_device.get("platform"),
+        "pixel_ratio": user_device.get("pixelRatio"),
+        "device": user_device.get("device"),
+        "location": user_device.get("timeZone"),    
+    }
+    
+    admin_email_address = settings.EMAIL_HOST_USER
+    return _send_email_helper(email_template_html,
+                             email_template_text,
+                             subject=subject,
+                             from_email=admin_email_address,
+                             to_email=user.email,
+                             unsubscriber=user,
+                             context=context
+                             )
+
+
+def _send_email_helper(email_template_html, email_template_text, context={}, **kwargs):
     """
     A private helper function to send an email with the specified templates and context.
 
@@ -200,14 +272,18 @@ def _send_email_helper(email_template_html, email_template_text, **kwargs):
         - bool: True if the email was sent successfully, False otherwise.
     """
     
+    if not isinstance(context, dict):
+        raise ValueError(f"The context must be a dictionary not type {type(context)}")
+    
     # set up the dictionary
-    context = {
-            "username":kwargs.get("username"),
-            "verification_url": kwargs.get("verification_url"),
-            "email_address":kwargs.get("email_address"),
-            "new_subscriber": kwargs.get("new_subscriber"),
-            "unsubscriber": kwargs.get("unsubscriber"),
-        }
+    if not context:
+        context = {
+                "username":kwargs.get("username"),
+                "verification_url": kwargs.get("verification_url"),
+                "email_address":kwargs.get("email_address"),
+                "new_subscriber": kwargs.get("new_subscriber"),
+                "unsubscriber": kwargs.get("unsubscriber"),
+            }
     
     task_id = async_task(
         send_email,  

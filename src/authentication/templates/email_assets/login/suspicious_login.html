@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suspicious Login Alert</title>
+</head>
+<body style="min-height: 90vh; max-height: 100vh; overflow: auto; margin: 0; padding: 0;">
+
+    <main>
+        <section id="login-alert" style="background: ghostwhite;">
+            <div class="container" style="background: white; width: 70%; margin: auto; padding: 16px; border: 2px solid lavender;">
+                
+                <!-- Include the image using the URL from GitHub Pages -->
+                <div class="logo" style="position: relative; height: 200px; width: 200px; margin: auto;">
+                    <img src="https://raw.githubusercontent.com/EgbieAndersonUku1/euorganics-email-assets/main/email_assets/images/registration/logo.png" alt="Logo" class="img-logo" style="height: 100%; width: 100%;">
+                </div>
+
+                <h1 class="center" style="text-align: center; font-family: fantasy; font-size: 32px; color: rgb(6, 64, 6);">
+                    EU Organics Online Store
+                </h1>
+
+                <div class="content">
+                    <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; text-align: left; padding-top: 8px;">
+                        Hi {{ username | capfirst }},
+                    </p>
+
+                    <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; text-align: left; padding-top: 8px; padding-bottom: 32px;">
+                        We’ve detected a suspicious login attempt on your EUOrganics account, which appears to be from an unrecognised device or location.
+                    </p>
+
+                    <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; text-align: left; padding-top: 8px; padding-bottom: 32px;">
+                        For your security, we have temporarily blocked access to your account. If this was you, please verify your identity 
+                        by clicking the link below. If you didn’t attempt this login, we strongly recommend resetting your password as soon as possible.
+                    </p>
+
+                    <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; text-align: left; padding-top: 8px;">
+                        The login attempt was attempted from this <span style="font-style: italic;"> {{ location | capfirst }} </span>
+                         a <span style="font-style: italic;">{{ device | capfirst }} </span>
+                    </p>
+
+                    <div style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; text-align: left;  padding-bottom: 32px;">
+                        <ul>
+                            <li>IP - {{ ip }}</li>
+                            <li>Local ip - {{ local_ip }}</li>
+                            <li>Browser - {{ browser | capfirst }}</li>
+                            <li>Browser version - {{ browser_version | capfirst }}</li>
+                            <li>Platform - {{ platform | capfirst }} </li>
+                            <li>Pixel ratio - {{ pixel_ration }}</li>
+                            <li>Screen width - {{ screen_width }}</li>
+                            <li>Screen height - {{ screen_height }} </li>
+                            <li>Is Touch Screen - {{ is_touch_screen }} </li>
+                            <li>Login date attempt - {{ date | date: "Y-m-d H:i:s" }}</li>
+
+                        </ul>
+                    </div>
+                    
+                    <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; text-align: left; padding-top: 32px; padding-bottom: 32px;">
+                        Please act promptly to ensure the continued security of your account. If you have any questions or require further assistance, 
+                        don’t hesitate to contact our support team.
+                    </p>
+
+                    <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; text-align: left; padding-top: 32px; padding-bottom: 64px;">
+                        Thank you for choosing EUOrganics. Your security is our priority.
+                    </p>
+
+                    <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; text-align: left; padding-top: 8px; font-weight: bolder;">
+                        Best regards,
+                    </p>
+                    <p style="font-family: Arial, sans-serif; font-size: 16px; width: 90%; text-align: left; font-weight: bolder;">
+                        The EUOrganics Team
+                    </p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+</body>
+</html>

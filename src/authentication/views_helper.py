@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.core.cache import cache
 from django.conf import settings
 from django.utils import timezone
+from django.http import HttpRequest
 
 from authentication.models import UserBaseLineData, UserDevice, User
 from utils.generator import generate_token, generate_verification_url
@@ -11,6 +12,7 @@ from utils.custom_errors import IPAddressError
 from utils.validator import validate_required_keys
 from utils.distance_calculator import is_travel_impossible
 from utils.utils import get_device, hash_ip
+from utils.tasks import notify_user_of_suspicious_login, notify_user_of_different_browser_login
 
 from os import getenv
 from dotenv import load_dotenv
@@ -290,13 +292,37 @@ def validate_user_status(user):
     return is_valid, error_msg
 
 
-def get_user_baseline_data(ip_address):
+def get_user_baseline_data(ip_address: str, user: User) -> UserBaseLineData:
+    """
+    Takes either IPV4 or IPV6 ip address and a user and returns the UserBaseLineData model associated with
+    that IP.
+    
+    Returns None if not found.
+    
+    Args:
+        ip_address (str): An ipv4 or ipv6 address that will be used to retrieve the UserBaseLineData model.
+    
+    Returns:
+        UserBaseLineData model | None:
+    
+    """
     ip_address = hash_ip(ip_address, getenv("SECRET_KEY"))
-    return UserBaseLineData.objects.filter(client_ip_address=ip_address).first()
+    return UserBaseLineData.get_by_ip_address_and_user(ip_address=ip_address, user=user)
 
 
 def extract_coordinates(data):
+    """
+    Extracts a set of geo-coordinates from a an object.
     
+    Returns None if the geo-coordinates are not found in the object
+    
+    Args:
+        - data (obj): An object containing a set of coordinates
+    
+    Returns:
+        dict | None :  Returns a dictionary containing the following coordinates `latitude`, `longitude` and `timestamp` 
+                       none if not found
+    """
     try:
         return {
             "latitude":  data.latitude,
@@ -308,46 +334,96 @@ def extract_coordinates(data):
         return None
     
 
-def process_user_device(user:User, user_device_info:str, request, ip_address, baseline_data):
+def process_user_device(user:User, user_device_info:dict, request:HttpRequest, ip_address:str, baseline_data:UserBaseLineData) -> True:
     """
+    Determines whether the login device used is the same as the one used during registration.
     
+    If the devices are not the same, the user is informed by email otherwise nothing is done.
     
+    Args:
+        user (user obj): The user object that will be used to extract the particular device belonging to the user
+        user_device_info (dict): The user device attribrutes captured at login. This data will be compared against
+                            the baseline user device captured at registration.
+       request (HttpRequest): Contains the user HTTP request for additonal information.
+       baseline_data (UserBaseLineData): The user Baseline data object
+    
+    Returns:
+        Returns True
     """
-    SECRET_KEY      = getenv("SECRET_KEY")
-    existing_device = UserDevice.get_by_user(user=user)
-    is_same_device  = True
+    SECRET_KEY                 = getenv("SECRET_KEY")
+    existing_device            = UserDevice.get_by_user(user=user)
+    is_same_device             = True
+    device                     = get_device(request),
+    user_device_info["device"] = str(device)
     
     if not existing_device:
         UserDevice.objects.create(
             user=user,
             frontend_timezone=user_device_info.get("timeZone"),
-            user_agent=user_device_info.get("userAgent", "Unknown"),
-            screen_width=user_device_info.get("screenWidth", 0),
-            screen_height=user_device_info.get("screenHeight", 0),
+            user_agent=user_device_info.get("userAgent"),
+            screen_width=user_device_info.get("screenWidth"),
+            screen_height=user_device_info.get("screenHeight"),
             is_touch_device=user_device_info.get("isDeviceTouchScreen"),
             platform=user_device_info.get("platform"),
             browser=user_device_info.get("browser"),
             browser_version=user_device_info.get("browserVersion"),
-            device=get_device(request),
+            device=device,
             pixel_ratio=user_device_info.get("pixelRatio"),
         )
      
     if existing_device:
-        is_same_device = any([existing_device.frontend_timezone == user_device_info.get("timeZone"),
-                             existing_device.screen_width==user_device_info.get("screenWidth"),
-                             existing_device.user_agent==user_device_info.get("userAgent"),
-                             existing_device.screen_height==user_device_info.get("screenHeight"),
-                             existing_device.is_touch_device==user_device_info.get("isDeviceTouchScreen"),
-                             existing_device.platform==user_device_info.get("platform"),
-                             existing_device.browser==user_device_info.get("browser"),
-                             existing_device.browser_version==user_device_info.get("browserVersion"),
-                             existing_device.pixel_ratio==user_device_info.get("pixelRatio")
-        ])
-
-    if hash_ip(ip_address, SECRET_KEY) != hash_ip(baseline_data.client_ip_address, SECRET_KEY) or not is_same_device:
-        # Todo
-        # send to user telling them their have logged in from a different device
-        # allong with user device info
-        pass
-    
+        is_same_device = is_same_device_check(existing_device, user_device_info)
+     
+    if hash_ip(ip_address, SECRET_KEY) != baseline_data.client_ip_address or not is_same_device:
+        handle_different_browser_login(user, user_device_info, ip_address)
+        
     return True
+
+
+def handle_suspicious_login(user:User, user_device_info:dict, ip_address:str):
+    """Notify user of a suspicious login attempt."""
+    
+    logger.warning(f"Suspicious login detected for user {user.id} from IP {ip_address}.")
+    
+    subject = "We Blocked a Suspicious Login to Protect Your Account"
+    notify_user_of_suspicious_login(subject, user, user_device_info, ip_address)
+
+
+def handle_different_browser_login(user:User, user_device_info:dict, ip_address:str):
+    """Notify user of a login from a different browser."""
+    
+    logger.warning(f"Detected that the user is using a different browser or device {user.id} from IP {ip_address}.")
+    
+    subject = "We noticed you logged in from a different browser"
+    notify_user_of_different_browser_login(subject, user, user_device_info, ip_address)
+    
+
+def is_same_device_check(existing_device:UserDevice, user_device_info:dict):
+    """Check if the login comes from the same device."""
+    
+    frontend_timezone_match = existing_device.frontend_timezone == user_device_info.get("timeZone")
+    screen_width_match      = existing_device.screen_width      == user_device_info.get("screenWidth")
+    user_agent_match        = existing_device.user_agent        == user_device_info.get("userAgent")
+    screen_height_match     = existing_device.screen_height     == user_device_info.get("screenHeight")
+    is_touch_device_match   = existing_device.is_touch_device   == user_device_info.get("isDeviceTouchScreen")
+    platform_match          = existing_device.platform          == user_device_info.get("platform")
+    browser_match           = existing_device.browser           == user_device_info.get("browser")
+    browser_version_match   = existing_device.browser_version   == user_device_info.get("browserVersion")
+    pixel_ratio_match       = existing_device.pixel_ratio       == user_device_info.get("pixelRatio")
+    device_match            = existing_device.device            == user_device_info.get("device")
+
+    # Check if all conditions match
+    all_match = all([frontend_timezone_match, 
+                     screen_width_match, 
+                     user_agent_match, 
+                     screen_height_match, 
+                     is_touch_device_match,
+                     platform_match, 
+                     browser_match, 
+                     browser_version_match, 
+                     pixel_ratio_match,
+                     device_match
+                     ]
+                    )
+    
+    return all_match

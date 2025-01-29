@@ -19,7 +19,7 @@ export default function fingerprintDevice() {
     const isTouchScreen = "ontouchstart" in window || navigator.maxTouchPoints > 0;
     const screenWidth   = window.screen.width;
     const screenHeight  = window.screen.height;
-    const pixelRatio    = window.devicePixelRatio || 1
+    const pixelRatio    = parseFloat(window.devicePixelRatio) || 1
 
     const browserInfo = userAgent.match(/(chrome|firefox|safari|msie|edge|opera|trident)[\/\s](\d+(\.\d+)?)/i);
 

@@ -288,14 +288,15 @@ This application uses **Django-Q** to handle email sending asynchronously. Here 
    - You can also check Django-Q's task queue use custom hooks for result processing.
 
 4. **Expected Wait Times**:
-   - Email tasks are usually processed within a few seconds, depending on server load and network conditions.
-   - If an email isn't sent immediately, it could be due to:
+   - Email tasks are usually processed and sent within a few seconds, depending on server load and network conditions it can take anyway up to 5-15 minutes .
+   - If an email doesn't show up in your email after 30 minutes it could be due to:
      - Network issues.
      - Problems with the email provider.
      - No more storage or close to full storage in your email account
 
 5. **Debugging**:
    - If an email task fails, review the logs or task queue for error details.
+   - Check if it is in a queue in the admin interface as Django-q stores a list of things it needs to process and works of that list one at a time
    - Check your admin with Django-Q section
    - Common issues include invalid email addresses, network timeouts, or misconfigured email settings.
 

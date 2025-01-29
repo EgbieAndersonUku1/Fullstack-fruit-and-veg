@@ -15,6 +15,7 @@ from authentication.views_helper import (is_suspicious_login,
                                          get_user_baseline_data,
                                          extract_coordinates,
                                          process_user_device,
+                                         handle_suspicious_login,
                                          )
 
 from .forms.register_form import RegisterForm
@@ -118,9 +119,10 @@ def user_login(request):
             bool: True if the user is authenticated and active, otherwise False.
         """
         
-        email     = data.get("email")
-        password  = data.get("password")
-        user      = authenticate(request, email=email, password=password)
+        email            = data.get("email")
+        password         = data.get("password")
+        user_device_info = data.get("userDeviceInfo")
+        user             = authenticate(request, email=email, password=password)
         
         if not user:
             logger.warning(f"Failed login attempt for user with email: {email}")
@@ -132,7 +134,7 @@ def user_login(request):
             return False, error_msg
     
         ip_address     = get_client_ip_address(request)
-        baseline_data  = get_user_baseline_data(ip_address)
+        baseline_data  = get_user_baseline_data(ip_address, user)
         
         if not baseline_data:
             logger.error("Baseline data not found for IP: %s", ip_address)
@@ -140,9 +142,9 @@ def user_login(request):
         
         is_supicious_login, msg = is_suspicious_login(ip_address, extract_coordinates(baseline_data))
         if is_supicious_login:
+            handle_suspicious_login(user, user_device_info, ip_address)
             return False, msg
         
-        user_device_info = data.get("userDeviceInfo")
         process_user_device(user, user_device_info, request, ip_address, baseline_data)        
        
         messages.success(request, "Welcome back, you have successfully logged in.")

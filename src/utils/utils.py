@@ -38,7 +38,7 @@ def get_local_ip_address() -> str:
     return gethostbyname(gethostname())
 
 
-def get_device(request: HttpRequest) -> StopIteration:
+def get_device(request: HttpRequest) -> str:
     """
     Determine the type of device connected to the network based on the HTTP request.
 
@@ -50,8 +50,12 @@ def get_device(request: HttpRequest) -> StopIteration:
 
     """
     user_agent_string = request.META.get('HTTP_USER_AGENT', '')
-    device            = DeviceDetector(user_agent_string).parse()
-    return device.device_type() or "Unknow device"
+    device_type       = DeviceDetector(user_agent_string).parse()
+    
+    if device_type:
+        return device_type.device_type()
+    
+    return "Unknow device"
 
 
 def hash_data(input_string:str, secret_key:str) -> str:
